@@ -9,19 +9,30 @@ import { trackEvent } from "@/lib/analytics";
 
 export default function Step3_Archetype() {
   const { character, updateCharacterField, setCurrentStep } = useCharacter();
+  const [archetypes, setArchetypes] = useState<string[]>([]);
   const [selectedArchetype, setSelectedArchetype] = useState<string>(character.archetype || "");
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  // Archetypes with descriptions
-  const archetypes = [
-    { name: "Bruiser", description: "Physically powerful character focused on strength and toughness. Excels at close combat and dealing/taking damage." },
-    { name: "Speedster", description: "Super-fast character with lightning reflexes. Masters of mobility, evasion, and striking multiple targets." },
-    { name: "Blaster", description: "Ranged damage specialist with destructive powers. Excellent at attacking from a distance with various energy types." },
-    { name: "Defender", description: "Protective character with abilities focused on shielding and supporting allies. Specialists in damage mitigation." },
-    { name: "Gadgeteer", description: "Tech-focused character with an arsenal of devices and tools. Adaptable problem-solvers with a tool for every situation." },
-    { name: "Mentalist", description: "Psychic character with powers of the mind. Masters of mental manipulation, telepathy, and psychokinesis." },
-    { name: "Mastermind", description: "Strategic genius with enhanced intelligence. Excel at planning, invention, and outsmarting opponents." },
-    { name: "Shapeshifter", description: "Adaptable character who can change form. Specializes in infiltration, disguise, and versatile combat forms." }
-  ];
+  useEffect(() => {
+    // Fetch archetype data from the JSON file
+    fetch('/src/rules/archetypes.json')
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Failed to load archetypes data');
+        }
+        return response.json();
+      })
+      .then(data => {
+        setArchetypes(data);
+        setIsLoading(false);
+      })
+      .catch(err => {
+        console.error('Error loading archetypes:', err);
+        setError(err.message);
+        setIsLoading(false);
+      });
+  }, []);
 
   const handleContinue = () => {
     if (selectedArchetype) {
@@ -39,6 +50,18 @@ export default function Step3_Archetype() {
     setCurrentStep(2);
   };
 
+  // Archetype descriptions
+  const archetypeDescriptions: Record<string, string> = {
+    "Bruiser": "Physically powerful character focused on strength and toughness. Excels at close combat and dealing/taking damage.",
+    "Speedster": "Super-fast character with lightning reflexes. Masters of mobility, evasion, and striking multiple targets.",
+    "Blaster": "Ranged damage specialist with destructive powers. Excellent at attacking from a distance with various energy types.",
+    "Defender": "Protective character with abilities focused on shielding and supporting allies. Specialists in damage mitigation.",
+    "Gadgeteer": "Tech-focused character with an arsenal of devices and tools. Adaptable problem-solvers with a tool for every situation.",
+    "Mentalist": "Psychic character with powers of the mind. Masters of mental manipulation, telepathy, and psychokinesis.",
+    "Mastermind": "Strategic genius with enhanced intelligence. Excel at planning, invention, and outsmarting opponents.",
+    "Shapeshifter": "Adaptable character who can change form. Specializes in infiltration, disguise, and versatile combat forms."
+  };
+
   return (
     <motion.div 
       className="bg-panel rounded-2xl p-6 comic-border overflow-hidden halftone-bg"
@@ -51,47 +74,57 @@ export default function Step3_Archetype() {
         <p className="text-gray-300 mt-2">Choose an archetype that defines your hero's role and fighting style.</p>
       </div>
 
-      <div className="space-y-6">
-        <RadioGroup 
-          value={selectedArchetype}
-          onValueChange={setSelectedArchetype}
-          className="space-y-4"
-        >
-          {archetypes.map((archetype) => (
-            <div key={archetype.name} className="flex items-start space-x-2">
-              <RadioGroupItem 
-                value={archetype.name} 
-                id={archetype.name}
-                className="mt-1"
-              />
-              <div className="flex-1">
-                <Label htmlFor={archetype.name} className="font-comic text-xl cursor-pointer">
-                  {archetype.name}
-                </Label>
-                <p className="text-gray-400 text-sm mt-1">{archetype.description}</p>
-              </div>
-            </div>
-          ))}
-        </RadioGroup>
-
-        <div className="flex justify-between mt-8 pt-4 border-t-2 border-gray-700">
-          <Button 
-            type="button"
-            className="px-6 py-3 rounded-lg bg-gray-700 font-comic text-white hover:bg-gray-600 transition-colors"
-            onClick={handlePrevious}
-          >
-            <ArrowLeft className="mr-2 h-5 w-5" /> Previous
-          </Button>
-          <Button 
-            type="button"
-            className="px-6 py-3 rounded-lg bg-accent font-comic text-white hover:bg-red-700 transition-colors shadow-lg"
-            onClick={handleContinue}
-            disabled={!selectedArchetype}
-          >
-            Next <ArrowRight className="ml-2 h-5 w-5" />
-          </Button>
+      {isLoading ? (
+        <div className="flex justify-center items-center py-10">
+          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-accent"></div>
         </div>
-      </div>
+      ) : error ? (
+        <div className="text-red-500 text-center py-6">
+          Error loading archetypes: {error}. Please try again later.
+        </div>
+      ) : (
+        <div className="space-y-6">
+          <RadioGroup 
+            value={selectedArchetype}
+            onValueChange={setSelectedArchetype}
+            className="space-y-4"
+          >
+            {archetypes.map((archetype) => (
+              <div key={archetype} className="flex items-start space-x-2">
+                <RadioGroupItem 
+                  value={archetype} 
+                  id={archetype}
+                  className="mt-1"
+                />
+                <div className="flex-1">
+                  <Label htmlFor={archetype} className="font-comic text-xl cursor-pointer">
+                    {archetype}
+                  </Label>
+                  <p className="text-gray-400 text-sm mt-1">{archetypeDescriptions[archetype] || "Description not available."}</p>
+                </div>
+              </div>
+            ))}
+          </RadioGroup>
+
+          <div className="flex justify-between mt-8 pt-4 border-t-2 border-gray-700">
+            <Button 
+              type="button"
+              className="px-6 py-3 rounded-lg bg-gray-700 font-comic text-white hover:bg-gray-600 transition-colors"
+              onClick={handlePrevious}
+            >
+              <ArrowLeft className="mr-2 h-5 w-5" /> Previous
+            </Button>
+            <Button 
+              type="button"
+              className="px-6 py-3 rounded-lg bg-accent font-comic text-white hover:bg-red-700 transition-colors shadow-lg"
+              onClick={handleContinue}
+              disabled={!selectedArchetype}
+            >
+              Next <ArrowRight className="ml-2 h-5 w-5" />
+            </Button>
+          </div>
+        </div>
+      )}
     </motion.div>
   );
 }
