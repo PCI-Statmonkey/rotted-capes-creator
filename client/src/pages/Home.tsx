@@ -21,6 +21,14 @@ export default function Home() {
       console.error("Login error:", error);
     }
   };
+  
+  // Direct admin access for Opera browser users
+  const handleDirectAdminAccess = () => {
+    localStorage.setItem('isAdmin', 'true');
+    localStorage.setItem('mockUserEmail', 'admin@rottedcapes.com');
+    localStorage.setItem('mockUserName', 'Opera Admin User');
+    alert("Admin access granted! You will now be redirected to the Analytics page.");
+  };
 
   return (
     <div className="container mx-auto p-4 md:px-8">
@@ -126,31 +134,14 @@ export default function Home() {
           <p className="text-muted-foreground mb-4">
             If you're using Opera browser and experiencing issues with the login popup, use this special development login button to access admin features.
           </p>
-          <Button 
-            className="bg-amber-600 hover:bg-amber-500 font-comic"
-            onClick={() => {
-              // Create a mock admin user
-              const mockUser = {
-                uid: "opera-user-admin",
-                email: "admin@rottedcapes.com",
-                displayName: "Opera Admin User"
-              };
-              
-              // Manually update Firebase auth state
-              auth.updateCurrentUser(mockUser as any);
-              
-              // Update local state
-              setCurrentUser(mockUser as any);
-              
-              // Show success message and redirect
-              alert("Admin login successful! You now have access to all features including Analytics.");
-              
-              // Redirect to Analytics
-              window.location.href = "/analytics";
-            }}
-          >
-            <LogIn className="mr-2 h-4 w-4" /> Opera Admin Login
-          </Button>
+          <Link href="/analytics">
+            <Button 
+              className="bg-amber-600 hover:bg-amber-500 font-comic"
+              onClick={handleDirectAdminAccess}
+            >
+              <LogIn className="mr-2 h-4 w-4" /> Go to Analytics (Admin Access)
+            </Button>
+          </Link>
         </motion.div>
       )}
       

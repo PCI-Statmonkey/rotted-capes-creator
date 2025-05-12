@@ -42,8 +42,22 @@ export default function Analytics() {
   const [, navigate] = useLocation();
   const { toast } = useToast();
 
+  // Check for special Opera admin access
+  const [hasDirectAccess, setHasDirectAccess] = useState(false);
+  
+  useEffect(() => {
+    // Check if user has the special Opera admin access
+    const directAccess = localStorage.getItem('isAdmin') === 'true';
+    setHasDirectAccess(directAccess);
+  }, []);
+  
   // Redirect if not logged in or not admin
   useEffect(() => {
+    // Skip all checks if user has direct admin access
+    if (hasDirectAccess) {
+      return;
+    }
+    
     if (!currentUser && !isLoading) {
       navigate("/");
       toast({
@@ -62,7 +76,7 @@ export default function Analytics() {
         variant: "destructive"
       });
     }
-  }, [currentUser, isAdmin, isLoading, navigate, toast]);
+  }, [currentUser, isAdmin, isLoading, navigate, toast, hasDirectAccess]);
 
   // Fetch analytics data
   useEffect(() => {
