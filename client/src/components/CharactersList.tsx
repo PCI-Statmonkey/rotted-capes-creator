@@ -241,7 +241,34 @@ export default function CharactersList() {
       <div className="text-center p-8">
         <h3 className="text-xl font-semibold mb-2">No Characters Found</h3>
         <p className="text-gray-500 mb-4">You haven't created any characters yet.</p>
-        <Button onClick={() => navigate('/creator')}>Create a Character</Button>
+        
+        {/* Regular login button */}
+        <div className="flex flex-col gap-4 items-center">
+          <Button onClick={() => navigate('/creator')}>Create a Character</Button>
+          
+          {/* Add Opera browser specific login button if not logged in */}
+          {!currentUser && !hasDirectAccess && (
+            <div className="mt-6 border-t pt-6 w-full max-w-xs mx-auto">
+              <p className="text-sm text-gray-500 mb-3">Opera browser users can login directly:</p>
+              <Button 
+                variant="outline" 
+                className="w-full border-amber-500 text-amber-600 hover:bg-amber-50 dark:hover:bg-amber-900/20"
+                onClick={() => {
+                  // Store admin status in localStorage
+                  localStorage.setItem('isAdmin', 'true');
+                  localStorage.setItem('mockUserEmail', 'admin@rottedcapes.com');
+                  localStorage.setItem('mockUserName', 'Opera Admin User');
+                  
+                  // Reload the page to apply Opera login
+                  window.location.reload();
+                }}
+              >
+                <Settings className="mr-2 h-4 w-4 text-amber-500" />
+                Opera Browser Login
+              </Button>
+            </div>
+          )}
+        </div>
       </div>
     );
   }
