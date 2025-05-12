@@ -9,6 +9,7 @@ import {
   LogOut,
   ChevronUp,
   BarChart4,
+  Settings,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Drawer, DrawerContent, DrawerTrigger } from "@/components/ui/drawer";
@@ -149,15 +150,40 @@ export default function MainLayout({ children }: MainLayoutProps) {
                 Analytics
               </Button>
             )}
-            <Button 
-              variant="ghost" 
-              size="icon"
-              onClick={handleLogin}
-              className="rounded-full"
-              disabled={isLoading}
-            >
-              {currentUser ? <LogOut className="h-5 w-5" /> : <LogIn className="h-5 w-5" />}
-            </Button>
+            {currentUser ? (
+              <Button 
+                variant="ghost" 
+                size="icon"
+                onClick={handleLogin}
+                className="rounded-full"
+                disabled={isLoading}
+              >
+                <LogOut className="h-5 w-5" />
+              </Button>
+            ) : (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button 
+                    variant="ghost" 
+                    size="icon"
+                    className="rounded-full"
+                    disabled={isLoading}
+                  >
+                    <LogIn className="h-5 w-5" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuItem onClick={handleLogin}>
+                    <LogIn className="mr-2 h-4 w-4" />
+                    <span>Regular Login</span>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={handleOperaLogin}>
+                    <Settings className="mr-2 h-4 w-4 text-amber-500" />
+                    <span className="text-amber-500 font-medium">Opera Browser Login</span>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            )}
             <Drawer>
               <DrawerTrigger asChild>
                 <Button 
@@ -212,24 +238,38 @@ export default function MainLayout({ children }: MainLayoutProps) {
                       </Button>
                     </Link>
                   )}
-                  <Button 
-                    variant="ghost" 
-                    className="w-full justify-start"
-                    onClick={handleLogin}
-                    disabled={isLoading}
-                  >
-                    {currentUser ? (
-                      <>
-                        <LogOut className="mr-2 h-5 w-5" />
-                        Logout
-                      </>
-                    ) : (
-                      <>
+                  {currentUser ? (
+                    <Button 
+                      variant="ghost" 
+                      className="w-full justify-start"
+                      onClick={handleLogin}
+                      disabled={isLoading}
+                    >
+                      <LogOut className="mr-2 h-5 w-5" />
+                      Logout
+                    </Button>
+                  ) : (
+                    <>
+                      <Button 
+                        variant="ghost" 
+                        className="w-full justify-start"
+                        onClick={handleLogin}
+                        disabled={isLoading}
+                      >
                         <LogIn className="mr-2 h-5 w-5" />
-                        Login
-                      </>
-                    )}
-                  </Button>
+                        Regular Login
+                      </Button>
+                      
+                      <Button 
+                        variant="ghost" 
+                        className="w-full justify-start mt-2 border-l-2 border-amber-500 pl-3"
+                        onClick={handleOperaLogin}
+                      >
+                        <Settings className="mr-2 h-5 w-5 text-amber-500" />
+                        <span className="text-amber-500 font-medium">Opera Browser Login</span>
+                      </Button>
+                    </>
+                  )}
                 </div>
               </DrawerContent>
             </Drawer>

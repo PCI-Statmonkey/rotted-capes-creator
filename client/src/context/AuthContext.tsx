@@ -23,6 +23,25 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     // For development mode, check if we might need a mock user
     if (import.meta.env.DEV && !auth.currentUser) {
       console.log("Setting up auth state monitoring in development mode");
+      
+      // Check if we have Opera browser login stored in localStorage
+      const isAdmin = localStorage.getItem('isAdmin');
+      const mockUserEmail = localStorage.getItem('mockUserEmail');
+      const mockUserName = localStorage.getItem('mockUserName');
+      
+      if (isAdmin === 'true' && mockUserEmail) {
+        // Create a mock user for Opera browser login
+        const operaUser = {
+          uid: "opera-admin-user",
+          email: mockUserEmail,
+          displayName: mockUserName || "Opera Admin User"
+        };
+        
+        console.log("Found Opera browser login in localStorage", operaUser);
+        setCurrentUser(operaUser as any);
+        setIsAdmin(true);
+        setIsLoading(false);
+      }
     }
 
     const unsubscribe = onAuthStateChanged(auth, (user) => {
