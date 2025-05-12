@@ -1,5 +1,6 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from "react";
 import { STORAGE_KEY, saveToLocalStorage, loadFromLocalStorage, calculateModifier } from "@/lib/utils";
+import { trackCharacterEvent, trackEvent } from "@/lib/analytics";
 
 export interface Ability {
   value: number;
@@ -250,6 +251,19 @@ export const CharacterProvider = ({ children }: { children: ReactNode }) => {
     // Save to local storage for offline usage
     saveToLocalStorage(STORAGE_KEY, character);
     
+    // Track character save event with Google Analytics
+    trackCharacterEvent('character_saved', {
+      name: character.name,
+      origin: character.origin,
+      archetype: character.archetype,
+      abilities: Object.keys(character.abilities).map(key => ({
+        name: key,
+        value: character.abilities[key as keyof typeof character.abilities].value
+      })),
+      powers_count: character.powers.length,
+      skills_count: character.skills.length
+    });
+    
     try {
       // If user is logged in, also save to Firebase
       const { auth } = await import('@/lib/firebase');
@@ -261,6 +275,7 @@ export const CharacterProvider = ({ children }: { children: ReactNode }) => {
         // Check if character already has a Firebase ID
         if (character.firebaseId) {
           await updateCharacterInFirebase(character.firebaseId, character);
+          trackEvent('character_updated', 'cloud_storage', character.name);
         } else {
           const firebaseId = await saveCharacterToFirebase(character, currentUser.uid);
           
@@ -270,11 +285,14 @@ export const CharacterProvider = ({ children }: { children: ReactNode }) => {
             firebaseId,
             updatedAt: new Date().toISOString()
           }));
+          
+          trackEvent('character_created_cloud', 'cloud_storage', character.name);
         }
       }
     } catch (error) {
       console.error("Error saving character to cloud:", error);
       // We still have the local copy, so no data loss
+      trackEvent('character_save_error', 'error', String(error));
     }
   };
 
@@ -283,13 +301,14 @@ export const CharacterProvider = ({ children }: { children: ReactNode }) => {
     const savedCharacter = loadFromLocalStorage(STORAGE_KEY);
     if (savedCharacter && (savedCharacter.id === id || savedCharacter.firebaseId === id)) {
       setCharacter(savedCharacter);
+      trackEvent('character_loaded', 'local_storage', savedCharacter.name);
       return;
     }
     
     // If not found locally and user is logged in, try to load from Firebase
     try {
-      const auth = window.firebase?.auth?.();
-      const currentUser = auth?.currentUser;
+      const { auth } = await import('@/lib/firebase');
+      const currentUser = auth.currentUser;
       
       if (currentUser) {
         const { getCharacterById } = await import('@/lib/firebase');
@@ -298,16 +317,31 @@ export const CharacterProvider = ({ children }: { children: ReactNode }) => {
         if (firebaseCharacter) {
           // Convert the Firebase data to our Character type
           const characterData = firebaseCharacter.data || {};
-          setCharacter({
+          const loadedCharacter = {
             ...createEmptyCharacter(),
             ...characterData,
             firebaseId: firebaseCharacter.id,
             updatedAt: new Date().toISOString()
+          };
+          
+          setCharacter(loadedCharacter);
+          
+          // Track the character loading event
+          trackCharacterEvent('character_loaded_cloud', {
+            name: loadedCharacter.name,
+            origin: loadedCharacter.origin,
+            archetype: loadedCharacter.archetype
           });
+          
+          // Also save to local storage for offline access
+          saveToLocalStorage(STORAGE_KEY, loadedCharacter);
+        } else {
+          trackEvent('character_not_found', 'error', id);
         }
       }
     } catch (error) {
       console.error("Error loading character from cloud:", error);
+      trackEvent('character_load_error', 'error', String(error));
     }
   };
 
