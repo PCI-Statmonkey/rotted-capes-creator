@@ -537,7 +537,7 @@ export default function Analytics() {
                 <AdvancedAnalytics 
                   analyticsData={analyticsData} 
                   isLoading={isLoading}
-                  onRefresh={() => fetchAnalytics()}
+                  onRefresh={fetchAnalytics}
                 />
               </CardContent>
             </Card>
