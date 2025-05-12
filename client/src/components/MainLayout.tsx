@@ -12,7 +12,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Drawer, DrawerContent, DrawerTrigger } from "@/components/ui/drawer";
-import { useAuth } from "@/context/AuthContext";
+import { auth, signInWithGoogle, logoutUser } from "@/lib/firebase";
 import { useEffect } from "react";
 
 interface MainLayoutProps {
@@ -21,8 +21,26 @@ interface MainLayoutProps {
 
 export default function MainLayout({ children }: MainLayoutProps) {
   const [location] = useLocation();
-  const { currentUser, isAdmin, login, logout, isLoading: authLoading } = useAuth();
+  const [currentUser, setCurrentUser] = useState<any>(null);
+  const [isAdmin, setIsAdmin] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  
+  // Listen for auth state changes
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      setCurrentUser(user);
+      
+      // Admin check - this can be expanded with more sophisticated rules
+      if (user) {
+        const adminEmails = ['admin@rottedcapes.com']; // Add real admin emails
+        setIsAdmin(adminEmails.includes(user.email || ''));
+      } else {
+        setIsAdmin(false);
+      }
+    });
+    
+    return () => unsubscribe();
+  }, []);
   
   // Character mock - in real usage, we would use the context appropriately
   const character = location === "/creator" ? {
@@ -35,11 +53,9 @@ export default function MainLayout({ children }: MainLayoutProps) {
     try {
       setIsLoading(true);
       if (currentUser) {
-        // Use the logout function from AuthContext instead of direct import
-        await logout();
+        await logoutUser();
       } else {
-        // Use the login function from AuthContext instead of direct import
-        const user = await login();
+        const user = await signInWithGoogle();
         console.log("Login completed, user:", user ? user.email : "none");
       }
     } catch (error) {
