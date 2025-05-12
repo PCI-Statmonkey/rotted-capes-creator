@@ -25,33 +25,59 @@ export default function CharactersList() {
   const [selectedCharacter, setSelectedCharacter] = useState<any>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   
+  // Check for Opera browser login in localStorage
+  const hasDirectAccess = localStorage.getItem('isAdmin') === 'true';
+  
   // Fetch characters from both Firebase and database
   const { data: characters, isLoading, error } = useQuery({
     queryKey: ['characters'],
     queryFn: async () => {
-      if (!currentUser) return [];
+      // For Opera browser login, use a fixed admin ID
+      const userId = currentUser?.uid || (hasDirectAccess ? 'opera-admin-user' : null);
+      
+      if (!userId) return [];
       
       // Get characters from database via API
       try {
-        const dbCharacters = await apiRequest(`/api/characters?userId=${currentUser.uid}`);
+        const dbCharacters = await apiRequest(`/api/characters?userId=${userId}`);
         
-        // Get characters from Firebase
-        const firebaseCharacters = await getUserCharacters(currentUser.uid);
+        // For regular users, also get characters from Firebase
+        // For Opera browser login, we'll only show database characters
+        let allCharacters = [...dbCharacters];
         
-        // Combine and deduplicate (prioritizing db versions if they exist)
-        const allCharacters = [...dbCharacters];
+        if (currentUser) {
+          // Get characters from Firebase
+          const firebaseCharacters = await getUserCharacters(currentUser.uid);
+          
+          // Add Firebase-only characters
+          firebaseCharacters.forEach(fbChar => {
+            if (!dbCharacters.some(dbChar => dbChar.firebaseId === fbChar.id)) {
+              allCharacters.push({
+                ...fbChar.data,
+                id: null, // No database ID yet
+                firebaseId: fbChar.id,
+                storageType: 'firebase'
+              });
+            }
+          });
+        }
         
-        // Add Firebase-only characters
-        firebaseCharacters.forEach(fbChar => {
-          if (!dbCharacters.some(dbChar => dbChar.firebaseId === fbChar.id)) {
-            allCharacters.push({
-              ...fbChar.data,
-              id: null, // No database ID yet
-              firebaseId: fbChar.id,
-              storageType: 'firebase'
-            });
-          }
-        });
+        // For Opera browser login without characters, provide some sample characters
+        if (hasDirectAccess && !currentUser && allCharacters.length === 0) {
+          console.log("Adding sample characters for Opera browser admin user");
+          allCharacters = [
+            {
+              id: 'sample-1',
+              name: 'Sample Character',
+              concept: 'Energy Manipulator',
+              origin: 'Super-Human',
+              archetype: 'Blaster',
+              updatedAt: new Date().toISOString(),
+              powers: [{ name: 'Energy Blast', rank: 5 }],
+              sampleData: true
+            }
+          ];
+        }
         
         return allCharacters;
       } catch (error) {
@@ -59,7 +85,7 @@ export default function CharactersList() {
         return [];
       }
     },
-    enabled: !!currentUser
+    enabled: !!(currentUser || hasDirectAccess)
   });
   
   // Delete character mutation
@@ -100,6 +126,16 @@ export default function CharactersList() {
   
   // Handle character deletion
   const handleDeleteCharacter = (character: any) => {
+    // For sample characters with Opera browser login, show notification instead of deleting
+    if (character.sampleData && hasDirectAccess && !currentUser) {
+      toast({
+        title: "Sample Character",
+        description: "Sample characters cannot be deleted in Opera browser mode.",
+        variant: "default"
+      });
+      return;
+    }
+    
     // Determine how to delete based on storage type
     if (character.firebaseId) {
       deleteMutation.mutate(character.firebaseId);
@@ -110,14 +146,37 @@ export default function CharactersList() {
   
   // Handle character view
   const handleViewCharacter = (character: any) => {
+    // Track view action
+    if (currentUser) {
+      trackEvent('character_view', 'character');
+    } else if (hasDirectAccess) {
+      // For Opera browser login
+      trackEvent('character_view_opera_mode', 'character');
+    }
+    
     setSelectedCharacter(character);
     setIsDialogOpen(true);
   };
   
   // Handle character edit
   const handleEditCharacter = (character: any) => {
+    // For sample characters with Opera browser login, show notification instead of editing
+    if (character.sampleData && hasDirectAccess && !currentUser) {
+      toast({
+        title: "Sample Character",
+        description: "Sample characters cannot be edited in Opera browser mode.",
+        variant: "default"
+      });
+      return;
+    }
+    
     // Track edit action in analytics
-    trackEvent('character_edit_started');
+    if (currentUser) {
+      trackEvent('character_edit_started', 'character');
+    } else if (hasDirectAccess) {
+      // For Opera browser login
+      trackEvent('character_edit_started_opera_mode', 'character');
+    }
     
     // Navigate to character editor with the character ID
     if (character.id) {

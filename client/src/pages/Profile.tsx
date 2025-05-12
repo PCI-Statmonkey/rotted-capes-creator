@@ -20,9 +20,22 @@ export default function Profile() {
   const [isLoading, setIsLoading] = useState(true);
   const [, navigate] = useLocation();
   const { toast } = useToast();
+  const [hasDirectAccess, setHasDirectAccess] = useState(false);
+
+  // Check for Opera browser login in localStorage
+  useEffect(() => {
+    const directAccess = localStorage.getItem('isAdmin') === 'true';
+    setHasDirectAccess(directAccess);
+  }, []);
 
   // Redirect if not logged in
   useEffect(() => {
+    // Skip all checks if user has direct Opera admin access
+    if (hasDirectAccess) {
+      setIsLoading(false);
+      return;
+    }
+    
     if (!currentUser && !isLoading) {
       navigate("/");
       toast({
@@ -31,22 +44,30 @@ export default function Profile() {
         variant: "destructive"
       });
     }
-  }, [currentUser, isLoading, navigate, toast]);
+  }, [currentUser, isLoading, navigate, toast, hasDirectAccess]);
 
   // Track profile view for analytics
   useEffect(() => {
-    if (currentUser) {
+    if (currentUser || hasDirectAccess) {
       setIsLoading(false);
       
       // Log analytics event
-      saveAnalyticsEvent('profile_view', {
-        userId: currentUser.uid
-      }, currentUser.uid);
+      if (currentUser) {
+        saveAnalyticsEvent('profile_view', {
+          userId: currentUser.uid
+        }, currentUser.uid);
+      } else if (hasDirectAccess) {
+        // For Opera browser login
+        saveAnalyticsEvent('profile_view', {
+          userId: 'opera-admin-user',
+          note: 'Opera browser direct access'
+        }, 'opera-admin-user');
+      }
       
       // Also track in Google Analytics
       trackEvent('profile_view', 'user');
     }
-  }, [currentUser]);
+  }, [currentUser, hasDirectAccess]);
 
   const handleCreateCharacter = () => {
     // Track button click for creating new character
@@ -86,9 +107,16 @@ export default function Profile() {
     }
   };
 
-  if (!currentUser) {
+  // Allow either regular Firebase login or Opera browser login
+  if (!currentUser && !hasDirectAccess) {
     return null; // Will redirect in useEffect
   }
+  
+  // Set default user info for Opera browser login
+  const displayName = currentUser?.displayName || 
+                    (hasDirectAccess ? localStorage.getItem('mockUserName') || "Opera Admin User" : null);
+  const userEmail = currentUser?.email || 
+                  (hasDirectAccess ? localStorage.getItem('mockUserEmail') || "admin@rottedcapes.com" : null);
 
   return (
     <div className="container mx-auto p-4 md:p-8">
@@ -100,7 +128,12 @@ export default function Profile() {
         <div className="mb-8 text-center">
           <h1 className="font-comic text-4xl text-accent mb-2">My Profile</h1>
           <p className="text-muted-foreground">
-            {currentUser.displayName || currentUser.email}
+            {displayName || userEmail}
+            {hasDirectAccess && !currentUser && (
+              <span className="ml-2 text-amber-500 bg-amber-100 dark:bg-amber-900/30 px-2 py-0.5 rounded-full text-xs">
+                Opera Browser
+              </span>
+            )}
           </p>
         </div>
 
@@ -137,30 +170,39 @@ export default function Profile() {
               <CardContent>
                 <div className="flex flex-col items-center mb-6">
                   <div className="w-24 h-24 rounded-full bg-gray-800 flex items-center justify-center mb-4">
-                    {currentUser.photoURL ? (
+                    {currentUser?.photoURL ? (
                       <img 
                         src={currentUser.photoURL} 
                         alt="Profile" 
                         className="w-24 h-24 rounded-full object-cover" 
                       />
                     ) : (
-                      <UserIcon className="h-12 w-12 text-accent" />
+                      <UserIcon className={`h-12 w-12 ${hasDirectAccess && !currentUser ? 'text-amber-500' : 'text-accent'}`} />
                     )}
                   </div>
+                  {hasDirectAccess && !currentUser && (
+                    <div className="text-center text-amber-500 mb-2">
+                      Opera Browser Direct Admin Access
+                    </div>
+                  )}
                 </div>
                 
                 <div className="space-y-4">
                   <div>
                     <h3 className="text-sm font-medium text-gray-400">Email</h3>
-                    <p>{currentUser.email}</p>
+                    <p>{userEmail}</p>
                   </div>
                   <div>
                     <h3 className="text-sm font-medium text-gray-400">Display Name</h3>
-                    <p>{currentUser.displayName || "Not set"}</p>
+                    <p>{displayName || "Not set"}</p>
                   </div>
                   <div>
-                    <h3 className="text-sm font-medium text-gray-400">Account Created</h3>
-                    <p>{currentUser.metadata.creationTime ? new Date(currentUser.metadata.creationTime).toLocaleDateString() : "Unknown"}</p>
+                    <h3 className="text-sm font-medium text-gray-400">Account Type</h3>
+                    <p>{hasDirectAccess && !currentUser ? 
+                      "Opera Browser Admin (Temporary)" : 
+                      (currentUser?.metadata?.creationTime ? 
+                        `Account created on ${new Date(currentUser.metadata.creationTime).toLocaleDateString()}` : 
+                        "Unknown")}</p>
                   </div>
                   
                   <div className="pt-4">
