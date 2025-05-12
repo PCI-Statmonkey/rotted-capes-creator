@@ -127,10 +127,27 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         }
       }
       
+      // Check if this is an Opera browser login (uid starts with 'opera-')
+      if (currentUser?.uid?.startsWith('opera-')) {
+        console.log("Logging out Opera browser user");
+        
+        // Clear Opera browser login from localStorage
+        localStorage.removeItem('isAdmin');
+        localStorage.removeItem('mockUserEmail');
+        localStorage.removeItem('mockUserName');
+        
+        // Reset the current user state
+        setCurrentUser(null);
+        setIsAdmin(false);
+        
+        // We're done here, no need to call Firebase logout
+        return;
+      }
+      
       // Clear the mock user state
       setMockUser(null);
       
-      // Actually log out
+      // Actually log out from Firebase
       await logoutUser();
     } catch (error) {
       console.error("Logout error:", error);
