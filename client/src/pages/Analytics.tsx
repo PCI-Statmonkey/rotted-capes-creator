@@ -12,12 +12,16 @@ import {
   Layers,
   Shield,
   AlertTriangle,
-  ArrowUpRight
+  ArrowUpRight,
+  TrendingUp,
+  Rocket,
+  ExternalLink
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
+import AdvancedAnalytics from "@/components/AdvancedAnalytics";
 import {
   ResponsiveContainer,
   BarChart as RechartBarChart,
@@ -347,7 +351,7 @@ export default function Analytics() {
         </div>
 
         <Tabs defaultValue="characters" className="w-full">
-          <TabsList className="grid w-full grid-cols-3 mb-8">
+          <TabsList className="grid w-full grid-cols-4 mb-8">
             <TabsTrigger value="characters" className="font-comic">
               <BarChart className="h-4 w-4 mr-2" />
               Character Stats
@@ -359,6 +363,10 @@ export default function Analytics() {
             <TabsTrigger value="events" className="font-comic">
               <Activity className="h-4 w-4 mr-2" />
               Events
+            </TabsTrigger>
+            <TabsTrigger value="advanced" className="font-comic">
+              <Rocket className="h-4 w-4 mr-2" />
+              Advanced
             </TabsTrigger>
           </TabsList>
           
@@ -521,6 +529,33 @@ export default function Analytics() {
                 )}
               </CardContent>
             </Card>
+          </TabsContent>
+          
+          <TabsContent value="advanced" className="m-0 p-0 border-none">
+            <Card className="bg-panel halftone-bg comic-border">
+              <CardContent className="p-6">
+                <AdvancedAnalytics 
+                  analyticsData={analyticsData} 
+                  isLoading={isLoading}
+                  onRefresh={() => fetchAnalytics()}
+                />
+              </CardContent>
+            </Card>
+            
+            <div className="mt-6 flex items-center justify-between">
+              <div className="text-sm text-muted-foreground">
+                <p>This advanced analytics dashboard provides deeper insights into character creation patterns and user behavior.</p>
+              </div>
+              <Button 
+                variant="outline" 
+                size="sm" 
+                className="flex items-center"
+                onClick={() => window.open('https://docs.google.com/spreadsheets/new', '_blank')}
+              >
+                <ExternalLink className="mr-2 h-4 w-4" />
+                Export to Spreadsheet
+              </Button>
+            </div>
           </TabsContent>
         </Tabs>
       </motion.div>
