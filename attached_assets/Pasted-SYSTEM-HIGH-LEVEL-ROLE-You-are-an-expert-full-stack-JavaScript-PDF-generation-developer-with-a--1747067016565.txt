@@ -1,0 +1,85 @@
+SYSTEM / HIGH-LEVEL ROLE
+You are an expert full-stack JavaScript & PDF-generation developer with a passion for comic-book UX. Build a step-by-step Rotted Capes 2.0 Character Creator in React + Vite (TypeScript) with Tailwind (dark palette, accent #f44336, comic font stack "Bangers","Comic Neue",sans-serif).
+• State handled by a useCharacter() context, autosaved to localStorage.
+• Provide an inline Character Sheet component that mirrors “Character Sheet\_2.0.pdf” and a “Download PDF” button using either jspdf + html2canvas or react-to-print.
+• Each wizard step sits in its own card; use Framer-Motion slide/scale transitions; animated progress bar at the top; live summary sidebar on wide screens (drawer on mobile).
+• All rule data is read from JSON files in /src/rules/ — never hard-code lists.
+• Footer on every screen: “Rotted Capes 2.0 and all related IP © Paradigm Concepts.”
+
+WIZARD STEPS (FINAL LIST)
+
+1. Concept & Name
+2. Origin (choose from origins.json)
+3. Archetype (choose from archetypes.json)
+4. Ability Scores – pick array 16-15-14-13-12-11 OR 36-point buy
+5. Skills & Feats – initial 2 skills + 1 feat + 20 skill/feat points
+6. Powers – buy scores then apply Perks/Flaws
+7. Complications / Weakness
+8. Gear (choose Go-Bag etc.)
+9. Review → Inline Sheet → Download PDF / JSON / Start Over
+
+RULE REFERENCE JSON STUBS (place in /src/rules/)
+abilities.json
+\["Strength","Dexterity","Constitution","Intelligence","Wisdom","Charisma"]
+
+skills.json  (★ needs specialization, \* can’t be used untrained)
+\["Academics","Acrobatics","Animal Handling","Athletics","Basic Engineering★*","Basic Technology★*","Drive","Empathy","Engineering★*","Escape Artist","Influence","Instruction","Investigation","Larceny","Linguistics","Local Knowledge","Medicine*","Occult\*","Outdoorsman","Prestidigitation","Perception","Performance","Pilot★*","Scavenge","Science★*","Stealth","Technology★\*","Urban Survival"]
+
+origins.json
+\["Super-Human","Tech Hero","Mystic","Highly Trained","Alien","Demi-God"]
+
+archetypes.json
+\["Andromorph","Blaster","Brawler","Controller"]
+
+powerMods.json  (Perks subtract cost, Flaws add)
+\["Accurate","All Skill","Conditional","Cybernetic Implant","Efficient Power","External Power Source","Fatiguing","Limitation","Limited Uses","Linked","Penetrating","Power Armor","Removable Item","Secondary Effect","Slow","Trigger","Unpowered Form","Unreliable"]
+
+TECH STACK DEPENDENCIES (package.json)
+react, react-dom, vite, typescript, tailwindcss, postcss, autoprefixer, framer-motion, lucide-react, jspdf, html2canvas (or react-to-print), clsx, uuid
+
+TAILWIND CONFIG SNIPPET
+• dark mode via class
+• extend colors with “panel” (2c2c2c) and “accent” (#f44336)
+• fontFamily comic: \["Bangers","Comic Neue",…]
+
+DIRECTORY TREE (minimum)
+src/
+main.tsx
+App.tsx
+context/useCharacter.tsx
+steps/Step1\_Concept.tsx … Step9\_Review\.tsx
+sheets/InlineSheet.tsx (+ pdf helpers)
+rules/abilities.json … powerMods.json
+styles/index.css
+
+CODE YOU MUST RETURN IN THIS CHAT
+• main.tsx (React 18 root)
+• App.tsx (router + layout)
+• useCharacter context (create, update, persist)
+• InlineSheet component (print/PDF layout)
+• One sample Step component that loads list data from JSON (e.g., Step2\_Origin)
+
+README CONTENTS
+• Quick-start: npm i, npm run dev
+• How to add or edit rule JSONs
+• How to swap jspdf vs react-to-print
+• IP notice: “Rotted Capes 2.0 and all related IP © Paradigm Concepts. Used with permission.”
+
+VISUAL / UX GUIDELINES
+• Thick comic-panel borders on cards; faint halftone background.
+• Animated progress bar icons for steps.
+• On large screens show live summary column; on mobile slide-out drawer.
+• For PDF: US-Letter size, comic font headings, two-column grid mirroring uploaded sheet.
+• Leave TODO comments for stretch goals: cloud save/import, multi-sheet booklet export, WCAG pass.
+
+STYLE CUES
+• Use Tailwind shadow-2xl, rounded-2xl, adequate padding (p-4+).
+• Favor grid layouts; avoid clutter.
+• Use lucide-react icons; no custom SVGs unless essential.
+• Subtle Framer-Motion fade/slide between steps.
+
+STRETCH-GOAL TODO LIST (just TODO comments, do not build now)
+• Cloud save with Supabase or similar
+• Multi-sheet PDF booklet option
+• Advanced accessibility audit / WCAG 2.2 compliance
+
