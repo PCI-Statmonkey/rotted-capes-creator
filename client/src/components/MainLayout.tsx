@@ -89,15 +89,17 @@ export default function MainLayout({ children }: MainLayoutProps) {
                 My Profile
               </Button>
             )}
-            <Button 
-              variant="ghost"
-              size="sm"
-              onClick={() => location !== "/analytics" && window.location.assign("/analytics")}
-              className="hidden md:flex"
-            >
-              <BarChart4 className="mr-2 h-4 w-4" />
-              Analytics
-            </Button>
+            {isAdmin && (
+              <Button 
+                variant="ghost"
+                size="sm"
+                onClick={() => location !== "/analytics" && window.location.assign("/analytics")}
+                className="hidden md:flex"
+              >
+                <BarChart4 className="mr-2 h-4 w-4" />
+                Analytics
+              </Button>
+            )}
             <Button 
               variant="ghost" 
               size="icon"
@@ -149,16 +151,18 @@ export default function MainLayout({ children }: MainLayoutProps) {
                       </Button>
                     </Link>
                   )}
-                  {/* Make analytics available to all users for demonstration purposes */}
-                  <Link href="/analytics">
-                    <Button 
-                      variant="ghost" 
-                      className="w-full justify-start"
-                    >
-                      <BarChart4 className="mr-2 h-5 w-5" />
-                      Analytics
-                    </Button>
-                  </Link>
+                  {/* Only show analytics to admin users */}
+                  {isAdmin && (
+                    <Link href="/analytics">
+                      <Button 
+                        variant="ghost" 
+                        className="w-full justify-start"
+                      >
+                        <BarChart4 className="mr-2 h-5 w-5" />
+                        Analytics
+                      </Button>
+                    </Link>
+                  )}
                   <Button 
                     variant="ghost" 
                     className="w-full justify-start"
