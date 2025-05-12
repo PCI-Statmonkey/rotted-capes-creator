@@ -1,7 +1,9 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { ArrowLeft, ArrowRight, Plus, Minus, Info } from "lucide-react";
+import { ArrowLeft, ArrowRight, Plus, Minus, Info, RotateCcw } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Label } from "@/components/ui/label";
 import { useCharacter } from "@/context/CharacterContext";
 import { trackEvent } from "@/lib/analytics";
 import { calculateModifier, formatModifier } from "@/lib/utils";
@@ -29,32 +31,145 @@ const POINT_BUY_COSTS: PointBuyCost[] = [
 // Total points available for abilities
 const TOTAL_POINTS = 36;
 
+// Standard array option
+const STANDARD_ARRAY = [16, 15, 14, 13, 12, 11];
+
 export default function Step4_Abilities() {
   const { character, updateAbilityScore, setCurrentStep, updateDerivedStats } = useCharacter();
   const [pointsSpent, setPointsSpent] = useState(0);
   const [localAbilities, setLocalAbilities] = useState({ ...character.abilities });
+  const [assignmentMethod, setAssignmentMethod] = useState<"pointBuy" | "standardArray">("pointBuy");
+  const [assignedStandardScores, setAssignedStandardScores] = useState<Record<string, number | null>>({
+    strength: null,
+    dexterity: null, 
+    constitution: null,
+    intelligence: null,
+    wisdom: null,
+    charisma: null
+  });
+  
+  // Get origin and archetype bonuses
+  const getOriginBonus = (ability: string): number => {
+    const bonuses: Record<string, Record<string, number>> = {
+      "Super-Human": { strength: 2, constitution: 1 },
+      "Tech Hero": { intelligence: 2, dexterity: 1 },
+      "Mystic": { wisdom: 2, charisma: 1 },
+      "Highly Trained": { dexterity: 2, strength: 1 },
+      "Alien": { constitution: 2, intelligence: 1 },
+      "Demi-God": { charisma: 2, wisdom: 1 }
+    };
+    
+    return bonuses[character.origin]?.[ability] || 0;
+  };
+  
+  const getArchetypeBonus = (ability: string): number => {
+    const bonuses: Record<string, Record<string, number>> = {
+      "Bruiser": { strength: 1, constitution: 1 },
+      "Speedster": { dexterity: 2 },
+      "Blaster": { intelligence: 1, dexterity: 1 },
+      "Defender": { constitution: 2 },
+      "Gadgeteer": { intelligence: 2 },
+      "Mentalist": { wisdom: 1, intelligence: 1 },
+      "Mastermind": { intelligence: 1, charisma: 1 },
+      "Shapeshifter": { constitution: 1, dexterity: 1 }
+    };
+    
+    return bonuses[character.archetype]?.[ability] || 0;
+  };
+  
+  // Get total bonus for an ability
+  const getTotalBonus = (ability: string): number => {
+    return getOriginBonus(ability) + getArchetypeBonus(ability);
+  };
 
   // Calculate total points spent whenever abilities change
   useEffect(() => {
-    let total = 0;
-    
-    Object.keys(localAbilities).forEach((ability) => {
-      const abilityKey = ability as keyof typeof localAbilities;
-      const score = localAbilities[abilityKey].value;
-      const cost = POINT_BUY_COSTS.find(item => item.score === score)?.cost || 0;
-      total += cost;
-    });
-    
-    setPointsSpent(total);
-  }, [localAbilities]);
+    if (assignmentMethod === "pointBuy") {
+      let total = 0;
+      
+      Object.keys(localAbilities).forEach((ability) => {
+        const abilityKey = ability as keyof typeof localAbilities;
+        const score = localAbilities[abilityKey].value;
+        const cost = POINT_BUY_COSTS.find(item => item.score === score)?.cost || 0;
+        total += cost;
+      });
+      
+      setPointsSpent(total);
+    }
+  }, [localAbilities, assignmentMethod]);
 
   // Get cost for a specific score
   const getCostForScore = (score: number): number => {
     return POINT_BUY_COSTS.find(item => item.score === score)?.cost || 0;
   };
 
-  // Handle increment ability score
+  // Standard array selection methods
+  const handleSelectStandardScore = (ability: string, score: number) => {
+    if (assignmentMethod !== "standardArray") return;
+    
+    // Check if score is already assigned to another ability
+    const isScoreAssigned = Object.entries(assignedStandardScores)
+      .some(([key, val]) => key !== ability && val === score);
+      
+    if (isScoreAssigned) return;
+    
+    // Update assigned scores
+    const newAssignedScores = { ...assignedStandardScores, [ability]: score };
+    setAssignedStandardScores(newAssignedScores);
+    
+    // Update local abilities
+    const newAbilities = { ...localAbilities };
+    newAbilities[ability as keyof typeof localAbilities] = {
+      value: score,
+      modifier: calculateModifier(score)
+    };
+    setLocalAbilities(newAbilities);
+  };
+  
+  const isStandardScoreSelected = (score: number): boolean => {
+    return Object.values(assignedStandardScores).includes(score);
+  };
+  
+  const getSelectedStandardScore = (ability: string): number | null => {
+    return assignedStandardScores[ability];
+  };
+  
+  // Reset standard array assignments
+  const resetStandardArray = () => {
+    setAssignedStandardScores({
+      strength: null,
+      dexterity: null, 
+      constitution: null,
+      intelligence: null,
+      wisdom: null,
+      charisma: null
+    });
+    
+    // Reset abilities to default values
+    const defaultAbilities = { ...character.abilities };
+    Object.keys(defaultAbilities).forEach(key => {
+      const abilityKey = key as keyof typeof defaultAbilities;
+      defaultAbilities[abilityKey] = {
+        value: 10,
+        modifier: calculateModifier(10)
+      };
+    });
+    setLocalAbilities(defaultAbilities);
+  };
+
+  // Handle assignment method change
+  const handleAssignmentMethodChange = (method: "pointBuy" | "standardArray") => {
+    setAssignmentMethod(method);
+    
+    if (method === "standardArray") {
+      resetStandardArray();
+    }
+  };
+
+  // Handle increment ability score in point buy mode
   const handleIncrement = (ability: keyof typeof localAbilities) => {
+    if (assignmentMethod !== "pointBuy") return;
+    
     const currentScore = localAbilities[ability].value;
     const nextScore = currentScore + 1;
     
@@ -75,8 +190,10 @@ export default function Step4_Abilities() {
     }
   };
 
-  // Handle decrement ability score
+  // Handle decrement ability score in point buy mode
   const handleDecrement = (ability: keyof typeof localAbilities) => {
+    if (assignmentMethod !== "pointBuy") return;
+    
     const currentScore = localAbilities[ability].value;
     
     // Prevent scores below 8
@@ -142,42 +259,99 @@ export default function Step4_Abilities() {
       <div className="mb-6 border-b-2 border-gray-700 pb-4">
         <h2 className="font-comic text-3xl text-accent tracking-wide">Step 4: Ability Scores</h2>
         <p className="text-gray-300 mt-2">
-          Distribute ability points using the point-buy system. You have {TOTAL_POINTS} points to spend.
+          Assign your character's ability scores and see bonuses from your Origin and Archetype.
         </p>
       </div>
 
       <div className="space-y-6">
-        {/* Points summary */}
-        <div className="flex justify-between items-center p-4 bg-gray-800 rounded-lg border border-gray-700">
-          <div>
-            <span className="text-gray-400">Points Spent:</span>
-            <span className={`ml-2 font-bold ${pointsSpent > TOTAL_POINTS ? 'text-red-500' : 'text-accent'}`}>
-              {pointsSpent}
-            </span>
-            <span className="text-gray-400"> / {TOTAL_POINTS}</span>
-          </div>
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button variant="ghost" size="icon">
-                  <Info className="h-5 w-5 text-gray-400" />
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent side="left" className="max-w-xs">
-                <div className="space-y-2">
-                  <h4 className="font-bold">Point Buy Costs</h4>
-                  <div className="grid grid-cols-5 gap-1 text-xs">
-                    {POINT_BUY_COSTS.map(item => (
-                      <div key={item.score} className="bg-gray-700 p-1 rounded text-center">
-                        {item.score}: {item.cost}
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
+        {/* Assignment method selection */}
+        <div className="bg-gray-800 rounded-lg p-4 border border-gray-700">
+          <h3 className="font-comic text-xl mb-3">Choose Assignment Method</h3>
+          <RadioGroup 
+            value={assignmentMethod}
+            onValueChange={(value) => handleAssignmentMethodChange(value as any)}
+            className="flex flex-col md:flex-row gap-4"
+          >
+            <div className="flex items-start gap-2">
+              <RadioGroupItem value="pointBuy" id="pointBuy" />
+              <div>
+                <Label htmlFor="pointBuy" className="font-medium">Point Buy</Label>
+                <p className="text-xs text-gray-400">Distribute {TOTAL_POINTS} points across abilities</p>
+              </div>
+            </div>
+            <div className="flex items-start gap-2">
+              <RadioGroupItem value="standardArray" id="standardArray" />
+              <div>
+                <Label htmlFor="standardArray" className="font-medium">Standard Array</Label>
+                <p className="text-xs text-gray-400">Assign {STANDARD_ARRAY.join(', ')} to abilities</p>
+              </div>
+            </div>
+          </RadioGroup>
         </div>
+
+        {/* Point Buy Summary - Only shown in point buy mode */}
+        {assignmentMethod === "pointBuy" && (
+          <div className="flex justify-between items-center p-4 bg-gray-800 rounded-lg border border-gray-700">
+            <div>
+              <span className="text-gray-400">Points Spent:</span>
+              <span className={`ml-2 font-bold ${pointsSpent > TOTAL_POINTS ? 'text-red-500' : 'text-accent'}`}>
+                {pointsSpent}
+              </span>
+              <span className="text-gray-400"> / {TOTAL_POINTS}</span>
+            </div>
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button variant="ghost" size="icon">
+                    <Info className="h-5 w-5 text-gray-400" />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent side="left" className="max-w-xs">
+                  <div className="space-y-2">
+                    <h4 className="font-bold">Point Buy Costs</h4>
+                    <div className="grid grid-cols-5 gap-1 text-xs">
+                      {POINT_BUY_COSTS.map(item => (
+                        <div key={item.score} className="bg-gray-700 p-1 rounded text-center">
+                          {item.score}: {item.cost}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          </div>
+        )}
+
+        {/* Standard Array Selection - Only shown in standard array mode */}
+        {assignmentMethod === "standardArray" && (
+          <div className="p-4 bg-gray-800 rounded-lg border border-gray-700">
+            <div className="flex justify-between items-center mb-3">
+              <h3 className="font-medium">Standard Array</h3>
+              <Button 
+                variant="ghost" 
+                size="sm" 
+                onClick={resetStandardArray}
+                className="h-8 flex gap-1 items-center text-xs"
+              >
+                <RotateCcw className="h-3 w-3" /> Reset
+              </Button>
+            </div>
+            <div className="flex flex-wrap gap-2 mb-2">
+              {STANDARD_ARRAY.map(score => (
+                <div key={score} className={`
+                  p-2 rounded-md text-center w-12 font-bold 
+                  ${isStandardScoreSelected(score) ? 'bg-gray-600 text-gray-400' : 'bg-accent text-white'}
+                `}>
+                  {score}
+                </div>
+              ))}
+            </div>
+            <p className="text-xs text-gray-400">
+              Click on a score and then on an ability to assign it
+            </p>
+          </div>
+        )}
 
         {/* Ability Scores */}
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
@@ -185,48 +359,105 @@ export default function Step4_Abilities() {
             const abilityKey = ability as keyof typeof localAbilities;
             const abilityValue = localAbilities[abilityKey].value;
             const abilityMod = localAbilities[abilityKey].modifier;
+            const bonus = getTotalBonus(ability);
             
             return (
               <div 
                 key={ability}
-                className="bg-gray-800 rounded-lg p-4 border-2 border-gray-700 flex flex-col"
+                className={`
+                  bg-gray-800 rounded-lg p-4 border-2 border-gray-700 flex flex-col
+                  ${assignmentMethod === 'standardArray' && !getSelectedStandardScore(ability) ? 
+                    'cursor-pointer hover:border-accent' : ''}
+                `}
+                onClick={() => {
+                  if (assignmentMethod === 'standardArray') {
+                    // Find first unassigned score
+                    const availableScore = STANDARD_ARRAY.find(score => !isStandardScoreSelected(score));
+                    if (availableScore) {
+                      handleSelectStandardScore(ability, availableScore);
+                    }
+                  }
+                }}
               >
                 <div className="flex justify-between items-center mb-2">
-                  <h3 className="font-comic text-xl">{formatAbilityName(ability)}</h3>
+                  <h3 className="font-comic text-lg truncate">{formatAbilityName(ability)}</h3>
                   <div className="flex items-center">
                     <span className="text-lg font-bold">{abilityValue}</span>
                     <span className="ml-2 text-gray-400">({formatModifier(abilityMod)})</span>
+                    {bonus > 0 && (
+                      <span className="ml-2 text-green-500">+{bonus}</span>
+                    )}
                   </div>
                 </div>
                 
                 <p className="text-xs text-gray-400 mb-3">{getAbilityDescription(ability)}</p>
                 
-                <div className="flex justify-between mt-auto">
-                  <Button 
-                    variant="outline"
-                    size="sm"
-                    className="h-8 w-8 p-0"
-                    onClick={() => handleDecrement(abilityKey)}
-                    disabled={abilityValue <= 8}
-                  >
-                    <Minus className="h-4 w-4" />
-                  </Button>
-                  
-                  <div className="flex items-center">
-                    <span className="text-xs text-gray-400">Cost: </span>
-                    <span className="ml-1 font-bold">{getCostForScore(abilityValue)}</span>
+                {assignmentMethod === "pointBuy" ? (
+                  <div className="flex justify-between mt-auto">
+                    <Button 
+                      variant="outline"
+                      size="sm"
+                      className="h-8 w-8 p-0"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleDecrement(abilityKey);
+                      }}
+                      disabled={abilityValue <= 8}
+                    >
+                      <Minus className="h-4 w-4" />
+                    </Button>
+                    
+                    <div className="flex items-center">
+                      <span className="text-xs text-gray-400">Cost: </span>
+                      <span className="ml-1 font-bold">{getCostForScore(abilityValue)}</span>
+                    </div>
+                    
+                    <Button 
+                      variant="outline"
+                      size="sm"
+                      className="h-8 w-8 p-0"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleIncrement(abilityKey);
+                      }}
+                      disabled={abilityValue >= 17 || (pointsSpent + (getCostForScore(abilityValue + 1) - getCostForScore(abilityValue))) > TOTAL_POINTS}
+                    >
+                      <Plus className="h-4 w-4" />
+                    </Button>
                   </div>
-                  
-                  <Button 
-                    variant="outline"
-                    size="sm"
-                    className="h-8 w-8 p-0"
-                    onClick={() => handleIncrement(abilityKey)}
-                    disabled={abilityValue >= 17 || (pointsSpent + (getCostForScore(abilityValue + 1) - getCostForScore(abilityValue))) > TOTAL_POINTS}
-                  >
-                    <Plus className="h-4 w-4" />
-                  </Button>
-                </div>
+                ) : (
+                  <div className="mt-auto">
+                    {getSelectedStandardScore(ability) ? (
+                      <div className="text-center p-2 rounded bg-gray-700">
+                        <span>Assigned: </span>
+                        <span className="font-bold">{getSelectedStandardScore(ability)}</span>
+                        {bonus > 0 && <span className="text-green-500 ml-1">(+{bonus} bonus)</span>}
+                      </div>
+                    ) : (
+                      <p className="text-xs text-center italic text-gray-500">
+                        Click to assign a score
+                      </p>
+                    )}
+                  </div>
+                )}
+                
+                {/* Origin and Archetype Bonuses */}
+                {(getOriginBonus(ability) > 0 || getArchetypeBonus(ability) > 0) && (
+                  <div className="mt-2 pt-2 border-t border-gray-700 text-xs">
+                    {getOriginBonus(ability) > 0 && (
+                      <div className="text-green-500 flex justify-between">
+                        <span>Origin: {character.origin}</span>
+                        <span>+{getOriginBonus(ability)}</span>
+                      </div>
+                    )}
+                    {getArchetypeBonus(ability) > 0 && (
+                      <div className="text-green-500 flex justify-between">
+                        <span>Archetype: {character.archetype}</span>
+                        <span>+{getArchetypeBonus(ability)}</span>
+                      </div>
+                    )}
+                  </div>
+                )}
               </div>
             );
           })}
