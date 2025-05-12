@@ -292,28 +292,30 @@ export default function AdvancedAnalytics({
           
           <div className="flex space-x-4">
             {/* Conditional controls based on the active tab */}
-            <TabsContent value="timeseries" className="m-0 p-0 border-none flex items-center space-x-4">
-              <Select value={timeRange} onValueChange={setTimeRange}>
-                <SelectTrigger className="w-32">
-                  <SelectValue placeholder="Time Range" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="week">Last Week</SelectItem>
-                  <SelectItem value="month">Last Month</SelectItem>
-                  <SelectItem value="quarter">Last Quarter</SelectItem>
-                </SelectContent>
-              </Select>
-              
-              <Select value={chartType} onValueChange={setChartType}>
-                <SelectTrigger className="w-32">
-                  <SelectValue placeholder="Chart Type" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="area">Area Chart</SelectItem>
-                  <SelectItem value="bar">Bar Chart</SelectItem>
-                  <SelectItem value="composed">Composed</SelectItem>
-                </SelectContent>
-              </Select>
+            <TabsContent value="timeseries" className="m-0 p-0 border-none">
+              <div className="flex items-center space-x-4">
+                <Select value={timeRange} onValueChange={setTimeRange}>
+                  <SelectTrigger className="w-32">
+                    <SelectValue placeholder="Time Range" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="week">Last Week</SelectItem>
+                    <SelectItem value="month">Last Month</SelectItem>
+                    <SelectItem value="quarter">Last Quarter</SelectItem>
+                  </SelectContent>
+                </Select>
+                
+                <Select value={chartType} onValueChange={setChartType}>
+                  <SelectTrigger className="w-32">
+                    <SelectValue placeholder="Chart Type" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="area">Area Chart</SelectItem>
+                    <SelectItem value="bar">Bar Chart</SelectItem>
+                    <SelectItem value="composed">Composed</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
             </TabsContent>
           </div>
         </div>
@@ -331,122 +333,128 @@ export default function AdvancedAnalytics({
             </CardHeader>
             <CardContent className="h-96">
               <ResponsiveContainer width="100%" height="100%">
-                {chartType === 'area' && (
-                  <AreaChart data={timeSeriesData}>
-                    <defs>
-                      <linearGradient id="colorCharacters" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="5%" stopColor="#f44336" stopOpacity={0.8}/>
-                        <stop offset="95%" stopColor="#f44336" stopOpacity={0}/>
-                      </linearGradient>
-                      <linearGradient id="colorLogins" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="5%" stopColor="#2196f3" stopOpacity={0.8}/>
-                        <stop offset="95%" stopColor="#2196f3" stopOpacity={0}/>
-                      </linearGradient>
-                      <linearGradient id="colorExports" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="5%" stopColor="#4caf50" stopOpacity={0.8}/>
-                        <stop offset="95%" stopColor="#4caf50" stopOpacity={0}/>
-                      </linearGradient>
-                    </defs>
-                    <XAxis 
-                      dataKey="date" 
-                      tickFormatter={formatDate}
-                      interval={Math.floor(timeSeriesData.length / 7)}
-                    />
-                    <YAxis />
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <Tooltip 
-                      labelFormatter={(val) => `Date: ${new Date(val).toLocaleDateString()}`}
-                    />
-                    <Legend />
-                    <Area 
-                      type="monotone" 
-                      dataKey="characterCreations" 
-                      stroke="#f44336" 
-                      fillOpacity={1} 
-                      fill="url(#colorCharacters)" 
-                      name="Character Creations"
-                    />
-                    <Area 
-                      type="monotone" 
-                      dataKey="logins" 
-                      stroke="#2196f3" 
-                      fillOpacity={1} 
-                      fill="url(#colorLogins)"
-                      name="User Logins" 
-                    />
-                    <Area 
-                      type="monotone" 
-                      dataKey="pdfExports" 
-                      stroke="#4caf50" 
-                      fillOpacity={1} 
-                      fill="url(#colorExports)"
-                      name="PDF Exports" 
-                    />
-                  </AreaChart>
-                )}
-                
-                {chartType === 'bar' && (
-                  <BarChart data={timeSeriesData}>
-                    <XAxis 
-                      dataKey="date" 
-                      tickFormatter={formatDate}
-                      interval={Math.floor(timeSeriesData.length / 7)}
-                    />
-                    <YAxis />
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <Tooltip 
-                      labelFormatter={(val) => `Date: ${new Date(val).toLocaleDateString()}`}
-                    />
-                    <Legend />
-                    <Bar 
-                      dataKey="characterCreations" 
-                      fill="#f44336" 
-                      name="Character Creations" 
-                    />
-                    <Bar 
-                      dataKey="logins" 
-                      fill="#2196f3"
-                      name="User Logins" 
-                    />
-                    <Bar 
-                      dataKey="pdfExports" 
-                      fill="#4caf50"
-                      name="PDF Exports" 
-                    />
-                  </BarChart>
-                )}
-                
-                {chartType === 'composed' && (
-                  <ComposedChart data={timeSeriesData}>
-                    <XAxis 
-                      dataKey="date" 
-                      tickFormatter={formatDate}
-                      interval={Math.floor(timeSeriesData.length / 7)}
-                    />
-                    <YAxis />
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <Tooltip 
-                      labelFormatter={(val) => `Date: ${new Date(val).toLocaleDateString()}`}
-                    />
-                    <Legend />
-                    <Bar 
-                      dataKey="characterCreations" 
-                      fill="#f44336" 
-                      name="Character Creations" 
-                    />
-                    <Bar 
-                      dataKey="pdfExports" 
-                      fill="#4caf50"
-                      name="PDF Exports" 
-                    />
-                    <Line 
-                      type="monotone" 
-                      dataKey="logins" 
-                      stroke="#2196f3"
-                      name="User Logins" 
-                    />
-                  </ComposedChart>
-                )}
+                {(() => {
+                  // This approach wraps the conditional rendering in a function 
+                  // that returns a single element, satisfying the single child requirement
+                  if (chartType === 'area') {
+                    return (
+                      <AreaChart data={timeSeriesData}>
+                        <defs>
+                          <linearGradient id="colorCharacters" x1="0" y1="0" x2="0" y2="1">
+                            <stop offset="5%" stopColor="#f44336" stopOpacity={0.8}/>
+                            <stop offset="95%" stopColor="#f44336" stopOpacity={0}/>
+                          </linearGradient>
+                          <linearGradient id="colorLogins" x1="0" y1="0" x2="0" y2="1">
+                            <stop offset="5%" stopColor="#2196f3" stopOpacity={0.8}/>
+                            <stop offset="95%" stopColor="#2196f3" stopOpacity={0}/>
+                          </linearGradient>
+                          <linearGradient id="colorExports" x1="0" y1="0" x2="0" y2="1">
+                            <stop offset="5%" stopColor="#4caf50" stopOpacity={0.8}/>
+                            <stop offset="95%" stopColor="#4caf50" stopOpacity={0}/>
+                          </linearGradient>
+                        </defs>
+                        <XAxis 
+                          dataKey="date" 
+                          tickFormatter={formatDate}
+                          interval={Math.floor(timeSeriesData.length / 7)}
+                        />
+                        <YAxis />
+                        <CartesianGrid strokeDasharray="3 3" />
+                        <Tooltip 
+                          labelFormatter={(val) => `Date: ${new Date(val).toLocaleDateString()}`}
+                        />
+                        <Legend />
+                        <Area 
+                          type="monotone" 
+                          dataKey="characterCreations" 
+                          stroke="#f44336" 
+                          fillOpacity={1} 
+                          fill="url(#colorCharacters)" 
+                          name="Character Creations"
+                        />
+                        <Area 
+                          type="monotone" 
+                          dataKey="logins" 
+                          stroke="#2196f3" 
+                          fillOpacity={1} 
+                          fill="url(#colorLogins)"
+                          name="User Logins" 
+                        />
+                        <Area 
+                          type="monotone" 
+                          dataKey="pdfExports" 
+                          stroke="#4caf50" 
+                          fillOpacity={1} 
+                          fill="url(#colorExports)"
+                          name="PDF Exports" 
+                        />
+                      </AreaChart>
+                    );
+                  } else if (chartType === 'bar') {
+                    return (
+                      <BarChart data={timeSeriesData}>
+                        <XAxis 
+                          dataKey="date" 
+                          tickFormatter={formatDate}
+                          interval={Math.floor(timeSeriesData.length / 7)}
+                        />
+                        <YAxis />
+                        <CartesianGrid strokeDasharray="3 3" />
+                        <Tooltip 
+                          labelFormatter={(val) => `Date: ${new Date(val).toLocaleDateString()}`}
+                        />
+                        <Legend />
+                        <Bar 
+                          dataKey="characterCreations" 
+                          fill="#f44336" 
+                          name="Character Creations" 
+                        />
+                        <Bar 
+                          dataKey="logins" 
+                          fill="#2196f3"
+                          name="User Logins" 
+                        />
+                        <Bar 
+                          dataKey="pdfExports" 
+                          fill="#4caf50"
+                          name="PDF Exports" 
+                        />
+                      </BarChart>
+                    );
+                  } else { // composed chart as default case
+                    return (
+                      <ComposedChart data={timeSeriesData}>
+                        <XAxis 
+                          dataKey="date" 
+                          tickFormatter={formatDate}
+                          interval={Math.floor(timeSeriesData.length / 7)}
+                        />
+                        <YAxis />
+                        <CartesianGrid strokeDasharray="3 3" />
+                        <Tooltip 
+                          labelFormatter={(val) => `Date: ${new Date(val).toLocaleDateString()}`}
+                        />
+                        <Legend />
+                        <Bar 
+                          dataKey="characterCreations" 
+                          fill="#f44336" 
+                          name="Character Creations" 
+                        />
+                        <Bar 
+                          dataKey="pdfExports" 
+                          fill="#4caf50"
+                          name="PDF Exports" 
+                        />
+                        <Line 
+                          type="monotone" 
+                          dataKey="logins" 
+                          stroke="#2196f3"
+                          name="User Logins" 
+                        />
+                      </ComposedChart>
+                    );
+                  }
+                })()}
               </ResponsiveContainer>
             </CardContent>
           </Card>
