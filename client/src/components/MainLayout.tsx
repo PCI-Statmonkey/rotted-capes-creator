@@ -54,9 +54,26 @@ export default function MainLayout({ children }: MainLayoutProps) {
       setIsLoading(true);
       if (currentUser) {
         await logoutUser();
+        // Manually clear the current user state
+        setCurrentUser(null);
+        setIsAdmin(false);
       } else {
         const user = await signInWithGoogle();
         console.log("Login completed, user:", user ? user.email : "none");
+        
+        // Manually set the current user state
+        if (user) {
+          setCurrentUser(user);
+          
+          // For development mode mock user, set admin flag
+          if (user.email === 'admin@rottedcapes.com') {
+            setIsAdmin(true);
+          }
+          
+          // Force a page reload to make sure all components update
+          // This is a failsafe approach when state updates might not propagate properly
+          window.location.reload();
+        }
       }
     } catch (error) {
       console.error("Authentication error:", error);

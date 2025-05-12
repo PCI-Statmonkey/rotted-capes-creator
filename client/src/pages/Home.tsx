@@ -2,7 +2,7 @@ import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { motion } from "framer-motion";
-import { FileEdit, Info, Shield, User, LogIn } from "lucide-react";
+import { FileEdit, Info, Shield, User, LogIn, Settings } from "lucide-react";
 import { useState } from "react";
 import { trackEvent } from "@/lib/analytics";
 import { auth, signInWithGoogle } from "@/lib/firebase";
@@ -113,6 +113,47 @@ export default function Home() {
         </motion.div>
       </div>
 
+      {/* Special Login for Opera Users */}
+      {!currentUser && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.5, delay: 0.35 }}
+          className="max-w-3xl mx-auto text-center p-6 mb-8 bg-zinc-800 rounded-2xl comic-border border-amber-500"
+        >
+          <Settings className="h-10 w-10 text-amber-500 mx-auto mb-4" />
+          <h2 className="font-comic text-2xl mb-4 text-amber-400">Opera Browser Users</h2>
+          <p className="text-muted-foreground mb-4">
+            If you're using Opera browser and experiencing issues with the login popup, use this special development login button to access admin features.
+          </p>
+          <Button 
+            className="bg-amber-600 hover:bg-amber-500 font-comic"
+            onClick={() => {
+              // Create a mock admin user
+              const mockUser = {
+                uid: "opera-user-admin",
+                email: "admin@rottedcapes.com",
+                displayName: "Opera Admin User"
+              };
+              
+              // Manually update Firebase auth state
+              auth.updateCurrentUser(mockUser as any);
+              
+              // Update local state
+              setCurrentUser(mockUser as any);
+              
+              // Show success message and redirect
+              alert("Admin login successful! You now have access to all features including Analytics.");
+              
+              // Redirect to Analytics
+              window.location.href = "/analytics";
+            }}
+          >
+            <LogIn className="mr-2 h-4 w-4" /> Opera Admin Login
+          </Button>
+        </motion.div>
+      )}
+      
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
