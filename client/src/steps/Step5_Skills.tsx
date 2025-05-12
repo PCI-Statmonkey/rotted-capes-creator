@@ -140,7 +140,7 @@ const SKILL_SETS: SkillSet[] = [
       { name: "Outdoorsman" },
       { name: "Urban Survival" }
     ],
-    feats: ["Learn Maneuver", "Learn Maneuver"]
+    feats: ["Learn Maneuver (1)", "Learn Maneuver (2)"]
   },
   {
     name: "Engineer",
@@ -675,62 +675,64 @@ export default function Step5_Skills() {
               </div>
             </div>
             
-            {/* Starting feat */}
+            {/* Starting feat - Dropdown version */}
             <div>
               <Label className="text-md font-medium mb-2 block">Select 1 Starting Feat</Label>
-              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
-                {AVAILABLE_FEATS.slice(0, 10).map(feat => (
-                  <div 
-                    key={feat}
-                    className={`
-                      rounded-md p-2 border ${startingFeat === feat 
-                        ? 'bg-accent/10 border-accent' 
-                        : 'bg-gray-700 border-gray-600 hover:border-gray-500'
-                      } cursor-pointer transition-colors
-                      ${startingFeat && startingFeat !== feat ? 'opacity-50' : ''}
-                    `}
-                    onClick={() => setStartingFeat(feat)}
-                  >
-                    <div className="flex items-center">
-                      <div className="w-5 h-5 flex items-center justify-center mr-2">
-                        {startingFeat === feat && (
-                          <Check className="h-4 w-4 text-accent" />
-                        )}
-                      </div>
-                      <span>{feat}</span>
-                    </div>
-                  </div>
-                ))}
+              <div className="relative">
+                <select
+                  className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-md text-white appearance-none cursor-pointer focus:border-accent focus:ring-1 focus:ring-accent focus:outline-none"
+                  value={startingFeat}
+                  onChange={(e) => setStartingFeat(e.target.value)}
+                >
+                  <option value="">-- Select a Feat --</option>
+                  {AVAILABLE_FEATS.map(feat => (
+                    <option key={feat} value={feat}>{feat}</option>
+                  ))}
+                </select>
+                <div className="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
+                  <svg className="h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
+                    <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
+                  </svg>
+                </div>
               </div>
+              {startingFeat && (
+                <div className="mt-2 p-2 bg-accent/10 border border-accent/30 rounded-md">
+                  <div className="flex items-center">
+                    <Check className="h-4 w-4 text-accent mr-2" />
+                    <span className="font-medium">{startingFeat}</span>
+                  </div>
+                </div>
+              )}
             </div>
             
-            {/* Starting maneuver */}
+            {/* Starting maneuver - Dropdown version */}
             <div>
               <Label className="text-md font-medium mb-2 block">Select 1 Starting Maneuver</Label>
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
-                {["Defensive Attack", "Defensive Stance", "Power Attack", "Grab", "Trip"].map(maneuver => (
-                  <div 
-                    key={maneuver}
-                    className={`
-                      rounded-md p-2 border ${startingManeuver === maneuver 
-                        ? 'bg-accent/10 border-accent' 
-                        : 'bg-gray-700 border-gray-600 hover:border-gray-500'
-                      } cursor-pointer transition-colors
-                      ${startingManeuver && startingManeuver !== maneuver ? 'opacity-50' : ''}
-                    `}
-                    onClick={() => setStartingManeuver(maneuver)}
-                  >
-                    <div className="flex items-center">
-                      <div className="w-5 h-5 flex items-center justify-center mr-2">
-                        {startingManeuver === maneuver && (
-                          <Check className="h-4 w-4 text-accent" />
-                        )}
-                      </div>
-                      <span>{maneuver}</span>
-                    </div>
-                  </div>
-                ))}
+              <div className="relative">
+                <select
+                  className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-md text-white appearance-none cursor-pointer focus:border-accent focus:ring-1 focus:ring-accent focus:outline-none"
+                  value={startingManeuver}
+                  onChange={(e) => setStartingManeuver(e.target.value)}
+                >
+                  <option value="">-- Select a Maneuver --</option>
+                  {["Defensive Attack", "Defensive Stance", "Power Attack", "Grab", "Trip", "All-Out Attack", "Block", "Charge", "Disarm", "Feint", "Grapple"].map(maneuver => (
+                    <option key={maneuver} value={maneuver}>{maneuver}</option>
+                  ))}
+                </select>
+                <div className="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
+                  <svg className="h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
+                    <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
+                  </svg>
+                </div>
               </div>
+              {startingManeuver && (
+                <div className="mt-2 p-2 bg-accent/10 border border-accent/30 rounded-md">
+                  <div className="flex items-center">
+                    <Check className="h-4 w-4 text-accent mr-2" />
+                    <span className="font-medium">{startingManeuver}</span>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </div>
