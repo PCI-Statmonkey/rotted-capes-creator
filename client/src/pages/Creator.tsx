@@ -6,6 +6,7 @@ import ProgressBar from "@/components/ProgressBar";
 import Step1_Concept from "@/steps/Step1_Concept";
 import Step2_Origin from "@/steps/Step2_Origin";
 import Step3_Archetype from "@/steps/Step3_Archetype";
+import Step4_Abilities from "@/steps/Step4_Abilities";
 import { WIZARD_STEPS } from "@/lib/utils";
 
 export default function Creator() {
@@ -20,6 +21,8 @@ export default function Creator() {
         return <Step2_Origin />;
       case 3:
         return <Step3_Archetype />;
+      case 4:
+        return <Step4_Abilities />;
       // Other steps will be added as they are implemented
       default:
         return <Step1_Concept />;
