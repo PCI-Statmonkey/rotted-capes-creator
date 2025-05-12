@@ -1,0 +1,198 @@
+Selecting your skills and feats 
+All heroes start with 
+•	You are trained with two (2) of the following skills: Athletics, Drive, Local Knowledge, Basic Technology, Basic Engineering, or Urban Survival.
+•	You gain one (1) feat of your choice (see pg XX for feats) 
+•	You gain one (1) maneuver of your choice (see pg XX for maneuvers)
+•	You now have 20 points to buy your hero’s starting skills and feats.  
+o	You can buy up to 2 skill sets, highly trained heroes can buy 3.
+o	Buying training in a single skills costs 1 point. 
+o	You can buy a feat for 5 points.
+•	If you gain a skill more than once through any source (say the Drive skill as part of your starting skills and again as part of a skill set), you gain skill focus in that skill or a related field of study, if applicable.
+•	If you gain the same feat twice through skill sets, you may choose any other non-power feat in place of one of them.
+<Side bar>
+Choosing Skills to Fit a Particular Theme 
+Don't feel limited by a skill set's name. For example, if you want to create a hero who was once a psychologist, you can choose the Public Relations/Con Artist skill set and become trained in Science (Psychology). If you want to create a commercial pilot, you could select either the Academic/Student or Business Professional skill set and take the Pilot skill. Skill sets shouldn't restrict you; if none fit your hero, purchase the skills that suit your vision.
+</Side Bar>
+
+For a complete discerption of skills and respective skill with fields of study, see page skills page XX. 
+
+Table X-X Complete Skills List: 
+Skills With * Possess fields of study
+Academics*	Medicine *
+Acrobatics *	Occult*
+Animal Handling *	Outdoorsman*
+Athletics *	Prestidigitation*
+Basic Engineering	Perception
+Basic Technology	Performance*
+Drive *	Pilot *
+Empathy	Scavenge*
+Engineering *	Science *
+Escapee Artist	Stealth 
+Influence *	Technology *
+Investigation	Urban Survival *
+Larceny *	
+Linguistics * 	
+Local Knowledge *	
+
+Skill Focus: If a skill has fields of study, you may gain skill focus in one of those fields. If it does not, you may gain focus on the skill itself. You gain Advantage on all checks with the chosen skill or field of study. During character creation, there are two ways to get skill focus: either by getting a feat that grants it or by getting the same skill twice via skill sets; you can’t buy a skill twice to get skill focus.
+
+Starting languages 
+You are considered to be literate and fluent in your native language. Through linguistic skill, you can learn additional languages. 
+Skill Sets
+Below is a list of available skill sets. Skill sets are a collection of skills and feats you acquire at a discount. Skills noted with an • you gain skill focus in that skill or related fields of study, if applicable. If you gain a skill more than once through any source (say the Drive skill as part of your starting skills and again as part of a skill set), gain skill focus in that skill or related fields of study, if applicable.
+Academic/Student (6 points)
+Academics
+• Academics (choose two fields of study)
+Athletics
+Linguistics
+Science
+Technology	
+Feats: Eclectic Knowledge
+Athlete, Pro/Semi-Pro (5 Points) 
+Academics
+Acrobatics
+Athletics	
+Perception
+Feat: Quick
+
+Automobile Mechanic (9 points) 
+Athletics
+• Basic Technology 
+Engineering
+• Engineering (Automobile Repair)
+Feats: Gearhead, Technophile
+
+Business Professional (12 Points)  
+Academics
+Basic Technology
+• Empathy
+Influence
+• Influence (choose a field of study)
+Linguistics
+Feats: Empathic Intuition, Honeyed Tongue
+Criminal (6 Points)
+Basic Technology 
+Empathy
+• Larceny 
+Perception	
+Stealth
+Feats: Burglar
+
+Computer Technician (8 Points)
+Engineering
+• Engineering (Computers)
+• Engineering (Programming)
+Technology 
+• Technology (Programming)
+• Technology (Computer Repair)
+Feats: Technological Savant, Engineering Prodigy 
+Detective (14 Points)
+Academics
+• Academics (Law or Criminology)
+Athletics
+Drive	
+Basic Technology
+• Empathy
+• Investigation
+Perception	
+Local Knowledge	
+Feats: Empathic Intuition, Investigator
+
+Doctor (16 Points)
+Academics 
+Empathy
+Medicine
+• Medicine (choose two fields of study)
+Perception
+• Science (Biology)
+• Science (Toxicology or Virology)
+Technology
+• Technology (Medical Technology)
+• Technology (Biotechnology)
+Feats: Healing Hands, Technological Savant, Scientific Mind
+
+Ex-military (12 points) 
+Athletics
+Basic Technology
+Medicine
+Perception
+Outdoorsman
+Urban Survival
+Feats:  Learn Maneuver x2
+
+Engineer (11 Points) 
+Academics
+• Basic Engineering
+Engineering 
+• Engineering (Choose two fields of study) 
+Science
+Technology
+Feats: Engineering Prodigy, Jury Rigging 
+
+Emergency Response (7 Points) 
+Academics
+Athletics
+Empathy
+Medicine
+• Medicine (EMT)
+• Medicine (infectious diseases)
+Science
+Technology
+Feats: Healing Hands
+
+Law Enforcement (6 Points)
+Academics
+Athletics
+Drive
+Perception
+• Local Knowledge
+Feats: Seasoned Survivor
+
+Occultist (6 Points)
+Academics 
+Empathy
+Investigation
+Linguistics
+• Occult
+Perception
+Feats: Occultist  
+
+Public Relations/Con Artist (9 Points) 
+Empathy
+• Influence
+Larceny
+Linguistics
+• Linguistics (choose one field of study)
+Choose three languages
+Feats: Honeyed Tongue, Polyglot
+Scientist (11 Points) 
+Basic Technology 
+• Academics (Choose two fields of study)
+Investigation
+• Science (Choose two fields of study)
+Technology 
+Perception
+Feats: Eclectic Knowledge, Scientific Mind 
+Spy/Assassin (13 Points) 
+Athletics
+Acrobatics
+Investigation
+Larceny
+Perception
+• Stealth
+• Technology (Computer Hacking)
+Feats: Hacker, Stealthy
+Street Magician (10 Points)
+Escape Artist 
+Influence 
+Prestidigitation
+Performance
+Feats: Escape Artist Extraordinaire, Street Magic   
+Survivalist (12 Points) 
+Athletics
+Animal Handling
+Drive
+Perception
+• Outdoorsman
+• Urban Survival
+Feats: Hunter, I’ve Done Alright for Myself. 

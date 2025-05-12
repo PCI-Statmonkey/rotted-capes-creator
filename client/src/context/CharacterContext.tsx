@@ -43,6 +43,16 @@ export interface GearItem {
   description: string;
 }
 
+export interface Feat {
+  name: string;
+  source?: string;
+  skillSetName?: string;
+}
+
+export interface Maneuver {
+  name: string;
+}
+
 export interface Character {
   id: string;
   firebaseId?: string;  // ID in Firebase storage
@@ -62,6 +72,8 @@ export interface Character {
   powers: Power[];
   complications: Complication[];
   gear: GearItem[];
+  feats: Feat[];
+  maneuvers: Maneuver[];
   defense: number;
   toughness: number;
   fortitude: number;
