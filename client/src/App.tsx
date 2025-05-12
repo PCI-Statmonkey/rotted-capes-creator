@@ -8,6 +8,8 @@ import { lazy, Suspense, useEffect } from "react";
 import MainLayout from "./components/MainLayout";
 import { initGA } from "@/lib/analytics";
 import { useAnalytics } from "@/hooks/use-analytics";
+import { CharacterProvider } from "@/context/CharacterContext";
+import { AuthProvider } from "@/context/AuthContext";
 
 // Lazy-load pages for better performance
 const Profile = lazy(() => import("@/pages/Profile"));
@@ -22,7 +24,14 @@ function AppRouter() {
     <Suspense fallback={<div className="p-8 text-center">Loading...</div>}>
       <Switch>
         <Route path="/" component={Home} />
-        <Route path="/creator" component={Creator} />
+        <Route path="/creator">
+          {/* Wrap the Creator component with CharacterProvider */}
+          {() => (
+            <CharacterProvider>
+              <Creator />
+            </CharacterProvider>
+          )}
+        </Route>
         <Route path="/profile" component={Profile} />
         <Route path="/analytics" component={Analytics} />
         <Route component={NotFound} />
@@ -44,12 +53,14 @@ function App() {
   }, []);
   
   return (
-    <TooltipProvider>
-      <Toaster />
-      <MainLayout>
-        <AppRouter />
-      </MainLayout>
-    </TooltipProvider>
+    <AuthProvider>
+      <TooltipProvider>
+        <Toaster />
+        <MainLayout>
+          <AppRouter />
+        </MainLayout>
+      </TooltipProvider>
+    </AuthProvider>
   );
 }
 
