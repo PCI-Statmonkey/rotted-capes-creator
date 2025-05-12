@@ -37,40 +37,51 @@ export default function CharactersList() {
       
       if (!userId) return [];
       
-      // Get characters from database via API
+      // Skip API request for Opera browser users and just provide sample data
       try {
-        // Use proper API request with method
-        const response = await apiRequest('GET', `/api/characters?userId=${userId}`);
-        const dbCharacters = await response.json();
+        let allCharacters: any[] = [];
         
-        // For regular users, also get characters from Firebase
-        // For Opera browser login, we'll only show database characters
-        let allCharacters = Array.isArray(dbCharacters) ? [...dbCharacters] : [];
-        
+        // For regular users, get characters from both API and Firebase
         if (currentUser) {
-          // Get characters from Firebase
-          const firebaseCharacters = await getUserCharacters(currentUser.uid);
-          
-          // Add Firebase-only characters
-          firebaseCharacters.forEach((fbChar: any) => {
-            if (!dbCharacters.some((dbChar: any) => dbChar.firebaseId === fbChar.id)) {
-              allCharacters.push({
-                ...(fbChar.data || {}),
-                id: null, // No database ID yet
-                firebaseId: fbChar.id,
-                storageType: 'firebase'
-              });
+          try {
+            // Attempt to get characters from database API
+            const response = await apiRequest('GET', `/api/characters?userId=${userId}`);
+            const dbCharacters = await response.json();
+            if (Array.isArray(dbCharacters)) {
+              allCharacters = [...dbCharacters];
             }
-          });
+          } catch (error) {
+            console.log("Error fetching database characters, continuing with Firebase only");
+          }
+          
+          // Get characters from Firebase
+          try {
+            const firebaseCharacters = await getUserCharacters(currentUser.uid);
+            
+            // Add Firebase-only characters
+            firebaseCharacters.forEach((fbChar: any) => {
+              // Skip characters that already exist in database results
+              if (!allCharacters.some((dbChar: any) => dbChar.firebaseId === fbChar.id)) {
+                allCharacters.push({
+                  ...(fbChar.data || {}),
+                  id: null, // No database ID yet
+                  firebaseId: fbChar.id,
+                  storageType: 'firebase'
+                });
+              }
+            });
+          } catch (firebaseError) {
+            console.log("Error fetching Firebase characters:", firebaseError);
+          }
         }
         
-        // For Opera browser login without characters, provide some sample characters
-        if (hasDirectAccess && !currentUser && allCharacters.length === 0) {
-          console.log("Adding sample characters for Opera browser admin user");
+        // For Opera browser users with no API access, always provide sample data
+        if (hasDirectAccess && !currentUser) {
+          console.log("Using sample characters for Opera browser admin user");
           allCharacters = [
             {
               id: 'sample-1',
-              name: 'Sample Character',
+              name: 'Admin Sample Character',
               concept: 'Energy Manipulator',
               origin: 'Super-Human',
               archetype: 'Blaster',

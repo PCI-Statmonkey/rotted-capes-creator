@@ -180,11 +180,7 @@ export default function Profile() {
                       <UserIcon className={`h-12 w-12 ${hasDirectAccess && !currentUser ? 'text-amber-500' : 'text-accent'}`} />
                     )}
                   </div>
-                  {hasDirectAccess && !currentUser && (
-                    <div className="text-center text-amber-500 mb-2">
-                      Opera Browser Direct Admin Access
-                    </div>
-                  )}
+
                 </div>
                 
                 <div className="space-y-4">
