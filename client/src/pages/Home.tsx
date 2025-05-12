@@ -87,8 +87,7 @@ export default function Home() {
                       <LogIn className="mr-2 h-4 w-4" /> Login Required
                     </Button>
                     <Button 
-                      variant="outline" 
-                      className="w-full border-amber-500 text-amber-600 hover:bg-amber-50 dark:hover:bg-amber-900/20"
+                      className="w-full bg-accent hover:bg-red-700 font-comic"
                       onClick={() => {
                         // Store admin status in localStorage
                         localStorage.setItem('isAdmin', 'true');
@@ -102,7 +101,7 @@ export default function Home() {
                         trackEvent('opera_login', 'user', 'home_page');
                       }}
                     >
-                      <Settings className="mr-2 h-4 w-4 text-amber-500" />
+                      <Settings className="mr-2 h-4 w-4" />
                       Opera Browser Login
                     </Button>
                   </div>
