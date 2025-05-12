@@ -331,7 +331,7 @@ const BASIC_STARTING_SKILLS = [
 // Define interface for selected skills, skill focus, etc.
 interface SelectedSkill {
   name: string;
-  focus?: string;
+  focus?: string | boolean;
   source: "starting" | "individual" | "skillSet";
   skillSetName?: string;
 }
@@ -365,7 +365,7 @@ export default function Step5_Skills() {
       
       return skillSet.skills.map(skill => ({
         name: skill.name,
-        focus: Array.isArray(skill.focus) ? skill.focus[0] : (skill.focus === true ? undefined : skill.focus),
+        focus: Array.isArray(skill.focus) ? skill.focus[0] : skill.focus,
         source: "skillSet" as const,
         skillSetName: setName
       }));
@@ -546,18 +546,34 @@ export default function Step5_Skills() {
   const handleContinue = () => {
     if (!canProceed()) return;
     
-    // Combine all selected skills
+    // Convert selected skills to the format expected by CharacterContext
     const allSelectedSkills = [
-      ...startingSkills.map(name => ({ name, source: "starting" as const })),
-      ...individualSkills.map(name => ({ name, source: "individual" as const })),
-      ...getSkillsFromSelectedSkillSets()
+      ...startingSkills.map(name => ({
+        name,
+        ability: "strength", // Default, would need to be properly assigned
+        ranks: 1,
+        trained: true,
+      })),
+      ...individualSkills.map(name => ({
+        name,
+        ability: "strength", // Default, would need to be properly assigned
+        ranks: 1,
+        trained: true,
+      })),
+      ...getSkillsFromSelectedSkillSets().map(skill => ({
+        name: skill.name,
+        ability: "strength", // Default, would need to be properly assigned
+        ranks: 1,
+        trained: true,
+        specialization: skill.focus,
+      }))
     ];
     
     // Combine all selected feats
     const allSelectedFeats = [
-      { name: startingFeat, source: "starting" as const },
-      ...purchasedFeats.map(name => ({ name, source: "purchased" as const })),
-      ...getFeatsFromSelectedSkillSets()
+      { name: startingFeat },
+      ...purchasedFeats.map(name => ({ name })),
+      ...getFeatsFromSelectedSkillSets().map(feat => ({ name: feat.name }))
     ];
     
     // Update character field with selections
@@ -584,7 +600,11 @@ export default function Step5_Skills() {
       <div className="mb-6 border-b-2 border-gray-700 pb-4">
         <h2 className="font-comic text-3xl text-accent tracking-wide">Step 5: Skills & Feats</h2>
         <p className="text-gray-300 mt-2">
-          Choose your character's skills, feats, and maneuvers.
+          All heroes start with 2 basic skills, 1 feat, and 1 maneuver. You also have 20 points to spend on additional skills, skill sets, and feats.
+        </p>
+        <p className="text-gray-300 mt-1 text-sm">
+          <span className="text-accent">Skill Sets</span> are collections of related skills and feats available at a discount.
+          You can purchase up to {character.origin === "Highly Trained" ? "3" : "2"} skill sets.
         </p>
       </div>
 

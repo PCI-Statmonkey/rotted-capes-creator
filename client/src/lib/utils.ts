@@ -38,7 +38,7 @@ export const WIZARD_STEPS = [
   { id: 2, name: "Origin" },
   { id: 3, name: "Archetype" },
   { id: 4, name: "Abilities" },
-  { id: 5, name: "Skills" },
+  { id: 5, name: "Skills & Feats" },
   { id: 6, name: "Powers" },
   { id: 7, name: "Complications" },
   { id: 8, name: "Gear" },

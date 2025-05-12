@@ -116,6 +116,8 @@ export const createEmptyCharacter = (): Character => ({
   powers: [],
   complications: [],
   gear: [],
+  feats: [],
+  maneuvers: [],
   defense: 10,
   toughness: 0,
   fortitude: 0,
