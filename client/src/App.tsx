@@ -5,7 +5,7 @@ import NotFound from "@/pages/not-found";
 import Home from "@/pages/Home";
 import Creator from "@/pages/Creator";
 import { lazy, Suspense, useEffect } from "react";
-import MainLayout from "@/components/MainLayout";
+import MainLayout from "./components/MainLayout";
 import { initGA } from "@/lib/analytics";
 import { useAnalytics } from "@/hooks/use-analytics";
 

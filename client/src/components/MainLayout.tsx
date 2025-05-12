@@ -98,85 +98,85 @@ export default function MainLayout({ children }: MainLayoutProps) {
             >
               {currentUser ? <LogOut className="h-5 w-5" /> : <LogIn className="h-5 w-5" />}
             </Button>
-            <Button 
-              variant="ghost" 
-              size="icon" 
-              className="md:hidden rounded-full"
-              asChild
-            >
-              <DrawerTrigger>
-                <Menu className="h-5 w-5" />
+            <Drawer>
+              <DrawerTrigger asChild>
+                <Button 
+                  variant="ghost" 
+                  size="icon" 
+                  className="md:hidden rounded-full"
+                >
+                  <Menu className="h-5 w-5" />
+                </Button>
               </DrawerTrigger>
-            </Button>
+              
+              <DrawerContent className="bg-panel">
+                <div className="p-4 space-y-4">
+                  <Link href="/">
+                    <Button 
+                      variant="ghost" 
+                      className="w-full justify-start"
+                    >
+                      <Home className="mr-2 h-5 w-5" />
+                      Home
+                    </Button>
+                  </Link>
+                  <Link href="/creator">
+                    <Button 
+                      variant="ghost" 
+                      className="w-full justify-start"
+                    >
+                      <FileEdit className="mr-2 h-5 w-5" />
+                      Character Creator
+                    </Button>
+                  </Link>
+                  {currentUser && (
+                    <Link href="/profile">
+                      <Button 
+                        variant="ghost" 
+                        className="w-full justify-start"
+                      >
+                        <User className="mr-2 h-5 w-5" />
+                        My Profile
+                      </Button>
+                    </Link>
+                  )}
+                  {currentUser && isAdmin && (
+                    <Link href="/analytics">
+                      <Button 
+                        variant="ghost" 
+                        className="w-full justify-start"
+                      >
+                        <BarChart4 className="mr-2 h-5 w-5" />
+                        Analytics
+                      </Button>
+                    </Link>
+                  )}
+                  <Button 
+                    variant="ghost" 
+                    className="w-full justify-start"
+                    onClick={handleLogin}
+                    disabled={isLoading}
+                  >
+                    {currentUser ? (
+                      <>
+                        <LogOut className="mr-2 h-5 w-5" />
+                        Logout
+                      </>
+                    ) : (
+                      <>
+                        <LogIn className="mr-2 h-5 w-5" />
+                        Login
+                      </>
+                    )}
+                  </Button>
+                </div>
+              </DrawerContent>
+            </Drawer>
           </div>
         </div>
       </header>
 
-      {/* Mobile Navigation Drawer */}
-      <Drawer>
-        <DrawerContent className="bg-panel">
-          <div className="p-4 space-y-4">
-            <Link href="/">
-              <Button 
-                variant="ghost" 
-                className="w-full justify-start"
-              >
-                <Home className="mr-2 h-5 w-5" />
-                Home
-              </Button>
-            </Link>
-            <Link href="/creator">
-              <Button 
-                variant="ghost" 
-                className="w-full justify-start"
-              >
-                <FileEdit className="mr-2 h-5 w-5" />
-                Character Creator
-              </Button>
-            </Link>
-            {currentUser && (
-              <Link href="/profile">
-                <Button 
-                  variant="ghost" 
-                  className="w-full justify-start"
-                >
-                  <User className="mr-2 h-5 w-5" />
-                  My Profile
-                </Button>
-              </Link>
-            )}
-            {currentUser && isAdmin && (
-              <Link href="/analytics">
-                <Button 
-                  variant="ghost" 
-                  className="w-full justify-start"
-                >
-                  <BarChart4 className="mr-2 h-5 w-5" />
-                  Analytics
-                </Button>
-              </Link>
-            )}
-            <Button 
-              variant="ghost" 
-              className="w-full justify-start"
-              onClick={handleLogin}
-              disabled={isLoading}
-            >
-              {currentUser ? (
-                <>
-                  <LogOut className="mr-2 h-5 w-5" />
-                  Logout
-                </>
-              ) : (
-                <>
-                  <LogIn className="mr-2 h-5 w-5" />
-                  Login
-                </>
-              )}
-            </Button>
-          </div>
-        </DrawerContent>
-      </Drawer>
+      {/* Mobile Navigation Drawer has been moved inside the header */}
 
       {/* Main Content */}
       <main className="flex-grow pt-16 pb-20">
@@ -200,11 +200,16 @@ export default function MainLayout({ children }: MainLayoutProps) {
                 <User className="mr-2 h-5 w-5 text-accent" />
                 Character Summary
               </h3>
-              <DrawerTrigger asChild>
-                <Button variant="ghost" size="icon" className="rounded-full">
-                  <ChevronUp className="h-5 w-5" />
-                </Button>
-              </DrawerTrigger>
+              <Button variant="ghost" size="icon" className="rounded-full" onClick={() => {
+                // Close the drawer manually
+                const drawerElement = document.querySelector('[role="dialog"]');
+                if (drawerElement) {
+                  drawerElement.setAttribute('data-state', 'closed');
+                  drawerElement.setAttribute('aria-hidden', 'true');
+                }
+              }}>
+                <ChevronUp className="h-5 w-5" />
+              </Button>
             </div>
             <div className="p-4">
               {/* On mobile we'd import and use CharacterSummary here */}
