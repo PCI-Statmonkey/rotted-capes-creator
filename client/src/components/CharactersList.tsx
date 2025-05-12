@@ -39,21 +39,23 @@ export default function CharactersList() {
       
       // Get characters from database via API
       try {
-        const dbCharacters = await apiRequest(`/api/characters?userId=${userId}`);
+        // Use proper API request with method
+        const response = await apiRequest('GET', `/api/characters?userId=${userId}`);
+        const dbCharacters = await response.json();
         
         // For regular users, also get characters from Firebase
         // For Opera browser login, we'll only show database characters
-        let allCharacters = [...dbCharacters];
+        let allCharacters = Array.isArray(dbCharacters) ? [...dbCharacters] : [];
         
         if (currentUser) {
           // Get characters from Firebase
           const firebaseCharacters = await getUserCharacters(currentUser.uid);
           
           // Add Firebase-only characters
-          firebaseCharacters.forEach(fbChar => {
-            if (!dbCharacters.some(dbChar => dbChar.firebaseId === fbChar.id)) {
+          firebaseCharacters.forEach((fbChar: any) => {
+            if (!dbCharacters.some((dbChar: any) => dbChar.firebaseId === fbChar.id)) {
               allCharacters.push({
-                ...fbChar.data,
+                ...(fbChar.data || {}),
                 id: null, // No database ID yet
                 firebaseId: fbChar.id,
                 storageType: 'firebase'
@@ -96,9 +98,7 @@ export default function CharactersList() {
         await deleteCharacterFromFirebase(characterId);
       } else {
         // Otherwise, it's a database ID
-        await apiRequest(`/api/characters/${characterId}`, {
-          method: 'DELETE'
-        });
+        await apiRequest('DELETE', `/api/characters/${characterId}`);
       }
     },
     onSuccess: () => {
