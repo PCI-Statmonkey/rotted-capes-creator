@@ -1,6 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged, User as FirebaseUser } from "firebase/auth";
-import { getFirestore, collection, addDoc, updateDoc, deleteDoc, doc, query, where, getDocs, getDoc } from "firebase/firestore";
+import { getFirestore, collection, addDoc, updateDoc, deleteDoc, doc, query, where, getDocs, getDoc, serverTimestamp, Timestamp, orderBy } from "firebase/firestore";
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
@@ -37,15 +37,37 @@ export const logoutUser = async () => {
 };
 
 // Characters collection operations
+/**
+ * Saves a character to Firebase and returns the document ID
+ */
 export const saveCharacterToFirebase = async (characterData: any, userId: string) => {
   try {
+    // Prepare the character data for Firebase
+    // Make a deep copy to avoid modifying the original
+    const characterToSave = JSON.parse(JSON.stringify(characterData));
+    
+    // Add ownership and timestamp information
+    characterToSave.ownerId = userId;
+    
+    // Add to Firestore
     const charactersRef = collection(db, "characters");
     const docRef = await addDoc(charactersRef, {
-      ...characterData,
       userId,
-      createdAt: new Date(),
-      updatedAt: new Date(),
+      data: characterToSave,
+      createdAt: serverTimestamp(),
+      updatedAt: serverTimestamp()
     });
+    
+    console.log("Character saved with ID: ", docRef.id);
+    
+    // Also log this event to analytics
+    await saveAnalyticsEvent('character_created', {
+      characterId: docRef.id,
+      name: characterData.name,
+      origin: characterData.origin,
+      archetype: characterData.archetype
+    }, userId);
+    
     return docRef.id;
   } catch (error) {
     console.error("Error saving character: ", error);
@@ -53,13 +75,29 @@ export const saveCharacterToFirebase = async (characterData: any, userId: string
   }
 };
 
+/**
+ * Updates an existing character in Firebase
+ */
 export const updateCharacterInFirebase = async (characterId: string, characterData: any) => {
   try {
+    // Prepare the character data
+    const characterToUpdate = JSON.parse(JSON.stringify(characterData));
+    
+    // Update the document
     const characterRef = doc(db, "characters", characterId);
     await updateDoc(characterRef, {
-      ...characterData,
-      updatedAt: new Date(),
+      data: characterToUpdate,
+      updatedAt: serverTimestamp()
     });
+    
+    console.log("Character updated successfully");
+    
+    // Log the update event
+    await saveAnalyticsEvent('character_updated', {
+      characterId,
+      name: characterData.name
+    });
+    
     return characterId;
   } catch (error) {
     console.error("Error updating character: ", error);
@@ -67,22 +105,48 @@ export const updateCharacterInFirebase = async (characterId: string, characterDa
   }
 };
 
+/**
+ * Deletes a character from Firebase
+ */
 export const deleteCharacterFromFirebase = async (characterId: string) => {
   try {
+    // Get the character data before deletion for analytics
     const characterRef = doc(db, "characters", characterId);
-    await deleteDoc(characterRef);
-    return characterId;
+    const characterSnap = await getDoc(characterRef);
+    
+    if (characterSnap.exists()) {
+      const characterData = characterSnap.data();
+      
+      // Delete the character
+      await deleteDoc(characterRef);
+      console.log("Character deleted successfully");
+      
+      // Log the deletion event
+      await saveAnalyticsEvent('character_deleted', {
+        characterId,
+        name: characterData.data?.name || 'Unknown Character'
+      });
+      
+      return characterId;
+    } else {
+      console.error("Character not found");
+      return null;
+    }
   } catch (error) {
     console.error("Error deleting character: ", error);
     throw error;
   }
 };
 
+/**
+ * Gets all characters for a specific user
+ */
 export const getUserCharacters = async (userId: string) => {
   try {
     const charactersRef = collection(db, "characters");
-    const q = query(charactersRef, where("userId", "==", userId));
+    const q = query(charactersRef, where("userId", "==", userId), orderBy("updatedAt", "desc"));
     const querySnapshot = await getDocs(q);
+    
     return querySnapshot.docs.map((docSnapshot) => ({
       id: docSnapshot.id,
       ...docSnapshot.data()
@@ -93,6 +157,9 @@ export const getUserCharacters = async (userId: string) => {
   }
 };
 
+/**
+ * Gets a specific character by its document ID
+ */
 export const getCharacterById = async (characterId: string) => {
   try {
     const characterRef = doc(db, "characters", characterId);
@@ -104,6 +171,7 @@ export const getCharacterById = async (characterId: string) => {
         ...docSnap.data()
       };
     } else {
+      console.log("No such character!");
       return null;
     }
   } catch (error) {

@@ -44,6 +44,8 @@ export interface GearItem {
 
 export interface Character {
   id: string;
+  firebaseId?: string;  // ID in Firebase storage
+  ownerId?: string;     // User ID who owns this character
   name: string;
   secretIdentity: string;
   concept: string;
@@ -244,16 +246,68 @@ export const CharacterProvider = ({ children }: { children: ReactNode }) => {
     setCurrentStep(1);
   };
 
-  const saveCharacter = () => {
-    // This will be expanded when we add cloud storage
+  const saveCharacter = async () => {
+    // Save to local storage for offline usage
     saveToLocalStorage(STORAGE_KEY, character);
+    
+    try {
+      // If user is logged in, also save to Firebase
+      const { auth } = await import('@/lib/firebase');
+      const currentUser = auth.currentUser;
+      
+      if (currentUser) {
+        const { saveCharacterToFirebase, updateCharacterInFirebase } = await import('@/lib/firebase');
+        
+        // Check if character already has a Firebase ID
+        if (character.firebaseId) {
+          await updateCharacterInFirebase(character.firebaseId, character);
+        } else {
+          const firebaseId = await saveCharacterToFirebase(character, currentUser.uid);
+          
+          // Update the character with the Firebase ID
+          setCharacter(prev => ({
+            ...prev,
+            firebaseId,
+            updatedAt: new Date().toISOString()
+          }));
+        }
+      }
+    } catch (error) {
+      console.error("Error saving character to cloud:", error);
+      // We still have the local copy, so no data loss
+    }
   };
 
-  const loadCharacter = (id: string) => {
-    // This will be expanded when we add cloud storage
+  const loadCharacter = async (id: string) => {
+    // First try to load from local storage
     const savedCharacter = loadFromLocalStorage(STORAGE_KEY);
-    if (savedCharacter && savedCharacter.id === id) {
+    if (savedCharacter && (savedCharacter.id === id || savedCharacter.firebaseId === id)) {
       setCharacter(savedCharacter);
+      return;
+    }
+    
+    // If not found locally and user is logged in, try to load from Firebase
+    try {
+      const auth = window.firebase?.auth?.();
+      const currentUser = auth?.currentUser;
+      
+      if (currentUser) {
+        const { getCharacterById } = await import('@/lib/firebase');
+        const firebaseCharacter = await getCharacterById(id);
+        
+        if (firebaseCharacter) {
+          // Convert the Firebase data to our Character type
+          const characterData = firebaseCharacter.data || {};
+          setCharacter({
+            ...createEmptyCharacter(),
+            ...characterData,
+            firebaseId: firebaseCharacter.id,
+            updatedAt: new Date().toISOString()
+          });
+        }
+      }
+    } catch (error) {
+      console.error("Error loading character from cloud:", error);
     }
   };
 
