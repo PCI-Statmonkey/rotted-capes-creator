@@ -3,26 +3,20 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { motion } from "framer-motion";
 import { FileEdit, Info, Shield, User, LogIn } from "lucide-react";
-import { useState, useEffect } from "react";
+import { useState } from "react";
+import { trackEvent } from "@/lib/analytics";
 import { auth, signInWithGoogle } from "@/lib/firebase";
 
 export default function Home() {
-  // Direct access to Firebase auth for simplicity
-  const [currentUser, setCurrentUser] = useState<any>(null);
+  // Simplified authentication for now
+  const [currentUser, setCurrentUser] = useState(auth.currentUser);
   
-  useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged((user) => {
-      setCurrentUser(user);
-    });
-    
-    return () => unsubscribe();
-  }, []);
-  
+  // Handler for login button
   const handleLogin = async () => {
     try {
-      if (!currentUser) {
-        await signInWithGoogle();
-      }
+      trackEvent('login_attempt', 'user', 'home_page');
+      await signInWithGoogle();
+      setCurrentUser(auth.currentUser);
     } catch (error) {
       console.error("Login error:", error);
     }
@@ -88,7 +82,7 @@ export default function Home() {
                     </Button>
                   </Link>
                 ) : (
-                  <Button className="bg-accent hover:bg-red-700 w-full font-comic" onClick={() => login()}>
+                  <Button className="bg-accent hover:bg-red-700 w-full font-comic" onClick={handleLogin}>
                     <LogIn className="mr-2 h-4 w-4" /> Login Required
                   </Button>
                 )}
