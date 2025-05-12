@@ -19,10 +19,28 @@ export const googleProvider = new GoogleAuthProvider();
 // Authentication helper functions
 export const signInWithGoogle = async () => {
   try {
+    // Add some OAuth scopes to request
+    googleProvider.addScope('email');
+    googleProvider.addScope('profile');
+    
+    // Set custom parameters for better UX
+    googleProvider.setCustomParameters({
+      prompt: 'select_account'
+    });
+    
     const result = await signInWithPopup(auth, googleProvider);
+    console.log("Login successful");
     return result.user;
-  } catch (error) {
+  } catch (error: any) {
     console.error("Error signing in with Google: ", error);
+    // Try to provide more user-friendly error info
+    let errorMessage = "Failed to sign in. Please try again.";
+    if (error && error.code === "auth/configuration-not-found") {
+      errorMessage = "Firebase app not properly configured. Please check your Firebase settings.";
+    }
+    
+    console.error("Login error:", error);
+    alert(errorMessage);
     throw error;
   }
 };
