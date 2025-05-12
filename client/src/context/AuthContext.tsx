@@ -17,30 +17,52 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [currentUser, setCurrentUser] = useState<FirebaseUser | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isAdmin, setIsAdmin] = useState(false);
+  const [mockUser, setMockUser] = useState<FirebaseUser | null>(null);
 
   useEffect(() => {
+    // For development mode, check if we might need a mock user
+    if (import.meta.env.DEV && !auth.currentUser) {
+      console.log("Setting up auth state monitoring in development mode");
+    }
+
     const unsubscribe = onAuthStateChanged(auth, (user) => {
-      setCurrentUser(user);
-      setIsLoading(false);
-      
-      // Admin check can be expanded later with more sophisticated rules
+      // If we have a real user from Firebase, use that
       if (user) {
+        setCurrentUser(user);
+        setMockUser(null); // Clear any mock user when we have a real one
+        setIsLoading(false);
+        
+        // Admin check can be expanded later with more sophisticated rules
         // For now, we'll just consider users with specific emails as admins
         const adminEmails = ['admin@rottedcapes.com']; // Add real admin emails here
         setIsAdmin(adminEmails.includes(user.email || ''));
         
         // Log user login for analytics
-        saveAnalyticsEvent('user_auth_state_changed', {
-          userId: user.uid,
-          email: user.email,
-          displayName: user.displayName,
-          action: 'signed_in'
-        }, user.uid);
+        try {
+          saveAnalyticsEvent('user_auth_state_changed', {
+            userId: user.uid,
+            email: user.email,
+            displayName: user.displayName,
+            action: 'signed_in'
+          }, user.uid);
+        } catch (error) {
+          console.error("Could not save analytics event:", error);
+        }
+      } else if (mockUser) {
+        // If we have a mock user (from development mode), keep using it
+        setCurrentUser(mockUser);
+        setIsLoading(false);
+        setIsAdmin(mockUser.email === 'admin@rottedcapes.com');
+      } else {
+        // No real user and no mock user
+        setCurrentUser(null);
+        setIsLoading(false);
+        setIsAdmin(false);
       }
     });
 
     return () => unsubscribe();
-  }, []);
+  }, [mockUser]); // Add mockUser as dependency
 
   const login = async (): Promise<FirebaseUser | null> => {
     try {
@@ -48,11 +70,20 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const user = await signInWithGoogle();
       
       if (user) {
-        saveAnalyticsEvent('user_login', {
-          userId: user.uid,
-          method: 'google',
-          timestamp: new Date().toISOString()
-        }, user.uid);
+        // If this is our development mock user, store it in state
+        if (user.uid === 'dev-user-123') {
+          setMockUser(user as any);
+        }
+        
+        try {
+          saveAnalyticsEvent('user_login', {
+            userId: user.uid,
+            method: 'google',
+            timestamp: new Date().toISOString()
+          }, user.uid);
+        } catch (error) {
+          console.error("Could not save analytics event:", error);
+        }
       }
       
       return user;
@@ -67,12 +98,20 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const logout = async (): Promise<void> => {
     try {
       if (currentUser) {
-        saveAnalyticsEvent('user_logout', {
-          userId: currentUser.uid,
-          timestamp: new Date().toISOString()
-        }, currentUser.uid);
+        try {
+          saveAnalyticsEvent('user_logout', {
+            userId: currentUser.uid,
+            timestamp: new Date().toISOString()
+          }, currentUser.uid);
+        } catch (error) {
+          console.error("Could not save analytics event:", error);
+        }
       }
       
+      // Clear the mock user state
+      setMockUser(null);
+      
+      // Actually log out
       await logoutUser();
     } catch (error) {
       console.error("Logout error:", error);
