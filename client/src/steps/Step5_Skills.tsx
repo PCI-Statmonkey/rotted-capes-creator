@@ -738,23 +738,22 @@ export default function Step5_Skills() {
         </div>
 
         {/* Points available display for additional purchases */}
-        <div className="flex justify-between items-center p-4 bg-gray-800 rounded-lg border border-gray-700">
-          <div>
+        <div className="p-4 bg-gray-800 rounded-lg border border-gray-700">
+          <div className="mb-3">
             <h3 className="font-medium text-lg">Additional Purchases</h3>
             <p className="text-sm text-gray-400">Choose skill sets, individual skills, or feats to purchase with your remaining points.</p>
           </div>
-          <div className="flex flex-col items-end">
-            <div className="flex items-center px-4 py-2 bg-gray-700 rounded-lg border border-gray-600 shadow-md">
-              <span className="text-gray-400">Points Available: </span>
-              <span className={`${availablePoints < 0 ? 'text-red-500' : 'text-accent'}`}>
-                {availablePoints}
-              </span>
-              <span className="text-gray-400"> / 20</span>
-            </div>
-            {availablePoints < 0 && (
-              <p className="text-xs text-red-400 mt-1">You've spent too many points!</p>
-            )}
+          
+          <div className="flex items-center px-4 py-2 bg-gray-700 rounded-lg border border-gray-600 shadow-md w-fit">
+            <span className="text-gray-400">Points Available: </span>
+            <span className={`${availablePoints < 0 ? 'text-red-500' : 'text-accent'}`}>
+              {availablePoints}
+            </span>
+            <span className="text-gray-400"> / 20</span>
           </div>
+          {availablePoints < 0 && (
+            <p className="text-xs text-red-400 mt-1">You've spent too many points!</p>
+          )}
         </div>
 
         {/* Tabs for different purchase options */}
