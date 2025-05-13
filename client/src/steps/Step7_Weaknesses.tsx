@@ -1,17 +1,11 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { ArrowLeft, ArrowRight, Plus, X, PlusCircle, Info } from "lucide-react";
+import { ArrowLeft, ArrowRight, Plus, X, Info } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useCharacter } from "@/context/CharacterContext";
 import { trackEvent } from "@/lib/analytics";
-import { 
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
 import {
   Select,
   SelectContent,
@@ -25,11 +19,27 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 
-// Define the weakness types
-type WeaknessType = "Addiction" | "DarkSecret" | "Dependence" | "Dependent" | "Custom";
+// Define weakness types
+type WeaknessType = 
+  | "Addiction" 
+  | "DarkSecret" 
+  | "Dependence" 
+  | "Dependent" 
+  | "DiminishedVitality" 
+  | "Enemy" 
+  | "Taboo" 
+  | "Origin" 
+  | "Archetype" 
+  | "Custom";
 
-// Define the weakness structure
+// Define weakness interface
 interface Weakness {
   type: WeaknessType;
   name: string;
@@ -37,165 +47,16 @@ interface Weakness {
   points: number;
   details?: {
     substanceType?: "Common" | "Uncommon" | "Rare";
-    negativeEffect?: "PowerNegation" | "PhysicalWeakness" | "IncapacitatingWeakness" | "FatalWeakness";
-    dependentType?: "Average" | "Weak" | "Frail";
-    secretLevel?: "Trivial" | "Serious" | "Severe";
+    negativeEffect?: string;
+    dependentType?: string;
+    secretLevel?: string;
+    enemyType?: string;
+    restriction?: string;
+    atonement?: string;
+    fromOrigin?: boolean;
+    fromArchetype?: boolean;
   };
 }
-
-// Define the weakness options
-const WEAKNESSES: Record<WeaknessType, {
-  title: string;
-  description: string;
-  options?: {
-    substance?: Array<{id: string, name: string, description: string, points: number}>;
-    negativeEffects?: Array<{id: string, name: string, description: string, points: number}>;
-    secretLevels?: Array<{id: string, name: string, description: string, points: number}>;
-    dependentTypes?: Array<{id: string, name: string, description: string, points: number}>;
-  };
-}> = {
-  "Addiction": {
-    title: "Addiction",
-    description: "You need it. You want it. You gotta have it. There is something out there you desperately crave.",
-    options: {
-      substance: [
-        {
-          id: "Common",
-          name: "Common Substance",
-          description: "Substances could include sugar and/or surgery foods (such as candy), cigarettes, or coffee.",
-          points: 5
-        },
-        {
-          id: "Uncommon",
-          name: "Uncommon Substance",
-          description: "Substances could include certain mild drugs (such as marijuana or commercial painkillers), vaping (electronic cigarettes), alcohol, or inhaling certain chemical fumes.",
-          points: 10
-        },
-        {
-          id: "Rare",
-          name: "Rare Substance",
-          description: "Substances could include hard drugs (cocaine, meth, PCP, and the like), commercially available amphetamines, or medical painkiller (such as Oxycodone and the like).",
-          points: 15
-        }
-      ]
-    }
-  },
-  "DarkSecret": {
-    title: "Dark Secret",
-    description: "There is something about you you'd prefer to keep hidden.",
-    options: {
-      secretLevels: [
-        {
-          id: "Trivial",
-          name: "Trivial Secret",
-          description: "Your secret is something trivial and more potentially embarrassing than damaging. For example, maybe you were a boyband pop star, participated in a low-brow reality show, was a cringeworthy YouTuber, or had a popular We Fan page.",
-          points: 5
-        },
-        {
-          id: "Serious",
-          name: "Serious Secret",
-          description: "Maybe you made a few deals with supervillains, or you are a former criminal (whose crimes go beyond petty theft and the like). Or, they may claim experience you don't have (such as claiming to be a doctor, having military experience, or being a police officer).",
-          points: 10
-        },
-        {
-          id: "Severe",
-          name: "Severe Secret",
-          description: "You may have resorted to cannibalism to survive the initial aftermath of Z-Day, maybe you're a registered sex offender, or you may have committed one or more murders (either before or after Z-Day). Or, they may claim to be someone they're not — a former US Senator, a high-ranking member of the Federal government, or they've taken the identity of a different B-Lister (who may or may not still be alive).",
-          points: 15
-        }
-      ]
-    }
-  },
-  "Dependence": {
-    title: "Dependence",
-    description: "Your metabolism or physiology is such that you require frequent exposure to a particular condition or you must partake of a specific substance.",
-    options: {
-      substance: [
-        {
-          id: "Common",
-          name: "Common Substance/Condition",
-          description: "Substances could include immersion in water, exposure to sunlight, or a commonly available alcohol-based fuel.",
-          points: 0
-        },
-        {
-          id: "Uncommon",
-          name: "Uncommon Substance/Condition",
-          description: "Substances could include needing to 'bathe' in a large bonfire, extensive repairs requiring easily scavenged parts, a custom fuel that takes time to distill, or an easily synthesized drug.",
-          points: 5
-        },
-        {
-          id: "Rare",
-          name: "Rare Substance/Condition",
-          description: "Substances could include extensive repairs requiring hard-to-find parts, exposure to a specific form of radiation, or a drug custom-made to keep you alive.",
-          points: 10
-        }
-      ],
-      negativeEffects: [
-        {
-          id: "PowerNegation",
-          name: "Power Negation",
-          description: "All your powers stop working until you can partake in your dependency.",
-          points: 5
-        },
-        {
-          id: "PhysicalWeakness",
-          name: "Physical Weakness",
-          description: "You suffer a disadvantage on Strength, Dexterity, Constitution checks and skill checks until you can partake in your dependency.",
-          points: 5
-        },
-        {
-          id: "IncapacitatingWeakness",
-          name: "Incapacitating Weakness",
-          description: "If you fail to meet your Dependency requirement, your maximum Stamina is reduced by 2d12 every hour until you reach 0 Stamina and fall unconscious or until you partake in your dependency.",
-          points: 10
-        },
-        {
-          id: "FatalWeakness",
-          name: "Fatal Weakness",
-          description: "If you fail to meet your Dependence requirement, you lose 1 wound every hour until you reach 0 wounds or until you partake of your dependency.",
-          points: 15
-        }
-      ]
-    }
-  },
-  "Dependent": {
-    title: "Dependent",
-    description: "There is someone you care about who depends on you for survival.",
-    options: {
-      dependentTypes: [
-        {
-          id: "Average",
-          name: "Average Health",
-          description: "Your Dependent can be a person of average health and ability, they are a survivor of the apocalypse and know how to get by.",
-          points: 5
-        },
-        {
-          id: "Weak",
-          name: "Weak Health",
-          description: "Your Dependent is weaker than the common survivor. While their mind may still be sharp, their body is aged, injured, or ravaged by illness.",
-          points: 10
-        },
-        {
-          id: "Frail",
-          name: "Frail Health",
-          description: "Your Dependent is of frail health. They may be blind, deaf, partially paralyzed, and so on. They depend on you for most of their needs.",
-          points: 15
-        }
-      ]
-    }
-  },
-  "Custom": {
-    title: "Custom Weakness",
-    description: "Create a custom weakness with your Editor-in-Chief's approval."
-  }
-};
-
-// Define the point usage options
-const POINT_USAGE_OPTIONS = [
-  { value: "ability", label: "Ability Score Bonus" },
-  { value: "power", label: "Power Score Bonus" },
-  { value: "feat", label: "Bonus Feat" }
-];
 
 // Sample dependents for users to choose from
 const SAMPLE_DEPENDENTS = [
@@ -224,7 +85,6 @@ export default function Step7_Weaknesses() {
     target: string;
     amount: number;
   }>>([]);
-  const [showSecondNegativeEffect, setShowSecondNegativeEffect] = useState<boolean>(false);
 
   // Calculate total weakness points
   const calculatePoints = () => {
@@ -292,111 +152,112 @@ export default function Step7_Weaknesses() {
   const handleWeaknessTypeChange = (type: WeaknessType) => {
     setSelectedWeaknessType(type);
     
-    // Reset the form
+    // Reset the form with appropriate defaults based on type
+    let initialPoints = 0;
+    
+    // Set initial points for simple weakness types
+    if (type === "DiminishedVitality") {
+      initialPoints = 5;
+    } else if (type === "Origin" || type === "Archetype") {
+      initialPoints = 0; // No points for Origin/Archetype weaknesses
+    }
+    
     setNewWeakness({
       type,
-      name: WEAKNESSES[type].title,
+      name: type,
       description: "",
-      points: 0,
-      details: {}
+      points: initialPoints,
+      details: {
+        fromOrigin: type === "Origin",
+        fromArchetype: type === "Archetype"
+      }
     });
-    
-    setShowSecondNegativeEffect(false);
   };
 
   // Handle substance type selection
   const handleSubstanceTypeChange = (substanceType: string) => {
-    const selectedSubstance = WEAKNESSES[selectedWeaknessType as WeaknessType].options?.substance?.find(
-      s => s.id === substanceType
-    );
-    
-    if (selectedSubstance) {
-      setNewWeakness({
-        ...newWeakness,
-        details: {
-          ...newWeakness.details,
-          substanceType: substanceType as "Common" | "Uncommon" | "Rare"
-        },
-        points: selectedSubstance.points + (newWeakness.details?.negativeEffect ? 
-          WEAKNESSES[selectedWeaknessType as WeaknessType].options?.negativeEffects?.find(
-            e => e.id === newWeakness.details?.negativeEffect
-          )?.points || 0 : 0)
-      });
-    }
+    setNewWeakness({
+      ...newWeakness,
+      details: {
+        ...newWeakness.details,
+        substanceType: substanceType as "Common" | "Uncommon" | "Rare"
+      },
+      points: substanceType === "Common" ? 5 : substanceType === "Uncommon" ? 10 : 15
+    });
   };
 
   // Handle negative effect selection
   const handleNegativeEffectChange = (negativeEffect: string) => {
-    const selectedEffect = WEAKNESSES[selectedWeaknessType as WeaknessType].options?.negativeEffects?.find(
-      e => e.id === negativeEffect
-    );
-    
-    if (selectedEffect) {
-      setNewWeakness({
-        ...newWeakness,
-        details: {
-          ...newWeakness.details,
-          negativeEffect: negativeEffect as "PowerNegation" | "PhysicalWeakness" | "IncapacitatingWeakness" | "FatalWeakness"
-        },
-        points: (newWeakness.details?.substanceType ? 
-          WEAKNESSES[selectedWeaknessType as WeaknessType].options?.substance?.find(
-            s => s.id === newWeakness.details?.substanceType
-          )?.points || 0 : 0) + selectedEffect.points
-      });
-      
-      // Allow for a second negative effect
-      setShowSecondNegativeEffect(true);
-    }
-  };
-
-  // Handle second negative effect selection
-  const handleSecondNegativeEffectChange = (negativeEffect: string) => {
-    const selectedEffect = WEAKNESSES[selectedWeaknessType as WeaknessType].options?.negativeEffects?.find(
-      e => e.id === negativeEffect
-    );
-    
-    if (selectedEffect) {
-      setNewWeakness({
-        ...newWeakness,
-        points: newWeakness.points + selectedEffect.points
-      });
-    }
-  };
-
-  // Handle secret level selection
-  const handleSecretLevelChange = (secretLevel: string) => {
-    const selectedLevel = WEAKNESSES[selectedWeaknessType as WeaknessType].options?.secretLevels?.find(
-      l => l.id === secretLevel
-    );
-    
-    if (selectedLevel) {
-      setNewWeakness({
-        ...newWeakness,
-        details: {
-          ...newWeakness.details,
-          secretLevel: secretLevel as "Trivial" | "Serious" | "Severe"
-        },
-        points: selectedLevel.points
-      });
-    }
+    setNewWeakness({
+      ...newWeakness,
+      details: {
+        ...newWeakness.details,
+        negativeEffect: negativeEffect
+      },
+      points: (newWeakness.details?.substanceType === "Common" ? 5 : 
+               newWeakness.details?.substanceType === "Uncommon" ? 10 : 15) + 
+              (negativeEffect === "PowerNegation" || negativeEffect === "PhysicalWeakness" ? 5 : 
+               negativeEffect === "IncapacitatingWeakness" ? 10 : 15)
+    });
   };
 
   // Handle dependent type selection
   const handleDependentTypeChange = (dependentType: string) => {
-    const selectedType = WEAKNESSES[selectedWeaknessType as WeaknessType].options?.dependentTypes?.find(
-      t => t.id === dependentType
-    );
+    setNewWeakness({
+      ...newWeakness,
+      details: {
+        ...newWeakness.details,
+        dependentType: dependentType
+      },
+      points: dependentType === "Average" ? 5 : dependentType === "Weak" ? 10 : 15
+    });
+  };
+
+  // Handle dark secret level selection
+  const handleSecretLevelChange = (secretLevel: string) => {
+    setNewWeakness({
+      ...newWeakness,
+      details: {
+        ...newWeakness.details,
+        secretLevel: secretLevel
+      },
+      points: secretLevel === "Trivial" ? 5 : secretLevel === "Serious" ? 10 : 15
+    });
+  };
+
+  // Handle enemy type selection
+  const handleEnemyTypeChange = (enemyType: string) => {
+    setNewWeakness({
+      ...newWeakness,
+      details: {
+        ...newWeakness.details,
+        enemyType: enemyType
+      },
+      points: enemyType === "Standard" ? 5 : 10
+    });
+  };
+
+  // Handle restriction selection for Taboo
+  const handleRestrictionChange = (restriction: string) => {
+    setNewWeakness({
+      ...newWeakness,
+      details: {
+        ...newWeakness.details,
+        restriction: restriction
+      },
+      points: restriction === "Easy" ? 0 : restriction === "Moderate" ? 5 : 10
+    });
+  };
+
+  // Check if we can add the current weakness
+  const canAddWeakness = () => {
+    if (!selectedWeaknessType) return false;
     
-    if (selectedType) {
-      setNewWeakness({
-        ...newWeakness,
-        details: {
-          ...newWeakness.details,
-          dependentType: dependentType as "Average" | "Weak" | "Frail"
-        },
-        points: selectedType.points
-      });
-    }
+    // Basic check
+    const hasName = !!newWeakness.name;
+    const hasDescription = !!newWeakness.description;
+    
+    return hasName && hasDescription;
   };
 
   // Select a sample dependent
@@ -407,43 +268,6 @@ export default function Step7_Weaknesses() {
         name: "Dependent: " + dependent.name,
         description: dependent.description
       });
-    }
-  };
-
-  // Handle custom points assignment
-  const handlePointsAssignment = () => {
-    if (remainingWeaknessPoints <= 0) return;
-    
-    const updatedAllocations = [...allocations];
-    
-    // Logic for allocating points
-    // This is a placeholder - you'll need to implement the actual logic based on your character data model
-    
-    setAllocations(updatedAllocations);
-    calculatePoints();
-  };
-
-  // Check if we can add the current weakness
-  const canAddWeakness = () => {
-    if (!selectedWeaknessType) return false;
-    
-    // Basic check for Custom type
-    if (selectedWeaknessType === "Custom") {
-      return !!newWeakness.name && !!newWeakness.description && newWeakness.points > 0;
-    }
-    
-    // Check for required fields based on weakness type
-    switch (selectedWeaknessType) {
-      case "Addiction":
-        return !!newWeakness.details?.substanceType;
-      case "DarkSecret":
-        return !!newWeakness.details?.secretLevel && !!newWeakness.description;
-      case "Dependence":
-        return !!newWeakness.details?.substanceType && !!newWeakness.details?.negativeEffect && !!newWeakness.description;
-      case "Dependent":
-        return !!newWeakness.details?.dependentType && !!newWeakness.name && !!newWeakness.description;
-      default:
-        return false;
     }
   };
 
@@ -474,10 +298,14 @@ export default function Step7_Weaknesses() {
           <p className="text-yellow-300 mb-2">
             You are not required to choose a weakness. You may choose to skip this step.
           </p>
-          <p>
+          <p className="mb-2">
             When you choose a weakness, you gain points that you can spend on ability score 
             bonuses, power score bonuses, or bonus feats. You may only acquire a maximum 
             of 20 points through weaknesses.
+          </p>
+          <p className="border-l-4 border-blue-500 pl-3 italic">
+            <span className="font-semibold">Note:</span> Weaknesses that come from your Origin 
+            or Archetype provide no additional points. These are considered inherent to your character type.
           </p>
         </div>
         
@@ -553,48 +381,37 @@ export default function Step7_Weaknesses() {
                 <SelectValue placeholder="Select a weakness type" />
               </SelectTrigger>
               <SelectContent>
-                {Object.entries(WEAKNESSES).map(([key, weakness]) => (
-                  <SelectItem key={key} value={key}>
-                    {weakness.title}
-                  </SelectItem>
-                ))}
+                <SelectItem value="Addiction">Addiction</SelectItem>
+                <SelectItem value="DarkSecret">Dark Secret</SelectItem>
+                <SelectItem value="Dependence">Dependence</SelectItem>
+                <SelectItem value="Dependent">Dependent</SelectItem>
+                <SelectItem value="DiminishedVitality">Diminished Vitality</SelectItem>
+                <SelectItem value="Enemy">Enemy</SelectItem>
+                <SelectItem value="Taboo">Taboo</SelectItem>
+                <SelectItem value="Origin">Origin Weakness</SelectItem>
+                <SelectItem value="Archetype">Archetype Weakness</SelectItem>
+                <SelectItem value="Custom">Custom Weakness</SelectItem>
               </SelectContent>
             </Select>
-            
-            {selectedWeaknessType && (
-              <p className="text-sm text-gray-400 mt-1">
-                {WEAKNESSES[selectedWeaknessType].description}
-              </p>
-            )}
           </div>
           
           {/* Weakness Details based on type */}
           {selectedWeaknessType && (
             <div className="space-y-4">
-              {/* Addiction */}
+              {/* Type-specific UI */}
               {selectedWeaknessType === "Addiction" && (
                 <div>
                   <label className="block text-sm mb-1">Substance Type</label>
-                  <Select 
-                    onValueChange={handleSubstanceTypeChange}
-                  >
+                  <Select onValueChange={handleSubstanceTypeChange}>
                     <SelectTrigger className="bg-gray-700">
                       <SelectValue placeholder="Select substance type" />
                     </SelectTrigger>
                     <SelectContent>
-                      {WEAKNESSES.Addiction.options?.substance?.map((substance) => (
-                        <SelectItem key={substance.id} value={substance.id}>
-                          {substance.name} ({substance.points} points)
-                        </SelectItem>
-                      ))}
+                      <SelectItem value="Common">Common Substance (5 points)</SelectItem>
+                      <SelectItem value="Uncommon">Uncommon Substance (10 points)</SelectItem>
+                      <SelectItem value="Rare">Rare Substance (15 points)</SelectItem>
                     </SelectContent>
                   </Select>
-                  
-                  {newWeakness.details?.substanceType && (
-                    <p className="text-xs text-gray-400 mt-1">
-                      {WEAKNESSES.Addiction.options?.substance?.find(s => s.id === newWeakness.details?.substanceType)?.description}
-                    </p>
-                  )}
                   
                   <div className="mt-3">
                     <label className="block text-sm mb-1">Addiction Details</label>
@@ -613,26 +430,16 @@ export default function Step7_Weaknesses() {
               {selectedWeaknessType === "DarkSecret" && (
                 <div>
                   <label className="block text-sm mb-1">Secret Level</label>
-                  <Select 
-                    onValueChange={handleSecretLevelChange}
-                  >
+                  <Select onValueChange={handleSecretLevelChange}>
                     <SelectTrigger className="bg-gray-700">
                       <SelectValue placeholder="Select secret level" />
                     </SelectTrigger>
                     <SelectContent>
-                      {WEAKNESSES.DarkSecret.options?.secretLevels?.map((level) => (
-                        <SelectItem key={level.id} value={level.id}>
-                          {level.name} ({level.points} points)
-                        </SelectItem>
-                      ))}
+                      <SelectItem value="Trivial">Trivial Secret (5 points)</SelectItem>
+                      <SelectItem value="Serious">Serious Secret (10 points)</SelectItem>
+                      <SelectItem value="Severe">Severe Secret (15 points)</SelectItem>
                     </SelectContent>
                   </Select>
-                  
-                  {newWeakness.details?.secretLevel && (
-                    <p className="text-xs text-gray-400 mt-1">
-                      {WEAKNESSES.DarkSecret.options?.secretLevels?.find(l => l.id === newWeakness.details?.secretLevel)?.description}
-                    </p>
-                  )}
                   
                   <div className="mt-3">
                     <label className="block text-sm mb-1">Secret Details</label>
@@ -652,91 +459,32 @@ export default function Step7_Weaknesses() {
                 <div className="space-y-3">
                   <div>
                     <label className="block text-sm mb-1">Substance/Condition</label>
-                    <Select 
-                      onValueChange={handleSubstanceTypeChange}
-                    >
+                    <Select onValueChange={handleSubstanceTypeChange}>
                       <SelectTrigger className="bg-gray-700">
                         <SelectValue placeholder="Select substance/condition" />
                       </SelectTrigger>
                       <SelectContent>
-                        {WEAKNESSES.Dependence.options?.substance?.map((substance) => (
-                          <SelectItem key={substance.id} value={substance.id}>
-                            {substance.name} ({substance.points} points)
-                          </SelectItem>
-                        ))}
+                        <SelectItem value="Common">Common Substance/Condition (0 points)</SelectItem>
+                        <SelectItem value="Uncommon">Uncommon Substance/Condition (5 points)</SelectItem>
+                        <SelectItem value="Rare">Rare Substance/Condition (10 points)</SelectItem>
                       </SelectContent>
                     </Select>
-                    
-                    {newWeakness.details?.substanceType && (
-                      <p className="text-xs text-gray-400 mt-1">
-                        {WEAKNESSES.Dependence.options?.substance?.find(s => s.id === newWeakness.details?.substanceType)?.description}
-                      </p>
-                    )}
                   </div>
                   
                   <div>
                     <label className="block text-sm mb-1">Negative Effect</label>
-                    <Select 
-                      onValueChange={handleNegativeEffectChange}
-                    >
+                    <Select onValueChange={handleNegativeEffectChange}>
                       <SelectTrigger className="bg-gray-700">
                         <SelectValue placeholder="Select negative effect" />
                       </SelectTrigger>
                       <SelectContent>
-                        {WEAKNESSES.Dependence.options?.negativeEffects?.map((effect) => (
-                          <SelectItem key={effect.id} value={effect.id}>
-                            {effect.name} ({effect.points} points)
-                          </SelectItem>
-                        ))}
+                        <SelectItem value="PowerNegation">Power Negation (5 points)</SelectItem>
+                        <SelectItem value="PhysicalWeakness">Physical Weakness (5 points)</SelectItem>
+                        <SelectItem value="IncapacitatingWeakness">Incapacitating Weakness (10 points)</SelectItem>
+                        <SelectItem value="FatalWeakness">Fatal Weakness (15 points)</SelectItem>
                       </SelectContent>
                     </Select>
-                    
-                    {newWeakness.details?.negativeEffect && (
-                      <p className="text-xs text-gray-400 mt-1">
-                        {WEAKNESSES.Dependence.options?.negativeEffects?.find(e => e.id === newWeakness.details?.negativeEffect)?.description}
-                      </p>
-                    )}
                   </div>
-                  
-                  {showSecondNegativeEffect && (
-                    <div>
-                      <div className="flex items-center">
-                        <label className="block text-sm mb-1">Additional Negative Effect (Optional)</label>
-                        <TooltipProvider>
-                          <Tooltip>
-                            <TooltipTrigger asChild>
-                              <Button variant="ghost" size="sm" className="h-5 w-5 p-0 ml-1">
-                                <Info className="h-3 w-3" />
-                              </Button>
-                            </TooltipTrigger>
-                            <TooltipContent>
-                              <p className="text-xs max-w-[250px]">
-                                You can add a second negative effect to increase the points from this weakness.
-                              </p>
-                            </TooltipContent>
-                          </Tooltip>
-                        </TooltipProvider>
-                      </div>
-                      
-                      <Select 
-                        onValueChange={handleSecondNegativeEffectChange}
-                      >
-                        <SelectTrigger className="bg-gray-700">
-                          <SelectValue placeholder="Select additional effect (optional)" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {WEAKNESSES.Dependence.options?.negativeEffects
-                            ?.filter(effect => effect.id !== newWeakness.details?.negativeEffect)
-                            .map((effect) => (
-                              <SelectItem key={effect.id} value={effect.id}>
-                                {effect.name} ({effect.points} points)
-                              </SelectItem>
-                            ))
-                          }
-                        </SelectContent>
-                      </Select>
-                    </div>
-                  )}
                   
                   <div>
                     <label className="block text-sm mb-1">Dependence Details</label>
@@ -756,26 +504,16 @@ export default function Step7_Weaknesses() {
                 <div className="space-y-3">
                   <div>
                     <label className="block text-sm mb-1">Dependent Type</label>
-                    <Select 
-                      onValueChange={handleDependentTypeChange}
-                    >
+                    <Select onValueChange={handleDependentTypeChange}>
                       <SelectTrigger className="bg-gray-700">
                         <SelectValue placeholder="Select dependent type" />
                       </SelectTrigger>
                       <SelectContent>
-                        {WEAKNESSES.Dependent.options?.dependentTypes?.map((type) => (
-                          <SelectItem key={type.id} value={type.id}>
-                            {type.name} ({type.points} points)
-                          </SelectItem>
-                        ))}
+                        <SelectItem value="Average">Average Health (5 points)</SelectItem>
+                        <SelectItem value="Weak">Weak Health (10 points)</SelectItem>
+                        <SelectItem value="Frail">Frail Health (15 points)</SelectItem>
                       </SelectContent>
                     </Select>
-                    
-                    {newWeakness.details?.dependentType && (
-                      <p className="text-xs text-gray-400 mt-1">
-                        {WEAKNESSES.Dependent.options?.dependentTypes?.find(t => t.id === newWeakness.details?.dependentType)?.description}
-                      </p>
-                    )}
                   </div>
                   
                   <div>
@@ -813,6 +551,148 @@ export default function Step7_Weaknesses() {
                         </div>
                       ))}
                     </div>
+                  </div>
+                </div>
+              )}
+              
+              {/* Diminished Vitality */}
+              {selectedWeaknessType === "DiminishedVitality" && (
+                <div className="space-y-3">
+                  <div>
+                    <label className="block text-sm mb-1">Weakness Details</label>
+                    <Textarea 
+                      value={newWeakness.description}
+                      onChange={(e) => setNewWeakness({...newWeakness, description: e.target.value})}
+                      placeholder="Describe how having reduced stamina affects your character..."
+                      className="bg-gray-700"
+                      rows={3}
+                    />
+                  </div>
+                  
+                  <div className="bg-gray-700 p-3 rounded-md">
+                    <p className="text-sm text-gray-300">
+                      <span className="font-semibold">Effect:</span> Reduce your maximum stamina by 10.
+                    </p>
+                    <p className="text-sm text-gray-300 mt-1">
+                      <span className="font-semibold">Point Value:</span> 5 points
+                    </p>
+                  </div>
+                </div>
+              )}
+              
+              {/* Enemy */}
+              {selectedWeaknessType === "Enemy" && (
+                <div className="space-y-3">
+                  <div>
+                    <label className="block text-sm mb-1">Enemy Type</label>
+                    <Select onValueChange={handleEnemyTypeChange}>
+                      <SelectTrigger className="bg-gray-700">
+                        <SelectValue placeholder="Select enemy type" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="Standard">Standard Enemy (5 points)</SelectItem>
+                        <SelectItem value="Tyrant">Tyrant (10 points)</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  
+                  <div>
+                    <label className="block text-sm mb-1">Enemy Name</label>
+                    <Input 
+                      value={newWeakness.name.replace("Enemy: ", "")}
+                      onChange={(e) => setNewWeakness({...newWeakness, name: "Enemy: " + e.target.value})}
+                      placeholder="e.g., The Biker Gang, Cannibal Cult, Former Supervillain"
+                      className="bg-gray-700"
+                    />
+                  </div>
+                  
+                  <div>
+                    <label className="block text-sm mb-1">Enemy Details</label>
+                    <Textarea 
+                      value={newWeakness.description}
+                      onChange={(e) => setNewWeakness({...newWeakness, description: e.target.value})}
+                      placeholder="Describe your enemy and why they're after you..."
+                      className="bg-gray-700"
+                      rows={3}
+                    />
+                  </div>
+                </div>
+              )}
+              
+              {/* Taboo */}
+              {selectedWeaknessType === "Taboo" && (
+                <div className="space-y-3">
+                  <div>
+                    <label className="block text-sm mb-1">Restriction Type</label>
+                    <Select onValueChange={handleRestrictionChange}>
+                      <SelectTrigger className="bg-gray-700">
+                        <SelectValue placeholder="Select restriction type" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="Easy">Easy Restriction (0 points)</SelectItem>
+                        <SelectItem value="Moderate">Moderate Restriction (5 points)</SelectItem>
+                        <SelectItem value="Difficult">Difficult Restriction (10 points)</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  
+                  <div>
+                    <label className="block text-sm mb-1">Taboo Name</label>
+                    <Input 
+                      value={newWeakness.name.replace("Taboo: ", "")}
+                      onChange={(e) => setNewWeakness({...newWeakness, name: "Taboo: " + e.target.value})}
+                      placeholder="e.g., Cannot Touch Metal, Must Ask Permission to Enter"
+                      className="bg-gray-700"
+                    />
+                  </div>
+                  
+                  <div>
+                    <label className="block text-sm mb-1">Taboo Details</label>
+                    <Textarea 
+                      value={newWeakness.description}
+                      onChange={(e) => setNewWeakness({...newWeakness, description: e.target.value})}
+                      placeholder="Describe the taboo and how it affects your character..."
+                      className="bg-gray-700"
+                      rows={3}
+                    />
+                  </div>
+                </div>
+              )}
+              
+              {/* Origin/Archetype Weakness */}
+              {(selectedWeaknessType === "Origin" || selectedWeaknessType === "Archetype") && (
+                <div className="space-y-3">
+                  <div className="bg-blue-900/30 p-3 rounded-md mb-3">
+                    <div className="flex items-center">
+                      <Info className="h-5 w-5 mr-2 text-blue-400" />
+                      <p className="text-sm text-blue-300 font-medium">
+                        {selectedWeaknessType === "Origin" ? "Origin-based Weakness" : "Archetype-based Weakness"}
+                      </p>
+                    </div>
+                    <p className="text-sm text-gray-300 mt-1">
+                      This weakness is inherent to your character's {selectedWeaknessType.toLowerCase()} and does not provide any additional points.
+                    </p>
+                  </div>
+                
+                  <div>
+                    <label className="block text-sm mb-1">Weakness Name</label>
+                    <Input 
+                      value={newWeakness.name.replace(`${selectedWeaknessType}: `, "")}
+                      onChange={(e) => setNewWeakness({...newWeakness, name: `${selectedWeaknessType}: ` + e.target.value})}
+                      placeholder={`Enter the name of your ${selectedWeaknessType.toLowerCase()}-based weakness`}
+                      className="bg-gray-700"
+                    />
+                  </div>
+                  
+                  <div>
+                    <label className="block text-sm mb-1">Description</label>
+                    <Textarea 
+                      value={newWeakness.description}
+                      onChange={(e) => setNewWeakness({...newWeakness, description: e.target.value})}
+                      placeholder={`Describe how this ${selectedWeaknessType.toLowerCase()}-based weakness affects your character...`}
+                      className="bg-gray-700"
+                      rows={3}
+                    />
                   </div>
                 </div>
               )}
