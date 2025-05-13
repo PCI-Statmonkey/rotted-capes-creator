@@ -1,65 +1,71 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useCharacter } from "@/context/CharacterContext";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 import { Separator } from "@/components/ui/separator";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "@/hooks/use-toast";
 import { calculateModifier, formatModifier } from "@/lib/utils";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Check, Save, AlertTriangle, FileText, Info, Medal, ArrowRight, Trash2 } from "lucide-react";
+import { Check, Save, Shield, Heart, Target } from "lucide-react";
+import CharacterPdfButton from "@/components/CharacterPdfButton";
 
 export default function Step10_Summary() {
   const { character, updateCharacterField, saveCharacter } = useCharacter();
-  const [activeTab, setActiveTab] = useState("derived-stats");
   const summaryRef = useRef<HTMLDivElement>(null);
 
   // Calculate derived stats
   const calculateDerivedStats = () => {
+    const strMod = calculateModifier(character.abilities.strength.value);
     const dexMod = calculateModifier(character.abilities.dexterity.value);
     const conMod = calculateModifier(character.abilities.constitution.value);
     const intMod = calculateModifier(character.abilities.intelligence.value);
     const wisMod = calculateModifier(character.abilities.wisdom.value);
+    const chaMod = calculateModifier(character.abilities.charisma.value);
     
-    // Defense calculation
-    let defense = 10 + dexMod;
+    // Defense calculation - in Rotted Capes 2.0 this is called "Avoidance"
+    let avoidance = 10 + dexMod;
     
-    // Toughness calculation 
-    let toughness = conMod;
+    // Fortitude calculation
+    let fortitude = 10 + (strMod > conMod ? strMod : conMod);
     
-    // Fortitude, Reflex, Willpower calculations
-    let fortitude = conMod;
-    let reflex = dexMod;
-    let willpower = wisMod;
+    // Willpower calculation
+    let willpower = 10 + (wisMod > chaMod ? wisMod : chaMod);
+    
+    // Stamina calculation
+    let stamina = avoidance + fortitude + willpower;
+    
+    // Wounds calculation
+    let wounds = Math.max(3, Math.floor(conMod / 2));
     
     // Initiative calculation
     let initiative = dexMod;
     
+    // Running pace
+    let runningPace = 30 + (strMod * 5);
+    
     return {
-      defense,
-      toughness,
+      avoidance,
       fortitude,
-      reflex,
       willpower,
-      initiative
+      stamina,
+      wounds,
+      initiative,
+      runningPace
     };
   };
 
-  // Update derived stats whenever relevant character fields change
+  // Derived stats are calculated on the fly
+  const derivedStats = calculateDerivedStats();
+  
+  // Update character defense to match avoidance for compatibility
   useEffect(() => {
-    const derivedStats = calculateDerivedStats();
-    
-    updateCharacterField('defense', derivedStats.defense);
-    updateCharacterField('toughness', derivedStats.toughness);
+    updateCharacterField('defense', derivedStats.avoidance);
     updateCharacterField('fortitude', derivedStats.fortitude);
-    updateCharacterField('reflex', derivedStats.reflex);
     updateCharacterField('willpower', derivedStats.willpower);
     updateCharacterField('initiative', derivedStats.initiative);
-  }, [character.abilities, updateCharacterField]);
+  }, [character.abilities, updateCharacterField, derivedStats]);
 
   const handleSaveCharacter = () => {
     saveCharacter();
@@ -89,12 +95,12 @@ export default function Step10_Summary() {
       // Base cost for a power
       let powerCost = power.cost || 0;
       
-      // Add perks costs (usually 1 point each)
+      // Add cost for perks
       if (power.perks) {
         powerCost += power.perks.length;
       }
       
-      // Subtract flaw benefits (usually 1 point each)
+      // Subtract points for flaws
       if (power.flaws) {
         powerCost -= power.flaws.length;
       }
@@ -113,6 +119,7 @@ export default function Step10_Summary() {
     };
   };
 
+  // Update points spent
   useEffect(() => {
     const pointsSpent = calculatePointsSpent();
     updateCharacterField('pointsSpent', pointsSpent);
@@ -120,370 +127,518 @@ export default function Step10_Summary() {
 
   return (
     <div className="container mx-auto px-4 py-6" ref={summaryRef}>
-      <h1 className="text-3xl font-bold mb-6">Character Summary</h1>
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-3xl font-bold">Character Sheet</h1>
+        <div className="flex gap-2">
+          <Button 
+            onClick={handleSaveCharacter} 
+            className="bg-green-600 hover:bg-green-700"
+          >
+            <Save className="mr-2 h-4 w-4" />
+            Save Character
+          </Button>
+          
+          <CharacterPdfButton 
+            character={character}
+            elementRef={summaryRef}
+            label="Download Sheet"
+            variant="default"
+          />
+        </div>
+      </div>
       
-      <Card className="mb-6">
-        <CardHeader>
-          <CardTitle className="flex justify-between items-center">
-            <span>{character.name || "Character Summary"}</span>
-            <div className="flex space-x-2">
-              <Button variant="outline" size="sm" onClick={handleSaveCharacter}>
-                <Save className="mr-2 h-4 w-4" />
-                Save Character
-              </Button>
-              <Button 
-                variant="default"
-                onClick={() => {
-                  if (summaryRef.current) {
-                    toast({
-                      title: "Generating PDF",
-                      description: "Your character sheet is being generated.",
-                    });
+      {/* Character Sheet Header */}
+      <Card className="mb-6 overflow-hidden">
+        <CardContent className="p-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {/* Left column - Name and Flaws */}
+            <div className="space-y-4">
+              <div>
+                <Label className="text-sm text-gray-400">Name</Label>
+                <h2 className="text-2xl font-bold">{character.name || "Unnamed Hero"}</h2>
+                <p className="text-gray-400 text-sm">{character.secretIdentity ? `Secret Identity: ${character.secretIdentity}` : ""}</p>
+              </div>
+              
+              <div>
+                <Label className="text-sm text-gray-400">Flaws</Label>
+                <div className="flex flex-wrap gap-1 mt-1">
+                  {character.personalityFlaws && character.personalityFlaws.length > 0 ? 
+                    character.personalityFlaws.map((flaw, index) => (
+                      <Badge key={index} variant="outline" className="border-gray-600">
+                        {flaw}
+                      </Badge>
+                    )) : 
+                    <span className="text-gray-500 text-sm">No flaws specified</span>
                   }
-                }}
-              >
-                <FileText className="mr-2 h-4 w-4" />
-                Download PDF
-              </Button>
+                </div>
+              </div>
             </div>
-          </CardTitle>
-          <CardDescription>
-            Final review of your character stats and details
-          </CardDescription>
-        </CardHeader>
-        
-        <CardContent>
-          <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-            <TabsList className="grid grid-cols-3 mb-6">
-              <TabsTrigger value="derived-stats">Derived Stats</TabsTrigger>
-              <TabsTrigger value="points-summary">Points Summary</TabsTrigger>
-              <TabsTrigger value="character-details">Character Details</TabsTrigger>
-            </TabsList>
             
-            {/* Derived Stats Tab */}
-            <TabsContent value="derived-stats" className="space-y-4">
-              <h3 className="text-lg font-semibold">Derived Character Statistics</h3>
-              <p className="text-gray-400 mb-4">
-                These values are calculated automatically based on your character's abilities, skills, and powers.
-              </p>
-              
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <Card>
-                  <CardHeader className="pb-2">
-                    <CardTitle className="text-base">Defense</CardTitle>
-                    <CardDescription>Ability to avoid attacks</CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="text-3xl font-bold text-center">{character.defense}</div>
-                  </CardContent>
-                </Card>
-                
-                <Card>
-                  <CardHeader className="pb-2">
-                    <CardTitle className="text-base">Toughness</CardTitle>
-                    <CardDescription>Resistance to damage</CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="text-3xl font-bold text-center">{character.toughness}</div>
-                  </CardContent>
-                </Card>
-                
-                <Card>
-                  <CardHeader className="pb-2">
-                    <CardTitle className="text-base">Initiative</CardTitle>
-                    <CardDescription>Combat turn order bonus</CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="text-3xl font-bold text-center">{formatModifier(character.initiative)}</div>
-                  </CardContent>
-                </Card>
-                
-                <Card>
-                  <CardHeader className="pb-2">
-                    <CardTitle className="text-base">Fortitude</CardTitle>
-                    <CardDescription>Physical resilience</CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="text-3xl font-bold text-center">{character.fortitude}</div>
-                  </CardContent>
-                </Card>
-                
-                <Card>
-                  <CardHeader className="pb-2">
-                    <CardTitle className="text-base">Reflex</CardTitle>
-                    <CardDescription>Reaction speed</CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="text-3xl font-bold text-center">{character.reflex}</div>
-                  </CardContent>
-                </Card>
-                
-                <Card>
-                  <CardHeader className="pb-2">
-                    <CardTitle className="text-base">Willpower</CardTitle>
-                    <CardDescription>Mental fortitude</CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="text-3xl font-bold text-center">{character.willpower}</div>
-                  </CardContent>
-                </Card>
+            {/* Middle column - Origin/Archetype */}
+            <div className="md:text-center space-y-4">
+              <div>
+                <Label className="text-sm text-gray-400">Origin/Archetype</Label>
+                <p className="font-semibold">{character.origin || "No Origin"} / {character.archetype || "No Archetype"}</p>
               </div>
-            </TabsContent>
+              
+              <div>
+                <Label className="text-sm text-gray-400">Concept</Label>
+                <p className="font-semibold">{character.concept || "No Concept"}</p>
+              </div>
+            </div>
             
-            {/* Points Summary Tab */}
-            <TabsContent value="points-summary">
-              <div className="space-y-4">
-                <h3 className="text-lg font-semibold">Character Points Summary</h3>
-                <p className="text-gray-400 mb-4">
-                  A breakdown of how you've spent your character points.
-                </p>
-                
-                <div className="grid gap-4">
-                  <div className="bg-gray-800 p-4 rounded-lg">
-                    <div className="flex justify-between mb-2">
-                      <span>Abilities</span>
-                      <span>{character.pointsSpent.abilities} points</span>
-                    </div>
-                    <Progress value={(character.pointsSpent.abilities / character.pointsSpent.total) * 100} />
-                  </div>
-                  
-                  <div className="bg-gray-800 p-4 rounded-lg">
-                    <div className="flex justify-between mb-2">
-                      <span>Skills</span>
-                      <span>{character.pointsSpent.skills} points</span>
-                    </div>
-                    <Progress value={(character.pointsSpent.skills / character.pointsSpent.total) * 100} />
-                  </div>
-                  
-                  <div className="bg-gray-800 p-4 rounded-lg">
-                    <div className="flex justify-between mb-2">
-                      <span>Powers</span>
-                      <span>{character.pointsSpent.powers} points</span>
-                    </div>
-                    <Progress value={(character.pointsSpent.powers / character.pointsSpent.total) * 100} />
-                  </div>
-                  
-                  <div className="bg-gray-700 p-4 rounded-lg mt-2">
-                    <div className="flex justify-between font-bold">
-                      <span>Total Points Spent</span>
-                      <span>{character.pointsSpent.total} points</span>
-                    </div>
-                  </div>
-                </div>
-                
-                <div className="bg-blue-900/30 p-4 rounded-lg mt-4">
-                  <div className="flex items-start">
-                    <Info className="h-5 w-5 mr-2 text-blue-300 mt-0.5" />
-                    <div>
-                      <h4 className="text-sm font-semibold text-blue-300">Points Allocation Note</h4>
-                      <p className="text-sm text-blue-100 mt-1">
-                        Standard character creation in Rotted Capes uses 100 points: 36 for Abilities, 20 for Skills, 
-                        32 for Powers, and 12 for Weaknesses that can be allocated to any category.
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </TabsContent>
-            
-            {/* Character Details Tab */}
-            <TabsContent value="character-details" className="space-y-6">
-              <h3 className="text-lg font-semibold">Character Profile</h3>
-              
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="bg-gray-800 p-4 rounded-lg">
-                  <h4 className="text-base font-medium mb-3">Identity</h4>
-                  <div className="space-y-2">
-                    <div className="flex justify-between">
-                      <span className="text-gray-400">Hero Name:</span>
-                      <span className="font-medium">{character.name || "—"}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-gray-400">Secret Identity:</span>
-                      <span className="font-medium">{character.secretIdentity || "—"}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-gray-400">Concept:</span>
-                      <span className="font-medium">{character.concept || "—"}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-gray-400">Origin:</span>
-                      <span className="font-medium">{character.origin || "—"}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-gray-400">Archetype:</span>
-                      <span className="font-medium">{character.archetype || "—"}</span>
-                    </div>
-                  </div>
-                </div>
-                
-                <div className="bg-gray-800 p-4 rounded-lg">
-                  <h4 className="text-base font-medium mb-3">Physical Traits</h4>
-                  <div className="space-y-2">
-                    <div className="flex justify-between">
-                      <span className="text-gray-400">Gender:</span>
-                      <span className="font-medium">{character.gender || "—"}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-gray-400">Age:</span>
-                      <span className="font-medium">{character.age || "—"}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-gray-400">Height:</span>
-                      <span className="font-medium">{character.height || "—"}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-gray-400">Weight:</span>
-                      <span className="font-medium">{character.weight || "—"}</span>
-                    </div>
-                  </div>
-                </div>
+            {/* Right column - Tagline and Pace */}
+            <div className="space-y-4 md:text-right">
+              <div>
+                <Label className="text-sm text-gray-400">Tagline</Label>
+                <p className="font-semibold italic">"{character.tagline || "No tagline"}"</p>
               </div>
               
-              <div className="bg-gray-800 p-4 rounded-lg">
-                <h4 className="text-base font-medium mb-3">Character Essence</h4>
-                <div className="space-y-3">
-                  <div>
-                    <span className="text-gray-400 block mb-1">Personality Flaws:</span>
-                    {character.personalityFlaws && character.personalityFlaws.length > 0 ? (
-                      <div className="font-medium">
-                        {character.personalityFlaws.map((flaw, index) => (
-                          <div key={index} className="mb-1">• {flaw}</div>
-                        ))}
-                      </div>
-                    ) : (
-                      <span className="block">—</span>
-                    )}
-                  </div>
-                  <div>
-                    <span className="text-gray-400 block mb-1">Tagline:</span>
-                    <span className="font-medium block italic">"{character.tagline || "—"}"</span>
-                  </div>
-                  <div>
-                    <span className="text-gray-400 block mb-1">Appearance:</span>
-                    <span className="block">{character.appearance || "—"}</span>
-                  </div>
-                </div>
+              <div>
+                <Label className="text-sm text-gray-400">Running Pace</Label>
+                <p className="font-semibold">{derivedStats.runningPace} feet</p>
               </div>
-              
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="bg-gray-800 p-4 rounded-lg">
-                  <h4 className="text-base font-medium mb-3">Powers Summary</h4>
-                  <div className="space-y-2">
-                    {character.powers.length > 0 ? character.powers.map((power, index) => (
-                      <div key={index} className="py-1 border-b border-gray-700 last:border-0">
-                        <div className="font-medium">{power.name}</div>
-                        <div className="text-sm text-gray-400">{power.description}</div>
-                      </div>
-                    )) : (
-                      <div className="text-gray-400">No powers selected</div>
-                    )}
-                  </div>
-                </div>
-                
-                <div className="bg-gray-800 p-4 rounded-lg">
-                  <h4 className="text-base font-medium mb-3">Equipment Summary</h4>
-                  <div className="space-y-2">
-                    {character.gear.length > 0 ? character.gear.map((item, index) => (
-                      <div key={index} className="py-1 border-b border-gray-700 last:border-0">
-                        <div className="font-medium">{item.name}</div>
-                        <div className="text-sm text-gray-400">{item.description}</div>
-                      </div>
-                    )) : (
-                      <div className="text-gray-400">No gear selected</div>
-                    )}
-                  </div>
-                </div>
-              </div>
-            </TabsContent>
-          </Tabs>
+            </div>
+          </div>
         </CardContent>
       </Card>
       
-      <div className="bg-gray-800 p-4 rounded-lg mb-6">
-        <h3 className="text-lg font-semibold mb-4">Character Completion Checklist</h3>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="space-y-2">
-            <div className="flex items-center">
-              <Check className={`h-5 w-5 mr-2 ${character.name ? "text-green-400" : "text-gray-500"}`} />
-              <span className={character.name ? "" : "text-gray-500"}>Character name provided</span>
-            </div>
-            
-            <div className="flex items-center">
-              <Check className={`h-5 w-5 mr-2 ${character.concept ? "text-green-400" : "text-gray-500"}`} />
-              <span className={character.concept ? "" : "text-gray-500"}>Character concept defined</span>
-            </div>
-            
-            <div className="flex items-center">
-              <Check className={`h-5 w-5 mr-2 ${character.origin ? "text-green-400" : "text-gray-500"}`} />
-              <span className={character.origin ? "" : "text-gray-500"}>Origin selected</span>
-            </div>
-            
-            <div className="flex items-center">
-              <Check className={`h-5 w-5 mr-2 ${character.archetype ? "text-green-400" : "text-gray-500"}`} />
-              <span className={character.archetype ? "" : "text-gray-500"}>Archetype chosen</span>
-            </div>
-          </div>
-          
-          <div className="space-y-2">
-            <div className="flex items-center">
-              <Check className={`h-5 w-5 mr-2 ${character.personalityFlaws.length > 0 ? "text-green-400" : "text-gray-500"}`} />
-              <span className={character.personalityFlaws.length > 0 ? "" : "text-gray-500"}>Personality flaws defined</span>
-            </div>
-            
-            <div className="flex items-center">
-              <Check className={`h-5 w-5 mr-2 ${character.tagline ? "text-green-400" : "text-gray-500"}`} />
-              <span className={character.tagline ? "" : "text-gray-500"}>Character tagline created</span>
-            </div>
-            
-            <div className="flex items-center">
-              <Check className={`h-5 w-5 mr-2 ${character.skills.length > 0 ? "text-green-400" : "text-gray-500"}`} />
-              <span className={character.skills.length > 0 ? "" : "text-gray-500"}>Skills selected</span>
-            </div>
-            
-            <div className="flex items-center">
-              <Check className={`h-5 w-5 mr-2 ${character.powers.length > 0 ? "text-green-400" : "text-gray-500"}`} />
-              <span className={character.powers.length > 0 ? "" : "text-gray-500"}>Powers defined</span>
-            </div>
-          </div>
-        </div>
-      </div>
-      
-      <div className="flex justify-between mt-8">
-        <Button onClick={handleSaveCharacter} className="bg-green-600 hover:bg-green-700">
-          <Save className="mr-2 h-4 w-4" />
-          Save Character
-        </Button>
+      {/* Abilities & Defenses */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+        {/* Abilities Column */}
+        <Card>
+          <CardHeader className="py-3">
+            <CardTitle className="text-center">Abilities</CardTitle>
+          </CardHeader>
+          <CardContent className="px-4 pb-4 pt-0">
+            <table className="w-full">
+              <thead>
+                <tr className="text-xs uppercase text-gray-400">
+                  <th className="text-left py-2">Ability</th>
+                  <th className="text-center py-2">Score</th>
+                  <th className="text-center py-2">Bonus</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr className="border-b border-gray-700">
+                  <td className="py-2">Strength</td>
+                  <td className="text-center py-2 font-semibold">{character.abilities.strength.value}</td>
+                  <td className="text-center py-2 font-semibold">{formatModifier(character.abilities.strength.modifier)}</td>
+                </tr>
+                <tr className="border-b border-gray-700">
+                  <td className="py-2">Dexterity</td>
+                  <td className="text-center py-2 font-semibold">{character.abilities.dexterity.value}</td>
+                  <td className="text-center py-2 font-semibold">{formatModifier(character.abilities.dexterity.modifier)}</td>
+                </tr>
+                <tr className="border-b border-gray-700">
+                  <td className="py-2">Constitution</td>
+                  <td className="text-center py-2 font-semibold">{character.abilities.constitution.value}</td>
+                  <td className="text-center py-2 font-semibold">{formatModifier(character.abilities.constitution.modifier)}</td>
+                </tr>
+                <tr className="border-b border-gray-700">
+                  <td className="py-2">Intelligence</td>
+                  <td className="text-center py-2 font-semibold">{character.abilities.intelligence.value}</td>
+                  <td className="text-center py-2 font-semibold">{formatModifier(character.abilities.intelligence.modifier)}</td>
+                </tr>
+                <tr className="border-b border-gray-700">
+                  <td className="py-2">Wisdom</td>
+                  <td className="text-center py-2 font-semibold">{character.abilities.wisdom.value}</td>
+                  <td className="text-center py-2 font-semibold">{formatModifier(character.abilities.wisdom.modifier)}</td>
+                </tr>
+                <tr>
+                  <td className="py-2">Charisma</td>
+                  <td className="text-center py-2 font-semibold">{character.abilities.charisma.value}</td>
+                  <td className="text-center py-2 font-semibold">{formatModifier(character.abilities.charisma.modifier)}</td>
+                </tr>
+              </tbody>
+            </table>
+          </CardContent>
+        </Card>
         
-        <Button 
-          className="bg-blue-600 hover:bg-blue-700" 
-          onClick={() => {
-            if (summaryRef.current) {
-              toast({
-                title: "Generating PDF",
-                description: "Your character sheet is being generated.",
-              });
-            }
-          }}
-        >
-          <FileText className="mr-2 h-4 w-4" />
-          Download Character Sheet
-        </Button>
+        {/* Defenses Column */}
+        <Card>
+          <CardHeader className="py-3">
+            <CardTitle className="text-center">Defenses</CardTitle>
+          </CardHeader>
+          <CardContent className="p-4 pt-0">
+            <div className="grid grid-cols-1 gap-4">
+              <div className="text-center p-3 bg-gray-800 rounded-lg">
+                <Label className="text-xs text-gray-400 uppercase">Avoidance</Label>
+                <div className="text-3xl font-bold flex items-center justify-center gap-2">
+                  <Shield className="h-5 w-5 text-blue-400" />
+                  {derivedStats.avoidance}
+                </div>
+                <p className="text-xs text-gray-400 mt-1">DEX or INT Bonus + 10</p>
+              </div>
+              
+              <div className="text-center p-3 bg-gray-800 rounded-lg">
+                <Label className="text-xs text-gray-400 uppercase">Fortitude</Label>
+                <div className="text-3xl font-bold flex items-center justify-center gap-2">
+                  <Shield className="h-5 w-5 text-red-400" />
+                  {derivedStats.fortitude}
+                </div>
+                <p className="text-xs text-gray-400 mt-1">STR or CON Bonus + 10</p>
+              </div>
+              
+              <div className="text-center p-3 bg-gray-800 rounded-lg">
+                <Label className="text-xs text-gray-400 uppercase">Willpower</Label>
+                <div className="text-3xl font-bold flex items-center justify-center gap-2">
+                  <Shield className="h-5 w-5 text-purple-400" />
+                  {derivedStats.willpower}
+                </div>
+                <p className="text-xs text-gray-400 mt-1">WIS or CHA Bonus + 10</p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+        
+        {/* Health Column */}
+        <Card>
+          <CardHeader className="py-3">
+            <CardTitle className="text-center">Health & Initiative</CardTitle>
+          </CardHeader>
+          <CardContent className="p-4 pt-0">
+            <div className="grid grid-cols-1 gap-4">
+              <div className="text-center p-3 bg-gray-800 rounded-lg">
+                <Label className="text-xs text-gray-400 uppercase">Stamina</Label>
+                <div className="text-3xl font-bold flex items-center justify-center gap-2">
+                  <Heart className="h-5 w-5 text-green-400" />
+                  {derivedStats.stamina}
+                </div>
+                <p className="text-xs text-gray-400 mt-1">AVOID + FORT + WILL</p>
+              </div>
+              
+              <div className="text-center p-3 bg-gray-800 rounded-lg">
+                <Label className="text-xs text-gray-400 uppercase">Wounds</Label>
+                <div className="text-3xl font-bold flex items-center justify-center gap-2">
+                  <Heart className="h-5 w-5 text-red-400" />
+                  {derivedStats.wounds}
+                </div>
+                <p className="text-xs text-gray-400 mt-1">Half CON Bonus (min 3)</p>
+              </div>
+              
+              <div className="text-center p-3 bg-gray-800 rounded-lg">
+                <Label className="text-xs text-gray-400 uppercase">Initiative</Label>
+                <div className="text-3xl font-bold flex items-center justify-center gap-2">
+                  <Target className="h-5 w-5 text-yellow-400" />
+                  {formatModifier(derivedStats.initiative)}
+                </div>
+                <p className="text-xs text-gray-400 mt-1">DEX Bonus</p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
       </div>
       
-      <div className="bg-amber-900/30 p-4 rounded-lg mt-8">
-        <div className="flex items-start">
-          <AlertTriangle className="h-5 w-5 mr-2 text-amber-400 mt-0.5" />
-          <div>
-            <h4 className="text-sm font-semibold text-amber-400">Character Approval Required</h4>
-            <p className="text-sm text-amber-200 mt-1">
-              Remember that all new characters need approval from your Editor-in-Chief (Game Master) 
-              before they can be used in play. Make sure to review all your character details 
-              before submitting them for approval.
-            </p>
-          </div>
+      {/* Powers, Skills, Gear */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+        {/* Powers Section */}
+        <Card>
+          <CardHeader className="py-3">
+            <CardTitle className="flex items-center">
+              <span className="flex-1">Powers</span>
+              <Badge variant="outline" className="ml-2">{character.powers.length}</Badge>
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="max-h-96 overflow-y-auto">
+            {character.powers.length > 0 ? (
+              <div className="space-y-4">
+                {character.powers.map((power, index) => (
+                  <div key={index} className="border border-gray-700 rounded-lg p-3">
+                    <div className="flex justify-between items-start">
+                      <h3 className="font-semibold">{power.name}</h3>
+                      {power.score && (
+                        <Badge variant="secondary">{power.score}</Badge>
+                      )}
+                    </div>
+                    <p className="text-sm text-gray-400 mt-1">{power.description}</p>
+                    
+                    {(power.perks.length > 0 || power.flaws.length > 0) && (
+                      <div className="grid grid-cols-2 gap-2 mt-2">
+                        {power.perks.length > 0 && (
+                          <div>
+                            <Label className="text-xs text-gray-400">Perks</Label>
+                            <ul className="text-xs ml-4 list-disc">
+                              {power.perks.map((perk, idx) => (
+                                <li key={idx}>{perk}</li>
+                              ))}
+                            </ul>
+                          </div>
+                        )}
+                        
+                        {power.flaws.length > 0 && (
+                          <div>
+                            <Label className="text-xs text-gray-400">Flaws</Label>
+                            <ul className="text-xs ml-4 list-disc">
+                              {power.flaws.map((flaw, idx) => (
+                                <li key={idx}>{flaw}</li>
+                              ))}
+                            </ul>
+                          </div>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="text-center py-6 text-gray-500">No powers defined</div>
+            )}
+          </CardContent>
+        </Card>
+        
+        {/* Skills and Gear */}
+        <div className="space-y-6">
+          {/* Skills Section */}
+          <Card>
+            <CardHeader className="py-3">
+              <CardTitle className="flex items-center">
+                <span className="flex-1">Skills</span>
+                <Badge variant="outline" className="ml-2">{character.skills.length}</Badge>
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="max-h-52 overflow-y-auto">
+              {character.skills.length > 0 ? (
+                <table className="w-full">
+                  <thead>
+                    <tr className="text-xs uppercase text-gray-400 border-b border-gray-700">
+                      <th className="text-left p-2">Skill</th>
+                      <th className="text-center p-2">Ability</th>
+                      <th className="text-center p-2">Ranks</th>
+                      <th className="text-center p-2">Trained</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {character.skills.map((skill, index) => (
+                      <tr key={index} className="border-b border-gray-700">
+                        <td className="p-2">
+                          {skill.name}
+                          {skill.specialization && (
+                            <span className="text-xs text-gray-400"> ({skill.specialization})</span>
+                          )}
+                        </td>
+                        <td className="text-center p-2">{skill.ability.substring(0, 3).toUpperCase()}</td>
+                        <td className="text-center p-2">{skill.ranks}</td>
+                        <td className="text-center p-2">
+                          {skill.trained ? (
+                            <Check className="h-4 w-4 text-green-400 mx-auto" />
+                          ) : (
+                            <span>—</span>
+                          )}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              ) : (
+                <div className="text-center py-6 text-gray-500">No skills defined</div>
+              )}
+            </CardContent>
+          </Card>
+          
+          {/* Gear Section */}
+          <Card>
+            <CardHeader className="py-3">
+              <CardTitle className="flex items-center">
+                <span className="flex-1">Gear</span>
+                <Badge variant="outline" className="ml-2">{character.gear.length}</Badge>
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="max-h-52 overflow-y-auto">
+              {character.gear.length > 0 ? (
+                <div className="space-y-2">
+                  {character.gear.map((item, index) => (
+                    <div key={index} className="border-b border-gray-700 pb-2 last:border-0">
+                      <div className="font-semibold">{item.name}</div>
+                      {item.description && (
+                        <p className="text-sm text-gray-400">{item.description}</p>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="text-center py-6 text-gray-500">No gear acquired</div>
+              )}
+            </CardContent>
+          </Card>
         </div>
       </div>
+      
+      {/* Complications and Feats */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+        {/* Complications Section */}
+        <Card>
+          <CardHeader className="py-3">
+            <CardTitle className="flex items-center">
+              <span className="flex-1">Complications</span>
+              <Badge variant="outline" className="ml-2">{character.complications.length}</Badge>
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="max-h-64 overflow-y-auto">
+            {character.complications.length > 0 ? (
+              <div className="space-y-3">
+                {character.complications.map((complication, index) => (
+                  <div key={index} className="border-b border-gray-700 pb-3 last:border-0">
+                    <div className="flex justify-between">
+                      <h3 className="font-semibold">{complication.name}</h3>
+                      {complication.type && (
+                        <Badge variant="outline">{complication.type}</Badge>
+                      )}
+                    </div>
+                    <p className="text-sm text-gray-400 mt-1">{complication.description}</p>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="text-center py-6 text-gray-500">No complications defined</div>
+            )}
+          </CardContent>
+        </Card>
+        
+        {/* Feats Section */}
+        <Card>
+          <CardHeader className="py-3">
+            <CardTitle className="flex items-center">
+              <span className="flex-1">Feats</span>
+              <Badge variant="outline" className="ml-2">{character.feats.length}</Badge>
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="max-h-64 overflow-y-auto">
+            {character.feats.length > 0 ? (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                {character.feats.map((feat, index) => (
+                  <div key={index} className="border border-gray-700 rounded-lg p-2">
+                    <div className="font-semibold">{feat.name}</div>
+                    {feat.source && (
+                      <div className="text-xs text-gray-400">Source: {feat.source}</div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="text-center py-6 text-gray-500">No feats selected</div>
+            )}
+          </CardContent>
+        </Card>
+      </div>
+      
+      {/* Points Allocation */}
+      <Card className="mb-6">
+        <CardHeader className="py-3">
+          <CardTitle>Points Allocation</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-4">
+            <div>
+              <div className="flex justify-between mb-1">
+                <h3 className="font-semibold">Abilities</h3>
+                <span className="font-semibold">{character.pointsSpent.abilities} / 36 points</span>
+              </div>
+              <Progress value={(character.pointsSpent.abilities / 36) * 100} className="h-2" />
+            </div>
+            
+            <div>
+              <div className="flex justify-between mb-1">
+                <h3 className="font-semibold">Skills</h3>
+                <span className="font-semibold">{character.pointsSpent.skills} / 20 points</span>
+              </div>
+              <Progress value={(character.pointsSpent.skills / 20) * 100} className="h-2" />
+            </div>
+            
+            <div>
+              <div className="flex justify-between mb-1">
+                <h3 className="font-semibold">Powers</h3>
+                <span className="font-semibold">{character.pointsSpent.powers} / 32 points</span>
+              </div>
+              <Progress value={(character.pointsSpent.powers / 32) * 100} className="h-2" />
+            </div>
+            
+            <Separator />
+            
+            <div>
+              <div className="flex justify-between mb-1">
+                <h3 className="font-semibold">Total</h3>
+                <span className="font-semibold">{character.pointsSpent.total} / 88 points</span>
+              </div>
+              <Progress value={(character.pointsSpent.total / 88) * 100} className="h-2" />
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+      
+      {/* Character Completion Checklist */}
+      <Card className="mb-6">
+        <CardHeader className="py-3">
+          <CardTitle>Character Completion Checklist</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+            <div className="space-y-1">
+              <div className="flex items-center">
+                <Check className={`h-5 w-5 mr-2 ${character.name ? "text-green-400" : "text-gray-500"}`} />
+                <span className={character.name ? "" : "text-gray-500"}>Character name created</span>
+              </div>
+              
+              <div className="flex items-center">
+                <Check className={`h-5 w-5 mr-2 ${character.secretIdentity ? "text-green-400" : "text-gray-500"}`} />
+                <span className={character.secretIdentity ? "" : "text-gray-500"}>Secret identity defined</span>
+              </div>
+              
+              <div className="flex items-center">
+                <Check className={`h-5 w-5 mr-2 ${character.concept ? "text-green-400" : "text-gray-500"}`} />
+                <span className={character.concept ? "" : "text-gray-500"}>Character concept written</span>
+              </div>
+              
+              <div className="flex items-center">
+                <Check className={`h-5 w-5 mr-2 ${character.appearance ? "text-green-400" : "text-gray-500"}`} />
+                <span className={character.appearance ? "" : "text-gray-500"}>Appearance described</span>
+              </div>
+              
+              <div className="flex items-center">
+                <Check className={`h-5 w-5 mr-2 ${character.origin ? "text-green-400" : "text-gray-500"}`} />
+                <span className={character.origin ? "" : "text-gray-500"}>Origin selected</span>
+              </div>
+              
+              <div className="flex items-center">
+                <Check className={`h-5 w-5 mr-2 ${character.archetype ? "text-green-400" : "text-gray-500"}`} />
+                <span className={character.archetype ? "" : "text-gray-500"}>Archetype selected</span>
+              </div>
+            </div>
+            
+            <div className="space-y-1">
+              <div className="flex items-center">
+                <Check className={`h-5 w-5 mr-2 ${character.personalityFlaws && character.personalityFlaws.length > 0 ? "text-green-400" : "text-gray-500"}`} />
+                <span className={character.personalityFlaws && character.personalityFlaws.length > 0 ? "" : "text-gray-500"}>Personality flaws defined</span>
+              </div>
+              
+              <div className="flex items-center">
+                <Check className={`h-5 w-5 mr-2 ${character.tagline ? "text-green-400" : "text-gray-500"}`} />
+                <span className={character.tagline ? "" : "text-gray-500"}>Character tagline created</span>
+              </div>
+              
+              <div className="flex items-center">
+                <Check className={`h-5 w-5 mr-2 ${character.skills.length > 0 ? "text-green-400" : "text-gray-500"}`} />
+                <span className={character.skills.length > 0 ? "" : "text-gray-500"}>Skills selected</span>
+              </div>
+              
+              <div className="flex items-center">
+                <Check className={`h-5 w-5 mr-2 ${character.powers.length > 0 ? "text-green-400" : "text-gray-500"}`} />
+                <span className={character.powers.length > 0 ? "" : "text-gray-500"}>Powers defined</span>
+              </div>
+              
+              <div className="flex items-center">
+                <Check className={`h-5 w-5 mr-2 ${character.complications.length > 0 ? "text-green-400" : "text-gray-500"}`} />
+                <span className={character.complications.length > 0 ? "" : "text-gray-500"}>Complications selected</span>
+              </div>
+              
+              <div className="flex items-center">
+                <Check className={`h-5 w-5 mr-2 ${character.gear.length > 0 ? "text-green-400" : "text-gray-500"}`} />
+                <span className={character.gear.length > 0 ? "" : "text-gray-500"}>Gear acquired</span>
+              </div>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
     </div>
   );
 }
