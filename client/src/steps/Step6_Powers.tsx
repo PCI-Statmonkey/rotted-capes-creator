@@ -139,15 +139,15 @@ const POWER_SETS: PowerSet[] = [
     ],
     requiredArchetypes: ["Speedster"]
   },
-  // General power sets available to all archetypes
+  // These general power sets are available to all archetypes
   {
     name: "Elemental Control",
     powers: [
       { name: "Energy Blast", score: 16 },
-      { name: "Energy Control", score: 16 },
-      { name: "Energy Sheath", score: 14 },
-      { name: "Force Field", score: 14 },
-      { name: "Environmental Control", score: 12 }
+      { name: "Energy Generation", score: 14 },
+      { name: "Energy Sheath", score: 12 },
+      { name: "Force Field", score: 16 },
+      { name: "Flight", score: 12 }
     ]
     // No requiredArchetypes means available to all
   },
@@ -155,10 +155,10 @@ const POWER_SETS: PowerSet[] = [
     name: "Psychic",
     powers: [
       { name: "Telepathy", score: 16 },
-      { name: "Move Object", score: 16 },
-      { name: "Mental Blast", score: 14 },
-      { name: "Emotion Control", score: 14 },
-      { name: "Force Field", score: 12 }
+      { name: "Move Object", score: 14 },
+      { name: "Mental Blast", score: 16 },
+      { name: "Emotion Control", score: 12 },
+      { name: "Mind Control", score: 12 }
     ]
     // No requiredArchetypes means available to all
   },
@@ -166,10 +166,10 @@ const POWER_SETS: PowerSet[] = [
     name: "Martial Artist",
     powers: [
       { name: "Enhanced Attack", score: 16 },
-      { name: "Enhanced Defense", score: 16 },
-      { name: "Enhanced Ability Score (Dexterity)", score: 14 },
+      { name: "Enhanced Defense", score: 14 },
+      { name: "Enhanced Ability Score (Dexterity)", score: 16 },
       { name: "Enhanced Ability Score (Strength)", score: 12 },
-      { name: "Enhanced Accuracy", score: 14 }
+      { name: "Enhanced Accuracy", score: 12 }
     ]
     // No requiredArchetypes means available to all
   }
