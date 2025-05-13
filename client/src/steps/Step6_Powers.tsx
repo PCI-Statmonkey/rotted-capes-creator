@@ -339,7 +339,7 @@ export default function Step6_Powers() {
   // Add a new power in point buy mode
   const addPower = () => {
     const newPower: Power = {
-      name: "",
+      name: ALL_POWERS[0], // Default to the first power in the list
       score: 10,
       flaws: [],
       perks: [],
@@ -438,6 +438,19 @@ export default function Step6_Powers() {
     
     // Clear any existing powers
     setSelectedPowers([]);
+  };
+  
+  // Add a default power for array mode
+  const addDefaultPower = () => {
+    const newPower: Power = {
+      name: ALL_POWERS[0], // Default to the first power in the list
+      score: 0, // This will be assigned from the array later
+      flaws: [],
+      perks: [],
+      finalScore: 0
+    };
+    
+    setSelectedPowers([...selectedPowers, newPower]);
   };
 
   // Assign a score from the array to a power
@@ -822,7 +835,7 @@ export default function Step6_Powers() {
                     <Button 
                       variant="outline" 
                       size="sm" 
-                      onClick={addPower}
+                      onClick={addDefaultPower}
                       disabled={selectedPowers.length >= getSelectedPowerArrayData().length}
                     >
                       <Plus className="h-4 w-4 mr-1" /> Add Power
@@ -891,14 +904,14 @@ export default function Step6_Powers() {
                             <div className="flex-1">
                               <Label className="text-xs mb-1 block">Damage Type (Optional)</Label>
                               <Select
-                                value={power.damageType || ""}
-                                onValueChange={(value) => updatePower(index, 'damageType', value)}
+                                value={power.damageType || "none"}
+                                onValueChange={(value) => updatePower(index, 'damageType', value === "none" ? undefined : value)}
                               >
                                 <SelectTrigger className="bg-gray-800">
                                   <SelectValue placeholder="Select type" />
                                 </SelectTrigger>
                                 <SelectContent>
-                                  <SelectItem value="">None</SelectItem>
+                                  <SelectItem value="none">None</SelectItem>
                                   {DAMAGE_TYPES.map(type => (
                                     <SelectItem key={type} value={type}>{type}</SelectItem>
                                   ))}
@@ -999,7 +1012,7 @@ export default function Step6_Powers() {
                                 <SelectValue placeholder="Select type" />
                               </SelectTrigger>
                               <SelectContent>
-                                <SelectItem value="">None</SelectItem>
+                                <SelectItem value="none">None</SelectItem>
                                 {DAMAGE_TYPES.map(type => (
                                   <SelectItem key={type} value={type}>{type}</SelectItem>
                                 ))}
