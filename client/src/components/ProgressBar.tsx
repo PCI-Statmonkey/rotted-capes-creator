@@ -4,7 +4,7 @@ import { useCharacter } from "@/context/CharacterContext";
 import { cn } from "@/lib/utils";
 
 export default function ProgressBar() {
-  const { currentStep, setCurrentStep } = useCharacter();
+  const { currentStep, setCurrentStep, saveCharacter } = useCharacter();
 
   return (
     <div className="flex overflow-x-auto md:overflow-visible py-2 px-1 mb-4 no-scrollbar">
@@ -20,7 +20,11 @@ export default function ProgressBar() {
                 "progress-bar-item flex-1 h-12 md:h-16 bg-panel mr-1 flex items-center justify-center relative group transition-all cursor-pointer",
                 isActive || isCompleted ? "" : "opacity-70"
               )}
-              onClick={() => setCurrentStep(step.id)}
+              onClick={() => {
+                // Save character progress before changing steps
+                saveCharacter();
+                setCurrentStep(step.id);
+              }}
               whileHover={{ scale: 1.03 }}
               transition={{ duration: 0.2 }}
             >

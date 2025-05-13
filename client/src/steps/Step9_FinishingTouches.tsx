@@ -239,11 +239,13 @@ export default function Step9_FinishingTouches() {
       
       <div className="flex justify-between mt-8">
         <Button 
-          onClick={handleSaveCharacter} 
+          onClick={() => {
+            saveCharacter();
+            window.location.href = "/creator/10";
+          }} 
           className="bg-green-600 hover:bg-green-700"
         >
-          <Save className="mr-2 h-4 w-4" />
-          Save Character
+          Continue to Summary
         </Button>
       </div>
       

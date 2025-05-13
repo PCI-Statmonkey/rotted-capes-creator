@@ -178,11 +178,18 @@ export const CharacterProvider = ({ children }: { children: ReactNode }) => {
   }, [character]);
 
   const updateCharacterField = <K extends keyof Character>(field: K, value: Character[K]) => {
-    setCharacter((prev) => ({
-      ...prev,
-      [field]: value,
-      updatedAt: new Date().toISOString(),
-    }));
+    setCharacter((prev) => {
+      const updatedCharacter = {
+        ...prev,
+        [field]: value,
+        updatedAt: new Date().toISOString(),
+      };
+      
+      // Auto-save to local storage whenever a field is updated
+      saveToLocalStorage(STORAGE_KEY, updatedCharacter);
+      
+      return updatedCharacter;
+    });
   };
 
   const updateAbilityScore = (ability: keyof Abilities, value: number) => {
