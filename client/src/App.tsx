@@ -24,17 +24,9 @@ function AppRouter() {
     <Suspense fallback={<div className="p-8 text-center">Loading...</div>}>
       <Switch>
         <Route path="/" component={Home} />
-        <Route path="/creator">
-          {/* Wrap the Creator component with CharacterProvider - base route */}
+        <Route path="/creator/:step?">
+          {/* Wrap the Creator component with CharacterProvider */}
           {() => (
-            <CharacterProvider>
-              <Creator />
-            </CharacterProvider>
-          )}
-        </Route>
-        <Route path="/creator/:step">
-          {/* Handle step-specific URLs */}
-          {(params) => (
             <CharacterProvider>
               <Creator />
             </CharacterProvider>

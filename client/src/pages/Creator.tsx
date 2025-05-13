@@ -33,23 +33,30 @@ export default function Creator() {
     }
   }, [params, setCurrentStep]);
   
-  // Update URL when step changes
+  // Update URL when step changes (but only after the component mounts)
   useEffect(() => {
-    if (currentStep > 0 && currentStep <= WIZARD_STEPS.length) {
-      const stepObject = WIZARD_STEPS.find(step => step.id === currentStep);
-      
-      if (stepObject) {
-        const stepNameForUrl = stepObject.name
-          .toString()
-          .toLowerCase()
-          .replace(/[^a-z0-9]/g, '');
+    // Skip initial URL update to avoid issues with CharacterProvider
+    const updateUrl = () => {
+      if (currentStep > 0 && currentStep <= WIZARD_STEPS.length) {
+        const stepObject = WIZARD_STEPS.find(step => step.id === currentStep);
         
-        // Only update if the URL doesn't already match
-        if (!location.includes(`/creator/${stepNameForUrl}`)) {
-          setLocation(`/creator/${stepNameForUrl}`);
+        if (stepObject) {
+          const stepNameForUrl = stepObject.name
+            .toString()
+            .toLowerCase()
+            .replace(/[^a-z0-9]/g, '');
+          
+          // Only update if the URL doesn't already match
+          if (!location.includes(`/creator/${stepNameForUrl}`)) {
+            setLocation(`/creator/${stepNameForUrl}`);
+          }
         }
       }
-    }
+    };
+    
+    // Small delay to ensure CharacterProvider is fully initialized
+    const timer = setTimeout(updateUrl, 100);
+    return () => clearTimeout(timer);
   }, [currentStep, setLocation, location]);
   
   // Function to render the current step component
