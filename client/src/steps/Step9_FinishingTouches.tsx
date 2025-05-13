@@ -44,7 +44,7 @@ export default function Step9_FinishingTouches() {
   };
   
   const toggleFlaw = (flaw: string) => {
-    const currentFlaws = [...character.personalityFlaws];
+    const currentFlaws = character.personalityFlaws ? [...character.personalityFlaws] : [];
     if (currentFlaws.includes(flaw)) {
       // Remove the flaw if it's already selected
       updateCharacterField(
@@ -61,8 +61,10 @@ export default function Step9_FinishingTouches() {
     if (customFlaw.trim() === "") return;
     
     const flawToAdd = customFlaw.trim();
-    if (!character.personalityFlaws.includes(flawToAdd)) {
-      updateCharacterField('personalityFlaws', [...character.personalityFlaws, flawToAdd]);
+    const currentFlaws = character.personalityFlaws || [];
+    
+    if (!currentFlaws.includes(flawToAdd)) {
+      updateCharacterField('personalityFlaws', [...currentFlaws, flawToAdd]);
       setCustomFlaw(""); // Clear the input after adding
       
       toast({
@@ -73,9 +75,10 @@ export default function Step9_FinishingTouches() {
   };
   
   const removeFlaw = (flaw: string) => {
+    const currentFlaws = character.personalityFlaws || [];
     updateCharacterField(
       'personalityFlaws', 
-      character.personalityFlaws.filter(f => f !== flaw)
+      currentFlaws.filter(f => f !== flaw)
     );
   };
 
@@ -103,7 +106,7 @@ export default function Step9_FinishingTouches() {
             </div>
             
             {/* Selected Flaws Display */}
-            {character.personalityFlaws.length > 0 && (
+            {character.personalityFlaws && character.personalityFlaws.length > 0 && (
               <div className="mb-4">
                 <Label>Selected Flaws</Label>
                 <div className="flex flex-wrap gap-2 mt-2">
@@ -128,7 +131,7 @@ export default function Step9_FinishingTouches() {
                 <div key={flaw} className="flex items-center space-x-2">
                   <Checkbox 
                     id={`flaw-${flaw}`} 
-                    checked={character.personalityFlaws.includes(flaw)}
+                    checked={character.personalityFlaws ? character.personalityFlaws.includes(flaw) : false}
                     onCheckedChange={() => toggleFlaw(flaw)}
                   />
                   <Label 
