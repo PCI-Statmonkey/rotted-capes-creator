@@ -35,7 +35,6 @@ type WeaknessType =
   | "DiminishedVitality" 
   | "Enemy" 
   | "Taboo" 
-  | "Origin" 
   | "Custom";
 
 // Define weakness interface
@@ -52,7 +51,6 @@ interface Weakness {
     enemyType?: string;
     restriction?: string;
     atonement?: string;
-    fromOrigin?: boolean;
   };
 }
 
@@ -156,8 +154,6 @@ export default function Step7_Weaknesses() {
     // Set initial points for simple weakness types
     if (type === "DiminishedVitality") {
       initialPoints = 5;
-    } else if (type === "Origin") {
-      initialPoints = 0; // No points for Origin weaknesses
     }
     
     setNewWeakness({
@@ -165,9 +161,7 @@ export default function Step7_Weaknesses() {
       name: type,
       description: "",
       points: initialPoints,
-      details: {
-        fromOrigin: type === "Origin"
-      }
+      details: {}
     });
   };
 
@@ -300,10 +294,7 @@ export default function Step7_Weaknesses() {
             bonuses, power score bonuses, or bonus feats. You may only acquire a maximum 
             of 20 points through weaknesses.
           </p>
-          <p className="border-l-4 border-blue-500 pl-3 italic">
-            <span className="font-semibold">Note:</span> Weaknesses that come from your Origin 
-            provide no additional points. These are considered inherent to your character type.
-          </p>
+
         </div>
         
         {/* Points Summary */}
@@ -385,7 +376,6 @@ export default function Step7_Weaknesses() {
                 <SelectItem value="DiminishedVitality">Diminished Vitality</SelectItem>
                 <SelectItem value="Enemy">Enemy</SelectItem>
                 <SelectItem value="Taboo">Taboo</SelectItem>
-                <SelectItem value="Origin">Origin Weakness</SelectItem>
                 <SelectItem value="Custom">Custom Weakness</SelectItem>
               </SelectContent>
             </Select>
@@ -648,44 +638,6 @@ export default function Step7_Weaknesses() {
                       value={newWeakness.description}
                       onChange={(e) => setNewWeakness({...newWeakness, description: e.target.value})}
                       placeholder="Describe the taboo and how it affects your character..."
-                      className="bg-gray-700"
-                      rows={3}
-                    />
-                  </div>
-                </div>
-              )}
-              
-              {/* Origin Weakness */}
-              {selectedWeaknessType === "Origin" && (
-                <div className="space-y-3">
-                  <div className="bg-blue-900/30 p-3 rounded-md mb-3">
-                    <div className="flex items-center">
-                      <Info className="h-5 w-5 mr-2 text-blue-400" />
-                      <p className="text-sm text-blue-300 font-medium">
-                        Origin-based Weakness
-                      </p>
-                    </div>
-                    <p className="text-sm text-gray-300 mt-1">
-                      This weakness is inherent to your character's origin and does not provide any additional points.
-                    </p>
-                  </div>
-                
-                  <div>
-                    <label className="block text-sm mb-1">Weakness Name</label>
-                    <Input 
-                      value={newWeakness.name.replace("Origin: ", "")}
-                      onChange={(e) => setNewWeakness({...newWeakness, name: "Origin: " + e.target.value})}
-                      placeholder="Enter the name of your origin-based weakness"
-                      className="bg-gray-700"
-                    />
-                  </div>
-                  
-                  <div>
-                    <label className="block text-sm mb-1">Description</label>
-                    <Textarea 
-                      value={newWeakness.description}
-                      onChange={(e) => setNewWeakness({...newWeakness, description: e.target.value})}
-                      placeholder="Describe how this origin-based weakness affects your character..."
                       className="bg-gray-700"
                       rows={3}
                     />
