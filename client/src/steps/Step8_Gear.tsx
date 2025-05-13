@@ -475,7 +475,7 @@ export default function Step8_Gear() {
             
             <AccordionItem value="weapons">
               <AccordionTrigger className="text-lg font-semibold">
-                Weapons ({acquisitionPoints} AP)
+                Weapons
               </AccordionTrigger>
               <AccordionContent>
                 <div className="space-y-4">
@@ -520,7 +520,7 @@ export default function Step8_Gear() {
             
             <AccordionItem value="equipment">
               <AccordionTrigger className="text-lg font-semibold">
-                Equipment ({acquisitionPoints} AP)
+                Equipment
               </AccordionTrigger>
               <AccordionContent>
                 <div className="space-y-4">
