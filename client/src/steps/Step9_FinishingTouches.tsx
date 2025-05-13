@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useCharacter } from "@/context/CharacterContext";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -15,6 +15,13 @@ export default function Step9_FinishingTouches() {
   const { character, updateCharacterField, saveCharacter } = useCharacter();
   const [customFlaw, setCustomFlaw] = useState("");
   const [customFlawDescription, setCustomFlawDescription] = useState("");
+  
+  // Initialize personalityFlaws if undefined
+  useEffect(() => {
+    if (!character.personalityFlaws) {
+      updateCharacterField('personalityFlaws', []);
+    }
+  }, [character, updateCharacterField]);
   
   // Personality flaws for superhero characters
   const personalityFlaws = [
