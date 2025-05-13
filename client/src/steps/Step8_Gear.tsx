@@ -684,7 +684,7 @@ export default function Step8_Gear() {
           onClick={() => {
             // Save character and navigate to next step
             saveCharacter();
-            window.location.href = "/creator/9";
+            window.location.href = "/creator/finishingtouches";
           }}
           className="bg-green-600 hover:bg-green-700"
         >

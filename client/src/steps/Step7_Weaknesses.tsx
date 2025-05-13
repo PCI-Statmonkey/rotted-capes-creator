@@ -93,9 +93,9 @@ export default function Step7_Weaknesses() {
 
   // Handle going to previous step
   const handlePrevious = () => {
-    // Save progress and navigate to previous step
+    // Save progress and navigate to previous step - Powers
     saveCharacter();
-    window.location.href = "/creator/6";
+    window.location.href = "/creator/powers";
   };
 
   // Handle going to next step
@@ -103,9 +103,9 @@ export default function Step7_Weaknesses() {
     // Track the event in analytics
     trackEvent('complete_step', 'character_creation', 'weaknesses');
     
-    // Save progress and navigate to next step
+    // Save progress and navigate to next step - Gear
     saveCharacter();
-    window.location.href = "/creator/8";
+    window.location.href = "/creator/gear";
   };
 
   // Add a weakness to the character

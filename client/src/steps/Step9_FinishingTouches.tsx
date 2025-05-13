@@ -241,7 +241,7 @@ export default function Step9_FinishingTouches() {
         <Button 
           onClick={() => {
             saveCharacter();
-            window.location.href = "/creator/10";
+            window.location.href = "/creator/summary";
           }} 
           className="bg-green-600 hover:bg-green-700"
         >
