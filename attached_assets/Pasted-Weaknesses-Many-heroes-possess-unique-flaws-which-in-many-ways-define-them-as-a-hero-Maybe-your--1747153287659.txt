@@ -1,0 +1,171 @@
+Weaknesses 
+Many heroes possess unique flaws, which in many ways define them as a hero. Maybe your hero is violently allergic to rare metal, maybe you are particularly vulnerable to sonic attacks or find all their powers nullified around strong electrical fields. 
+You are not required to choose a weakness. You may choose to skip this step. 
+While some weaknesses are limited to a specific origin, they be applied to another origin with your Editor-in-Chief’s approval. 
+When you choose a weakness, you gain a number of points; depending on the number of points, you may choose from ability score bonuses, power score bonuses, or bonus feats. You may only acquire a maximum of 20 points through weaknesses; you can always choose more weaknesses at no mechanical benefit. You may spend these points to gain the following benefits: you may spend your points on the options below in any way you wish.
+Weakness Point Options 
+Points	Possible Benefits 
+5	Gain training in a skill and receive a +1 bonus to any ability or power score up to a maximum of 25.
+10	Gain a feat or +1 to any two ability or power scores up to a maximum of 25.
+15	Gain a +2 bonus to any ability or power score up to a maximum score of 25.
+
+<side bar>
+Editor’s Note:
+The none-weakness: Both the players and the Editor-in-Chief should work together to develop a hero’s weakness. The Editor-in-Chief should be alert for “non-weaknesses,” where players attempt to minimize the impact of a weakness while gaining maximum benefits.
+For example, if you are running a campaign in sunny Miami, a hero with weakness against extreme cold weather conditions may be attempting to “game” the system.
+<side bar>
+<side bar>
+Character creation ride along: Weaknesses. 
+Although they don’t have to, both players take on a weakness. 
+Ruben goes with a physical vulnerability: something about his telekinetic powers seems to be affected by gravity powers. He chooses a Stimuli: Gravity Powers and the effect of Power Negation of all his powers. Gravity Powers are rare, so they are worth 0 points, but power negation is worth 10 points, and uses it to gain an additional bonus feat.  
+Nani decides to give their hero a dependent: her little sister. She is only 8, so while in good health, she is not quite capable. Nani gains 10 points and uses it to gain +1 to her Enhanced Strength power, raising it to 20 and +1 to her constitution score raising it to 16.
+</side bar> 
+Addiction 
+You need it. You want it. You gotta have it.
+There is something out there you desperately crave. During the Glory Days, it was easy to get enough of it to keep you going. But now, after Z-Day, supplies are scarce, and getting your fix is becoming harder and harder. How far will you go before you crash?
+Effect: To build an Addiction, select a substance your hero is addicted to. You may be addicted to more than one substance. If you are, purchase the substance that gives the highest possible bonus first, then add a +1 build point for each additional addictive substance. Characters must partake of their addictive substance at least once per day. If they fail to partake, they suffer disadvantage on all skill and power checks until they partake again. While characters are assumed to start playing with a stockpile of whatever substance they’re addicted to, the Editor-in-Chief can always declare that this stockpile is depleted, ruined, or missing; at this point, you will need to seek a new supply.
+Substance:
+•	Common: Substances could include sugar and/or surgery foods (such as candy), cigarettes, or coffee. 
+You gain 5 points.
+•	Uncommon: Substances could include certain mild drugs (such as marijuana or commercial painkillers), vaping (electronic cigarettes), alcohol, or inhaling certain chemical fumes. You gain 10 points.
+•	Rare: Substances could include hard drugs (cocaine, meth, PCP, and the like), commercially available amphetamines, or medical painkiller (such as Oxycodone and the like). You gain 15 points.
+Dark Secret
+There is something about you you’d prefer to keep hidden.
+Effect: There is something in your past that you’d like to keep hidden. Having the secret exposed could damage your standing and/or reputation among their teammates or bystanders, resulting in you longer being taken seriously, having privileges or supplies taken away, putting you under suspicion of any recent crimes, or in a worst-case scenario, they could have you expelled from their current enclave.
+•	Your secret is something trivial and more potentially embarrassing than damaging. For example, maybe you were a boyband pop star, participated in a low-brow reality show, was a cringeworthy YouTuber, or had a popular We Fan page. You gain 5 points.
+•	Maybe you made a few deals with supervillains, or you are a former criminal (whose crimes go beyond petty theft and the like). Or, they may claim experience you don’t have (such as claiming to be a doctor, having military experience, or being a police officer). You gain 10 points.
+•	You may have resorted to cannibalism to survive the initial aftermath of Z-Day, maybe you’re a registered sex offender, or you may have committed one or more murders (either before or after Z-Day). Or, they may claim to be someone they’re not — a former US Senator, a high-ranking member of the Federal government, or they’ve taken the identity of a different B-Lister (who may or may not still be alive). You gain 15 points.
+Dependence 
+Your metabolism or physiology is such that you require frequent exposure to a particular condition (such as sunlight or immersion in water), or you must partake of a specific substance (such as an experimental medicine), or your equipment might require frequent repair or refueling.
+Effect: To build a Dependency, apply each step and add up the points acquired. You shouldn’t have more than one Dependency. You must satisfy their dependence at least once per day; if you fail to do so, they’ll suffer a negative effect. In addition, the time it takes to satisfy the dependence can be a factor. Simply popping a pill offers fewer points than needing to spend hours soaking in a tub of water.
+Substance:
+•	Common: Substances could include immersion in water, exposure to sunlight, or a commonly available alcohol-based fuel. You gain 0 points.
+•	Uncommon: Substances could include needing to ‘bathe’ in a large bonfire, extensive repairs requiring easily scavenged parts, a custom fuel that takes time to distill, or an easily synthesized drug. You gain 5 points.
+•	Rare: Substances could include extensive repairs requiring hard-to-find parts, exposure to a specific form of radiation, or a drug custom-made to keep you alive. You gain 10 points.
+Negative Effects:
+•	Power Negation: All your powers stop working until you can partake in your dependency. You gain 5 points. 
+•	Physical Weakness: You suffer a disadvantage on Strength, Dexterity, Constitution checks and skill checks until you can partake in your dependency. You gain 5 points.
+•	Incapacitating Weakness: If you fail to meet your Dependency requirement, your maximum Stamina is reduced by 2d12 every hour until you reach 0 Stamina and fall unconscious or until you partake in your dependency. If you reach 0 stamina, you remain unconscious until you partake in your dependency. You recover your lost Stamina after completing a long rest. You gain 10 points.
+•	Fatal Weakness: If you fail to meet your Dependence requirement, you lose 1 wound every hour until you reach 0 wounds or until you partake of your dependency. If you reach 0 wounds you die unless you can partake of your dependency within 1 minute after reaching 0 wounds. You recover wounds lost from suffering this weakness after completing a long rest. You gain 15 points. 
+Dependent
+There is someone you care about who depends on you for survival.
+Effect: Simply put, there is someone close to you who depends on you for survival. This goes above and beyond a Supporting Cast member into something far more personal. Your dependent can be a younger sibling, a daughter or son, an elderly relative, and so on.
+•	Your Dependent can be a person of average health and ability, they are a survivor of the apocalypse and know how to get by. You gain 5 points.
+•	Your Dependent is weaker than the common survivor. While their mind may still be sharp, their body is aged, injured, or ravaged by illness. Although they are able to still walk, they do so slowly and have difficulty with stairs and the like. You gain 10 points.
+•	Your Dependent is of frail health. They may be blind, deaf, partially paralyzed, and so on. They depend on you for most of their needs, and would probably quickly succumb to the dangerous of the post-apocalyptic world if left alone. You gain 15 points.
+Sample Dependents
+There are sample dependents in chapter XXX of this book, alternately you may choose to build a dependent using the following options. 
+	Abilities (Points - Array) 	Skills Points
+Average	(25) 12, 11, 10, 10, 10, 9	15 
+Weak	(20) 12, 10, 9, 9, 8, 8	10 
+Frail	(15) 12, 10, 9, 8, 8, 8 	5 
+
+Weak Dependents possess the Mentally Frail or Physically Frail weakness (see below). 
+Frail Dependents possess the Mentally Frail or Physically Frail weakness as well as either a Severe Mental Flaw or Severe Physical Flaw (see below).
+Dependent Archetypes:
+The following examples should give you an idea of the kind of Dependents your Hero can have.
+•	The Younger Sibling: The younger sibling usually idolizes you and wants to be just like you when they grow up. They may wear a variant of your costume, practice their combat skills, and cobble together sufficient gear in an effort to emulate your super powers. They may try to be your sidekick, joining you on excursions, or they may try to go out on their own. In any event, odds are that sooner or later they will get in over their head, forcing you to try and rescue them.
+•	The Child: The child is similar to the sibling; in that they usually look up to you and may also want to be ‘just like you’ when they get older. However, the child is often far younger than the sibling, and is less capable of taking care of themselves. In addition, you need to see to the child’s instruction and training, especially in the use of weapons and survival skills. Your enemies may see your child as a vulnerability they can exploit, someone they can kidnap and use to force you to do their bidding.
+•	The Spouse/Lover: Unlike many who survived the onset of Z-Day, you were able to protect your spouse (or lover) from the zombie hordes. This may result in you being overly protective of them, and working overtime to ensure their safety. They may worry about you as well, and may try to talk you into engaging in less risky behavior and try to encourage you to remain within the relative safety of the enclave. If you’re away too often, your spouse or lover may find solace in the company of another, a situation which will probably not end well for anyone.
+•	The Elderly Relative: Be it your father, grandmother, or aged aunt, you seek to protect and keep safe one of the last remaining members of your immediate family. The Elderly Relative is often either frail or handicapped and may be bed-ridden or require special medical needs. As much as you hate to admit it, they are often a drain on the enclave’s resources without giving much back in return. And if you ever need to abandon the enclave quickly, their physical health may not take the strain.
+•	The Mentor/Father Figure: Unlike the younger sibling who looks up to you, this is someone you look up to. This person might be a former superhero who taught you the ropes, but whose health has declined with old age. Or a replacement for the mother or father you never knew, who brought you up when no one else cared. Or your boss from before Z-Day, who helped you succeed. In any event, this person’s wisdom and wise council is such that you wish to preserve it despite all the post-apocalyptic world throws at you.
+•	The Beloved Pet: When you’ve lost everything, then you might seek solace in an animal companion. Your dog (or cat, or monkey, or…) may be the last thing left from your previous life, or it might be an animal you adopted while wandering the apocalyptic wasteland. In any event, your pet means as much to you as a child or sibling might mean to another Hero. Better keep a close eye on it, lest some other survivor gets hungry and decides to eat it.
+
+What happens if the Dependent dies? 
+Considering the nature of the world post Z-Day, your Hero will need to consider the possibility of their Dependent’s death. What then? First, unlike the Glory Days, you have almost no chance of getting a new Dependent. Or, one with as deep an emotional bond as the one you lost. To represent the physiological trauma of losing your Dependent in a post-apocalyptic, zombie-infested world your Hero will need to replace their Dependent Disadvantage with another weakness fitting the situation. 
+
+•	Enemy: Mad with grief and anger, you must now seek out whoever (or whatever) killed your Dependent to the exclusion of all else. This enemy is well aware of your disposition toward them and returns your intent in kind.
+•	Mental Disorder: Death wish: You have nothing left to live for. You no longer care about your own safety or survival, and will take on more and more risky missions and actions, all in an effort to join your Dependent in death. You may not even care about others anymore, as it is obvious that no matter what you do, everyone around you is going to die. 
+•	Dark Secret: Maybe it was your direct actions that led to your dependent’s death. The knowledge of which would shake your enclave to its core. 
+
+Diminished Vitality 
+You have a bit of a glass jaw 
+Effect: Reduce your maximum stamina by 10, You gain 5 points. 
+Enemy
+Someone out there doesn’t like you.
+Before Z-Day almost every superhero had a rogues’ gallery of foes. After Z-Day most of these rogues either died, were Z’d, or joined the assorted B-Listers in defending the rest of humanity. For you, their place has been taken by someone new. This someone may be an individual (such as a supervillain with an extreme grudge) or a group (such as a horde of religious fanatics who wish to burn you and your enclave for spurning them). In any event, you need to be careful anytime you venture outside the enclave, as you never know where your enemy may be waiting.
+Effect: Your enemy always seems to find a way to complicate your life and the lives of those around you. The Editor-in-Chief may have your enemy show up at any time. Even if you take countermeasures to create some distance between you and your enemy, it is only a matter of time before they show up again. You gain 5 points, with Tyrant being worth 10. 
+<side bar>
+Editor’s Note: 
+There are always bigger fish: If the heroes somehow defeat the hero’s Enemy, it’s not the end of the story, if anything the defeat of an enemy should open the door to a new threat. 
+</side bar>
+Sample Enemies
+The following examples should give you an idea of the kind of Enemies your Hero can have. Make sure to discuss your idea with the Editor-in-Chief, first to see if your idea fits the campaign, and second to see what changes the Editor-in- Chief wants to make to your Enemy (not all of which you may know about!).
+Biker Gang: Post Z-Day most biker gangs stay on the move, looting first one area then another. In this case, you have something the bikers want. Perhaps there’s a former motorcycle dealership in your enclave, full of parts they need. Or you have a working fuel refinery and all the gas the bikers will ever need. Or you have the only decent food stores for miles around. In any case, the bikers want into your enclave and will do anything to gain entry. While you might be safe behind your walls, sooner or later you’ll need to go out into the ruins to scavenge for supplies and the bikers will be waiting. Worst yet, there may come a time when the bikers become desperate enough to launch an all-out assault on your enclave. Will you and your fellow B-Listers be able to stop them?
+Cannibals: Similar to the biker gang (and as an added bonus you can make them a cannibal biker gang), this is a group of people that eats other people. The exact reasons vary: they may be religious fanatics (see Cultists below) seeking to emulate zombies by devouring the living; they may use it as an initiation ritual, forcing others to partake of human flesh in order to ‘mark’ them; or, they may simply feel that it’s easier to catch and devour others than bother trying to raise chickens and pigs. In any case, they wish to devour you and your companions. Probably because they have a misguided idea that eating the body of a superhuman will give them superhuman powers, try not to get caught.
+Cultists: Cultists are religious fanatics whose faith is dark and twisted. They seek to impose their will, and their religious ways, on everyone around them. Infidels, which in their case is anyone who doesn’t believe exactly as they do, are to be purged, often with fire. Cultists may despise zombies, or they may worship them (leading to cannibal cultists), but in any event, they have no use for your enclave (aside from the resources it offers). If you do not convert to their ways by choice, then they will convert you by force. Similar in some respects to a biker gang, the cultists are less like to lay in wait and will probably attack openly. Unfortunately, their fanaticism makes them highly unlikely to break and run.
+Tyrant: This is an enclave, or series of enclaves, dedicated to one thing and one thing only, their leader. Everything anyone does, they do for the ‘state’, and no one is allowed to dissent. Free and independent enclaves, such as yours, are an anathema to them and must be brought to heel. The tyrant and their followers are probably the most dangerous form of Enemy a Hero can have as they are often well-organized, well-equipped, and well-trained. They are also implacable. Since the leader can’t appear weak, the tyrant’s followers will almost never give up the attack and will come at you and your enclave again and again. They may also use sophisticated tactics, weaponry, and individuals, including B-Listers of their own. Fortunately for you, these fanatics are usually led by a single strong man, and if you can take him out, much of the power goes with him. As the tyrant tends to be paranoid and power-hungry, they usually haven’t made provisions for when they’re no longer around. Remove the tyrant, and infighting among the lieutenants usually takes care of the rest.
+<side bar>
+For an excellent example of a cannibalistic gang of cultists, read Lucifer’s Hammer by Larry Niven and Jerry Pournelle.
+</side bar>
+Fragile Psyche 
+Your mental state of being is quite fragile. 
+Effect: You suffer a disadvantage saving throws to resist gaining levels of psychosis and on horror checks. You gain 5 points. 
+
+Mental Disorder 
+You might possess an irrational phobia, a learning disability, or even a severe mental disorder. 
+Effect: Mental flaws may be any number of things. 
+•	Slight:  You might suffer an irrational fear of something trivial like rodents. You gain 5 points. 
+•	Challenging: You might suffer from a learning disability that inhibits your ability to communicate or maintain focus, such as Dyslexia or ADHD respectively. You gain 10 points.
+•	Severe: You might suffer from a severe mental handicap such as Dissociative Identity Disorder, PTSD, or severe Pyromania. You gain 15 points.
+
+Mentally Frail
+You’re not the sharpest tool in the shed. 
+Effect: Choose Intelligence, Wisdom, or Charisma. You suffer disadvantage on all checks, saving throws, and related skill checks for that chosen ability. If you choose one ability to be affected, you gain 10 points, 2 ability scores for 15 points, and if you choose all three, you gain 20 points.
+
+Physical Drawback 
+You possess a physical restriction; maybe you’re missing a few fingers, an eye, or even a leg. 
+Effect: Physical flaws may be any number of things, detailed by the character. 
+•	Slight: you may suffer from a few missing fingers, may be hard of hearing, or possesses very bad eyesight. Such physical flaws, you suffer disadvantage on any applicable action skill rolls. You gain 5 points.
+•	Challenging: You may suffer from a severe limiting physical flaw, such as being deaf or missing an arm, with the co responding results. You gain 10 points.
+•	Severe: You may require a wheelchair or are blind (and without other special detection powers). You gain 15 points.
+Physically Frail 
+Maybe you are either very young, you may have aged far past your physical prime, or you’re just not a “prime physical specimen.” 
+Effect: Choose Strength, Dexterity, or Constitution. You suffer disadvantage on all checks, saving throws, and related skill checks for that chosen ability. If you choose one ability to be affected, you gain 10 points, 2 ability scores for 15 points, and if you choose all three, you gain 20 points.
+Physical Vulnerabilities
+You possess a physical vulnerability against a particular material (such as lead) or condition (such as daylight or being exposed to gamma radiation). 
+Both heroes and villains will do everything in their power to keep any vulnerability secret even from their closest friends and companions. 
+Restriction: cannot be taken by the highly trained or techoheroes. 
+
+Effect: To build a Unique Vulnerability simply apply each step and add up total points acquired. You may choose multiple negative effects to the same stimuli, gaining the highest possible bonus; +5 points for each additional negative effect.
+
+Stimuli: 
+Material Weakness: If a particular type of material is chosen (such as lead), Any time you start your turn within 2 areas of that substance you suffer from this weaknesses effect. At the Editor-in-Chief’s discretion, a huge amount of the material in question may increase this weaknesses’ effective range. 
+Conditional Weakness: Any time you are exposed to a particular environmental condition; they suffer from their vulnerabilities effects until they can get away from or are free of that condition. 
+Energy Weakness:  Choose a particular energy type; for example, Sonic, Cold, Heat, Gamma Radiation, and so on. You suffer effects of this weakness if you are exposed to this energy type consciously for more than 1 turn or if you are the target of a power or attack which utilizes this energy type. 
+Stimuli’s Rarity: 
+Common items:  Stimuli may include plastic, glass, steel, daylight, storms, or being tied up with rope or chains. You gain 10 points. 
+Uncommon items: Stimuli may include lead, mercury, gold, being exposed to extreme temperatures, open fire, being attacked by magic, or being knee deep in water. You gain 5 points.
+Rare items: Stimuli may include items such as a rare type of meteorite from a distant planet or being exposed to the radiation of a distant sun. You gain 0 points.
+Negative Effects: 
+Power Negation: All of your inborn powers simply stop working until the end of your next turn if you start your turn within range of your chosen martial or under your chosen environmental condition. If you are the target of an attack which uses an energy type, you have a weakness toward your inborn powers cease to function until the end of your next turn. You gain 5 points.
+Physical Weakness:  Your Strength, Dexterity, and Constitution scores are reduced to 8 any time you start your turn within range of or being exposed to your chosen stimuli, or if you are the target of an attack or power which utilizes an energy type you are weak against. Your ability scores continue to remain diminished as long as you remain exposed to the stimuli. You regain your ability scores at the end of your next turn after no longer being exposed to your chosen stimuli. You gain 5 points.
+Deadly weakness:  You possess vulnerability against damage dealt by energy types or weapons made of a material you weak against. These attacks bypass any damage reduction you might possess. If you start your turn within range of a material or under a condition you are weak against you instead suffer 4d6 damage which bypass any damage reduction you might possess. The Extra damage dealt by this disadvantage is applied when determining the possibility of massive damage. You gain 10 points.
+Lethal weakness: Any time you start your turn within range or of, or being exposed to, your weakness or if you are the target of an attack or power which utilizes an energy type you are weak against you gain a level of exhaustion. Once you leave the range of the substance you lose a level of exhaustion granted by this weakness at the rate of 1 level per minute. You gain 15 points.
+Ravenous Metabolism 
+Your body requires much more food than a regular person.
+Restriction: Super-Human, Cosmic, or Supernatural, or Alien or Andromorph Archetype
+Effect: During the Glory Days food was never really a problem for you; with drive through, vending machines, and the local supermarket, you were never more than an arm’s reach away from a power bar. But things have changed. You require double the food of a regular person, and must eat something every 6 hours in between regular meals, be it beef jerky, Twinkies, an apple, or what have you. Although you can attempt to keep yourself well-supplied with food stores, there will come times when the Editor-in-Chief simply informs you food supplies are running low, which may force you to undertake a scavenger run, seek out fruit trees, and so on. If you do not eat on regular bases (every 6 hours) your Burnout Threshold decreases by 5 for every meal you skip, to a minimum of 5. You gain 5 points.
+Strange Appearance
+You possess a strange or disturbing appearance which may entice or terrify others. 
+Effect: To build a Strange Appearance, choose its ease of concealment and your appearance’s effect on others then add up the points acquired. Bystanders or other heroes who do not know you on a personal basis may be quick to judge, flee from you, or in the case of someone with a threatening appearance, may attack you. Additionally, you suffer a penalty to all Influence skill rolls equal to the amount of points acquired through this disadvantage.
+Ease of Concealment: If your strange appearance is easily concealed, you gain 0 points. If your strange appearance is impossible to hide (such as fur or a demonic appearance), you gain 5 points. 
+Effect upon others: If you possess a slightly disturbing or strangely attractive trait (such as red eyes or shining silver hair) you gain 0 points. If your appearance is disturbing or mildly threatening (small horns or giant bat wings) you gain 5 points. If your appearance is outright threatening (you possess the aforementioned demonic appearance), you gain 10 points.
+Taboo
+You are restricted from actions a normal person can perform.
+Effect: The nature of your existence means there are certain things you simply cannot do. Perhaps your mystical powers require you to refrain from eating meat or bathing. Perhaps your android programming includes a failsafe against certain behavior. Perhaps your supernatural nature prevents you from entering a building without being invited. To build a Taboo apply each step and add up the points acquired. The Hero may choose multiple Taboos, gaining the highest possible bonus, +5 points for each additional restriction.
+Restriction
+•	Easy: These restrictions either have few negative effects when followed or are rarely encountered. Examples include not interacting with a particular person, not bathing except in a natural lake or river, or not crossing a line of salt. You gain 0 points.
+•	Moderate: These restrictions make life difficult or are frequently encountered. Restrictions could include not touching bare human skin, not remaining in the presence of a symbol of faith, or not attacking without offering a chance to surrender. You gain 5 points.
+•	Difficult: These restrictions negatively impact your life daily. Restrictions could include not eating food that you have not killed and prepared yourself, not touching metal, or not harming a living being. You gain 10 points.
+
+Negative Effects
+•	Power Negation: All of the affected powers simply stop working when the Taboo is broken, until you Atone. You gain 5 points per power affected.
+•	Physical Weakness: All of your ability scores are reduced by 2 until you Atone. You gain 5 points.
+•	Impossibility: It is simply impossible for you to break this Taboo. You are physically incapable of doing so. If you are somehow forced to do so, you must dedicate you efforts into no longer breaking the Taboo in the most efficient manner possible. Since you cannot willingly break this Taboo, there is no atonement option. You gain 10 points. 
+•	Incapacitating Weakness: After initial violation of the Taboo you lose 1d8 stamina that bypasses all Damage resistance at the end of every turn until they atone or fall unconscious. They remain so until they Atone, which might be difficult if they are unconscious. You gain 10 points.
+•	Fatal Weakness: After breaking the Taboo, you begin to lose 1 wound every minute you reach 0 wounds, at which point you die. This process ends if you atone, but unless the Atonement is simple it is very unlikely to happen before death. You gain 15 points.
+Atonement
+•	Simple Atonement: Atonement for breaking this Taboo is simple to perform and requires no special materials. It might involve spending an hour in prayer, or running a system reset. Even a simple atonement should take at least a scene to perform. You gain 0 points.
+•	Difficult Atonement: Atonement for breaking this Taboo is difficult to perform, requiring at least a day, and perhaps special materials not easily available after Z-Day. It might involve burning incense or finding electronic equipment to replace fused wiring. You gain 5 points.
+•	Atonement Quest: Atonement for breaking this Taboo involves a heroic quest that should be the subject of its own Issue, or perhaps even Mini-Series. It might involve tracking down an android’s original programmer, a ghost returning to the distant place of their death to reconnect with their old life or passing a series of spiritual trials to reconnect with mystic power. You gain 10 points.

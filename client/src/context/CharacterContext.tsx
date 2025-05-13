@@ -39,6 +39,8 @@ export interface Power {
 export interface Complication {
   name: string;
   description: string;
+  points?: number;
+  type?: string;
 }
 
 export interface GearItem {
