@@ -745,11 +745,11 @@ export default function Step5_Skills() {
           </div>
           <div className="flex flex-col items-end">
             <div className="flex items-center px-4 py-2 bg-gray-700 rounded-lg border border-gray-600 shadow-md">
-              <span className="text-gray-300 mr-2">Points Available:</span>
-              <span className={`text-xl font-bold ${availablePoints < 0 ? 'text-red-500' : 'text-accent'}`}>
+              <span className="text-gray-400 mr-2">Points Available:</span>
+              <span className={`font-bold ${availablePoints < 0 ? 'text-red-500' : 'text-accent'}`}>
                 {availablePoints}
               </span>
-              <span className="text-gray-300 ml-1"> / 20</span>
+              <span className="text-gray-400 ml-1"> / 20</span>
             </div>
             {availablePoints < 0 && (
               <p className="text-xs text-red-400 mt-1">You've spent too many points!</p>
