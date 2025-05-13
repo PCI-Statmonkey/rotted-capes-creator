@@ -639,6 +639,41 @@ export default function Step10_Summary() {
           </div>
         </CardContent>
       </Card>
+
+      <div className="flex justify-between mt-8">
+        <Button 
+          onClick={() => {
+            saveCharacter();
+            toast({
+              title: "Character Saved",
+              description: `${character.name || "Your character"} has been saved successfully.`,
+            });
+          }} 
+          variant="outline"
+          className="flex items-center"
+        >
+          <Save className="mr-2 h-4 w-4" />
+          Save Character
+        </Button>
+        
+        <div className="flex space-x-4">
+          <CharacterPdfButton
+            character={character}
+            elementRef={summaryRef}
+            label="Download PDF"
+            variant="secondary"
+          />
+          
+          <Button 
+            onClick={() => {
+              window.location.href = "/";
+            }}
+            className="bg-green-600 hover:bg-green-700"
+          >
+            Return to Home
+          </Button>
+        </div>
+      </div>
     </div>
   );
 }
