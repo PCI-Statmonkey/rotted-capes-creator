@@ -111,7 +111,7 @@ export default function Step7_Weaknesses() {
       const updatedWeaknesses = [...character.complications];
       
       // Add the new weakness
-      updatedComplications.push({
+      updatedWeaknesses.push({
         name: newWeakness.name,
         description: newWeakness.description,
         points: newWeakness.points,
@@ -119,7 +119,7 @@ export default function Step7_Weaknesses() {
       });
       
       // Update the character
-      updateCharacterField('complications', updatedComplications);
+      updateCharacterField('complications', updatedWeaknesses);
       
       // Reset the form
       setNewWeakness({
@@ -138,9 +138,9 @@ export default function Step7_Weaknesses() {
 
   // Remove a weakness from the character
   const removeWeakness = (index: number) => {
-    const updatedComplications = [...character.complications];
-    updatedComplications.splice(index, 1);
-    updateCharacterField('complications', updatedComplications);
+    const updatedWeaknesses = [...character.complications];
+    updatedWeaknesses.splice(index, 1);
+    updateCharacterField('complications', updatedWeaknesses);
     calculatePoints();
   };
 
@@ -326,7 +326,7 @@ export default function Step7_Weaknesses() {
             </div>
           ) : (
             <div className="space-y-2">
-              {character.complications.map((complication, index) => (
+              {character.complications.map((weakness, index) => (
                 <div 
                   key={index} 
                   className="p-3 bg-gray-800 rounded-lg flex justify-between items-start"
