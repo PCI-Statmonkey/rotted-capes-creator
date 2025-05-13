@@ -27,8 +27,11 @@ export interface Skill {
 export interface Power {
   name: string;
   description: string;
-  cost: number;
-  rank: number;
+  cost?: number; // Optional now
+  rank?: number; // Optional now
+  score?: number; // New field for power score
+  finalScore?: number; // New field for final power score after modifiers
+  damageType?: string; // Optional damage type
   perks: string[];
   flaws: string[];
 }
@@ -113,7 +116,7 @@ export const createEmptyCharacter = (): Character => ({
   archetype: "",
   abilities: { ...defaultAbilities },
   skills: [],
-  powers: [],
+  powers: [] as Power[],
   complications: [],
   gear: [],
   feats: [],
@@ -330,11 +333,12 @@ export const CharacterProvider = ({ children }: { children: ReactNode }) => {
         
         if (firebaseCharacter) {
           // Convert the Firebase data to our Character type
-          const characterData = firebaseCharacter.data || {};
+          // The firebaseCharacter already has id and data spread together from firebase.ts
+          const { id: firebaseId, ...characterData } = firebaseCharacter;
           const loadedCharacter = {
             ...createEmptyCharacter(),
             ...characterData,
-            firebaseId: firebaseCharacter.id,
+            firebaseId,
             updatedAt: new Date().toISOString()
           };
           

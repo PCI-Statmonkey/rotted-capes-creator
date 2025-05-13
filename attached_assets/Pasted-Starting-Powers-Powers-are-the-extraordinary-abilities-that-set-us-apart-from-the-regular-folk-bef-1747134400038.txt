@@ -1,0 +1,107 @@
+Starting Powers
+Powers are the extraordinary abilities that set us apart from the regular folk, before all we had to worry about was those powers in the wrong hands, and we had our hands full with them. Now we have Super Z’s to worry about. But it’s not them that I worry the most about, they are so territorial you can keep clear of them if ya need too. I worry about those who use their powers raid enclaves for their resources while put regular folk under heal in exchange for their “protection” 
+During this step you will precocious your powers. Powers like Ability scores have a Power Score that can range from 10 upwards. Although there are reports of bystanders and epsilon level heroes possessing powers with a power scores of 9 and below, but B-Listers will commonly start with powers ranging from 10 to 20, before power modifications, with some exceptions.
+
+<side bar>
+Character creation ride along: Starting Powers 
+Ruben chooses to go with the point buy option, he picks the powers of personal force field, move object, and Energy Blast choosing Kinetic has his damage type. He has 32 points to buy power scores and ends up with personal force field:16, move object:16, and Energy Blast (Kinetic): 17, chooses to have all the powers linked boosting them to 18, 18, and 19 respectively. 
+Nani want to just to hit things, she chooses to go with the power score array option, choosing the powers of Armor, Enhanced Ability (Choosing Strength), Energy Blast (Electrical Damage), Invulnerability (Electricity Damage) chooses a sword as her mystical item giving it Enhanced Attack (Electrical damage). She sees for 5 powers she has an array of 16,15,14,12,12
+So Nani applies her scores ending up with Armor: 16, Enhanced Ability (Strength): 15, Energy Blast (Electrical):14, Invulnerability (electricity):12 and Enhanced Attack (Electrical):12
+
+She chooses the Underpowered Form flaw requiring her to call upon the power of her father and the sword he gifted her to take her true form, giving her a +2 to all her powers, she also Links her armor and enhanced ability powers granting them an additional +2 to those powers, finally she applies the Removable Item flaw to her sword raising her Enhanced Attack power by +2 as well. 
+Finalizing her power scores to Armor: 20, Enhanced Ability (Strength): 19, Energy Blast (Electrical):16, Invulnerability (electricity):14 and her sword now possesses Enhanced Attack (Electrical):16 
+</side bar>
+Determining your Starting Power Scores 
+There are three ways to determine your power scores.
+
+Option 1: Choose a Power Set 
+1.	Choose a power set: Power sets are collections of similar powers that fall within a particular theme; if you choose a power set, you must choose a power set in accordance with your archetype. Once you choose your power set, you may rearrange the powers scores as you wish among the set’s powers. While power sets limit your choices, they do have slightly higher scores than those provided by other options.
+2.	Apply any power flaws/perks to your powers which may increase or decrease the final score
+a.	You may apply any number of power modifications to a power, but if a power’s final score, after modifications, exceeds your rank cap (20 + 5 × your rank), it is capped at this maximum. Any points above the cap are considered untapped potential. You can utilize the power’s score up to the new rank cap as you increase in rank.
+b.	You may not use perks to reduce a power’s final score below 10.
+
+
+Andromorph Power Set
+Bestial Transformation: 16 
+Communicate with Animals*: 12  
+Enhanced Attack*: 16
+Enhanced Ability Score (Strength or Dexterity) *: 14 
+Enhanced Sense*: 12
+
+Blaster Power Set 
+Energy Blast: 16 
+Energy Generation: 12
+Energy Explosion: 14
+Energy Sheath: 16
+Flight: 12
+
+Brawler Power Set 
+Enhanced Attack*: 16
+Enhanced Ability Score (Strength or Dexterity)*: 16
+Enhanced Ability Score (Constitution)*: 12
+Regeneration: 14
+Super-Sense: 12
+
+Controller Power Set 
+Telepathy: 12 
+Emotion Control: 12
+Mind Control: 16
+Move Object: 16
+Sympathy: 14
+
+Infiltrator Power Set
+Adoptive Muscle Memory*: 16
+Enhanced Sense*: 14
+Invisibility: 16 
+Luck*: 12
+Swinging: 12 
+
+Heavy Power Set
+Armor: 16
+Enhanced Attack*: 12
+Enhanced Ability Score (Strength)*: 14
+Enhanced Ability Score (Constitution)*: 16 
+Resistance: 12
+
+Transporter Power Set
+Celerity*: 16
+Enhanced Ability Score (Dexterity): 14
+Speed*: 16
+Surge: 14
+Temporal Fugue: 12
+
+
+Option 2: B-Lister Power Score Array 
+
+3.	Choose one of the following arrays and arrange it among your chosen powers
+Power arrays: 	20,18
+			18,16,15
+			16,16,14,14 
+			16,15,14,12,12
+4.	Apply any power flaws/perks to your powers which may increase or decrease the final score
+a.	You may apply any number of power modifications to a power, but if a power’s final score, after modifications, exceeds your power score cap (20 + 5 × your rank), it is capped at this maximum. Any points above the cap are considered untapped potential. You can utilize the power’s score up to the new rank cap as you increase in rank.
+b.	You may not use perks to reduce a power’s final score below 10.
+
+Option 3: Customized starting ability scores. 
+
+1.	You start with 32 power points. Use these points to buy your starting power scores using the table below.   
+2.	Apply any power flaws/perks to your powers that may increase or decrease the final score.
+a.	You may apply any number of power modifications to a power, but if a power’s final score, after modifications, exceeds your power score cap (20 + 5 × your rank), it is capped at this maximum. Any points above the cap are considered untapped potential. You can utilize the power’s score up to the new rank cap as you increase in rank.
+b.	You may not use perks to reduce a power’s final score below 10.
+
+Starting Power Score Cost Table
+Power Score	Cost
+9	1
+10	2
+11	3
+12	4
+13	5
+14	6
+15	8
+16	10
+17	12
+18	14
+19	16
+20	18
+
+For a complete list of powers, power discerptions, and power modification, see chapter XX: Powers on page XX
