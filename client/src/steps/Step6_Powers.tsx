@@ -43,6 +43,23 @@ interface PowerModifier {
   bonus: number;
 }
 
+// Define which powers use damage types based on the Power chapter
+const DAMAGE_TYPE_POWERS = [
+  "Energy Blast",
+  "Energy Explosion",
+  "Energy Generation",
+  "Energy Manipulation",
+  "Energy Sheath",
+  "Damaging Form",
+  "Darkness",
+  "Psychic Attack"
+];
+
+// Helper function to check if a power uses damage type
+const powerUsesDamageType = (powerName: string): boolean => {
+  return DAMAGE_TYPE_POWERS.includes(powerName);
+};
+
 // Define the available power sets
 const POWER_SETS: PowerSet[] = [
   {
@@ -59,10 +76,10 @@ const POWER_SETS: PowerSet[] = [
   {
     name: "Blaster",
     powers: [
-      { name: "Energy Blast", score: 16, hasDamageType: true },
-      { name: "Energy Generation", score: 12, hasDamageType: true },
-      { name: "Energy Explosion", score: 14, hasDamageType: true },
-      { name: "Energy Sheath", score: 16, hasDamageType: true },
+      { name: "Energy Blast", score: 16 },
+      { name: "Energy Generation", score: 12 },
+      { name: "Energy Explosion", score: 14 },
+      { name: "Energy Sheath", score: 16 },
       { name: "Flight", score: 12 }
     ],
     requiredArchetypes: ["Blaster", "Speedster"]
@@ -360,6 +377,18 @@ export default function Step6_Powers() {
   const updatePower = (index: number, field: keyof Power, value: any) => {
     const newPowers = [...selectedPowers];
     newPowers[index] = { ...newPowers[index], [field]: value };
+    
+    // Handle changes to power name to determine if damage type should be available
+    if (field === 'name') {
+      // If the selected power uses damage type, make sure a damage type exists or set default
+      if (powerUsesDamageType(value) && !newPowers[index].damageType) {
+        newPowers[index].damageType = DAMAGE_TYPES[0];
+      }
+      // If the power doesn't use damage type, clear any existing damage type
+      else if (!powerUsesDamageType(value)) {
+        newPowers[index].damageType = undefined;
+      }
+    }
     
     // Recalculate final score if needed
     if (field === 'score' || field === 'flaws' || field === 'perks') {
@@ -881,7 +910,7 @@ export default function Step6_Powers() {
                             <div className="flex-1">
                               <Label className="text-xs mb-1 block">Power Score</Label>
                               <Select
-                                value={power.score.toString()}
+                                value={String(power.score || 0)}
                                 onValueChange={(value) => assignScoreToPower(index, parseInt(value))}
                               >
                                 <SelectTrigger className="bg-gray-800">
@@ -890,8 +919,8 @@ export default function Step6_Powers() {
                                 <SelectContent>
                                   {getSelectedPowerArrayData().map(score => (
                                     <SelectItem 
-                                      key={score} 
-                                      value={score.toString()}
+                                      key={`array-score-${score}`}
+                                      value={String(score)}
                                       disabled={selectedPowers.some(p => p.score === score && selectedPowers.indexOf(p) !== index)}
                                     >
                                       {score}
@@ -901,28 +930,141 @@ export default function Step6_Powers() {
                               </Select>
                             </div>
                             
-                            <div className="flex-1">
-                              <Label className="text-xs mb-1 block">Damage Type (Optional)</Label>
+                            {/* Only show damage type selector for powers that need it */}
+                            {powerUsesDamageType(power.name) && (
+                              <div className="flex-1">
+                                <Label className="text-xs mb-1 block">Damage Type</Label>
+                                <Select
+                                  value={power.damageType || "none"}
+                                  onValueChange={(value) => updatePower(index, 'damageType', value === "none" ? undefined : value)}
+                                >
+                                  <SelectTrigger className="bg-gray-800">
+                                    <SelectValue placeholder="Select type" />
+                                  </SelectTrigger>
+                                  <SelectContent>
+                                    <SelectItem value="none">None</SelectItem>
+                                    {DAMAGE_TYPES.map(type => (
+                                      <SelectItem key={`damage-${type}`} value={type}>{type}</SelectItem>
+                                    ))}
+                                  </SelectContent>
+                                </Select>
+                              </div>
+                            )}
+                          </div>
+                          
+                          {/* Add power modification dropdowns */}
+                          <div className="mt-3 pt-3 border-t border-gray-600 grid grid-cols-2 gap-3">
+                            <div>
+                              <Label className="text-xs mb-1 block">Add Flaw</Label>
                               <Select
-                                value={power.damageType || "none"}
-                                onValueChange={(value) => updatePower(index, 'damageType', value === "none" ? undefined : value)}
+                                value=""
+                                onValueChange={(value) => {
+                                  if (value) {
+                                    const flaw = POWER_FLAWS.find(f => f.name === value);
+                                    if (flaw && !power.flaws.some(f => f.name === flaw.name)) {
+                                      togglePowerModifier(index, "flaws", flaw.name);
+                                    }
+                                  }
+                                }}
                               >
                                 <SelectTrigger className="bg-gray-800">
-                                  <SelectValue placeholder="Select type" />
+                                  <SelectValue placeholder="Add a flaw" />
                                 </SelectTrigger>
                                 <SelectContent>
-                                  <SelectItem value="none">None</SelectItem>
-                                  {DAMAGE_TYPES.map(type => (
-                                    <SelectItem key={type} value={type}>{type}</SelectItem>
+                                  {POWER_FLAWS.map(flaw => (
+                                    <SelectItem 
+                                      key={`flaw-option-${flaw.name}`} 
+                                      value={flaw.name}
+                                      disabled={power.flaws.some(f => f.name === flaw.name)}
+                                    >
+                                      {flaw.name} (+{flaw.bonus})
+                                    </SelectItem>
+                                  ))}
+                                </SelectContent>
+                              </Select>
+                            </div>
+                            
+                            <div>
+                              <Label className="text-xs mb-1 block">Add Perk</Label>
+                              <Select
+                                value=""
+                                onValueChange={(value) => {
+                                  if (value) {
+                                    const perk = POWER_PERKS.find(p => p.name === value);
+                                    if (perk && !power.perks.some(p => p.name === perk.name)) {
+                                      togglePowerModifier(index, "perks", perk.name);
+                                    }
+                                  }
+                                }}
+                              >
+                                <SelectTrigger className="bg-gray-800">
+                                  <SelectValue placeholder="Add a perk" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  {POWER_PERKS.map(perk => (
+                                    <SelectItem 
+                                      key={`perk-option-${perk.name}`} 
+                                      value={perk.name}
+                                      disabled={power.perks.some(p => p.name === perk.name)}
+                                    >
+                                      {perk.name} ({perk.bonus})
+                                    </SelectItem>
                                   ))}
                                 </SelectContent>
                               </Select>
                             </div>
                           </div>
-                          
+
+                          {/* Display applied modifiers */}
+                          {(power.flaws.length > 0 || power.perks.length > 0) && (
+                            <div className="mt-3">
+                              {power.flaws.length > 0 && (
+                                <div className="mb-2">
+                                  <span className="text-xs text-gray-400">Applied Flaws:</span>
+                                  <div className="flex flex-wrap gap-1 mt-1">
+                                    {power.flaws.map(flaw => (
+                                      <div key={flaw.name} className="bg-gray-800 text-red-400 px-2 py-0.5 rounded-full text-xs flex items-center">
+                                        {flaw.name} (+{flaw.bonus})
+                                        <Button
+                                          variant="ghost"
+                                          size="icon"
+                                          className="h-4 w-4 p-0 ml-1"
+                                          onClick={() => togglePowerModifier(index, "flaws", flaw.name)}
+                                        >
+                                          <X className="h-3 w-3" />
+                                        </Button>
+                                      </div>
+                                    ))}
+                                  </div>
+                                </div>
+                              )}
+                              
+                              {power.perks.length > 0 && (
+                                <div>
+                                  <span className="text-xs text-gray-400">Applied Perks:</span>
+                                  <div className="flex flex-wrap gap-1 mt-1">
+                                    {power.perks.map(perk => (
+                                      <div key={perk.name} className="bg-gray-800 text-green-400 px-2 py-0.5 rounded-full text-xs flex items-center">
+                                        {perk.name} ({perk.bonus})
+                                        <Button
+                                          variant="ghost"
+                                          size="icon"
+                                          className="h-4 w-4 p-0 ml-1"
+                                          onClick={() => togglePowerModifier(index, "perks", perk.name)}
+                                        >
+                                          <X className="h-3 w-3" />
+                                        </Button>
+                                      </div>
+                                    ))}
+                                  </div>
+                                </div>
+                              )}
+                            </div>
+                          )}
+
                           {/* Display final score if it differs */}
                           {power.finalScore !== power.score && (
-                            <div className="text-sm text-green-400 mt-1">
+                            <div className="text-sm text-green-400 mt-3">
                               Final Score: {power.finalScore} (after modifiers)
                             </div>
                           )}
@@ -1002,23 +1144,25 @@ export default function Step6_Powers() {
                             </div>
                           </div>
                           
-                          <div className="flex-1">
-                            <Label className="text-xs mb-1 block">Damage Type (Optional)</Label>
-                            <Select
-                              value={power.damageType || ""}
-                              onValueChange={(value) => updatePower(index, 'damageType', value)}
-                            >
-                              <SelectTrigger className="bg-gray-800">
-                                <SelectValue placeholder="Select type" />
-                              </SelectTrigger>
-                              <SelectContent>
-                                <SelectItem value="none">None</SelectItem>
-                                {DAMAGE_TYPES.map(type => (
-                                  <SelectItem key={type} value={type}>{type}</SelectItem>
-                                ))}
-                              </SelectContent>
-                            </Select>
-                          </div>
+                          {powerUsesDamageType(power.name) && (
+                            <div className="flex-1">
+                              <Label className="text-xs mb-1 block">Damage Type</Label>
+                              <Select
+                                value={power.damageType || "none"}
+                                onValueChange={(value) => updatePower(index, 'damageType', value === "none" ? undefined : value)}
+                              >
+                                <SelectTrigger className="bg-gray-800">
+                                  <SelectValue placeholder="Select type" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  <SelectItem value="none">None</SelectItem>
+                                  {DAMAGE_TYPES.map(type => (
+                                    <SelectItem key={`point-buy-${type}`} value={type}>{type}</SelectItem>
+                                  ))}
+                                </SelectContent>
+                              </Select>
+                            </div>
+                          )}
                         </div>
                         
                         {/* Display final score if it differs */}
