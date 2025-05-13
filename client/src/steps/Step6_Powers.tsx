@@ -60,7 +60,7 @@ const powerUsesDamageType = (powerName: string): boolean => {
   return DAMAGE_TYPE_POWERS.includes(powerName);
 };
 
-// Define the available power sets
+// Define the available power sets - based on Rotted Capes 2.0 rulebook
 const POWER_SETS: PowerSet[] = [
   {
     name: "Andromorph",
@@ -175,15 +175,15 @@ const POWER_SETS: PowerSet[] = [
   }
 ];
 
-// Power score arrays
+// Power score arrays - from Rotted Capes 2.0 rulebook
 const POWER_ARRAYS = [
-  { name: "Array 1", scores: [20, 18] },
-  { name: "Array 2", scores: [18, 16, 15] },
-  { name: "Array 3", scores: [16, 16, 14, 14] },
-  { name: "Array 4", scores: [16, 15, 14, 12, 12] }
+  { name: "Array 1 (2 Powers)", scores: [20, 18] },
+  { name: "Array 2 (3 Powers)", scores: [18, 16, 15] },
+  { name: "Array 3 (4 Powers)", scores: [16, 16, 14, 14] },
+  { name: "Array 4 (5 Powers)", scores: [16, 15, 14, 12, 12] }
 ];
 
-// Power point buy costs
+// Power point buy costs - from Rotted Capes 2.0 rulebook
 const POWER_COST_TABLE: { score: number; cost: number }[] = [
   { score: 9, cost: 1 },
   { score: 10, cost: 2 },
