@@ -654,13 +654,32 @@ export default function Step6_Powers() {
         {/* Power Set Selection (if applicable) */}
         {powerCreationMethod === "powerSet" && hasPowerSets && (
           <div className="p-4 bg-gray-800 rounded-lg border border-gray-700">
-            <h3 className="font-medium text-lg mb-3">
+            <h3 className="font-comic text-xl mb-3">
               {selectedPowerSet ? `Power Set Selected` : `Select a Power Set`}
             </h3>
+            {!selectedPowerSet && character.archetype && (
+              <div className="mb-4 p-3 bg-gray-700 rounded-md">
+                <p className="text-sm">Power sets available for your <span className="font-bold text-accent">{character.archetype}</span> archetype:</p>
+                <div className="mt-2">
+                  {eligiblePowerSets.filter(set => set.requiredArchetypes?.includes(character.archetype)).map(set => (
+                    <span key={set.name} className="inline-block mr-2 mb-2 px-2 py-1 bg-accent/20 text-accent text-xs rounded-full">{set.name}</span>
+                  ))}
+                </div>
+              </div>
+            )}
             {selectedPowerSet ? (
               <div className="bg-accent/10 border border-accent rounded-lg p-4">
                 <div className="flex justify-between items-start mb-3">
-                  <h4 className="font-medium text-accent">{selectedPowerSet} Power Set</h4>
+                  <div>
+                    <h4 className="font-comic text-lg text-accent">{selectedPowerSet} Power Set</h4>
+                    {character.archetype && (
+                      <p className="text-xs text-accent/70 mt-1">
+                        {POWER_SETS.find(set => set.name === selectedPowerSet)?.requiredArchetypes?.includes(character.archetype) 
+                          ? `Specialized for ${character.archetype} archetype` 
+                          : 'Available to all archetypes'}
+                      </p>
+                    )}
+                  </div>
                   <Button 
                     variant="outline" 
                     size="sm"
@@ -673,9 +692,10 @@ export default function Step6_Powers() {
                   </Button>
                 </div>
                 <div className="space-y-2">
+                  <p className="text-sm mb-1">Your powers with this set:</p>
                   {selectedPowers.map((power, idx) => (
                     <div key={`selected-power-${idx}`} className="flex justify-between items-center bg-gray-700 p-2 rounded">
-                      <span>{power.name}</span>
+                      <span className="font-medium">{power.name}</span>
                       <span className="font-bold text-accent">{power.score}</span>
                     </div>
                   ))}
