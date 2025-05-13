@@ -60,86 +60,9 @@ const powerUsesDamageType = (powerName: string): boolean => {
   return DAMAGE_TYPE_POWERS.includes(powerName);
 };
 
-// Define the available power sets - based on Rotted Capes 2.0 rulebook
+// Define the available power sets - based on the provided screenshot
 const POWER_SETS: PowerSet[] = [
-  {
-    name: "Andromorph",
-    powers: [
-      { name: "Bestial Transformation", score: 16 },
-      { name: "Communicate with Animals", score: 12 },
-      { name: "Enhanced Attack", score: 16 },
-      { name: "Enhanced Ability Score (Strength or Dexterity)", score: 14 },
-      { name: "Enhanced Sense", score: 12 }
-    ],
-    requiredArchetypes: ["Shapeshifter"]
-  },
-  {
-    name: "Blaster",
-    powers: [
-      { name: "Energy Blast", score: 16 },
-      { name: "Energy Generation", score: 12 },
-      { name: "Energy Explosion", score: 14 },
-      { name: "Energy Sheath", score: 16 },
-      { name: "Flight", score: 12 }
-    ],
-    requiredArchetypes: ["Blaster", "Speedster"]
-  },
-  {
-    name: "Brawler",
-    powers: [
-      { name: "Enhanced Attack", score: 16 },
-      { name: "Enhanced Ability Score (Strength or Dexterity)", score: 16 },
-      { name: "Enhanced Ability Score (Constitution)", score: 12 },
-      { name: "Regeneration", score: 14 },
-      { name: "Super-Sense", score: 12 }
-    ],
-    requiredArchetypes: ["Bruiser", "Speedster"]
-  },
-  {
-    name: "Controller",
-    powers: [
-      { name: "Telepathy", score: 12 },
-      { name: "Emotion Control", score: 12 },
-      { name: "Mind Control", score: 16 },
-      { name: "Move Object", score: 16 },
-      { name: "Sympathy", score: 14 }
-    ],
-    requiredArchetypes: ["Mentalist", "Mastermind"]
-  },
-  {
-    name: "Infiltrator",
-    powers: [
-      { name: "Adoptive Muscle Memory", score: 16 },
-      { name: "Enhanced Sense", score: 14 },
-      { name: "Invisibility", score: 16 },
-      { name: "Luck", score: 12 },
-      { name: "Swinging", score: 12 }
-    ],
-    requiredArchetypes: ["Gadgeteer", "Shapeshifter"]
-  },
-  {
-    name: "Heavy",
-    powers: [
-      { name: "Armor", score: 16 },
-      { name: "Enhanced Attack", score: 12 },
-      { name: "Enhanced Ability Score (Strength)", score: 14 },
-      { name: "Enhanced Ability Score (Constitution)", score: 16 },
-      { name: "Resistance", score: 12 }
-    ],
-    requiredArchetypes: ["Bruiser", "Defender"]
-  },
-  {
-    name: "Transporter",
-    powers: [
-      { name: "Celerity", score: 16 },
-      { name: "Enhanced Ability Score (Dexterity)", score: 14 },
-      { name: "Speed", score: 16 },
-      { name: "Surge", score: 14 },
-      { name: "Temporal Fugue", score: 12 }
-    ],
-    requiredArchetypes: ["Speedster"]
-  },
-  // These general power sets are available to all archetypes
+  // These power sets are available to all archetypes
   {
     name: "Elemental Control",
     powers: [
@@ -149,7 +72,6 @@ const POWER_SETS: PowerSet[] = [
       { name: "Force Field", score: 16 },
       { name: "Flight", score: 12 }
     ]
-    // No requiredArchetypes means available to all
   },
   {
     name: "Psychic",
@@ -160,7 +82,6 @@ const POWER_SETS: PowerSet[] = [
       { name: "Emotion Control", score: 12 },
       { name: "Mind Control", score: 12 }
     ]
-    // No requiredArchetypes means available to all
   },
   {
     name: "Martial Artist",
@@ -171,7 +92,6 @@ const POWER_SETS: PowerSet[] = [
       { name: "Enhanced Ability Score (Strength)", score: 12 },
       { name: "Enhanced Accuracy", score: 12 }
     ]
-    // No requiredArchetypes means available to all
   }
 ];
 
@@ -353,8 +273,7 @@ export default function Step6_Powers() {
     !set.requiredArchetypes || set.requiredArchetypes.includes(character.archetype)
   );
 
-  // Check if current archetype has any power sets available
-  // Now we'll always have power sets available since we added general ones for all archetypes
+  // We'll always have power sets available with the generic ones
   const hasPowerSets = true;
   
   // Update power creation method if current selection is invalid
