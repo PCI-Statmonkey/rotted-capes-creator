@@ -8,7 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { toast } from '@/hooks/use-toast';
-import { Trash2, Plus, PackageCheck, ShieldX } from 'lucide-react';
+import { Trash2, Plus, PackageCheck, ShieldX, Save, ArrowRight } from 'lucide-react';
 
 // Define Go-Bag types
 type GoBagType = 'survivalist' | 'infiltrator' | 'technician' | 'medic' | 'bystander';
@@ -148,7 +148,7 @@ const equipment: EquipmentItem[] = [
 ];
 
 export default function Step8_Gear() {
-  const { character, addGearItem, removeGearItem } = useCharacter();
+  const { character, addGearItem, removeGearItem, saveCharacter } = useCharacter();
   const [selectedGoBag, setSelectedGoBag] = useState<GoBagType | ''>('');
   const [newCustomGear, setNewCustomGear] = useState({ name: '', description: '' });
   const [acquisitionPoints, setAcquisitionPoints] = useState(5); // Default 5 AP
@@ -661,6 +661,36 @@ export default function Step8_Gear() {
             <span className="font-medium text-amber-400">Ammunition:</span> Firearms use ammunition that isn't specifically tracked. When you roll a 1 on a d20 attack roll, you run out of ammunition.
           </p>
         </div>
+      </div>
+      
+      <div className="flex justify-between mt-8">
+        {/* Save your progress first */}
+        <Button 
+          onClick={() => {
+            saveCharacter();
+            toast({
+              title: "Character Saved",
+              description: `${character.name || "Your character"}'s gear has been saved.`,
+            });
+          }} 
+          variant="outline"
+        >
+          <Save className="mr-2 h-4 w-4" />
+          Save Progress
+        </Button>
+        
+        {/* Continue to next step */}
+        <Button 
+          onClick={() => {
+            // Save character and navigate to next step
+            saveCharacter();
+            window.location.href = "/creator/9";
+          }}
+          className="bg-green-600 hover:bg-green-700"
+        >
+          Continue to Finishing Touches
+          <ArrowRight className="ml-2 h-4 w-4" />
+        </Button>
       </div>
     </div>
   );
