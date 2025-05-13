@@ -9,6 +9,7 @@ import Step3_Archetype from "@/steps/Step3_Archetype";
 import Step4_Abilities from "@/steps/Step4_Abilities";
 import Step5_Skills from "@/steps/Step5_Skills";
 import Step6_Powers from "@/steps/Step6_Powers";
+import Step7_Complications from "@/steps/Step7_Complications";
 import { WIZARD_STEPS } from "@/lib/utils";
 import { useLocation, useParams, useRoute } from "wouter";
 
@@ -74,6 +75,8 @@ export default function Creator() {
         return <Step5_Skills />;
       case 6:
         return <Step6_Powers />;
+      case 7:
+        return <Step7_Complications />;
       // Other steps will be added as they are implemented
       default:
         return <Step1_Concept />;
