@@ -843,9 +843,9 @@ export default function Step6_Powers() {
                 <div className="p-4 bg-gray-700 rounded-lg border border-gray-600">
                   <h3 className="font-medium mb-2">Selected Array: {selectedPowerArray}</h3>
                   <div className="flex flex-wrap gap-2 mb-4">
-                    {getSelectedPowerArrayData().map(score => (
+                    {getSelectedPowerArrayData().map((score, idx) => (
                       <div 
-                        key={score}
+                        key={`array-score-display-${selectedPowerArray}-${score}-${idx}`}
                         className={`
                           p-2 rounded-md text-center min-w-[40px]
                           ${selectedPowers.some(p => p.score === score) 
@@ -917,9 +917,9 @@ export default function Step6_Powers() {
                                   <SelectValue placeholder="Select score" />
                                 </SelectTrigger>
                                 <SelectContent>
-                                  {getSelectedPowerArrayData().map(score => (
+                                  {getSelectedPowerArrayData().map((score, idx) => (
                                     <SelectItem 
-                                      key={`array-score-${score}`}
+                                      key={`array-score-${score}-${idx}-${index}`}
                                       value={String(score)}
                                       disabled={selectedPowers.some(p => p.score === score && selectedPowers.indexOf(p) !== index)}
                                     >
