@@ -148,21 +148,138 @@ const POWER_COST_TABLE: { score: number; cost: number }[] = [
   { score: 20, cost: 18 }
 ];
 
-// Sample power modifiers
-const POWER_FLAWS: PowerModifier[] = [
-  { name: "Underpowered Form", description: "Requires a transformation to access your powers", bonus: 2 },
-  { name: "Removable Item", description: "Power is tied to an item that can be taken away", bonus: 2 },
-  { name: "Limited Use", description: "Power can only be used a limited number of times", bonus: 1 },
-  { name: "Activation", description: "Power requires an activation roll or time to activate", bonus: 1 },
-  { name: "Electrical Conductivity", description: "Vulnerability to electrical attacks", bonus: 1 }
+// Complete list of powers
+const ALL_POWERS = [
+  "Aquatic Adaptation",
+  "Adsorb Energy",
+  "Adsorb Matter",
+  "Adoptive Muscle Memory",
+  "Animate Object",
+  "Armor",
+  "Bestial Transformation",
+  "Botanokinesis",
+  "Broadcast",
+  "Catfall",
+  "Celerity",
+  "Chameleon",
+  "Communicate with Animals",
+  "Communicate with Plants",
+  "Control Weather",
+  "Convert Matter",
+  "Damaging Form",
+  "Darkness",
+  "Defection",
+  "Density Control",
+  "Duplicate",
+  "Dynamic Power",
+  "Eidetic Memory",
+  "Elasticity",
+  "Energy Blast",
+  "Energy Explosion",
+  "Energy Generation",
+  "Energy Manipulation",
+  "Energy Sheath",
+  "Emotion Control",
+  "Endurance",
+  "Enhanced Attack",
+  "Enhanced Ability Score",
+  "Enhanced Sense",
+  "Entangle",
+  "Flight",
+  "Force Field",
+  "Force Field, Personal",
+  "Force Shield",
+  "Free Consciousness",
+  "Geospatial Shift",
+  "Gravity Control",
+  "Growth",
+  "Glide",
+  "Heal",
+  "Imbue Consciousness",
+  "Incorporeal",
+  "Inventive Gadgetry",
+  "Invisibility",
+  "Invulnerability",
+  "Life Support",
+  "Luck",
+  "Manifest Gear",
+  "Mimic",
+  "Mind Control",
+  "Move Object",
+  "Multiple Limbs",
+  "Nullify",
+  "Portal",
+  "Poison",
+  "Possession",
+  "Psychic Attack",
+  "Power Boost",
+  "Regeneration",
+  "Resistance",
+  "Shapeshift",
+  "Shrink",
+  "Sixth Sense",
+  "Speed",
+  "Summon Animal",
+  "Super-Sense",
+  "Surge",
+  "Swinging",
+  "Sympathy",
+  "Telepathy",
+  "Teleport",
+  "Temporal Fugue",
+  "Tracking",
+  "Tunnel",
+  "Weaken",
+  "Wall Crawl",
+  "Wireless",
+  "Weird Biology"
 ];
 
+// Powers compatible with the All Skill power modifier
+const ALL_SKILL_COMPATIBLE = [
+  "Catfall",
+  "Celerity",
+  "Endurance",
+  "Enhanced Attack",
+  "Enhanced Ability Score",
+  "Enhanced Sense",
+  "Inventive Gadgetry",
+  "Luck",
+  "Manifest Gear",
+  "Sixth Sense",
+  "Surge"
+];
+
+// Power Flaws from the list
+const POWER_FLAWS: PowerModifier[] = [
+  { name: "Conditional", description: "Power only works under specific conditions", bonus: 4 },
+  { name: "Cybernetic Implant", description: "Power comes from cybernetic enhancements", bonus: 2 },
+  { name: "External Power Source", description: "Power requires an external source to function", bonus: 0 },
+  { name: "Fatiguing", description: "Using the power causes fatigue", bonus: 4 },
+  { name: "Limitation (Minor)", description: "Power has a minor limitation in how it can be used", bonus: 2 },
+  { name: "Limitation (Moderate)", description: "Power has a moderate limitation in how it can be used", bonus: 3 },
+  { name: "Limitation (Major)", description: "Power has a major limitation in how it can be used", bonus: 4 },
+  { name: "Limited Uses (Few)", description: "Power can only be used a few times", bonus: 2 },
+  { name: "Limited Uses (Very Few)", description: "Power can only be used very few times", bonus: 4 },
+  { name: "Linked", description: "Power is linked to another power", bonus: 2 },
+  { name: "Power Armor", description: "Power is derived from powered armor", bonus: 4 },
+  { name: "Removable Item (Standard)", description: "Power is tied to an item that can be taken away", bonus: 2 },
+  { name: "Removable Item (Difficult)", description: "Power is tied to an item that is difficult to remove", bonus: 4 },
+  { name: "Slow (Moderately)", description: "Power takes extra time to activate", bonus: 2 },
+  { name: "Slow (Significantly)", description: "Power takes significant time to activate", bonus: 4 },
+  { name: "Trigger", description: "Power requires a specific trigger to activate", bonus: 2 },
+  { name: "Unpowered Form", description: "Requires a transformation to access your powers", bonus: 2 },
+  { name: "Unreliable", description: "Power doesn't always work as expected", bonus: 4 }
+];
+
+// Power Perks from the list
 const POWER_PERKS: PowerModifier[] = [
-  { name: "Linked Powers", description: "Link two or more powers together, enhancing their effectiveness", bonus: 2 },
-  { name: "Extended Range", description: "Power has a greater range than normal", bonus: -1 },
-  { name: "Sustained Effect", description: "Power effects last longer than normal", bonus: -1 },
-  { name: "Area Effect", description: "Power can affect multiple targets in an area", bonus: -2 },
-  { name: "Selective", description: "You can choose who is affected by your power", bonus: -1 }
+  { name: "Accurate", description: "Power is exceptionally accurate", bonus: -4 },
+  { name: "All Skill", description: "Power can be used with any skill", bonus: 0 },
+  { name: "Efficient Power", description: "Power uses less energy or resources", bonus: -2 },
+  { name: "Penetrating", description: "Power can penetrate defenses more effectively", bonus: -2 },
+  { name: "Secondary Effect (Minor)", description: "Power has a minor additional effect", bonus: -2 },
+  { name: "Secondary Effect (Major)", description: "Power has a major additional effect", bonus: -4 }
 ];
 
 // Available damage types
@@ -720,13 +837,23 @@ export default function Step6_Powers() {
                       <div className="flex justify-between items-start">
                         <div className="w-full">
                           <div className="flex justify-between mb-2">
-                            <input
-                              type="text"
-                              value={power.name}
-                              onChange={(e) => updatePower(index, 'name', e.target.value)}
-                              placeholder="Enter power name"
-                              className="bg-transparent border-b border-gray-700 focus:border-accent focus:outline-none text-white w-4/5"
-                            />
+                            <div className="w-4/5">
+                              <Select
+                                value={power.name}
+                                onValueChange={(value) => updatePower(index, 'name', value)}
+                              >
+                                <SelectTrigger className="bg-gray-800">
+                                  <SelectValue placeholder="Select a power" />
+                                </SelectTrigger>
+                                <SelectContent className="max-h-[300px]">
+                                  {ALL_POWERS.map(powerName => (
+                                    <SelectItem key={powerName} value={powerName}>
+                                      {powerName}{ALL_SKILL_COMPATIBLE.includes(powerName) && " *"}
+                                    </SelectItem>
+                                  ))}
+                                </SelectContent>
+                              </Select>
+                            </div>
                             <Button 
                               variant="ghost" 
                               size="icon"
@@ -804,13 +931,21 @@ export default function Step6_Powers() {
                     <div className="flex justify-between items-start">
                       <div className="w-full">
                         <div className="flex justify-between mb-3">
-                          <input
-                            type="text"
+                          <Select
                             value={power.name}
-                            onChange={(e) => updatePower(index, 'name', e.target.value)}
-                            placeholder="Enter power name"
-                            className="bg-transparent border-b border-gray-700 focus:border-accent focus:outline-none text-white w-4/5"
-                          />
+                            onValueChange={(value) => updatePower(index, 'name', value)}
+                          >
+                            <SelectTrigger className="bg-gray-800">
+                              <SelectValue placeholder="Select a power" />
+                            </SelectTrigger>
+                            <SelectContent className="max-h-[300px]">
+                              {ALL_POWERS.map(powerName => (
+                                <SelectItem key={powerName} value={powerName}>
+                                  {powerName}{ALL_SKILL_COMPATIBLE.includes(powerName) && " *"}
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
                           <Button 
                             variant="ghost" 
                             size="icon"
