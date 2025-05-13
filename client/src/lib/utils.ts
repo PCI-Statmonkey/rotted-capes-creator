@@ -42,5 +42,5 @@ export const WIZARD_STEPS = [
   { id: 6, name: "Powers" },
   { id: 7, name: "Weaknesses" },
   { id: 8, name: "Gear" },
-  { id: 9, name: "Review" },
+  { id: 9, name: "Finishing Touches" },
 ];
