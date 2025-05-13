@@ -443,10 +443,14 @@ export default function Step6_Powers() {
 
   // Handle power set selection
   const handlePowerSetSelection = (powerSetName: string) => {
+    console.log("Selected power set:", powerSetName);
     setSelectedPowerSet(powerSetName);
     
     const powerSet = POWER_SETS.find(set => set.name === powerSetName);
-    if (!powerSet) return;
+    if (!powerSet) {
+      console.log("Power set not found", powerSetName);
+      return;
+    }
     
     // Convert power set to powers with initial scores
     const powers = powerSet.powers.map(power => ({
@@ -455,10 +459,14 @@ export default function Step6_Powers() {
       flaws: [],
       perks: [],
       finalScore: power.score,
-      damageType: power.hasDamageType ? DAMAGE_TYPES[0] : undefined
+      damageType: powerUsesDamageType(power.name) ? DAMAGE_TYPES[0] : undefined
     }));
     
+    console.log("Setting powers:", powers);
     setSelectedPowers(powers);
+    
+    // Update activeTab to "powers" to make sure the UI shows the selected powers
+    setActiveTab("powers");
   };
 
   // Handle power array selection
@@ -656,14 +664,17 @@ export default function Step6_Powers() {
                   <Button 
                     variant="outline" 
                     size="sm"
-                    onClick={() => setSelectedPowerSet("")}
+                    onClick={() => {
+                      setSelectedPowerSet("");
+                      setSelectedPowers([]);
+                    }}
                   >
                     Change
                   </Button>
                 </div>
                 <div className="space-y-2">
-                  {eligiblePowerSets.find(ps => ps.name === selectedPowerSet)?.powers.map((power, idx) => (
-                    <div key={`${power.name}-${idx}`} className="flex justify-between items-center bg-gray-700 p-2 rounded">
+                  {selectedPowers.map((power, idx) => (
+                    <div key={`selected-power-${idx}`} className="flex justify-between items-center bg-gray-700 p-2 rounded">
                       <span>{power.name}</span>
                       <span className="font-bold text-accent">{power.score}</span>
                     </div>
