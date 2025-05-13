@@ -84,8 +84,8 @@ export default function Step7_Weaknesses() {
 
   // Calculate total weakness points
   const calculatePoints = () => {
-    const points = character.complications.reduce((total, complication) => {
-      return total + (complication.points || 0);
+    const points = character.complications.reduce((total, weakness) => {
+      return total + (weakness.points || 0);
     }, 0);
     setTotalWeaknessPoints(points);
     setRemainingWeaknessPoints(points - allocations.reduce((total, alloc) => total + alloc.amount, 0));
@@ -107,8 +107,8 @@ export default function Step7_Weaknesses() {
   // Add a weakness to the character
   const addWeakness = () => {
     if (newWeakness.name.trim() && newWeakness.description.trim() && selectedWeaknessType) {
-      // Create a copy of the current complications array
-      const updatedComplications = [...character.complications];
+      // Create a copy of the current weaknesses array
+      const updatedWeaknesses = [...character.complications];
       
       // Add the new weakness
       updatedComplications.push({
