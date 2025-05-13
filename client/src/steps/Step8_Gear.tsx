@@ -243,7 +243,7 @@ export default function Step8_Gear() {
       
       toast({
         title: "Weapon Added",
-        description: `${weapon.name} has been added to your inventory (${weapon.ap} AP).`,
+        description: `${weapon.name} has been added to your inventory.`,
       });
     } else {
       toast({
@@ -273,7 +273,7 @@ export default function Step8_Gear() {
       
       toast({
         title: "Equipment Added",
-        description: `${equip.name} has been added to your inventory (${equip.ap} AP).`,
+        description: `${equip.name} has been added to your inventory.`,
       });
     } else {
       toast({
@@ -371,7 +371,7 @@ export default function Step8_Gear() {
       
       toast({
         title: "Item Removed",
-        description: `${item.name} has been removed from your inventory${apRefunded > 0 ? ` (${apRefunded} AP refunded)` : ''}.`,
+        description: `${item.name} has been removed from your inventory.`,
       });
     } else {
       toast({
