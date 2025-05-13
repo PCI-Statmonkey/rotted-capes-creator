@@ -72,6 +72,8 @@ export interface Character {
   appearance: string;
   origin: string;
   archetype: string;
+  personalityFlaw: string;
+  tagline: string;
   abilities: Abilities;
   skills: Skill[];
   powers: Power[];
@@ -116,6 +118,8 @@ export const createEmptyCharacter = (): Character => ({
   appearance: "",
   origin: "",
   archetype: "",
+  personalityFlaw: "",
+  tagline: "",
   abilities: { ...defaultAbilities },
   skills: [],
   powers: [] as Power[],

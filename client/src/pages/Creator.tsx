@@ -12,6 +12,7 @@ import Step6_Powers from "@/steps/Step6_Powers";
 import Step7_Weaknesses from "@/steps/Step7_Weaknesses";
 import Step8_Gear from "@/steps/Step8_Gear";
 import Step9_FinishingTouches from "@/steps/Step9_FinishingTouches";
+import Step10_Summary from "@/steps/Step10_Summary";
 import { WIZARD_STEPS } from "@/lib/utils";
 import { useLocation, useParams, useRoute } from "wouter";
 
@@ -83,6 +84,8 @@ export default function Creator() {
         return <Step8_Gear />;
       case 9:
         return <Step9_FinishingTouches />;
+      case 10:
+        return <Step10_Summary />;
       // Default to the first step if an unknown step is provided
       default:
         return <Step1_Concept />;

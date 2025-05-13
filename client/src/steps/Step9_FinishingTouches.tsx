@@ -1,66 +1,36 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useCharacter } from "@/context/CharacterContext";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Separator } from "@/components/ui/separator";
-import { Progress } from "@/components/ui/progress";
-import { Badge } from "@/components/ui/badge";
 import { toast } from "@/hooks/use-toast";
-import { calculateModifier, formatModifier } from "@/lib/utils";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useRef } from "react";
-import { Check, Save, AlertTriangle, FileText, Info, Medal, ArrowRight, Trash2 } from "lucide-react";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Save, AlertTriangle, Info } from "lucide-react";
 
 export default function Step9_FinishingTouches() {
   const { character, updateCharacterField, saveCharacter } = useCharacter();
-  const [activeTab, setActiveTab] = useState("derived-stats");
-  const finishingTouchesRef = useRef<HTMLDivElement>(null);
-
-  // Calculate derived stats
-  const calculateDerivedStats = () => {
-    const dexMod = calculateModifier(character.abilities.dexterity.value);
-    const conMod = calculateModifier(character.abilities.constitution.value);
-    const intMod = calculateModifier(character.abilities.intelligence.value);
-    const wisMod = calculateModifier(character.abilities.wisdom.value);
-    
-    // Defense calculation
-    let defense = 10 + dexMod;
-    
-    // Toughness calculation 
-    let toughness = conMod;
-    
-    // Fortitude, Reflex, Willpower calculations
-    let fortitude = conMod;
-    let reflex = dexMod;
-    let willpower = wisMod;
-    
-    // Initiative calculation
-    let initiative = dexMod;
-    
-    return {
-      defense,
-      toughness,
-      fortitude,
-      reflex,
-      willpower,
-      initiative
-    };
-  };
-
-  // Update derived stats whenever relevant character fields change
-  useEffect(() => {
-    const derivedStats = calculateDerivedStats();
-    
-    updateCharacterField('defense', derivedStats.defense);
-    updateCharacterField('toughness', derivedStats.toughness);
-    updateCharacterField('fortitude', derivedStats.fortitude);
-    updateCharacterField('reflex', derivedStats.reflex);
-    updateCharacterField('willpower', derivedStats.willpower);
-    updateCharacterField('initiative', derivedStats.initiative);
-  }, [character.abilities, updateCharacterField]);
+  
+  // Personality flaws for superhero characters
+  const personalityFlaws = [
+    "Arrogant - Believes they are superior to others",
+    "Reckless - Acts without thinking of consequences",
+    "Vengeful - Unable to let go of past wrongs",
+    "Distrustful - Has difficulty trusting others",
+    "Stubborn - Refuses to change their mind or approach",
+    "Impulsive - Acts on emotion rather than reason",
+    "Overprotective - Tries to shield others to unhealthy degrees",
+    "Indecisive - Unable to make quick decisions under pressure",
+    "Obsessive - Fixates on goals to the exclusion of all else",
+    "Insecure - Doubts their own abilities and worth",
+    "Perfectionist - Cannot accept anything less than perfection",
+    "Guilt-Ridden - Carries unbearable guilt for past actions",
+    "Temperamental - Prone to emotional outbursts",
+    "Paranoid - Sees threats and conspiracies everywhere",
+    "Secretive - Keeps important information from allies"
+  ];
 
   const handleSaveCharacter = () => {
     saveCharacter();
@@ -70,472 +40,130 @@ export default function Step9_FinishingTouches() {
     });
   };
 
-  // Character point calculations
-  const calculatePointsSpent = () => {
-    // Abilities points (cost per point varies)
-    let abilitiesPoints = 0;
-    for (const ability in character.abilities) {
-      const abilityValue = character.abilities[ability as keyof typeof character.abilities].value;
-      // Points cost calculation: 10 is free, each point above costs 1 point
-      abilitiesPoints += Math.max(0, abilityValue - 10);
-    }
-
-    // Skills points (1 point per rank)
-    const skillsPoints = character.skills.reduce((total, skill) => {
-      return total + (skill.ranks || 0);
-    }, 0);
-
-    // Powers points (varies by power)
-    const powersPoints = character.powers.reduce((total, power) => {
-      // Base cost for a power
-      let powerCost = power.cost || 0;
-      
-      // Add perks costs (usually 1 point each)
-      if (power.perks) {
-        powerCost += power.perks.length;
-      }
-      
-      // Subtract flaw benefits (usually 1 point each)
-      if (power.flaws) {
-        powerCost -= power.flaws.length;
-      }
-      
-      return total + powerCost;
-    }, 0);
-
-    // Total points
-    const totalPoints = abilitiesPoints + skillsPoints + powersPoints;
-
-    return {
-      abilities: abilitiesPoints,
-      skills: skillsPoints,
-      powers: powersPoints,
-      total: totalPoints
-    };
-  };
-
-  useEffect(() => {
-    const pointsSpent = calculatePointsSpent();
-    updateCharacterField('pointsSpent', pointsSpent);
-  }, [character.abilities, character.skills, character.powers, updateCharacterField]);
-
   return (
-    <div className="container mx-auto px-4 py-6" ref={finishingTouchesRef}>
+    <div className="container mx-auto px-4 py-6">
       <h1 className="text-3xl font-bold mb-6">Finishing Touches</h1>
       
       <Card className="mb-6">
         <CardHeader>
-          <CardTitle className="flex justify-between items-center">
-            <span>Character Summary</span>
-            <div className="flex space-x-2">
-              <Button variant="outline" size="sm" onClick={handleSaveCharacter}>
-                <Save className="mr-2 h-4 w-4" />
-                Save Character
-              </Button>
-              <Button 
-                variant="default"
-                onClick={() => {
-                  if (finishingTouchesRef.current) {
-                    toast({
-                      title: "Generating PDF",
-                      description: "Your character sheet is being generated.",
-                    });
-                  }
-                }}
-              >
-                <FileText className="mr-2 h-4 w-4" />
-                Download PDF
-              </Button>
-            </div>
-          </CardTitle>
+          <CardTitle>Define Your Character's Core</CardTitle>
           <CardDescription>
-            Final review of your character stats and details
+            Add the final defining elements that make your character unique and memorable
           </CardDescription>
         </CardHeader>
         
-        <CardContent>
-          <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-            <TabsList className="grid grid-cols-4 mb-6">
-              <TabsTrigger value="derived-stats">Derived Stats</TabsTrigger>
-              <TabsTrigger value="points-summary">Points Summary</TabsTrigger>
-              <TabsTrigger value="character-details">Character Details</TabsTrigger>
-              <TabsTrigger value="final-touches">Final Touches</TabsTrigger>
-            </TabsList>
-            
-            {/* Derived Stats Tab */}
-            <TabsContent value="derived-stats" className="space-y-4">
-              <h3 className="text-lg font-semibold">Derived Character Statistics</h3>
+        <CardContent className="space-y-6">
+          {/* Personality Flaw Section */}
+          <div className="space-y-4">
+            <div>
+              <h3 className="text-lg font-semibold">Personality Flaw</h3>
               <p className="text-gray-400 mb-4">
-                These values are calculated automatically based on your character's abilities, skills, and powers.
+                Every hero has a flaw that humanizes them and creates internal conflict. Choose or create a personality flaw for your character.
               </p>
+            </div>
+            
+            <div className="grid grid-cols-1 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="personalityFlaw">Select a Personality Flaw</Label>
+                <Select 
+                  value={character.personalityFlaw || ""} 
+                  onValueChange={(value) => updateCharacterField('personalityFlaw', value)}
+                >
+                  <SelectTrigger className="bg-gray-700">
+                    <SelectValue placeholder="Choose a personality flaw" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {personalityFlaws.map((flaw) => (
+                      <SelectItem key={flaw} value={flaw}>
+                        {flaw}
+                      </SelectItem>
+                    ))}
+                    <SelectItem value="custom">Custom Flaw (describe below)</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
               
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <Card>
-                  <CardHeader className="pb-2">
-                    <CardTitle className="text-base">Defense</CardTitle>
-                    <CardDescription>Ability to avoid attacks</CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="text-3xl font-bold text-center">{character.defense}</div>
-                  </CardContent>
-                </Card>
-                
-                <Card>
-                  <CardHeader className="pb-2">
-                    <CardTitle className="text-base">Toughness</CardTitle>
-                    <CardDescription>Resistance to damage</CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="text-3xl font-bold text-center">{character.toughness}</div>
-                  </CardContent>
-                </Card>
-                
-                <Card>
-                  <CardHeader className="pb-2">
-                    <CardTitle className="text-base">Initiative</CardTitle>
-                    <CardDescription>Combat turn order bonus</CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="text-3xl font-bold text-center">{formatModifier(character.initiative)}</div>
-                  </CardContent>
-                </Card>
-                
-                <Card>
-                  <CardHeader className="pb-2">
-                    <CardTitle className="text-base">Fortitude</CardTitle>
-                    <CardDescription>Physical resilience</CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="text-3xl font-bold text-center">{character.fortitude}</div>
-                  </CardContent>
-                </Card>
-                
-                <Card>
-                  <CardHeader className="pb-2">
-                    <CardTitle className="text-base">Reflex</CardTitle>
-                    <CardDescription>Reaction speed</CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="text-3xl font-bold text-center">{character.reflex}</div>
-                  </CardContent>
-                </Card>
-                
-                <Card>
-                  <CardHeader className="pb-2">
-                    <CardTitle className="text-base">Willpower</CardTitle>
-                    <CardDescription>Mental fortitude</CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="text-3xl font-bold text-center">{character.willpower}</div>
-                  </CardContent>
-                </Card>
+              {/* Show text area for custom flaw or elaboration */}
+              <div className="space-y-2">
+                <Label htmlFor="customFlaw">
+                  {character.personalityFlaw === 'custom' 
+                    ? 'Describe Your Custom Flaw' 
+                    : 'How Does This Flaw Manifest in Your Character?'}
+                </Label>
+                <Textarea 
+                  id="customFlaw" 
+                  placeholder={character.personalityFlaw === 'custom' 
+                    ? "Describe your character's unique personality flaw..." 
+                    : "Explain how this flaw affects your character's actions and relationships..."}
+                  className="bg-gray-700 min-h-[100px]"
+                />
               </div>
-            </TabsContent>
+            </div>
+          </div>
+          
+          <Separator />
+          
+          {/* Tagline Section */}
+          <div className="space-y-4">
+            <div>
+              <h3 className="text-lg font-semibold">Character Tagline</h3>
+              <p className="text-gray-400 mb-4">
+                Create a memorable catchphrase or motto that encapsulates your character's philosophy or attitude.
+              </p>
+            </div>
             
-            {/* Points Summary Tab */}
-            <TabsContent value="points-summary">
-              <div className="space-y-4">
-                <h3 className="text-lg font-semibold">Character Points Summary</h3>
-                <p className="text-gray-400 mb-4">
-                  A breakdown of how you've spent your character points.
-                </p>
-                
-                <div className="grid gap-4">
-                  <div className="bg-gray-800 p-4 rounded-lg">
-                    <div className="flex justify-between mb-2">
-                      <span>Abilities</span>
-                      <span>{character.pointsSpent.abilities} points</span>
-                    </div>
-                    <Progress value={(character.pointsSpent.abilities / character.pointsSpent.total) * 100} />
-                  </div>
-                  
-                  <div className="bg-gray-800 p-4 rounded-lg">
-                    <div className="flex justify-between mb-2">
-                      <span>Skills</span>
-                      <span>{character.pointsSpent.skills} points</span>
-                    </div>
-                    <Progress value={(character.pointsSpent.skills / character.pointsSpent.total) * 100} />
-                  </div>
-                  
-                  <div className="bg-gray-800 p-4 rounded-lg">
-                    <div className="flex justify-between mb-2">
-                      <span>Powers</span>
-                      <span>{character.pointsSpent.powers} points</span>
-                    </div>
-                    <Progress value={(character.pointsSpent.powers / character.pointsSpent.total) * 100} />
-                  </div>
-                  
-                  <div className="bg-gray-700 p-4 rounded-lg mt-2">
-                    <div className="flex justify-between font-bold">
-                      <span>Total Points Spent</span>
-                      <span>{character.pointsSpent.total} points</span>
-                    </div>
-                  </div>
-                </div>
-                
-                <div className="bg-blue-900/30 p-4 rounded-lg mt-4">
-                  <div className="flex items-start">
-                    <Info className="h-5 w-5 mr-2 text-blue-300 mt-0.5" />
-                    <div>
-                      <h4 className="text-sm font-semibold text-blue-300">Points Allocation Note</h4>
-                      <p className="text-sm text-blue-100 mt-1">
-                        Standard character creation in Rotted Capes uses 100 points: 36 for Abilities, 20 for Skills, 
-                        32 for Powers, and 12 for Weaknesses that can be allocated to any category.
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </TabsContent>
+            <div className="space-y-2">
+              <Label htmlFor="tagline">Tagline</Label>
+              <Input 
+                id="tagline" 
+                value={character.tagline} 
+                onChange={(e) => updateCharacterField('tagline', e.target.value)}
+                placeholder="e.g., 'With great power comes great responsibility'"
+                className="bg-gray-700"
+              />
+              <p className="text-xs text-gray-400 mt-1">
+                A good tagline reflects your character's values and can be referenced during gameplay
+              </p>
+            </div>
             
-            {/* Character Details Tab */}
-            <TabsContent value="character-details">
-              <div className="space-y-6">
-                <h3 className="text-lg font-semibold">Character Details</h3>
-                
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div className="space-y-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="name">Hero Name</Label>
-                      <Input 
-                        id="name" 
-                        value={character.name} 
-                        onChange={(e) => updateCharacterField('name', e.target.value)}
-                        className="bg-gray-700"
-                      />
-                    </div>
-                    
-                    <div className="space-y-2">
-                      <Label htmlFor="secretIdentity">Secret Identity</Label>
-                      <Input 
-                        id="secretIdentity" 
-                        value={character.secretIdentity} 
-                        onChange={(e) => updateCharacterField('secretIdentity', e.target.value)}
-                        className="bg-gray-700"
-                      />
-                    </div>
-                    
-                    <div className="space-y-2">
-                      <Label htmlFor="concept">Concept</Label>
-                      <Input 
-                        id="concept" 
-                        value={character.concept} 
-                        onChange={(e) => updateCharacterField('concept', e.target.value)}
-                        className="bg-gray-700"
-                      />
-                    </div>
-                  </div>
-                  
-                  <div className="space-y-4">
-                    <div className="grid grid-cols-2 gap-4">
-                      <div className="space-y-2">
-                        <Label htmlFor="origin">Origin</Label>
-                        <Input 
-                          id="origin" 
-                          value={character.origin} 
-                          onChange={(e) => updateCharacterField('origin', e.target.value)}
-                          className="bg-gray-700"
-                          readOnly
-                        />
-                      </div>
-                      
-                      <div className="space-y-2">
-                        <Label htmlFor="archetype">Archetype</Label>
-                        <Input 
-                          id="archetype" 
-                          value={character.archetype} 
-                          onChange={(e) => updateCharacterField('archetype', e.target.value)}
-                          className="bg-gray-700"
-                          readOnly
-                        />
-                      </div>
-                    </div>
-                    
-                    <div className="grid grid-cols-2 gap-4">
-                      <div className="space-y-2">
-                        <Label htmlFor="gender">Gender</Label>
-                        <Input 
-                          id="gender" 
-                          value={character.gender} 
-                          onChange={(e) => updateCharacterField('gender', e.target.value)}
-                          className="bg-gray-700"
-                        />
-                      </div>
-                      
-                      <div className="space-y-2">
-                        <Label htmlFor="age">Age</Label>
-                        <Input 
-                          id="age" 
-                          value={character.age} 
-                          onChange={(e) => updateCharacterField('age', e.target.value)}
-                          className="bg-gray-700"
-                        />
-                      </div>
-                    </div>
-                    
-                    <div className="grid grid-cols-2 gap-4">
-                      <div className="space-y-2">
-                        <Label htmlFor="height">Height</Label>
-                        <Input 
-                          id="height" 
-                          value={character.height} 
-                          onChange={(e) => updateCharacterField('height', e.target.value)}
-                          className="bg-gray-700"
-                        />
-                      </div>
-                      
-                      <div className="space-y-2">
-                        <Label htmlFor="weight">Weight</Label>
-                        <Input 
-                          id="weight" 
-                          value={character.weight} 
-                          onChange={(e) => updateCharacterField('weight', e.target.value)}
-                          className="bg-gray-700"
-                        />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                
-                <div className="space-y-2 mt-4">
-                  <Label htmlFor="appearance">Appearance</Label>
-                  <Textarea 
-                    id="appearance" 
-                    value={character.appearance} 
-                    onChange={(e) => updateCharacterField('appearance', e.target.value)}
-                    className="bg-gray-700"
-                    rows={4}
-                  />
-                </div>
-              </div>
-            </TabsContent>
-            
-            {/* Final Touches Tab */}
-            <TabsContent value="final-touches">
-              <div className="space-y-6">
-                <div className="space-y-4">
-                  <h3 className="text-lg font-semibold">Final Touches</h3>
-                  <p className="text-gray-400">
-                    These are the final steps before your character is ready for play.
+            <div className="bg-blue-900/30 p-4 rounded-lg mt-6">
+              <div className="flex items-start">
+                <Info className="h-5 w-5 mr-2 text-blue-300 mt-0.5" />
+                <div>
+                  <h4 className="text-sm font-semibold text-blue-300">Tagline Tips</h4>
+                  <p className="text-sm text-blue-100 mt-1">
+                    Great taglines are short, memorable, and reflect your character's core beliefs.
+                    Think about what motivates your character or what lesson they've learned from their experiences.
+                  </p>
+                  <p className="text-sm text-blue-100 mt-2">
+                    Examples: "Never again will the innocent suffer if I can prevent it." or
+                    "In a world of monsters, be the worst monster."
                   </p>
                 </div>
-                
-                <div className="bg-gray-800 p-4 rounded-lg space-y-4">
-                  <h4 className="text-md font-medium">Pre-Flight Checklist</h4>
-                  
-                  <div className="space-y-2">
-                    <div className="flex items-center">
-                      <Check className="h-5 w-5 mr-2 text-green-400" />
-                      <span>Character background and identity established</span>
-                    </div>
-                    
-                    <div className="flex items-center">
-                      <Check className="h-5 w-5 mr-2 text-green-400" />
-                      <span>Character origin and archetype selected</span>
-                    </div>
-                    
-                    <div className="flex items-center">
-                      <Check className="h-5 w-5 mr-2 text-green-400" />
-                      <span>Character abilities assigned</span>
-                    </div>
-                    
-                    <div className="flex items-center">
-                      <Check className="h-5 w-5 mr-2 text-green-400" />
-                      <span>Character skills and feats selected</span>
-                    </div>
-                    
-                    <div className="flex items-center">
-                      <Check className="h-5 w-5 mr-2 text-green-400" />
-                      <span>Character powers defined</span>
-                    </div>
-                    
-                    <div className="flex items-center">
-                      <Check className="h-5 w-5 mr-2 text-green-400" />
-                      <span>Character weaknesses selected</span>
-                    </div>
-                    
-                    <div className="flex items-center">
-                      <Check className="h-5 w-5 mr-2 text-green-400" />
-                      <span>Character gear and equipment chosen</span>
-                    </div>
-                  </div>
-                </div>
-                
-                <div className="bg-gray-800 p-4 rounded-lg space-y-4">
-                  <h4 className="text-md font-medium">Character Story Hooks</h4>
-                  <p className="text-sm text-gray-400">
-                    Consider adding some personal storylines for your character. These can help the Editor-in-Chief 
-                    create engaging scenarios involving your character.
-                  </p>
-                  
-                  <div className="space-y-3">
-                    <div className="space-y-2">
-                      <Label htmlFor="storyHook1">Personal Goal</Label>
-                      <Textarea 
-                        id="storyHook1" 
-                        placeholder="What does your character hope to accomplish in the post-apocalyptic world?"
-                        className="bg-gray-700"
-                        rows={2}
-                      />
-                    </div>
-                    
-                    <div className="space-y-2">
-                      <Label htmlFor="storyHook2">Unresolved Issue</Label>
-                      <Textarea 
-                        id="storyHook2" 
-                        placeholder="What problem or issue from before Z-Day still haunts your character?"
-                        className="bg-gray-700"
-                        rows={2}
-                      />
-                    </div>
-                    
-                    <div className="space-y-2">
-                      <Label htmlFor="storyHook3">Connection</Label>
-                      <Textarea 
-                        id="storyHook3" 
-                        placeholder="Who is someone important to your character that they've lost contact with?"
-                        className="bg-gray-700"
-                        rows={2}
-                      />
-                    </div>
-                  </div>
-                </div>
-                
-                <div className="flex justify-center space-x-4 mt-8">
-                  <Button onClick={handleSaveCharacter} className="w-40">
-                    <Save className="mr-2 h-4 w-4" />
-                    Save Character
-                  </Button>
-                  <Button 
-                    className="w-60" 
-                    onClick={() => {
-                      if (finishingTouchesRef.current) {
-                        toast({
-                          title: "Generating PDF",
-                          description: "Your character sheet is being generated.",
-                        });
-                      }
-                    }}
-                  >
-                    <FileText className="mr-2 h-4 w-4" />
-                    Download Character Sheet
-                  </Button>
-                </div>
               </div>
-            </TabsContent>
-          </Tabs>
+            </div>
+          </div>
         </CardContent>
       </Card>
       
-      <div className="bg-amber-900/30 p-4 rounded-lg mb-6">
+      <div className="flex justify-between mt-8">
+        <Button 
+          onClick={handleSaveCharacter} 
+          className="bg-green-600 hover:bg-green-700"
+        >
+          <Save className="mr-2 h-4 w-4" />
+          Save Character
+        </Button>
+      </div>
+      
+      <div className="bg-amber-900/30 p-4 rounded-lg mt-8">
         <div className="flex items-start">
           <AlertTriangle className="h-5 w-5 mr-2 text-amber-400 mt-0.5" />
           <div>
-            <h4 className="text-sm font-semibold text-amber-400">Character Approval Required</h4>
+            <h4 className="text-sm font-semibold text-amber-400">One Last Step</h4>
             <p className="text-sm text-amber-200 mt-1">
-              Remember that all new characters need approval from your Editor-in-Chief (Game Master) 
-              before they can be used in play. Make sure to review all your character details 
-              before submitting them for approval.
+              After adding these final touches, proceed to the Summary page to review your complete character
+              and generate your character sheet.
             </p>
           </div>
         </div>
