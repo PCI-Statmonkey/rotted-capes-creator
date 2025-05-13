@@ -36,7 +36,6 @@ type WeaknessType =
   | "Enemy" 
   | "Taboo" 
   | "Origin" 
-  | "Archetype" 
   | "Custom";
 
 // Define weakness interface
@@ -54,7 +53,6 @@ interface Weakness {
     restriction?: string;
     atonement?: string;
     fromOrigin?: boolean;
-    fromArchetype?: boolean;
   };
 }
 
@@ -158,8 +156,8 @@ export default function Step7_Weaknesses() {
     // Set initial points for simple weakness types
     if (type === "DiminishedVitality") {
       initialPoints = 5;
-    } else if (type === "Origin" || type === "Archetype") {
-      initialPoints = 0; // No points for Origin/Archetype weaknesses
+    } else if (type === "Origin") {
+      initialPoints = 0; // No points for Origin weaknesses
     }
     
     setNewWeakness({
@@ -168,8 +166,7 @@ export default function Step7_Weaknesses() {
       description: "",
       points: initialPoints,
       details: {
-        fromOrigin: type === "Origin",
-        fromArchetype: type === "Archetype"
+        fromOrigin: type === "Origin"
       }
     });
   };
@@ -305,7 +302,7 @@ export default function Step7_Weaknesses() {
           </p>
           <p className="border-l-4 border-blue-500 pl-3 italic">
             <span className="font-semibold">Note:</span> Weaknesses that come from your Origin 
-            or Archetype provide no additional points. These are considered inherent to your character type.
+            provide no additional points. These are considered inherent to your character type.
           </p>
         </div>
         
@@ -389,7 +386,6 @@ export default function Step7_Weaknesses() {
                 <SelectItem value="Enemy">Enemy</SelectItem>
                 <SelectItem value="Taboo">Taboo</SelectItem>
                 <SelectItem value="Origin">Origin Weakness</SelectItem>
-                <SelectItem value="Archetype">Archetype Weakness</SelectItem>
                 <SelectItem value="Custom">Custom Weakness</SelectItem>
               </SelectContent>
             </Select>
@@ -659,27 +655,27 @@ export default function Step7_Weaknesses() {
                 </div>
               )}
               
-              {/* Origin/Archetype Weakness */}
-              {(selectedWeaknessType === "Origin" || selectedWeaknessType === "Archetype") && (
+              {/* Origin Weakness */}
+              {selectedWeaknessType === "Origin" && (
                 <div className="space-y-3">
                   <div className="bg-blue-900/30 p-3 rounded-md mb-3">
                     <div className="flex items-center">
                       <Info className="h-5 w-5 mr-2 text-blue-400" />
                       <p className="text-sm text-blue-300 font-medium">
-                        {selectedWeaknessType === "Origin" ? "Origin-based Weakness" : "Archetype-based Weakness"}
+                        Origin-based Weakness
                       </p>
                     </div>
                     <p className="text-sm text-gray-300 mt-1">
-                      This weakness is inherent to your character's {selectedWeaknessType.toLowerCase()} and does not provide any additional points.
+                      This weakness is inherent to your character's origin and does not provide any additional points.
                     </p>
                   </div>
                 
                   <div>
                     <label className="block text-sm mb-1">Weakness Name</label>
                     <Input 
-                      value={newWeakness.name.replace(`${selectedWeaknessType}: `, "")}
-                      onChange={(e) => setNewWeakness({...newWeakness, name: `${selectedWeaknessType}: ` + e.target.value})}
-                      placeholder={`Enter the name of your ${selectedWeaknessType.toLowerCase()}-based weakness`}
+                      value={newWeakness.name.replace("Origin: ", "")}
+                      onChange={(e) => setNewWeakness({...newWeakness, name: "Origin: " + e.target.value})}
+                      placeholder="Enter the name of your origin-based weakness"
                       className="bg-gray-700"
                     />
                   </div>
@@ -689,7 +685,7 @@ export default function Step7_Weaknesses() {
                     <Textarea 
                       value={newWeakness.description}
                       onChange={(e) => setNewWeakness({...newWeakness, description: e.target.value})}
-                      placeholder={`Describe how this ${selectedWeaknessType.toLowerCase()}-based weakness affects your character...`}
+                      placeholder="Describe how this origin-based weakness affects your character..."
                       className="bg-gray-700"
                       rows={3}
                     />
