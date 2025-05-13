@@ -646,42 +646,58 @@ export default function Step6_Powers() {
         {/* Power Set Selection (if applicable) */}
         {powerCreationMethod === "powerSet" && hasPowerSets && (
           <div className="p-4 bg-gray-800 rounded-lg border border-gray-700">
-            <h3 className="font-medium text-lg mb-3">Select a Power Set</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {eligiblePowerSets.map(powerSet => (
-                <div
-                  key={powerSet.name}
-                  className={`
-                    border rounded-lg p-3 cursor-pointer
-                    ${selectedPowerSet === powerSet.name 
-                      ? 'bg-accent/10 border-accent' 
-                      : 'bg-gray-700 border-gray-600 hover:border-gray-500'
-                    }
-                  `}
-                  onClick={() => handlePowerSetSelection(powerSet.name)}
-                >
-                  <div className="flex justify-between items-start mb-2">
-                    <h4 className="font-medium">{powerSet.name}</h4>
-                    {selectedPowerSet === powerSet.name && (
-                      <Check className="h-4 w-4 text-accent" />
-                    )}
-                  </div>
-                  
-                  <div className="space-y-1 text-sm">
-                    <div className="flex flex-wrap gap-1 mt-1">
-                      {powerSet.powers.map((power, idx) => (
-                        <div key={`${power.name}-${idx}`} className="flex items-center">
-                          <span className="bg-gray-900 text-gray-300 px-2 py-0.5 rounded-full text-xs mr-1">
-                            {power.name}
-                          </span>
-                          <span className="text-accent text-xs">{power.score}</span>
-                        </div>
-                      ))}
+            <h3 className="font-medium text-lg mb-3">
+              {selectedPowerSet ? `Power Set Selected` : `Select a Power Set`}
+            </h3>
+            {selectedPowerSet ? (
+              <div className="bg-accent/10 border border-accent rounded-lg p-4">
+                <div className="flex justify-between items-start mb-3">
+                  <h4 className="font-medium text-accent">{selectedPowerSet} Power Set</h4>
+                  <Button 
+                    variant="outline" 
+                    size="sm"
+                    onClick={() => setSelectedPowerSet("")}
+                  >
+                    Change
+                  </Button>
+                </div>
+                <div className="space-y-2">
+                  {eligiblePowerSets.find(ps => ps.name === selectedPowerSet)?.powers.map((power, idx) => (
+                    <div key={`${power.name}-${idx}`} className="flex justify-between items-center bg-gray-700 p-2 rounded">
+                      <span>{power.name}</span>
+                      <span className="font-bold text-accent">{power.score}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {eligiblePowerSets.map(powerSet => (
+                  <div
+                    key={powerSet.name}
+                    className="border rounded-lg p-3 cursor-pointer bg-gray-700 border-gray-600 hover:border-gray-500"
+                    onClick={() => handlePowerSetSelection(powerSet.name)}
+                  >
+                    <div className="flex justify-between items-start mb-2">
+                      <h4 className="font-medium">{powerSet.name}</h4>
+                    </div>
+                    
+                    <div className="space-y-1 text-sm">
+                      <div className="flex flex-wrap gap-1 mt-1">
+                        {powerSet.powers.map((power, idx) => (
+                          <div key={`${power.name}-${idx}`} className="flex items-center">
+                            <span className="bg-gray-900 text-gray-300 px-2 py-0.5 rounded-full text-xs mr-1">
+                              {power.name}
+                            </span>
+                            <span className="text-accent text-xs">{power.score}</span>
+                          </div>
+                        ))}
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            )}
           </div>
         )}
 
