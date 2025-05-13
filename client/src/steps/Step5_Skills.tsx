@@ -642,20 +642,8 @@ export default function Step5_Skills() {
 
         {/* Starting skills & feats selection */}
         <div className="space-y-4 p-4 bg-gray-800 rounded-lg border border-gray-700">
-          <div className="flex justify-between items-center">
-            <div>
-              <h3 className="font-comic text-xl text-accent">Starting Choices</h3>
-              <p className="text-sm text-gray-300">All heroes start with these basic selections.</p>
-            </div>
-            <div className="flex items-center p-2 bg-gray-700 rounded-lg border border-gray-600 shadow-sm">
-              <span className="text-gray-400 text-sm mr-2">Points Available:</span>
-              <span className={`font-bold ${availablePoints < 0 ? 'text-red-500' : 'text-accent'}`}>
-                {availablePoints}
-              </span>
-              <span className="text-gray-400 text-sm ml-1"> / 20</span>
-            </div>
-          </div>
-          <p className="text-sm text-gray-300 mb-2">Complete all starting selections below.</p>
+          <h3 className="font-comic text-xl text-accent">Starting Choices</h3>
+          <p className="text-sm text-gray-300 mb-4">All heroes start with these basic selections.</p>
           
           <div className="space-y-6">
             {/* Starting skills */}
@@ -746,6 +734,26 @@ export default function Step5_Skills() {
                 </div>
               )}
             </div>
+          </div>
+        </div>
+
+        {/* Points available display for additional purchases */}
+        <div className="flex justify-between items-center p-4 bg-gray-800 rounded-lg border border-gray-700">
+          <div>
+            <h3 className="font-medium text-lg">Additional Purchases</h3>
+            <p className="text-sm text-gray-400">Choose skill sets, individual skills, or feats to purchase with your remaining points.</p>
+          </div>
+          <div className="flex flex-col items-end">
+            <div className="flex items-center px-4 py-2 bg-gray-700 rounded-lg border border-gray-600 shadow-md">
+              <span className="text-gray-300 mr-2">Points Available:</span>
+              <span className={`text-xl font-bold ${availablePoints < 0 ? 'text-red-500' : 'text-accent'}`}>
+                {availablePoints}
+              </span>
+              <span className="text-gray-300 ml-1"> / 20</span>
+            </div>
+            {availablePoints < 0 && (
+              <p className="text-xs text-red-400 mt-1">You've spent too many points!</p>
+            )}
           </div>
         </div>
 
