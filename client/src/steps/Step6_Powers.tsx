@@ -138,6 +138,40 @@ const POWER_SETS: PowerSet[] = [
       { name: "Temporal Fugue", score: 12 }
     ],
     requiredArchetypes: ["Speedster"]
+  },
+  // General power sets available to all archetypes
+  {
+    name: "Elemental Control",
+    powers: [
+      { name: "Energy Blast", score: 16 },
+      { name: "Energy Control", score: 16 },
+      { name: "Energy Sheath", score: 14 },
+      { name: "Force Field", score: 14 },
+      { name: "Environmental Control", score: 12 }
+    ]
+    // No requiredArchetypes means available to all
+  },
+  {
+    name: "Psychic",
+    powers: [
+      { name: "Telepathy", score: 16 },
+      { name: "Move Object", score: 16 },
+      { name: "Mental Blast", score: 14 },
+      { name: "Emotion Control", score: 14 },
+      { name: "Force Field", score: 12 }
+    ]
+    // No requiredArchetypes means available to all
+  },
+  {
+    name: "Martial Artist",
+    powers: [
+      { name: "Enhanced Attack", score: 16 },
+      { name: "Enhanced Defense", score: 16 },
+      { name: "Enhanced Ability Score (Dexterity)", score: 14 },
+      { name: "Enhanced Ability Score (Strength)", score: 12 },
+      { name: "Enhanced Accuracy", score: 14 }
+    ]
+    // No requiredArchetypes means available to all
   }
 ];
 
@@ -320,7 +354,8 @@ export default function Step6_Powers() {
   );
 
   // Check if current archetype has any power sets available
-  const hasPowerSets = eligiblePowerSets.length > 0;
+  // Now we'll always have power sets available since we added general ones for all archetypes
+  const hasPowerSets = true;
   
   // Update power creation method if current selection is invalid
   useEffect(() => {
