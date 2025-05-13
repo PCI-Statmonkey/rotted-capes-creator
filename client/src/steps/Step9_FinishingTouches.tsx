@@ -7,11 +7,14 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Separator } from "@/components/ui/separator";
 import { toast } from "@/hooks/use-toast";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Save, AlertTriangle, Info } from "lucide-react";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Save, AlertTriangle, Info, X, Plus } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 
 export default function Step9_FinishingTouches() {
   const { character, updateCharacterField, saveCharacter } = useCharacter();
+  const [customFlaw, setCustomFlaw] = useState("");
+  const [customFlawDescription, setCustomFlawDescription] = useState("");
   
   // Personality flaws for superhero characters
   const personalityFlaws = [
@@ -39,6 +42,42 @@ export default function Step9_FinishingTouches() {
       description: `${character.name} has been saved successfully.`,
     });
   };
+  
+  const toggleFlaw = (flaw: string) => {
+    const currentFlaws = [...character.personalityFlaws];
+    if (currentFlaws.includes(flaw)) {
+      // Remove the flaw if it's already selected
+      updateCharacterField(
+        'personalityFlaws', 
+        currentFlaws.filter(f => f !== flaw)
+      );
+    } else {
+      // Add the flaw if it's not already selected
+      updateCharacterField('personalityFlaws', [...currentFlaws, flaw]);
+    }
+  };
+  
+  const addCustomFlaw = () => {
+    if (customFlaw.trim() === "") return;
+    
+    const flawToAdd = customFlaw.trim();
+    if (!character.personalityFlaws.includes(flawToAdd)) {
+      updateCharacterField('personalityFlaws', [...character.personalityFlaws, flawToAdd]);
+      setCustomFlaw(""); // Clear the input after adding
+      
+      toast({
+        title: "Custom Flaw Added",
+        description: `"${flawToAdd}" has been added to your character's flaws.`,
+      });
+    }
+  };
+  
+  const removeFlaw = (flaw: string) => {
+    updateCharacterField(
+      'personalityFlaws', 
+      character.personalityFlaws.filter(f => f !== flaw)
+    );
+  };
 
   return (
     <div className="container mx-auto px-4 py-6">
@@ -53,51 +92,93 @@ export default function Step9_FinishingTouches() {
         </CardHeader>
         
         <CardContent className="space-y-6">
-          {/* Personality Flaw Section */}
+          {/* Personality Flaws Section */}
           <div className="space-y-4">
             <div>
-              <h3 className="text-lg font-semibold">Personality Flaw</h3>
+              <h3 className="text-lg font-semibold">Personality Flaws</h3>
               <p className="text-gray-400 mb-4">
-                Every hero has a flaw that humanizes them and creates internal conflict. Choose or create a personality flaw for your character.
+                Every hero has flaws that humanize them and create internal conflict. 
+                Choose one or more personality flaws for your character.
               </p>
             </div>
             
-            <div className="grid grid-cols-1 gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="personalityFlaw">Select a Personality Flaw</Label>
-                <Select 
-                  value={character.personalityFlaw || ""} 
-                  onValueChange={(value) => updateCharacterField('personalityFlaw', value)}
-                >
-                  <SelectTrigger className="bg-gray-700">
-                    <SelectValue placeholder="Choose a personality flaw" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {personalityFlaws.map((flaw) => (
-                      <SelectItem key={flaw} value={flaw}>
-                        {flaw}
-                      </SelectItem>
-                    ))}
-                    <SelectItem value="custom">Custom Flaw (describe below)</SelectItem>
-                  </SelectContent>
-                </Select>
+            {/* Selected Flaws Display */}
+            {character.personalityFlaws.length > 0 && (
+              <div className="mb-4">
+                <Label>Selected Flaws</Label>
+                <div className="flex flex-wrap gap-2 mt-2">
+                  {character.personalityFlaws.map((flaw, index) => (
+                    <Badge key={index} variant="secondary" className="px-3 py-1 text-sm flex items-center gap-1">
+                      {flaw}
+                      <button 
+                        onClick={() => removeFlaw(flaw)} 
+                        className="ml-1 text-gray-400 hover:text-gray-100"
+                      >
+                        <X className="h-3 w-3" />
+                      </button>
+                    </Badge>
+                  ))}
+                </div>
               </div>
-              
-              {/* Show text area for custom flaw or elaboration */}
-              <div className="space-y-2">
-                <Label htmlFor="customFlaw">
-                  {character.personalityFlaw === 'custom' 
-                    ? 'Describe Your Custom Flaw' 
-                    : 'How Does This Flaw Manifest in Your Character?'}
-                </Label>
-                <Textarea 
+            )}
+            
+            {/* Flaw Selection Checkboxes */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-2 bg-gray-800 p-4 rounded-lg">
+              {personalityFlaws.map((flaw) => (
+                <div key={flaw} className="flex items-center space-x-2">
+                  <Checkbox 
+                    id={`flaw-${flaw}`} 
+                    checked={character.personalityFlaws.includes(flaw)}
+                    onCheckedChange={() => toggleFlaw(flaw)}
+                  />
+                  <Label 
+                    htmlFor={`flaw-${flaw}`}
+                    className="text-sm cursor-pointer"
+                  >
+                    {flaw}
+                  </Label>
+                </div>
+              ))}
+            </div>
+            
+            {/* Custom Flaw Input */}
+            <div className="space-y-2 mt-4">
+              <Label htmlFor="customFlaw">Add Custom Flaw</Label>
+              <div className="flex gap-2">
+                <Input 
                   id="customFlaw" 
-                  placeholder={character.personalityFlaw === 'custom' 
-                    ? "Describe your character's unique personality flaw..." 
-                    : "Explain how this flaw affects your character's actions and relationships..."}
-                  className="bg-gray-700 min-h-[100px]"
+                  value={customFlaw}
+                  onChange={(e) => setCustomFlaw(e.target.value)}
+                  placeholder="e.g., 'Overconfident - Too sure of their abilities'"
+                  className="bg-gray-700 flex-grow"
                 />
+                <Button 
+                  type="button" 
+                  variant="secondary" 
+                  onClick={addCustomFlaw}
+                  disabled={customFlaw.trim() === ""}
+                >
+                  <Plus className="h-4 w-4 mr-1" />
+                  Add
+                </Button>
               </div>
+              <p className="text-xs text-gray-400 mt-1">
+                Create a custom flaw if none of the predefined options suit your character
+              </p>
+            </div>
+            
+            {/* Flaw Manifestation */}
+            <div className="space-y-2 mt-4">
+              <Label htmlFor="flawDescription">
+                How Do These Flaws Manifest in Your Character?
+              </Label>
+              <Textarea 
+                id="flawDescription" 
+                value={customFlawDescription}
+                onChange={(e) => setCustomFlawDescription(e.target.value)}
+                placeholder="Explain how these flaws affect your character's actions, decisions, and relationships..."
+                className="bg-gray-700 min-h-[100px]"
+              />
             </div>
           </div>
           

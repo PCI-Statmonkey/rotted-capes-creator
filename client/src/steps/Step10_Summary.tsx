@@ -344,8 +344,16 @@ export default function Step10_Summary() {
                 <h4 className="text-base font-medium mb-3">Character Essence</h4>
                 <div className="space-y-3">
                   <div>
-                    <span className="text-gray-400 block mb-1">Personality Flaw:</span>
-                    <span className="font-medium block">{character.personalityFlaw || "—"}</span>
+                    <span className="text-gray-400 block mb-1">Personality Flaws:</span>
+                    {character.personalityFlaws && character.personalityFlaws.length > 0 ? (
+                      <div className="font-medium">
+                        {character.personalityFlaws.map((flaw, index) => (
+                          <div key={index} className="mb-1">• {flaw}</div>
+                        ))}
+                      </div>
+                    ) : (
+                      <span className="block">—</span>
+                    )}
                   </div>
                   <div>
                     <span className="text-gray-400 block mb-1">Tagline:</span>
@@ -419,8 +427,8 @@ export default function Step10_Summary() {
           
           <div className="space-y-2">
             <div className="flex items-center">
-              <Check className={`h-5 w-5 mr-2 ${character.personalityFlaw ? "text-green-400" : "text-gray-500"}`} />
-              <span className={character.personalityFlaw ? "" : "text-gray-500"}>Personality flaw defined</span>
+              <Check className={`h-5 w-5 mr-2 ${character.personalityFlaws.length > 0 ? "text-green-400" : "text-gray-500"}`} />
+              <span className={character.personalityFlaws.length > 0 ? "" : "text-gray-500"}>Personality flaws defined</span>
             </div>
             
             <div className="flex items-center">

@@ -72,7 +72,7 @@ export interface Character {
   appearance: string;
   origin: string;
   archetype: string;
-  personalityFlaw: string;
+  personalityFlaws: string[];
   tagline: string;
   abilities: Abilities;
   skills: Skill[];
@@ -118,7 +118,7 @@ export const createEmptyCharacter = (): Character => ({
   appearance: "",
   origin: "",
   archetype: "",
-  personalityFlaw: "",
+  personalityFlaws: [],
   tagline: "",
   abilities: { ...defaultAbilities },
   skills: [],
