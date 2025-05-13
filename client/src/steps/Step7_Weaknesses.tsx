@@ -65,7 +65,7 @@ const SAMPLE_DEPENDENTS = [
 ];
 
 export default function Step7_Weaknesses() {
-  const { character, updateCharacterField, setCurrentStep } = useCharacter();
+  const { character, updateCharacterField, setCurrentStep, saveCharacter } = useCharacter();
   const [selectedWeaknessType, setSelectedWeaknessType] = useState<WeaknessType | "">("");
   const [newWeakness, setNewWeakness] = useState<Weakness>({
     type: "Custom",
@@ -93,7 +93,9 @@ export default function Step7_Weaknesses() {
 
   // Handle going to previous step
   const handlePrevious = () => {
-    setCurrentStep(6);
+    // Save progress and navigate to previous step
+    saveCharacter();
+    window.location.href = "/creator/6";
   };
 
   // Handle going to next step
@@ -101,7 +103,9 @@ export default function Step7_Weaknesses() {
     // Track the event in analytics
     trackEvent('complete_step', 'character_creation', 'weaknesses');
     
-    setCurrentStep(8);
+    // Save progress and navigate to next step
+    saveCharacter();
+    window.location.href = "/creator/8";
   };
 
   // Add a weakness to the character
@@ -333,12 +337,12 @@ export default function Step7_Weaknesses() {
                 >
                   <div>
                     <div className="flex items-center">
-                      <h4 className="font-medium text-accent">{complication.name}</h4>
+                      <h4 className="font-medium text-accent">{weakness.name}</h4>
                       <span className="ml-2 px-2 py-0.5 bg-gray-700 rounded-full text-xs">
-                        {complication.points} points
+                        {weakness.points} points
                       </span>
                     </div>
-                    <p className="text-sm text-gray-300 mt-1">{complication.description}</p>
+                    <p className="text-sm text-gray-300 mt-1">{weakness.description}</p>
                   </div>
                   <Button 
                     variant="ghost" 
