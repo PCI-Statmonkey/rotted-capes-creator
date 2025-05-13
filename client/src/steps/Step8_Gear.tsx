@@ -154,19 +154,41 @@ export default function Step8_Gear() {
   const [acquisitionPoints, setAcquisitionPoints] = useState(5); // Default 5 AP
   const [expandedAccordion, setExpandedAccordion] = useState<string[]>(['go-bag']);
 
-  // Update acquisition points whenever character's gear changes
-  useEffect(() => {
-    // Here you would calculate remaining AP based on character's gear
-    // For simplicity, we'll just keep a fixed amount
-    const usedPoints = character.gear.reduce((total, item) => {
-      // In a real app, you'd calculate based on the item's cost
-      // This is just a placeholder
-      return total + 0; 
-    }, 0);
+  // Store weapon and equipment associations to track AP costs
+  const [itemApCosts, setItemApCosts] = useState<Record<string, number>>({});
+  
+  // Calculate bonus AP from feats
+  const calculateBonusApFromFeats = (): number => {
+    // Look for feats that grant bonus AP
+    const bonusApFeats = [
+      { name: "Scavenger", apBonus: 2 },
+      { name: "Lucky Find", apBonus: 1 },
+      { name: "Well Equipped", apBonus: 3 }
+    ];
     
-    // Starting with 5 points
-    setAcquisitionPoints(5 - usedPoints);
-  }, [character.gear]);
+    let bonusAp = 0;
+    character.feats.forEach(feat => {
+      const matchingFeat = bonusApFeats.find(f => f.name === feat.name);
+      if (matchingFeat) {
+        bonusAp += matchingFeat.apBonus;
+      }
+    });
+    
+    return bonusAp;
+  };
+  
+  // Update acquisition points whenever character's gear or feats change
+  useEffect(() => {
+    // Calculate used AP based on tracked item costs
+    const usedPoints = Object.values(itemApCosts).reduce((total, cost) => total + cost, 0);
+    
+    // Base AP is 5, plus any bonus from feats
+    const baseAp = 5;
+    const bonusAp = calculateBonusApFromFeats();
+    
+    // Set remaining AP
+    setAcquisitionPoints(baseAp + bonusAp - usedPoints);
+  }, [character.gear, character.feats, itemApCosts]);
 
   const handleGoBagSelect = (value: string) => {
     if (value in goBags) {
@@ -204,16 +226,24 @@ export default function Step8_Gear() {
 
   const handleAddWeapon = (weapon: WeaponItem) => {
     if (acquisitionPoints >= weapon.ap) {
+      // Create a unique ID for this item to track its AP cost
+      const itemId = `weapon_${weapon.name}_${Date.now()}`;
+      
+      // Add the gear item
       addGearItem({
         name: weapon.name,
         description: `${weapon.description}${weapon.damage ? ` | Damage: ${weapon.damage}` : ''}${weapon.range ? ` | Range: ${weapon.range}` : ''}`
       });
       
-      setAcquisitionPoints(prev => prev - weapon.ap);
+      // Track this item's AP cost
+      setItemApCosts(prev => ({
+        ...prev,
+        [itemId]: weapon.ap
+      }));
       
       toast({
         title: "Weapon Added",
-        description: `${weapon.name} has been added to your inventory.`,
+        description: `${weapon.name} has been added to your inventory (${weapon.ap} AP).`,
       });
     } else {
       toast({
@@ -226,16 +256,24 @@ export default function Step8_Gear() {
 
   const handleAddEquipment = (equip: EquipmentItem) => {
     if (acquisitionPoints >= equip.ap) {
+      // Create a unique ID for this item to track its AP cost
+      const itemId = `equipment_${equip.name}_${Date.now()}`;
+      
+      // Add the gear item
       addGearItem({
         name: equip.name,
         description: equip.description
       });
       
-      setAcquisitionPoints(prev => prev - equip.ap);
+      // Track this item's AP cost
+      setItemApCosts(prev => ({
+        ...prev,
+        [itemId]: equip.ap
+      }));
       
       toast({
         title: "Equipment Added",
-        description: `${equip.name} has been added to your inventory.`,
+        description: `${equip.name} has been added to your inventory (${equip.ap} AP).`,
       });
     } else {
       toast({
@@ -269,8 +307,7 @@ export default function Step8_Gear() {
   };
 
   const handleRemoveGearItem = (index: number) => {
-    // If the item is a weapon or equipment that costs AP, refund the points
-    // This is a simplified implementation
+    // Get the item before it's removed
     const item = character.gear[index];
     
     // Check if it's a Go-Bag main entry
@@ -300,24 +337,48 @@ export default function Step8_Gear() {
       return;
     }
     
-    // Otherwise, just remove the single item
+    // Find matching AP costs for this item to refund points
+    const weaponMatch = weapons.find(w => w.name === item.name);
+    const equipMatch = equipment.find(e => e.name === item.name);
+    
+    // Remove the single item
     removeGearItem(index);
     
-    // Refund points for specific items (in a real implementation, you'd look up the actual cost)
-    const weaponMatch = weapons.find(w => w.name === item.name);
-    if (weaponMatch) {
-      setAcquisitionPoints(prev => prev + weaponMatch.ap);
-    }
-    
-    const equipMatch = equipment.find(e => e.name === item.name);
-    if (equipMatch) {
-      setAcquisitionPoints(prev => prev + equipMatch.ap);
-    }
-    
-    toast({
-      title: "Item Removed",
-      description: `${item.name} has been removed from your inventory.`,
+    // Find the key in itemApCosts for this item and remove it
+    // We're looking for any entries that match this item's name
+    const matchingKeys = Object.keys(itemApCosts).filter(key => {
+      return (
+        (key.startsWith('weapon_') && key.includes(item.name)) || 
+        (key.startsWith('equipment_') && key.includes(item.name))
+      );
     });
+    
+    if (matchingKeys.length > 0) {
+      // Only remove the first matching key since we're removing one item at a time
+      const keyToRemove = matchingKeys[0];
+      
+      // Create a new AP costs object without this key
+      const newApCosts = {...itemApCosts};
+      delete newApCosts[keyToRemove];
+      
+      // Update the AP costs state
+      setItemApCosts(newApCosts);
+      
+      // Inform the user that AP was refunded
+      let apRefunded = 0;
+      if (weaponMatch) apRefunded = weaponMatch.ap;
+      if (equipMatch) apRefunded = equipMatch.ap;
+      
+      toast({
+        title: "Item Removed",
+        description: `${item.name} has been removed from your inventory${apRefunded > 0 ? ` (${apRefunded} AP refunded)` : ''}.`,
+      });
+    } else {
+      toast({
+        title: "Item Removed",
+        description: `${item.name} has been removed from your inventory.`,
+      });
+    }
   };
 
   return (
@@ -331,10 +392,36 @@ export default function Step8_Gear() {
             {acquisitionPoints} AP Remaining
           </Badge>
         </div>
-        <p className="text-gray-300">
+        <p className="text-gray-300 mb-2">
           Use your acquisition points to obtain weapons and equipment. 
           Each character starts with 5 AP and one Go-Bag of choice.
         </p>
+        
+        {/* AP Bonus from Feats Section */}
+        {calculateBonusApFromFeats() > 0 && (
+          <div className="mt-3 bg-blue-900/30 p-3 rounded-md">
+            <h3 className="text-sm font-semibold text-blue-300 mb-1">Feat Bonuses</h3>
+            <div className="space-y-1">
+              {character.feats.map((feat, idx) => {
+                const bonusFeat = [
+                  { name: "Scavenger", apBonus: 2 },
+                  { name: "Lucky Find", apBonus: 1 },
+                  { name: "Well Equipped", apBonus: 3 }
+                ].find(f => f.name === feat.name);
+                
+                if (bonusFeat) {
+                  return (
+                    <div key={idx} className="flex justify-between text-sm">
+                      <span>{bonusFeat.name}</span>
+                      <span className="text-green-400">+{bonusFeat.apBonus} AP</span>
+                    </div>
+                  );
+                }
+                return null;
+              })}
+            </div>
+          </div>
+        )}
       </div>
       
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
