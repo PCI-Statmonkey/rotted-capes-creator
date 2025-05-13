@@ -10,9 +10,47 @@ import Step4_Abilities from "@/steps/Step4_Abilities";
 import Step5_Skills from "@/steps/Step5_Skills";
 import Step6_Powers from "@/steps/Step6_Powers";
 import { WIZARD_STEPS } from "@/lib/utils";
+import { useLocation, useParams, useRoute } from "wouter";
 
 export default function Creator() {
-  const { currentStep } = useCharacter();
+  const { currentStep, setCurrentStep } = useCharacter();
+  const params = useParams();
+  const [location, setLocation] = useLocation();
+  
+  // Sync URL with current step
+  useEffect(() => {
+    // If we have a step parameter in the URL
+    if (params && params.step) {
+      const stepName = params.step.toLowerCase();
+      // Find the corresponding step number
+      const stepObject = WIZARD_STEPS.find(step => 
+        step.name.toString().toLowerCase().replace(/[^a-z0-9]/g, '') === stepName
+      );
+      
+      if (stepObject) {
+        setCurrentStep(stepObject.id);
+      }
+    }
+  }, [params, setCurrentStep]);
+  
+  // Update URL when step changes
+  useEffect(() => {
+    if (currentStep > 0 && currentStep <= WIZARD_STEPS.length) {
+      const stepObject = WIZARD_STEPS.find(step => step.id === currentStep);
+      
+      if (stepObject) {
+        const stepNameForUrl = stepObject.name
+          .toString()
+          .toLowerCase()
+          .replace(/[^a-z0-9]/g, '');
+        
+        // Only update if the URL doesn't already match
+        if (!location.includes(`/creator/${stepNameForUrl}`)) {
+          setLocation(`/creator/${stepNameForUrl}`);
+        }
+      }
+    }
+  }, [currentStep, setLocation, location]);
   
   // Function to render the current step component
   const renderStep = () => {

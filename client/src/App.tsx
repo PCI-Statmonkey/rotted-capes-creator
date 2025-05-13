@@ -25,8 +25,16 @@ function AppRouter() {
       <Switch>
         <Route path="/" component={Home} />
         <Route path="/creator">
-          {/* Wrap the Creator component with CharacterProvider */}
+          {/* Wrap the Creator component with CharacterProvider - base route */}
           {() => (
+            <CharacterProvider>
+              <Creator />
+            </CharacterProvider>
+          )}
+        </Route>
+        <Route path="/creator/:step">
+          {/* Handle step-specific URLs */}
+          {(params) => (
             <CharacterProvider>
               <Creator />
             </CharacterProvider>
