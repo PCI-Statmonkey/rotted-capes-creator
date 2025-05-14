@@ -50,23 +50,71 @@ export default function Step4_Abilities() {
   
   // Get origin and archetype bonuses
   const getOriginBonus = (ability: string): number => {
+    // For newer origin formats that include type in parentheses
+    const originName = character.origin.split('(')[0].trim();
+    
+    // Handle special cases for Highly Trained with custom ability bonuses
+    if (originName === "Highly Trained" && character.origin.includes("Bonuses:")) {
+      const bonusText = character.origin.match(/Bonuses: (.*)\)/)?.[1] || "";
+      if (bonusText.includes(`+1 ${ability.charAt(0).toUpperCase() + ability.slice(1)}`)) {
+        return 1;
+      }
+      return 0;
+    }
+    
+    // Handle special cases for Mystic with subtypes
+    if (originName === "Mystic" && character.origin.includes("(")) {
+      // Extract subtype
+      const mysticType = character.origin.match(/Mystic \(([^:]+):/)?.[1]?.trim();
+      
+      if (mysticType === "Practitioner") {
+        if (ability === "wisdom") return 2;
+        if (ability === "charisma") return 1;
+      } else if (mysticType === "The Chosen") {
+        if (ability === "wisdom") return 2;
+        if (ability === "constitution") return 1;
+      } else if (mysticType === "Enchanter") {
+        if (ability === "wisdom") return 2;
+        if (ability === "intelligence") return 1;
+      } else {
+        // Default Mystic bonuses
+        if (ability === "wisdom") return 2;
+        if (ability === "charisma") return 1;
+      }
+      
+      return 0;
+    }
+    
+    // Default bonuses by origin
     const bonuses: Record<string, Record<string, number>> = {
-      "Super-Human": { strength: 2, constitution: 1 },
-      "Tech Hero": { intelligence: 2, dexterity: 1 },
-      "Mystic": { wisdom: 2, charisma: 1 },
-      "Highly Trained": { dexterity: 2, strength: 1 },
-      "Alien": { constitution: 2, intelligence: 1 },
-      "Demi-God": { charisma: 2, wisdom: 1 }
+      "Super-Human": { strength: 0, constitution: 2 },
+      "Tech Hero": { intelligence: 2, dexterity: 0 },
+      "Mystic": { wisdom: 2, charisma: 0 },
+      "Highly Trained": { dexterity: 0, strength: 0, constitution: 0 },
+      "Alien": { strength: 2, intelligence: 0 },
+      "Android": { intelligence: 2 },
+      "Cosmic": { constitution: 1, strength: 0, dexterity: 0, intelligence: 0, wisdom: 0, charisma: 0 }, // + any bonus
+      "Demigod": { strength: 0, dexterity: 0, constitution: 0, intelligence: 0, wisdom: 0, charisma: 0 } // any +2
     };
     
-    return bonuses[character.origin]?.[ability] || 0;
+    return bonuses[originName]?.[ability] || 0;
   };
   
   const getArchetypeBonus = (ability: string): number => {
+    // Get just the archetype name without any additional info
+    const archetypeName = character.archetype.split('(')[0].trim();
+    
     const bonuses: Record<string, Record<string, number>> = {
+      "Andromorph": { constitution: 2 },
+      "Blaster": { dexterity: 1, intelligence: 1 },
+      "Brawler": { strength: 2 },
+      "Controller": { intelligence: 1, wisdom: 1 },
+      "Heavy": { constitution: 1, strength: 1 },
+      "Infiltrator": { dexterity: 2 },
+      "Transporter": { dexterity: 1, constitution: 1 },
+      // Legacy archetypes (keeping for backward compatibility)
       "Bruiser": { strength: 1, constitution: 1 },
       "Speedster": { dexterity: 2 },
-      "Blaster": { intelligence: 1, dexterity: 1 },
       "Defender": { constitution: 2 },
       "Gadgeteer": { intelligence: 2 },
       "Mentalist": { wisdom: 1, intelligence: 1 },
@@ -74,7 +122,7 @@ export default function Step4_Abilities() {
       "Shapeshifter": { constitution: 1, dexterity: 1 }
     };
     
-    return bonuses[character.archetype]?.[ability] || 0;
+    return bonuses[archetypeName]?.[ability] || 0;
   };
   
   // Get total bonus for an ability
@@ -216,12 +264,13 @@ export default function Step4_Abilities() {
   // Handle going to next step
   const handleContinue = () => {
     // Update all ability scores in the character context
+    // Base scores only - bonuses will be applied when needed
     Object.keys(localAbilities).forEach((ability) => {
       const abilityKey = ability as keyof typeof localAbilities;
       updateAbilityScore(abilityKey, localAbilities[abilityKey].value);
     });
     
-    // Update derived stats based on new abilities
+    // Update derived stats based on new abilities (including bonuses)
     updateDerivedStats();
     
     // Track event in analytics
@@ -261,6 +310,17 @@ export default function Step4_Abilities() {
         <p className="text-gray-300 mt-2">
           Assign your character's ability scores and see bonuses from your Origin and Archetype.
         </p>
+        <div className="flex items-center gap-4 mt-3 text-xs bg-gray-800 p-2 rounded-md">
+          <div className="flex items-center">
+            <span className="text-sm font-medium text-gray-400">10</span>
+            <span className="mx-1 text-sm text-green-500">+2</span>
+            <span className="text-sm font-bold ml-1">12</span>
+            <span className="ml-1 text-gray-400">(+1)</span>
+          </div>
+          <div className="text-gray-400">
+            <span className="font-medium">Format:</span> Base Score + Origin/Archetype Bonus = Final Score (Modifier)
+          </div>
+        </div>
       </div>
 
       <div className="space-y-6">
@@ -382,11 +442,19 @@ export default function Step4_Abilities() {
                 <div className="flex justify-between items-center mb-2">
                   <h3 className="font-comic text-lg truncate">{formatAbilityName(ability)}</h3>
                   <div className="flex items-center">
-                    <span className="text-lg font-bold">{abilityValue}</span>
-                    <span className="ml-2 text-gray-400">({formatModifier(abilityMod)})</span>
+                    {/* Base score */}
+                    <span className="text-sm font-medium text-gray-400">{abilityValue}</span>
+                    
+                    {/* Bonus from origin/archetype */}
                     {bonus > 0 && (
-                      <span className="ml-2 text-green-500">+{bonus}</span>
+                      <span className="mx-1 text-sm text-green-500">+{bonus}</span>
                     )}
+                    
+                    {/* Final score */}
+                    <span className="text-lg font-bold ml-1">{abilityValue + bonus}</span>
+                    
+                    {/* Modifier based on final score */}
+                    <span className="ml-2 text-gray-400">({formatModifier(calculateModifier(abilityValue + bonus))})</span>
                   </div>
                 </div>
                 
