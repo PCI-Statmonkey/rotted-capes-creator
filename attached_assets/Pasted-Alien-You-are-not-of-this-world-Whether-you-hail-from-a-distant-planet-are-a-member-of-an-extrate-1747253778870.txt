@@ -1,0 +1,509 @@
+Alien
+You are not of this world. Whether you hail from a distant planet, are a member of an extraterrestrial race, or from another dimension, your origins lie beyond. Your alien nature grants you unique abilities and perspectives that set you apart from humanity. 
+Perhaps you arrived on Earth as an ambassador of your people, or maybe you were stranded here, your spacecraft damaged beyond repair, forcing you to adapt to survive. Regardless of the circumstances, you are now a stranger in a strange land, facing the dual challenges of the zombie apocalypse and the mysteries of this new world.
+Your alien heritage brings both advantages and challenges. You may possess advanced technology, telepathic abilities, or physical attributes beyond human limits. However, you also grapple with the struggle of finding your place among humans, building trust, and understanding their customs and culture.
+
+Ability Score Bonus: 
+As an Alien, your unique physiology grants you enhanced physical attributes. You gain a +2 bonus to your Strength score.
+
+Unique Advantages: 
+Alien Resilience: Your alien physiology grants you natural resistance to physical harm. You have an innate Damage Resistance (DR) of 1 against all physical damage, which stacks with any other sources of DR. Additionally, you have advantage on saving throws against poisons.
+Advanced Technology: Your knowledge and access to advanced alien technology provide you with unique tools and gadgets. Any powers that apply the removable item power modification have their power scores increased by +1.
+Unique Disadvantages: 
+Cultural Misunderstanding: Your alien nature and cultural background may lead to misunderstandings and difficulties in interacting with humans. You have a disadvantage on Insight checks when trying to understand human behavior and social cues. Additionally, specific actions or customs that are commonplace for your alien race may be seen as strange or alarming to humans, potentially leading to tension or hostility.
+Lost Connection: Being trapped on Earth during the zombie apocalypse has severed your ties to your alien home world. You no longer have access to the resources and support from your alien civilization. Any attempt to contact or seek assistance from your home world is uncertain at best.
+Origin Features: As you advance in level (see Hero Advancement pg. xx), at specific levels, you will be granted Origin Features; when you do, choose one of the options from the list below. You may only choose A-Lister Rank Origin Features once you reach gamma level 1.
+B-Lister Rank Origin Features
+Alien Adaptation
+Alien Physiology
+Alien Technology Expert
+Ethereal Connection
+Enhanced Strength
+Unearthly Speed
+A-Lister Rank Origin Features
+Alien Empathy
+Alien Physiology
+Alien Technology Specialist
+Cosmic Beacon 
+
+B-Lister Rank Origin Features
+Alien Adaptation: You have DR: 1 vs. one damage type you choose. This DR stacks with DR from other sources.
+Alien Physiology: Increase your Constitution score and another ability score of your choice by 1; you may take this feature multiple times.
+Alien Technology Expert: You are now trained in Engineering/Alien Technology, allowing you to identify, repair, and utilize advanced devices with ease. If you are already trained in Engineering/Alien Technology you gain skill focus in it instead. 
+Enhanced Strength: You possess incredible strength, allowing you to lift and carry heavy objects easily. Your strength score is doubled to determine how much you can lift, carry, or drag. You also have advantage on Strength checks and saving throws.
+Ethereal Connection: Increase the power score of any two of your inborn powers by 1; you may take this feature multiple times.
+Unearthly Speed: Your unearthly agility and reflexes grant you incredible speed. You can now apply your total dexterity modifier to your pace score (ignoring the cap of 5 areas). Additionally, you may increase your pace by 1 area or gain a +1 to your avoidance. You can choose this feature twice to gain both options.
+A-Lister Rank Origin Features
+Cosmic Beacon: Your alien presence emits a unique cosmic energy that can empower or disrupt other beings. Once per scene, as a bonus action, when within 2 areas of another powered creature, you may modify the power score of any of their abilities by +2 or -2 until the end of their next turn.
+Alien Empathy: Your cosmic connection allows you to sense and understand the emotions and intentions of other beings. You gain a +2 bonus to your Charisma checks when attempting to persuade, deceive, or empathize with creatures.
+Alien Physiology: You gain the life support power at a power rank equal to your charisma score. If you already possess this power, it increases to match your charisma score or is increased by +4 if already higher than your charisma score. 
+Alien Technology Specialist: If you arer trained in Engineering/Alien Technology you are now focused in it. Additionally, you can quickly kit bash alien technology on the fly as long as you have some raw materials to work with. You gain Dynamic Power at a power score equal to your charisma score. If you already possess this power, you gain another instance of this power instead. Any power you manifest through this version of Dynamic Power must have an external energy source and be a removable object. Any object you create ceases to function at the end of the scene.  
+Android
+You are some form of mechanical creation, be it a self-aware robot, an artificially-constructed human, or even a human brain in a cybernetic body. You have an inorganic makeup and are relatively immune to most diseases. Making you a very valuable member of any enclave. However, that said…. 
+<side bar>
+Editor’s Note: 
+Being immune to infection may make the Android too effective for the zombie apocalypse. You may want to consider the possibility of a machine-based virus allowing for mechanical zombies. See “Zombies and Non-Humans,” p. XX, for more options. 
+</side bar>
+Ability Score Bonus: 
+Androids are a varied lot, but their digital minds allow them to recall information with ease. You gain +2 to your Intelligence score.
+Unique Advantages: 
+Artificial Mind: being an artificial life form, you are not susceptible to emotions that drive carbon-based life forms. As such, you cannot be easily frightened; you gain a +5 bonus to saving throws and a +2 bonus to your willpower defense when resisting the effects of psychosis or any effect that would frighten you.
+Unique Disadvantages: 
+Lack of Emotion: you suffer a -5 penalty on all insight rolls to read another’s emotional state. 
+Origin Features: As you advance in level (see Hero Advancement pg. xx), at specific levels, you will be granted Origin Features; when you do, choose one of the options from the list below. You may only choose A-Lister Rank Origin Features once you reach gamma level 1.
+B-Lister Rank Origin Features
+Adaptive Learning
+Adaptive Modifications
+Data Analysis
+Enhanced Capabilities
+Enhanced Durability
+Enhanced Strength
+Self-Repair
+A-Lister Rank Origin Features
+Combat Computer
+Digital Mind Interface
+Tactical Combat Records
+
+B-Lister Rank Origin Features 
+Adaptive Learning: You become trained in one skill. 
+
+Adaptive Modifications: Increase your Intelligence score and another ability score of your choice by 1. You may take this feature multiple times.
+
+Data Analysis: Your digital mind excels at analyzing patterns and gathering information. You gain a +2 bonus to Investigation and Insight checks. You may take this feature multiple times, increasing the bonus by +1 each additional time you take this feature to a maximum of +5.
+
+Enhanced Capabilities: Increase the power score of any two of your inborn powers by 1. You may take this feature multiple times.
+
+Enhanced Durability: You have DR: 1 vs. all physical damage. This DR stacks with DR from other sources.
+
+Enhanced Strength: You possess incredible strength, allowing you to lift and carry heavy objects easily. Your strength score is doubled to determine how much you can lift, carry, or drag. You also have advantage on Strength checks and saving throws.
+
+Self-Repair: Your android body can repair itself over time. When you heal a wound, you heal two instead. 
+A-Lister Rank Origin Features
+Combat Computer: As a bonus action, you can dedicate most of your processing power to your combat computer, allowing it to take control. While in your combat computer is active, the following benefits apply for 1 minute:
+
+•	Advantage on Attacks: You gain advantage on all attack rolls.
+•	Precision: Your attacks deal an additional 1d6 damage of the same type. 
+•	Unreal Reflexes: you gain a +1 bonus to your Avoidance.
+
+After using this feature, you wait 1 week before using it again. You may retake this feature when you reach Theta (rank 6) Level Category, reducing the time between uses to a long rest.
+
+Digital Mind Interface: You can wirelessly connect to computer systems to easily access information and control technology. You gain the Wireless power at a power score equal to your Intelligence score. If you already have the wireless power, increase your power score in that power by +4 if the score is higher than your intelligence score.
+
+Tactical Combat Records: After fighting someone for 2 rounds, you gain a +1 bonus to hit and a +1 bonus to your defenses against that creature. You may retain data on as many creatures as your intelligence bonus. 
+
+Cosmic
+You can tap into and channel the energies that permeate the universe. How you gained these powers is up to you, but you might possess an alien artifact that draws upon such energies or may someone have granted you these powers to help keep law and order in this small section of the universe. However, despite your origin, you’re still a B-Lister and only possess a fraction of the power cosmically enhanced A-Listers can sling around. In other words, no flying through space unaided, defending entire solar systems all by yourself, or destroying starships with a single energy blast. And worse yet, you’re now trapped in a world overrun by the living dead. Your starship may be damaged, your interstellar flight ring has gone missing, or with your mentor gone, you have sworn to eradicate the zombie threat in their memory.
+The reason doesn’t matter. What does matter is that you’re in for the long haul and are here to stay.
+Ability Bonus: 
+Comic beings come in many shapes, but the rigors of being a vessel for such power demand a level of durability. You gain +1 to your Constitution and one other ability score of your choice.
+Unique Advantages:
+Limitless Cosmic Power: The energies that permeate the universe are nigh inexhaustible. You receive the Increased Burnout Power Feat. Additionally, all your inborn powers are Cosmic in nature. 
+
+Unique Disadvantages:
+Power Limits: While you have access to unending cosmic energy, you don’t have an unending suite of powers to call upon. You can only gain new inborn powers through mastering emulated powers based on your existing inborn powers. 
+Later, with Editor-in-Chief’s permission, you may acquire new powers, but none of them can be Inborn powers; they must be made available through technology, supernatural, or some other external source. Certain story-based events, such as exposure to a nuclear reactor, massive amounts of solar radiation, or other such esoteric energies, may allow you to acquire new inborn powers. 
+
+Origin Features: As you advance in level (see Hero Advancement pg. xx), at specific levels, you will be granted Origin Features; when you do, choose one of the options from the list below. You may only choose A-Lister Rank Origin Features once you reach gamma level 1.
+B-Lister Rank Origin Features
+Cosmic Adaptation
+Cosmic Awareness
+Cosmic Ascendance
+Cosmic Evolution
+Cosmic Resistance
+Infinite Cosmic Power
+Power Mastery
+A-Lister Rank Origin Features
+Cosmic Entanglement
+Cosmic Transformation
+Stellar Manipulation
+
+B-Lister Level Origin Features 
+Cosmic Adaptation: Adapt to various environments and conditions in space, such as extreme temperatures or lack of oxygen. You gain the power of Life Support: 40. This power is limited to space, allowing you to exist and operate in the extreme temperatures and vacuum of space.  
+
+Cosmic Awareness: Your connection to the cosmos grants you heightened senses and the ability to detect hidden threats or sources of power. You can sense the use of cosmic-based powers or events within a number of miles equal to your wisdom bonus. You can gauge the general power level classification of the cosmic event with a successful Wisdom Check vs. a DC: 20, -5 for each power level classification above Gamma, so gauging a Theta level event would require a DC 5 Charisma Check.
+
+Cosmic Ascendance: Increase the power score of any two of your cosmic powers by +1. You may take this feature multiple times.
+Cosmic Evolution: Increase your Constitution score and another ability score of your choice by 1. You may take this feature multiple times.
+Cosmic Resistance: You have DR 1 vs. cosmic-based attacks and effects, stacks with other effects. You may choose this feature more than once, gaining a +1 each additional time you take this feature to a maximum of +5. 
+
+Infinite Cosmic Power: Increase your burnout threshold by 2 
+
+Power Mastery: Choose a power feat.
+A-Lister Level Origin Features
+Cosmic Entanglement: All cosmic-level heroes tap into the same reserves. You have learned how to manipulate the flow of the cosmic, empowering or disempowering those around you that tap into that power. Once per scene, as a bonus action, when within 2 areas of another cosmic-powered creature, you may modify the power score of any of their Cosmic themed powers by +2 or -2 until the end of their next turn. 
+
+Cosmic Transformation: Tapping into the cosmic power, you unleash your true potential and undergo a temporary transformation. You can activate Cosmic Transformation as a bonus action. While in your cosmic form, the following benefits apply for 1 minute:
+
+•	Advantage on Attacks: You gain advantage on all attack rolls.
+•	Resilience: You have advantage on all saving throws and ability checks. 
+•	Cosmic Overcharge: Choose one of your cosmic powers, and that power’s score is increased by +4 
+
+After using this feature, you wait 1 week before using it again. You may retake this feature when you reach Theta (rank 6) Level Category, reducing the time between uses to a long rest.
+Stellar Manipulation: Harness the power of stars to unleash devastating energy attacks. You gain the Energy Manipulation (Cosmic) power with a power score equal to your Charisma score. If you already have the Energy Manipulation (Cosmic) power, increase your power score in that power by +4 if the score is higher than your Charisma score.
+Demigod
+You are a ‘divine’ being. Or at least you claim to be. It is possible you’re the result of the union between a god and a mortal, or you may be the avatar of such a being, sent to Earth to work its will. Before Z-Day, other superheroes figured you were either a powerful alien, a deluded mutant, another form of superhuman, a visitor from another dimension, or a walking example of ‘any sufficiently advanced technology is indistinguishable from magic.’ After Z-Day, all that mattered was that you were alive and could deal with the zombie threat.
+
+Ability Bonus: 
+Demigods are as different as the deities of the varied pantheons as such, you get a +2 bonus to one ability score of your choice or +1 to any two ability scores of your choice. 
+Unique Advantages:
+Divine Blood, Divine Power: as a demigod, you possess a mystical and physical connection to the essence of your divine lineage, which allows you to push beyond the limits of mere mortals. You receive the Power Surge Power Feat. 
+
+Unique Disadvantages:
+Divine Power Limits: After character creation, at least half of your powers must be Inborn Powers, with all other powers being tied to one supernatural object. You can only gain new inborn powers through mastering emulated powers based on your existing inborn powers.
+Later, with Editor-in-Chief’s permission, you may acquire new powers, but none of them can be Inborn powers; they must be made available through technology, supernatural, or some other external source. Of course, certain story-based events tied to your Demigod’s mythological theme may allow you to gain new inborn powers. 
+
+Origin Features: As you advance in level (see Hero Advancement pg. xx), at specific levels, you will be granted Origin Features; when you do, choose one of the options from the list below. You may only choose A-Lister Rank Origin Features once you reach gamma level 1. 
+B-Lister Rank Origin Features
+Divine Ascendance
+Divine Blessing
+Divine Bloodline
+Divine Presence
+Divine Sense
+Enhanced Strength
+Unearthly Speed
+A-Lister Rank Origin Features
+Divine Intervention
+Divine Transformation
+Divine Resistance
+
+B-Lister Level Origin Features 
+Divine Ascendance: Increase the power score of any two of your inborn powers by 1. You may take this feature multiple times.
+
+Divine Blessing: The gods smile upon you, granting you a permanent boon. Choose one of the following benefits: +1 bonus to avoidance, +1 grit, or +1 to all attack rolls. This benefit cannot be changed once chosen.
+
+Divine Bloodline: Increase the ability score or scores modified by your origin during hero creation by 2 or 1, respectively. You may take this feature multiple times. For example, if you choose to increase Strength by +2 during hero creation, you gain a +2 to strength when choosing this feature. 
+
+Divine Presence: Your presence exudes an aura of power and authority, influencing the behavior of others and benefiting in social interactions. You gain a +2 bonus on all influence skill checks. You may take this feature multiple times, gaining a +1 each additional time you take this feature to a maximum of +5.
+
+Divine Sense: Your connection to the divine allows you to sense the presence of undead creatures. You have a +5 bonus on Perception skill checks to detect undead and can detect their presence within 30 feet, even through walls and obstacles.
+
+Enhanced Strength: You possess incredible strength, allowing you to lift and carry heavy objects easily. Your strength score is doubled to determine how much you can lift, carry, or drag. You also have advantage on Strength checks and saving throws.
+
+Unearthly Speed: Your unearthly agility and reflexes grant you incredible speed. You can now apply your total dexterity modifier to your pace score (ignoring the cap of 5 areas). Additionally, you may increase your pace by 1 area or gain a +1 to your avoidance. You can choose this feature twice to gain both options. 
+A-Lister Level Origin Features
+Divine Intervention:  You can call upon the divine power within you to alter the course of events. When making a saving throw, you can choose to roll with advantage.  You regain the use of this feature after completing a long rest. 
+
+Divine Transformation: Embracing your divine lineage, you can tap into your true potential and undergo a temporary transformation. You can activate Divine Transformation as a bonus action. While in your divine form, the following benefits apply for 1 minute:
+
+•	Advantage on Attacks: You gain advantage on all attack rolls.
+•	Resilience: You have advantage on all saving throws and ability checks. 
+•	Divine Weaponry: When attacking with a weapon or unarmed attack, once per turn, you deal an additional 1d6 damage. 
+
+After using this feature, you wait 1 week before using it again. You may retake this feature when you reach Theta (rank 6) Level Category, reducing the time between uses to a long rest.
+Divine Resistance: Your divine heritage grants you resistance to a specific damage type associated with your divine parentage. Choose one damage type (e.g., fire, lightning, necrotic) and gain DR 2 against that damage type. You may take this feature multiple times, gaining a +1 each additional time you take this feature to a maximum of +5. 
+
+
+Highly Trained 
+Yes, it was hard for you to make a name for yourself; you can’t fly, dodge bullets, or build a battle suit that would have allowed you to face down the likes of the Raptor or Inferno, but what you lacked in raw power you more than made up for in hard earned skill. 
+At one time, you may have been a highly trained field agent for the NSA or The Division, or maybe you were a uniquely gifted martial artist trained in almost forgotten techniques by a solitary master, or perhaps you were a rich millionaire utilizing almost limitless resources, ruthless training, and an unbreakable will to forge yourself into more than an ordinary man. 
+Regardless of how you trained your body to become the hero you are today, you face a threat you could have never foreseen. And you thought you had it hard when your enemies were breathing… 
+Ability Bonus: Skill-based heroes are a varied lot; they gain a +1 bonus to any three attributes of their choice. 
+Unique Advantages: 
+My knowledge is my power: You gain 10 additional points to buy skills or feats. Also, unlike other Heroes, you may purchase up to three skill sets. You also gain a bonus Feat (see Feats pg. XX) of your choice except for Visionary. 
+Unique Disadvantages: 
+Only Human: You are ultimately only human; you may never increase your physical attributes (before applying powers such as Enhanced Ability Score) beyond 20.
+No Powers: You do not possess any inborn powers; therefore, any power must be skill-based or the result of specialized equipment. Powers marked with a (*) in Archetypes and later in the Powers section may be attributed to specialized training. If you choose these as powers, they must possess the All Skill Power Modification. Any other powers are the product of custom technology; thus, they must have the External Power Source and the Cybernetic Implants or Removable Item Power Modifications.
+New Power Limitations: You may only learn new powers as skill-based powers; alternately, with the Editor-in-Chief’s permission, you may acquire new powers through special equipment, implants, or from some event. 
+Origin Features: As you advance in level (see Hero Advancement pg. xx), at specific levels, you will be granted Origin Features; when you do, choose one of the options from the list below. You may only choose A-Lister Rank Origin Features once you reach gamma level 1.
+B-Lister Rank Origin Features
+Acrobatic Mastry
+Advanced Training
+Focused Training
+Skill Mastery
+Skill Training
+Tactical Analysis
+Tactical Maneuvers
+A-Lister Rank Origin Features
+Flawless Execution
+Flow state
+Resourcefulness
+
+B-Lister Level Origin Features 
+
+Acrobatic Mastery: Your exceptional agility and acrobatic skills allow you to navigate the battlefield with finesse. You gain advantage on Dexterity (Acrobatics) checks and may take the disengage action as a bonus action. 
+
+Advanced Training: Choose a feat; you may take this feature multiple times.  
+
+Focused Training:  You may acquire any three skill foci in skills you are already trained in; you may take this feature multiple times.
+
+Skill Mastery: Choose one skill you are trained in, and you gain a +2 bonus to use that skill. You may take this feature multiple times, gaining an additional +1 each additional time you take this feature to a maximum of +5.
+
+Skill Training: Choose a skill. If you are untrained, you become trained in it. If you are already trained, you gain skill focus in that skill or a related field of study, if applicable. This feature may be taken multiple times.
+
+Tactical Analysis: Your keen intellect and training in strategy make you a master tactician. Once per long rest, before the initiative is rolled, you can give one friendly creature that can see and hear you a +5 bonus to their initiative roll.
+
+Tactical Maneuvers: You learn three manners of your choice.  
+
+A-Lister Level Origin Features 
+Flawless Execution: Your meticulous planning and execution make your attacks deadly and efficient. Once per scene, when you hit with a weapon attack, you deal maximize the damage instead of rolling for damage.
+
+Flow state: In combat, your highly trained skills and focused mindset allow you to enter a state of heightened awareness and precision. You can activate Flow State as a bonus action. While in Flow State, the following benefits apply for 1 minute:
+
+•	Hyper Focus: You gain advantage on all skill checks and attack rolls.
+•	I saw that coming: As a reaction, in response to an attack which you are aware of impose disadvantage the triggering attack.
+•	Subconscious Reload: Once per turn, you can reload a weapon as a free action, allowing you to maintain a continuous barrage of fire.
+
+After using this feature, you wait 1 week before using it again. You may retake this feature when you reach Theta (rank 6) Level Category, reducing the time between uses to a long rest.
+Resourcefulness: You are skilled at improvising and making the best use of your surroundings, granting you bonuses to skill checks involving creative problem-solving. You can reroll any failed skill check, regaining the ability to do so after completing a short rest.
+Mystic
+You are one of the rarest heroes, a mystic arts practitioner, or a mystic power wielder. You Might be a magician calling ancient powers and bending them to your will, or an ancient artifact may have chosen you to wield its power for a greater purpose, or a master of mystical gadgetry.
+Before Z-Day, you may have used your knowledge to fight crime under the guise of a stage magician, acted as a private investigator of the occult, or defended the Earth from extradimensional invaders. You may have even taken to wearing a colorful costume and fighting alongside more traditional (at least in the public mind) heroes. In any event, you were considered an oddity, even among the other heroes. Scientists may try and quantify your power source, while others would dismiss your clams as theater to invoke your heroic persona. But after Z-Day, does it matter anymore? Depending on the cause of the Zombie Apocalypse chosen by the Editor, you may be one of the people best equipped to deal with the apocalypse. Zombies (and other forms are undead) are often par for the course for many mystic masters.
+The problem here, however, is that there are so many zombies. More unsettling is the silence that has settled onto the supernatural side of the world. You would have thought the deaths of so many would have caused an increase in apparitions and ghosts of the world. Instead, there is an uneasy quiet. In addition, you can now “feel” the waves of mystic power far more quickly than before as it flows readily through you. It is so accessible that you’d think it was building itself up in anticipation, but for what? 
+<side Bar>
+Superheroic Sorcery
+At first glance, superheroes and sorcery may seem like an odd mix, but magic-using and magic-powered superheroes date back to the first costumed crime fighters. Thus, when playing Rotted Capes, you and the Editor-in-Chief must consider the nature of magic and magical characters in your campaign.
+For starters, superheroic magicians tend to look and dress differently than your typical costumed crime fighter. Skin-tight costumes tend to be reasonably rare, replaced with trench coats, tunics, top hats, capes and cloaks, and so on. And even if they wear a skin-tight costume, the superheroic sorcerer tends to have or use some distinctive artifact that marks them as a magician, such as an enchanted helmet, a “spell sword,” or a power-channeling staff. Finally, such heroes also have codenames that reflect the nature of their powers. For example, there are a lot of Doctors slinging spells in the comics.
+Next, we need to consider the nature of superheroic spellcasting. Much of it tends to be akin to thaumaturgy or “wonder-working.” In other words, comic book magicians work miracles through their spells and spellcraft. However, very few comic book magicians cast their spells the same way as other magicians. Usually, each hero has a specific technique for creating their magical effects. Some speak their spells backward, saying “tlob gninthgil!” when they want to produce a bolt of electricity. Others use alliterative phrasing, calling upon “hoary hosts” and the like.
+Still, others channel their magic through specific objects, such as wands, the aforementioned enchanted helmet, or amulets. By determining this, you start to bring your hero to life and differentiate them from regular costumed supers and other magically-powered characters. That said, first check with your Editor-in-Chief to see if he has any specific ideas on how magic works in his game. He may give you his outlines for spells or, better yet, might take your ideas and adopt them whole cloth.
+Once you know how you cast spells, you need to decide what your spells look like. As comics are a visual medium, comic book super mages tend to have showy side effects to their spells. When creating magic, their hands are often surrounded by such effects as great globes of light, bands or rings, elaborate mandalas, or intricate patterns of lines. Magical artifacts glow when used, often with unusual or unnatural colors. 
+Combat spells tend to go beyond the “mundane” energy/ element blasts of regular superheroes. They may manifest as a multitude of energy darts, a burning animal shape, or any number of similar effects. Defensive spells often spark or shine when struck or radiate the same effects mentioned when creating spells if an attack hits home.
+Another thing to consider is that, unlike regular superheroes, super mages aren’t manipulating real-world energies. They’re working with magical energies, which means they can do things in highly unconventional ways. For example, a regular superhero may perform a Geospatial Shift by traveling at super speed, manipulating time, or converting their mass to energy and back again. On the other hand, a super mage may cut a rift in the “veil between worlds,” shift from our world to a different dimension, and then back, or simply will themselves there. These kinds of effects apply to everything a superheroic magician can do and go hand-in-hand with the idea that superheroic spell casting needs to be showy and visually distinct.
+Of course, in a zombie apocalypse, showy spell casting might not be the best of ideas, as it might draw unwanted attention to you and your companions, but that’s the price you pay for mastery of the mystic arts.
+</Side Bar>
+There are three basic types of mystic heroes:
+Practitioners are the magi, the wielders of magic. These heroes derive their powers through mystical rituals requiring an almost inhuman dedication.
+The Chosen are those heroes who have been blessed by either mystical beings from beyond the planes of man or those who have been chosen by a powerful magical item that empowers them with their abilities.
+Enchanters are those heroes who come at magic differently, sometimes called mystic gadgeteers. These heroes create fantastic instruments which are cable of doing fantastic things.  
+Practitioners
+Ability Bonus:
+Practitioners get where they are through constant study and self-Willpower, which allows them a +2 to their Charisma score.
+Unique Advantages: 
+Bell, Book, And Candle: To represent your training in the mystic arts, you get a +1 bonus to your Grit and must purchase the Occultist Skill Set (see page XX) during character creation, for which you receive a 5-point discount. In addition, you also gain the Eclectic Knowledge feat for free.
+
+Spell Slinger: As a wielder of the mystic arts, you do not possess powers, but rather cast spells. When choosing a power, it is instead considered a spell and must have the Magical Spell perk (see page xx). Spells that you have memorized or otherwise know are considered inborn powers. All other spells must have the removable flaw, such as they are written in a tome or linked to an object that could be lost mid battle. When casting a spell, you may choose to increase the speed of a power by one action type (i.e. from Bonus Action to Action) increasing the spells power by +2, alternately you can speed up the casting of a spell by one step (i.e. from Action to Bonus Action) decreasing the spells power score by -4.
+Unique Disadvantages:
+Only Human: Despite your mystic Might, you’re ultimately only human; you may never increase your base Physical Attributes (before the application of powers such as Enhanced Ability Score) beyond 20.
+Gremlins: All mystic heroes seem to have problems with technology; mystic heroes gain Gremlins as an additional personality flaw, your editor-in-chief may activate this flaw to refuse its affects you must spend a plot point.
+Limits of Knowledge: While it may be easier for you to learn new powers through acquiring and mastering new spells, finding new spells has become all but impossible. You may only learn new spells once you have found a complete copy of a spell. The power it may grant you is entirely in the hands of the Editor-in-Chief. Other than new spells, you may only learn new powers if they are powers with the all-skill power modification. 
+Enchanters 
+Ability Bonus:
+Enchanters see the world in ways others cannot even phantom; thus, they gain +2 to their Intelligence score.  
+Unique Advantages: 
+Techomage: You possess an unparalleled mind for the occult and mystech (mystical technology). You gain skill focus basic engineering and any two of occult’s fields of study. 
+
+So many toys: your powers come from multiple pieces of equipment that share one power source: you. During hero creation, all your powers must result from items; as such, your powers can not have the external power source power modifications and must possess the Removable Item power modification (fully explained under powers pg. XX). Additionally, you may learn the power Inventive Gadgetry, items created through the use of this power do not have the external power source power modification. Instead, they tap into your arcane power; as such, you pay the burnout cost when activating the item's power.  
+Unique Disadvantages:
+Only Human: Despite your mystic might, you’re ultimately only human; you may never increase your base Physical Attributes (before applying powers such as Enhanced Ability Score) beyond 20.
+
+Techno-Shaman: Technology reaches out for you. Unexplained technological phenomenon springs up wherever you go. You might be able to work wonders with a computer, but that computer is just as likely to turn on you. Beware, for there are ghosts in the machine who are hungry for someone like you, someone attuned to their world, your editor-in-chief may activate this flaw to refuse its affects you must spend a plot point.
+
+The Chosen
+Ability Bonus:
+The Chosen are typically selected because they possess an unorthodox way of seeing things; thus, they gain +2 to their Wisdom score.  
+Unique Advantages 
+Destiny is All: you’re constantly resisting the urges and demands of your item/Patrion; as such, you gain a +1 bonus to your Grit. Additionally, you gain the Diehard feat for free. 
+ Unique Disadvantages:
+Only Human: Despite your mystic might, you’re ultimately only human; you may never increase your base Physical Attributes (before the application of powers such as Enhanced Ability Score) beyond 20.
+Gremlins: All mystic heroes seem to have problems with technology; mystic heroes gain Gremlins as an additional personality flaw, your editor-in-chief may activate this flaw to refuse its affects you must spend a plot point.
+A Set Path: Either all powers you gain through Hero creation are tied to a magic item in your possession which must have the External Power Source modification, or a particular Patron grants you your powers and must have the Patron modification. You may only learn new powers if they are granted to you by your patron (with the editor’s approval) which can be acquired with the Acquire New Power feat or as in the from new equipment or acquiring powers with the all-skill power modification.
+Origin Features: As you advance in level (see Hero Advancement pg. xx), at specific levels, you will be granted Origin Features; when you do, choose one of the options from the list below. You may only choose A-Lister Rank Origin Features once you reach gamma level 1.
+B-Lister Rank Origin Features
+Deep Knowledge
+Eldritch Endurance (The Chosin only)
+Eldritch Sense
+Eureka! (Enchanter only)
+Expanded Mind
+Mystic Enhancement
+Mystic Spell Enhancement (Practitioner only)
+Mystic Wellspring
+Occultist
+A-Lister Rank Origin Features
+Aura of Mysticism
+Divination
+Everything just clicks (Enchanters only)
+Focused Presence (The Chosen only)
+One with the Flow (Practitioners only)
+
+B-Lister Level Origin Features 
+Deep Knowledge: Your mystical connection to the fabric of reality grants you enhanced intuition. You gain a +5 bonus on Arcana and History skill checks to recall information about magical artifacts, creatures, or phenomena.
+
+Eldritch Endurance (The Chosin only): For a fleeting moment, you are in perfect sync with your gifts. On your turn, as a bonus action, reduce the base burnout costs of all your powers granted by your mystical item or your patron to 1 until the end of your next turn, regaining the ability to use this feature after completing a long rest.
+
+Eldritch Sense: Your connection to the flow grants you heightened senses and the ability to detect hidden threats or sources of power. You can sense the use of magic and supernatural-based powers or events within a number of miles equal to your Charisma bonus. You can gauge the general power level classification of the magical event with a successful Charisma Check vs. a DC: 20, -5 for each power level classification above Gamma, so gauging a Theta level event would require a DC 5 Charisma Check.
+
+Eureka! (Enchanter only): you have created some new mystical gadget to add to your collection. You gain a new power score of 10 + your intelligence bonus, which must possess the removable item power modification.   
+
+Expanded Mind: If you are a Practitioner, you gain a +2 bonus to your charisma score; if you are one of The Chosen, you gain a +2 bonus to Wisdom; If you are an Enchanter, you gain a +2 bonus to your Intelligence score; you may take this feature multiple times.
+
+Mystic Enhancement: Increase the power score of any two of your magical powers/spells by 1; you may take this feature multiple times.
+
+Mystic Spell Enhancement (Practitioner only): Choose a spell you know, you gain a +2 bonus to that spell’s power score. Additionally, the spells potential power level is increased by 4. You can take this feature multiple times, but it must be applied to a different spell you know each time.
+
+Mystic Wellspring: You can tap into an ever-growing pool of energy beyond the comprehension of the uninitiated. Increase either your burnout threshold by 1 or the burnout threshold of your mystic item by 1; you may take this feature multiple times, gaining a +1 each additional time you take this feature to a maximum of +3.
+
+Occultist: You have delved into the occult, and few can match your knowledge. You gain a +2 bonus on all Occult skill checks; you may take this feature multiple times, gaining a +1 each additional time you take this feature to a maximum of +5.
+
+A-Lister a Level Origin Features 
+Aura of Mysticism: Your presence is imbued with mystical energy, granting you and your allies enhanced abilities. As an action, you can activate an aura of mysticism that extends 30 feet from you and lasts for 10 minutes. While in the aura, you and friendly creatures gain a bonus to all saving throws equal to your charisma modifier. You regain the ability to use this feature after completing a long rest. 
+
+Divination: You have learned the spell of divination or have been gifted it by your Patron. With it, you possess the ability to glimpse into the future. Casting this ritual takes 10 minutes, after which You ask a single question concerning a specific goal, event, or activity to occur within 7 days. The editor offers a truthful reply. The reply might be a short phrase, a cryptic rhyme, or an omen.
+This spell doesn’t consider circumstances that might change the outcome, such as losing or discovering a fellow survivor. Once cast, you regain the ability to recast this spell after a week. 
+Everything just clicks (Enchanters only): that glorious moment where everything just falls into place, that flow state you constantly chase after. On your turn, you can activate Everything just clicks as a bonus action. While in this state, the following benefits apply for 1 minute:
+
+•	Arcane Potency: One of your powers gains a power score increase of +2d6, and another power of your choice gains a power score increases equal to half that.  
+•	Overflow: Your burnout threshold is increased by 5, and you gain advantage on saves against burnout.
+
+After using this feature, you wait 1 week before using it again. You may retake this feature when you reach Theta (rank 6) Level Category, reducing the time between uses to a long rest.
+Focused Presence (The Chosen only): You tap into the power around you and within you or the power of the item you carry, temporarily channeling one into the other. On your turn, you can activate Focused Presence as a bonus action. While in this state, the following benefits apply for 1 minute:
+
+•	Arcane Potency: One of your powers gains a power score increase of +2d6, and another power of your choice gains a power score increases equal to half that.  
+•	Efficient Mysticism: All burnout costs of your spells are reduced by 1
+
+After using this feature, you wait 1 week before using it again. You may retake this feature when you reach Theta (rank 6) Level Category, reducing the time between uses to a long rest.
+One with the Flow (Practitioners only): You tap into the natural flow of magic around you, allowing yourself to be swept into its power. On your turn, you can activate One with the Flow as a bonus action. While in this state, the following benefits apply for 1 minute:
+
+•	Enhanced Mana: All spells you cast are cast at +2d4 Power Level. 
+•	Arcane Accuracy: You have advantage to hit with any spell. 
+•	Efficient Casting: All burnout costs of your spells are reduced by 1
+
+After using this feature, you wait 1 week before using it again. You may retake this feature when you reach Theta (rank 6) Level Category, reducing the time between uses to a long rest.
+Super-Human 
+You may have been born with your powers, seeing them develop over time, or be a result of scientific experimentation. Perhaps you were one of those rare Super- Humans resulting from a “lucky accident,” simply in the right place at the wrong time, triggering what has been referred to as the Ultra-Gene. 
+Before Z-Day, all you had to worry about were “super-villains” or ‘Gene purists”. However, with Z-Day has come a disturbing phenomenon: some Super-Humans who possessed the Ultra gene do not simply become zombies, but twisted malign versions of themselves, with all ability to tell right from wrong erased from their psyche. 
+Ability Bonus: Super-Humans are heartier than normal humans. You gain +2 to your Constitution score. 
+Unique Advantages: 
+Super: Because of who and what you are, after hero creation, raise the power scores of all your inborn powers by 1. These powers must be inborn. (Inborn powers are simply powers that are not reliant on an outside source, in other words, part of the hero’s physiology.) or you may gain one power feat of your choice. 
+Unique Disadvantages: 
+Power Limits: Super-Humans are born with specific Ultra genes, which dictate the powers they can develop. You can only gain new inborn powers through mastering emulated powers.
+Later, with the Editor-in-Chief’s permission, you may have your Hero acquire new powers, but they must be made available through technology, supernatural, or some story-based event. 
+ 
+Origin Features: As you advance in level (see Hero Advancement pg. xx), at specific levels, you will be granted Origin Features; when you do, choose one of the options from the list below. You may only choose A-Lister Rank Origin Features once you reach gamma level 1.
+B-Lister Rank Origin Features
+Apex Evolution
+Enhanced Physiology
+Enhanced Strength
+Power Advancement
+Power Focus 
+Resilient Constitution
+Superhuman Speed
+A-Lister Rank Origin Features
+Versatile Power
+Power Surge
+Apex Power Surge
+
+B-Lister Level Origin Features 
+Apex Evolution: Your powers continue to evolve. Choose a power feat, and you may take this feature multiple times.
+
+Enhanced Physiology: Your superhuman abilities enhance your physical and mental attributes. Increase your Constitution by 1 and any other ability score of your choice by 1. You may take this feature multiple times.
+
+Enhanced Strength: You possess incredible strength, allowing you to lift and carry heavy objects easily. Your strength score is doubled to determine how much you can lift, carry, or drag. You also have advantage on Strength checks and saving throws.
+
+Power Advancement: Your powers increase in potency the more you use them. Increase the power score of any two of your inborn powers by 1; you may take this feature multiple times.
+
+Power Focus: Choose one of your inborn powers, increases its power score by 2. 
+
+Resilient Constitution: Your body is exceptionally resilient, giving you a +2 bonus on Constitution saving throws and resistance to poison damage. You may take this feature multiple times, gaining a +1 each additional time you take this feature to a maximum of +5.
+
+Superhuman Speed: Your superhuman agility and reflexes grant you incredible speed. You can now apply your full dexterity modifier to your pace score (ignoring the cap of 5 areas). Additionally, you may increase your pace by 1 area or gain a +1 to your avoidance; you can choose this feature twice to gain both options.
+A-Lister Level Origin Features 
+
+Versatile Power: Your mastery over your powers allows you to adapt and utilize them in various ways. Choose one power you possess and gain a new power stunt associated with that power. 
+
+Power Surge: You can push your powers beyond their limits with little repercussion; as a bonus action you may roll a 2d4 and add that result to one of your power scores until the end of your turn. You regain the ability to use this feature after completing a long rest.
+
+Apex Power Surge: As a bonus action, you can slip into a state of mental attunement, allowing you to untap your true potential; for 1 minute, you gain the following abilities. 
+
+•	Power Potency: roll a 2d6 and add that result to one power of your choice and half that amount to a secondary power of your choice. 
+•	With ease: All burnout costs of your powers are reduced by 1
+
+After using this feature, you wait 1 week before using it again. You may take this feature again when you reach Theta (rank 6) Level Category, reducing the time between uses to a long rest.
+Supernatural
+You are possibly the strangest form of costumed hero—a supernatural being. You may be the ghost of someone slain before Z-Day (or after), the physical manifestation of some aspect of the natural world, a heroic vampire who fights the urge to drink the blood of the living, or someone infected with lycanthropy, assuming the form of a bear, tiger, wolf or other beast at will.
+Before Z-Day, you almost certainly operated from the shadows, fighting criminals and other menaces without drawing too much attention to yourself. If you belonged to a super team, you avoided the spotlight and tended to be somewhat cryptic about your origins and nature. Now, after Z-Day, you are conflicted. You can certainly use your powers to help the scattered enclaves and survivors, but will they accept your help? Or will they look at you as just another zombie?
+Ability Bonus:
+Supernatural heroes are rather varied in origin and nature. You gain a +1 bonus to two ability scores of your choice.
+Unique Advantages:
+More Than Human: As supernatural heroes tend to be hard to hurt, you start with the Diehard Feat for free. In addition, in order to reflect the eclectic nature of supernatural heroes, you may also pick one other Feat of your choice (except for Visionary).
+Unique Disadvantages:
+No Longer Human: You must take some form of the Strange Appearance Weakness (later in this chapter) to represent the supernatural aspect of your character; you do not gain any bonuses for this weakness. Although you may still choose and benefit from additional weaknesses.
+Silver Bullets and Wooden Stakes: As a supernatural being, there is something you are vulnerable to. You must take a thematically appropriate vulnerability weakness (later in this chapter) worth at least 10 points; you do not gain any bonuses for this weakness. Although you may still choose and benefit from additional weaknesses.
+Origin Features: As you advance in level (see Hero Advancement pg. xx) at specific levels, you will be granted Origin Features; when you do, choose one of the options from the list below. You may only choose A-Lister Rank Origin Features once you reach gamma level 1.
+B-Lister Rank Origin Features
+Bloodline Legacy
+Eldritch Sense
+Occultist
+Paranormal Ascendance
+Paranormal Prowess
+Resilient Bloodline
+Unnatural Speed
+A-Lister Rank Origin Features
+Eldritch Mastery
+Psychic Shield
+Supernatural Fury
+
+B-Lister Level Origin Features 
+Bloodline Legacy: the mystic power that flows though you seems to get stronger with age, Increase any two ability scores of your choice by 1. you may take this feature multiple times.
+ 
+Eldritch Sense: Your connection to the flow grants you heightened senses and the ability to detect hidden threats or sources of power. You can sense the use of magic and supernatural based powers or events within a number of miles equal to your Charisma bonus. You can gauge the general power level classification of the magical event with a successful Charisma Check vs a DC: 20, -5 for each power level classification above Gamma, so gauging a Theta level event would require a DC 5 Charisma Check.
+
+Occultist: You have delved into the occult, and few can match your knowledge of it. You gain a +2 bonus on all Occult skill checks; you may take this feature multiple times, gaining a +1 each additional time you take this feature to a maximum of +5.
+
+Paranormal Ascendance: Your powers increase in potency the more you use them, Increase the power score of any two of your inborn powers by 1, you may take this feature multiple times.
+
+Paranormal Prowess: You gain a +2 bonus on all Athletics skill checks; you may take this feature multiple times, gaining a +1 each additional time you take this feature to a maximum of +5.
+
+Resilient Bloodline: The ancient power flowing through your veins enhances your resilience and determination. You gain a +1 bonus to your Grit. Additionally, when you roll a Saving Throw, you may roll an additional d4 and add the result to your total. Once you use this feature, you must finish a short or long rest before you can use it again.
+
+Unnatural Speed: Your superhuman agility and reflexes grant you incredible speed. You can now apply your full dexterity modifier to your pace score (ignoring the cap of 5 areas) additionally you may increase your pace by 1 area or gain a +1 to your avoidance, you can choose this feature twice to gain both options.
+A-Lister Level Origin Features 
+Eldritch Mastery: Instinctually you have delved deep into the secrets of your supernatural essence, learning how to tap into it and the flow of magic around you. You have learned how to a magical spell, you learn one power at a power score of 12, this spell has a maximum potential score equal to your intelligence score. 
+
+Psychic Shield: Your mind is shielded from external influence and psychic attacks. and gain DR 5 against psychic damage, you may take this feature multiple times, gaining a +1 each additional time you take this feature to a maximum of DR 10.
+
+Supernatural Fury: You release the parts of your supernatural power you always battle to keep in check, unleashing a fury most have never witnessed. On your turn, you can activate Supernatural Fury as a bonus action. While in this state, the following benefits apply for 1 minute:
+
+•	Primal Fury: You have advantage on all melee and unarmed attack rolls.   
+•	Primal Savagery: your melee attacks deal an additional 1d6 damage. 
+•	Piramal Mind: You have advantage on saving throws against mind control powers. 
+
+After using this feature, you wait 1 week before using it again. You may take this feature again when you reach Theta (rank 6) Level Category, reducing the time between uses to a long rest.
+
+Techno Hero
+Back during the “Glory Days” you did well for yourself, using either your superior intellect or impressive resources to create your heroic persona. You might have a suit of power armor once designed for military applications, maybe you made a new scientific breakthrough, or you might just be an exceptional archer with a quiver of specialized arrows and the ability to scavenge like no other. 
+Back when you had a workshop you were always able to keep your gear in tip top shape, but after everything fell apart you were lucky to have power, let alone a high powered plasma cutter. Now you simply make due, find what you can, make it work, and move on. What other choice do you have? 
+Ability Bonus: Tech Heroes are generally geniuses; you gain +2 to your Intelligence score. 
+Unique Advantages: 
+Technopath: You possess an unparalleled mind for technology. You must purchase the Engineer skill set, for which you receive a 5-point discount. You also gain the Visionary Feat for free. 
+Self-Made Hero! As a result of technology, with the exception of the Manifest Gear and the Inventive Gadgetry, any power you take must possess a number of power modifications (fully explained under powers pg. XX). 
+•	All of your powers must have either the All-Skill, Cybernetic Implant, Removable Item, or Power Armor Power Modifications. 
+•	Powers utilizing the Cybernetic Implant or Removable Item Power Modifications must also possess the External Power Source.
+•	All external power sources have their burnout threshold increased by your Intelligence modifier. 
+Unique Disadvantages: 
+Only Human: You are ultimately only human; you may never increase your base physical ability scores (before the application of powers such as Enhanced Ability scores) beyond 20. 
+Unreliable at the best of times: At any time, once per scene, the Editor-in-Chief may decide that a piece of your tech or an external power source just fails to work. This may be applied only to a single power. You may spend a Plot Point to negate this result.
+Origin Features: As you advance in level (see Hero Advancement pg. xx) at specific levels you will be granted Origin Features, when you do, choose one of the options from the list below. You may only choose A-Lister Rank Origin Features once you reach gamma level 1.
+B-Lister Rank Origin Features
+A Sharp Mind
+Always Learning
+Analytical Mind
+Hardened Energy Source
+Just a few Adjustments
+Hacking Savant 
+Technological Mastery
+A-Lister Rank Origin Features
+Technological Precision
+Kit-Bashing/McGyvering
+Overdrive
+
+B-Lister Level Origin Features 
+A Sharp Mind: Your mind is sharper than most. Increase your wisdom or intelligence score by +2 or both by +1, you may choose this option multiple times. 
+
+Always Learning: Choose two engineering fields of study, you gain skill focus in those fields of study.
+
+Analytical Mind: Your engineering prowess is unmatched. Choose one of your engineering focuses; you gain a +2 bonus to all checks made with that focus. You may take this feature multiple times, either selecting a new focus or further increasing the bonus to an existing focus by +1 each additional time, up to a maximum of +5.
+
+Hardened Energy Source:  Increase the burnout threshold any of your external power sources by 4 
+
+Just a few Adjustments: Increase the power score of any of your pieces of technology by +2 
+
+Hacking Savant: You possess advanced hacking skills, allowing you to bypass security systems, override controls, and gain access to restricted areas. You have +2 on skill checks related to hacking or computer systems. You may take this feature multiple times each time increasing this bonus by +1 each additional time you take this feature this to a maximum of +5.
+Technological Mastery: You have proficiency with technological devices and can attempt to interface with them even if you lack the necessary credentials or access codes. You gain a +5 bonus to all Intelligence checks related to analyzing or understanding technology.
+A-Lister Level Origin Features 
+Technological Precision: You have a deep understanding of how technology works, allowing you to precisely target weak points or vulnerabilities in mechanical or technological enemies. After making a successful engineering skill check You have a +2 bonus on attack rolls against constructs, robots, or other technological entities for the remainder of the scene. The base DC of this check is 15 +2 for each power level category above your power level classification or -2 for each power level below yours.
+
+
+
+
+Kit-Bashing/McGyvering: You can quickly kit bash technology on the fly as long as you have some raw materials to work with. You gain Dynamic Power at a power score equal to your intelligence score. If you already possess this power, you gain another instance of this power instead. Any power you manifest through this version of Dynamic Power must have an external energy source and be a removable object. Any object you create ceases to function at the end of the scene.  
+
+Overdrive: You can push your technology far beyond its design parameters.  As a bonus action, roll a 2d6 and add that result to the Burnout Threshold of one of your external power sources, and had half the amount rolled to the power score of one of your powers which tap into that power source. These bonuses last for 1 minute, after which you must wait 1 week before using this feature again. 
