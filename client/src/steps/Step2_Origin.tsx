@@ -29,6 +29,8 @@ interface OriginData {
   subTypes?: {
     name: string;
     description: string;
+    uniqueAdvantage?: string;
+    uniqueDisadvantage?: string;
   }[]; // For origins with subtypes like Mystic
 }
 
@@ -140,15 +142,21 @@ export default function Step2_Origin() {
       subTypes: [
         { 
           name: "Practitioner", 
-          description: "You have learned to tap into the mystic energy around you either through extensive training or innate talent."
+          description: "You have learned to tap into the mystic energy around you either through extensive training or innate talent.",
+          uniqueAdvantage: "Spell-Casting Mastery: You use the spell-like power model and add your wisdom bonus to the burn threshold of all powers with the supernatural modifier. Additionally, you can cast minor cantrips without risking burnout.",
+          uniqueDisadvantage: "Ritual Requirements: Your powers require complex rituals or specific components to function at full capacity. Without proper preparation, your powers suffer a -2 penalty."
         },
         { 
           name: "The Chosen", 
-          description: "You have been chosen to wield an item of power, granting you abilities far beyond mortal ken." 
+          description: "You have been chosen to wield an item of power, granting you abilities far beyond mortal ken.",
+          uniqueAdvantage: "Artifact Conduit: Your mystical artifact acts as a conduit to ancient powers. You can channel its energies to add +3 to one power check per day, chosen before rolling.",
+          uniqueDisadvantage: "Bound to Artifact: If separated from your mystical item, you lose access to all powers until reunited. The artifact may also have a will of its own at times."
         },
         { 
           name: "Enchanter", 
-          description: "Through extensive study and practice, you have learned to craft, wield, and master mystical items."
+          description: "Through extensive study and practice, you have learned to craft, wield, and master mystical items.",
+          uniqueAdvantage: "Mystical Craftsman: You can create temporary magical devices with a day of work. These devices can replicate any power you possess at -2 effective power score and last for 24 hours.",
+          uniqueDisadvantage: "Time-Consuming Craft: Your powers work through crafted items that take time to prepare. In unexpected situations, you have access to only half your normal powers until you can craft new items."
         }
       ]
     },
@@ -307,13 +315,25 @@ export default function Step2_Origin() {
                     {/* Unique Advantage */}
                     <div className="space-y-1">
                       <h4 className="text-sm font-medium text-green-400">Unique Advantage:</h4>
-                      <p className="text-gray-400 text-xs">{origin.uniqueAdvantage}</p>
+                      {selectedOrigin === origin.name && origin.name === "Mystic" && origin.subTypes ? (
+                        <p className="text-gray-400 text-xs">
+                          {origin.subTypes.find(st => st.name === selectedMysticType)?.uniqueAdvantage}
+                        </p>
+                      ) : (
+                        <p className="text-gray-400 text-xs">{origin.uniqueAdvantage}</p>
+                      )}
                     </div>
                     
                     {/* Unique Disadvantage */}
                     <div className="space-y-1">
                       <h4 className="text-sm font-medium text-red-400">Unique Disadvantage:</h4>
-                      <p className="text-gray-400 text-xs">{origin.uniqueDisadvantage}</p>
+                      {selectedOrigin === origin.name && origin.name === "Mystic" && origin.subTypes ? (
+                        <p className="text-gray-400 text-xs">
+                          {origin.subTypes.find(st => st.name === selectedMysticType)?.uniqueDisadvantage}
+                        </p>
+                      ) : (
+                        <p className="text-gray-400 text-xs">{origin.uniqueDisadvantage}</p>
+                      )}
                     </div>
                   </div>
                 </CardContent>
