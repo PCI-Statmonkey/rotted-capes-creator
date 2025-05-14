@@ -1,38 +1,26 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { ArrowLeft, ArrowRight } from "lucide-react";
+import { ArrowLeft, ArrowRight, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Label } from "@/components/ui/label";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 import { useCharacter } from "@/context/CharacterContext";
 import { trackEvent } from "@/lib/analytics";
+import { cn } from "@/lib/utils";
+
+// Interface for archetype data 
+interface ArchetypeData {
+  name: string;
+  description: string;
+  keyAbilities: string[]; // Key abilities for this archetype
+  image: string; // Image path 
+}
 
 export default function Step3_Archetype() {
   const { character, updateCharacterField, setCurrentStep } = useCharacter();
-  const [archetypes, setArchetypes] = useState<string[]>([]);
   const [selectedArchetype, setSelectedArchetype] = useState<string>(character.archetype || "");
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    // Fetch archetype data from the JSON file
-    fetch('/src/rules/archetypes.json')
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('Failed to load archetypes data');
-        }
-        return response.json();
-      })
-      .then(data => {
-        setArchetypes(data);
-        setIsLoading(false);
-      })
-      .catch(err => {
-        console.error('Error loading archetypes:', err);
-        setError(err.message);
-        setIsLoading(false);
-      });
-  }, []);
 
   const handleContinue = () => {
     if (selectedArchetype) {
@@ -50,17 +38,57 @@ export default function Step3_Archetype() {
     setCurrentStep(2);
   };
 
-  // Archetype descriptions
-  const archetypeDescriptions: Record<string, string> = {
-    "Bruiser": "Physically powerful character focused on strength and toughness. Excels at close combat and dealing/taking damage.",
-    "Speedster": "Super-fast character with lightning reflexes. Masters of mobility, evasion, and striking multiple targets.",
-    "Blaster": "Ranged damage specialist with destructive powers. Excellent at attacking from a distance with various energy types.",
-    "Defender": "Protective character with abilities focused on shielding and supporting allies. Specialists in damage mitigation.",
-    "Gadgeteer": "Tech-focused character with an arsenal of devices and tools. Adaptable problem-solvers with a tool for every situation.",
-    "Mentalist": "Psychic character with powers of the mind. Masters of mental manipulation, telepathy, and psychokinesis.",
-    "Mastermind": "Strategic genius with enhanced intelligence. Excel at planning, invention, and outsmarting opponents.",
-    "Shapeshifter": "Adaptable character who can change form. Specializes in infiltration, disguise, and versatile combat forms."
-  };
+  // Enhanced archetype data with images and key abilities
+  const archetypesData: ArchetypeData[] = [
+    {
+      name: "Bruiser",
+      description: "Physically powerful character focused on strength and toughness. Excels at close combat and dealing/taking damage.",
+      keyAbilities: ["Strength", "Constitution"],
+      image: "https://placehold.co/400x225/991b1b/ffffff?text=Bruiser"
+    },
+    {
+      name: "Speedster",
+      description: "Super-fast character with lightning reflexes. Masters of mobility, evasion, and striking multiple targets.",
+      keyAbilities: ["Dexterity", "Constitution"],
+      image: "https://placehold.co/400x225/db2777/ffffff?text=Speedster"
+    },
+    {
+      name: "Blaster",
+      description: "Ranged damage specialist with destructive powers. Excellent at attacking from a distance with various energy types.",
+      keyAbilities: ["Dexterity", "Intelligence"],
+      image: "https://placehold.co/400x225/ea580c/ffffff?text=Blaster"
+    },
+    {
+      name: "Defender",
+      description: "Protective character with abilities focused on shielding and supporting allies. Specialists in damage mitigation.",
+      keyAbilities: ["Constitution", "Wisdom"],
+      image: "https://placehold.co/400x225/0284c7/ffffff?text=Defender"
+    },
+    {
+      name: "Gadgeteer",
+      description: "Tech-focused character with an arsenal of devices and tools. Adaptable problem-solvers with a tool for every situation.",
+      keyAbilities: ["Intelligence", "Dexterity"],
+      image: "https://placehold.co/400x225/7c3aed/ffffff?text=Gadgeteer"
+    },
+    {
+      name: "Mentalist",
+      description: "Psychic character with powers of the mind. Masters of mental manipulation, telepathy, and psychokinesis.",
+      keyAbilities: ["Wisdom", "Charisma"],
+      image: "https://placehold.co/400x225/4f46e5/ffffff?text=Mentalist"
+    },
+    {
+      name: "Mastermind",
+      description: "Strategic genius with enhanced intelligence. Excel at planning, invention, and outsmarting opponents.",
+      keyAbilities: ["Intelligence", "Charisma"],
+      image: "https://placehold.co/400x225/0f766e/ffffff?text=Mastermind"
+    },
+    {
+      name: "Shapeshifter",
+      description: "Adaptable character who can change form. Specializes in infiltration, disguise, and versatile combat forms.",
+      keyAbilities: ["Constitution", "Charisma"],
+      image: "https://placehold.co/400x225/475569/ffffff?text=Shapeshifter"
+    }
+  ];
 
   return (
     <motion.div 
@@ -84,27 +112,53 @@ export default function Step3_Archetype() {
         </div>
       ) : (
         <div className="space-y-6">
-          <RadioGroup 
-            value={selectedArchetype}
-            onValueChange={setSelectedArchetype}
-            className="space-y-4"
-          >
-            {archetypes.map((archetype) => (
-              <div key={archetype} className="flex items-start space-x-2">
-                <RadioGroupItem 
-                  value={archetype} 
-                  id={archetype}
-                  className="mt-1"
-                />
-                <div className="flex-1">
-                  <Label htmlFor={archetype} className="font-comic text-xl cursor-pointer">
-                    {archetype}
-                  </Label>
-                  <p className="text-gray-400 text-sm mt-1">{archetypeDescriptions[archetype] || "Description not available."}</p>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {archetypesData.map((archetype) => (
+              <Card 
+                key={archetype.name}
+                className={cn(
+                  "cursor-pointer transition-all hover:shadow-md hover:border-accent/50 overflow-hidden",
+                  selectedArchetype === archetype.name ? "border-2 border-accent shadow-lg" : ""
+                )}
+                onClick={() => setSelectedArchetype(archetype.name)}
+              >
+                {/* Archetype Image */}
+                <div className="relative">
+                  <img 
+                    src={archetype.image} 
+                    alt={`${archetype.name} Archetype`} 
+                    className="w-full h-[160px] object-cover"
+                  />
+                  {/* Selected indicator overlay */}
+                  {selectedArchetype === archetype.name && (
+                    <div className="absolute top-2 right-2 bg-accent rounded-full p-1 shadow-md">
+                      <Check className="h-5 w-5 text-white" />
+                    </div>
+                  )}
                 </div>
-              </div>
+                <CardHeader className="pb-2 pt-4">
+                  <CardTitle className="font-comic text-xl">{archetype.name}</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-gray-400 text-sm mb-4">{archetype.description}</p>
+                  <div className="space-y-2">
+                    <h4 className="text-sm font-medium text-gray-300">Key Abilities:</h4>
+                    <div className="flex flex-wrap gap-2">
+                      {archetype.keyAbilities.map((ability, index) => (
+                        <Badge 
+                          key={index}
+                          variant={selectedArchetype === archetype.name ? "default" : "outline"} 
+                          className="font-medium"
+                        >
+                          {ability}
+                        </Badge>
+                      ))}
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
             ))}
-          </RadioGroup>
+          </div>
 
           <div className="flex justify-between mt-8 pt-4 border-t-2 border-gray-700">
             <Button 
