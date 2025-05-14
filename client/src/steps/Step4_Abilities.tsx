@@ -50,6 +50,10 @@ export default function Step4_Abilities() {
   
   // Get origin and archetype bonuses
   const getOriginBonus = (ability: string): number => {
+    const abilityLower = ability.toLowerCase();
+    // No origin selected yet
+    if (!character.origin) return 0;
+    
     // For newer origin formats that include type in parentheses
     const originName = character.origin.split('(')[0].trim();
     
@@ -64,65 +68,119 @@ export default function Step4_Abilities() {
     
     // Handle special cases for Mystic with subtypes
     if (originName === "Mystic" && character.origin.includes("(")) {
-      // Extract subtype
-      const mysticType = character.origin.match(/Mystic \(([^:]+):/)?.[1]?.trim();
-      
-      if (mysticType === "Practitioner") {
-        if (ability === "wisdom") return 2;
-        if (ability === "charisma") return 1;
-      } else if (mysticType === "The Chosen") {
-        if (ability === "wisdom") return 2;
-        if (ability === "constitution") return 1;
-      } else if (mysticType === "Enchanter") {
-        if (ability === "wisdom") return 2;
-        if (ability === "intelligence") return 1;
+      // If it's in the format "Mystic (Subtype: bonuses)"
+      if (character.origin.includes(":")) {
+        const mysticType = character.origin.match(/Mystic \(([^:]+):/)?.[1]?.trim();
+        
+        if (mysticType === "Practitioner") {
+          if (abilityLower === "wisdom") return 2;
+          if (abilityLower === "charisma") return 1;
+        } else if (mysticType === "The Chosen") {
+          if (abilityLower === "wisdom") return 2;
+          if (abilityLower === "constitution") return 1;
+        } else if (mysticType === "Enchanter") {
+          if (abilityLower === "wisdom") return 2;
+          if (abilityLower === "intelligence") return 1;
+        }
       } else {
-        // Default Mystic bonuses
-        if (ability === "wisdom") return 2;
-        if (ability === "charisma") return 1;
+        // Default fallback for older "Mystic" format
+        if (abilityLower === "wisdom") return 2;
+        if (abilityLower === "charisma") return 1;
       }
       
       return 0;
     }
     
-    // Default bonuses by origin
-    const bonuses: Record<string, Record<string, number>> = {
-      "Super-Human": { strength: 0, constitution: 2 },
-      "Tech Hero": { intelligence: 2, dexterity: 0 },
-      "Mystic": { wisdom: 2, charisma: 0 },
-      "Highly Trained": { dexterity: 0, strength: 0, constitution: 0 },
-      "Alien": { strength: 2, intelligence: 0 },
-      "Android": { intelligence: 2 },
-      "Cosmic": { constitution: 1, strength: 0, dexterity: 0, intelligence: 0, wisdom: 0, charisma: 0 }, // + any bonus
-      "Demigod": { strength: 0, dexterity: 0, constitution: 0, intelligence: 0, wisdom: 0, charisma: 0 } // any +2
-    };
+    // Handle specific origins from the rulebook
+    switch(originName) {
+      case "Alien":
+        if (abilityLower === "strength") return 2;
+        break;
+      case "Android":
+        if (abilityLower === "intelligence") return 2;
+        break;
+      case "Cosmic":
+        if (abilityLower === "constitution") return 1;
+        // Second ability is user-selected, handled at character creation
+        break;
+      case "Demigod":
+        // Ability is user-selected, handled at character creation
+        break;
+      case "Super-Human":
+        if (abilityLower === "constitution") return 2;
+        break;
+      case "Tech Hero":
+        if (abilityLower === "intelligence") return 2;
+        break;
+    }
     
-    return bonuses[originName]?.[ability] || 0;
+    return 0;
   };
   
   const getArchetypeBonus = (ability: string): number => {
+    const abilityLower = ability.toLowerCase();
+    // No archetype selected yet
+    if (!character.archetype) return 0;
+    
     // Get just the archetype name without any additional info
     const archetypeName = character.archetype.split('(')[0].trim();
     
-    const bonuses: Record<string, Record<string, number>> = {
-      "Andromorph": { constitution: 2 },
-      "Blaster": { dexterity: 1, intelligence: 1 },
-      "Brawler": { strength: 2 },
-      "Controller": { intelligence: 1, wisdom: 1 },
-      "Heavy": { constitution: 1, strength: 1 },
-      "Infiltrator": { dexterity: 2 },
-      "Transporter": { dexterity: 1, constitution: 1 },
-      // Legacy archetypes (keeping for backward compatibility)
-      "Bruiser": { strength: 1, constitution: 1 },
-      "Speedster": { dexterity: 2 },
-      "Defender": { constitution: 2 },
-      "Gadgeteer": { intelligence: 2 },
-      "Mentalist": { wisdom: 1, intelligence: 1 },
-      "Mastermind": { intelligence: 1, charisma: 1 },
-      "Shapeshifter": { constitution: 1, dexterity: 1 }
-    };
+    // Use the exact archetypes from the rulebook
+    switch(archetypeName) {
+      case "Andromorph":
+        if (abilityLower === "constitution") return 2;
+        break;
+      case "Blaster":
+        if (abilityLower === "dexterity") return 1;
+        if (abilityLower === "intelligence") return 1;
+        break;
+      case "Brawler":
+        if (abilityLower === "strength") return 2;
+        break;
+      case "Controller":
+        if (abilityLower === "intelligence") return 1;
+        if (abilityLower === "wisdom") return 1;
+        break;
+      case "Heavy":
+        if (abilityLower === "constitution") return 1;
+        if (abilityLower === "strength") return 1;
+        break;
+      case "Infiltrator":
+        if (abilityLower === "dexterity") return 2;
+        break;
+      case "Transporter":
+        if (abilityLower === "dexterity") return 1;
+        if (abilityLower === "constitution") return 1;
+        break;
+      // Legacy archetypes for backward compatibility
+      case "Bruiser":
+        if (abilityLower === "strength") return 1;
+        if (abilityLower === "constitution") return 1;
+        break;
+      case "Speedster":
+        if (abilityLower === "dexterity") return 2;
+        break;
+      case "Defender":
+        if (abilityLower === "constitution") return 2;
+        break;
+      case "Gadgeteer":
+        if (abilityLower === "intelligence") return 2;
+        break;
+      case "Mentalist":
+        if (abilityLower === "wisdom") return 1;
+        if (abilityLower === "intelligence") return 1;
+        break;
+      case "Mastermind":
+        if (abilityLower === "intelligence") return 1;
+        if (abilityLower === "charisma") return 1;
+        break;
+      case "Shapeshifter":
+        if (abilityLower === "constitution") return 1;
+        if (abilityLower === "dexterity") return 1;
+        break;
+    }
     
-    return bonuses[archetypeName]?.[ability] || 0;
+    return 0;
   };
   
   // Get total bonus for an ability
