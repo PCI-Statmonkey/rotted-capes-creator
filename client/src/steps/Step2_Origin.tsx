@@ -31,6 +31,10 @@ interface OriginData {
     description: string;
     uniqueAdvantage?: string;
     uniqueDisadvantage?: string;
+    abilityBonuses?: {
+      ability: string;
+      bonus: number;
+    }[];
   }[]; // For origins with subtypes like Mystic
 }
 
@@ -57,9 +61,18 @@ export default function Step2_Origin() {
         const originDetail = `Highly Trained (Bonuses: +1 ${selectedAbilities[0]}, +1 ${selectedAbilities[1]}, +1 ${selectedAbilities[2]})`;
         updateCharacterField('origin', originDetail);
       }
-      // For Mystic, store the selected subtype
+      // For Mystic, store the selected subtype and its special bonuses
       else if (selectedOrigin === "Mystic") {
-        const originDetail = `Mystic (${selectedMysticType})`;
+        const mysticSubtype = originsData
+          .find(o => o.name === "Mystic")
+          ?.subTypes?.find(st => st.name === selectedMysticType);
+          
+        // Format the ability bonuses for display
+        const bonusText = mysticSubtype?.abilityBonuses
+          ?.map(bonus => `+${bonus.bonus} ${bonus.ability}`)
+          .join(", ");
+          
+        const originDetail = `Mystic (${selectedMysticType}: ${bonusText})`;
         updateCharacterField('origin', originDetail);
       }
       // For all other origins, just store the name
@@ -144,19 +157,31 @@ export default function Step2_Origin() {
           name: "Practitioner", 
           description: "You have learned to tap into the mystic energy around you either through extensive training or innate talent.",
           uniqueAdvantage: "Spell-Casting Mastery: You use the spell-like power model and add your wisdom bonus to the burn threshold of all powers with the supernatural modifier. Additionally, you can cast minor cantrips without risking burnout.",
-          uniqueDisadvantage: "Ritual Requirements: Your powers require complex rituals or specific components to function at full capacity. Without proper preparation, your powers suffer a -2 penalty."
+          uniqueDisadvantage: "Ritual Requirements: Your powers require complex rituals or specific components to function at full capacity. Without proper preparation, your powers suffer a -2 penalty.",
+          abilityBonuses: [
+            { ability: "Wisdom", bonus: 2 },
+            { ability: "Charisma", bonus: 1 }
+          ]
         },
         { 
           name: "The Chosen", 
           description: "You have been chosen to wield an item of power, granting you abilities far beyond mortal ken.",
           uniqueAdvantage: "Artifact Conduit: Your mystical artifact acts as a conduit to ancient powers. You can channel its energies to add +3 to one power check per day, chosen before rolling.",
-          uniqueDisadvantage: "Bound to Artifact: If separated from your mystical item, you lose access to all powers until reunited. The artifact may also have a will of its own at times."
+          uniqueDisadvantage: "Bound to Artifact: If separated from your mystical item, you lose access to all powers until reunited. The artifact may also have a will of its own at times.",
+          abilityBonuses: [
+            { ability: "Wisdom", bonus: 2 },
+            { ability: "Constitution", bonus: 1 }
+          ]
         },
         { 
           name: "Enchanter", 
           description: "Through extensive study and practice, you have learned to craft, wield, and master mystical items.",
           uniqueAdvantage: "Mystical Craftsman: You can create temporary magical devices with a day of work. These devices can replicate any power you possess at -2 effective power score and last for 24 hours.",
-          uniqueDisadvantage: "Time-Consuming Craft: Your powers work through crafted items that take time to prepare. In unexpected situations, you have access to only half your normal powers until you can craft new items."
+          uniqueDisadvantage: "Time-Consuming Craft: Your powers work through crafted items that take time to prepare. In unexpected situations, you have access to only half your normal powers until you can craft new items.",
+          abilityBonuses: [
+            { ability: "Wisdom", bonus: 2 },
+            { ability: "Intelligence", bonus: 1 }
+          ]
         }
       ]
     },
@@ -239,15 +264,32 @@ export default function Step2_Origin() {
                     <div className="space-y-2">
                       <h4 className="text-sm font-medium text-gray-300">Ability Bonuses:</h4>
                       <div className="flex flex-wrap gap-2">
-                        {origin.abilityBonuses.map((bonus, index) => (
-                          <Badge 
-                            key={index}
-                            variant={selectedOrigin === origin.name ? "default" : "outline"} 
-                            className="font-medium"
-                          >
-                            {bonus.ability} +{bonus.bonus}
-                          </Badge>
-                        ))}
+                        {/* For Mystic, show subtype-specific ability bonuses */}
+                        {selectedOrigin === origin.name && origin.name === "Mystic" && origin.subTypes ? (
+                          <>
+                            {origin.subTypes.find(st => st.name === selectedMysticType)?.abilityBonuses?.map((bonus, index) => (
+                              <Badge 
+                                key={index}
+                                variant="default" 
+                                className="font-medium"
+                              >
+                                {bonus.ability} +{bonus.bonus}
+                              </Badge>
+                            ))}
+                          </>
+                        ) : (
+                          <>
+                            {origin.abilityBonuses.map((bonus, index) => (
+                              <Badge 
+                                key={index}
+                                variant={selectedOrigin === origin.name ? "default" : "outline"} 
+                                className="font-medium"
+                              >
+                                {bonus.ability} +{bonus.bonus}
+                              </Badge>
+                            ))}
+                          </>
+                        )}
                       </div>
                       
                       {/* Highly Trained ability score selection */}
