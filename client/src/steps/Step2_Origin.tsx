@@ -6,6 +6,13 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Badge } from "@/components/ui/badge";
 import { useCharacter } from "@/context/CharacterContext";
 import { cn } from "@/lib/utils";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 // Interface for origin data with ability bonuses and special features
 interface OriginData {
@@ -14,21 +21,50 @@ interface OriginData {
   abilityBonuses: {
     ability: string;
     bonus: number;
+    selectable?: boolean; // Whether this bonus can be chosen by player
   }[];
   uniqueAdvantage: string; // Special advantage that comes with the origin
   uniqueDisadvantage: string; // Special disadvantage that comes with the origin
   image?: string; // Optional image path
+  subTypes?: {
+    name: string;
+    description: string;
+  }[]; // For origins with subtypes like Mystic
 }
 
 export default function Step2_Origin() {
   const { character, updateCharacterField, setCurrentStep } = useCharacter();
   const [selectedOrigin, setSelectedOrigin] = useState<string>(character.origin || "");
+  
+  // For Highly Trained origin (ability score selection)
+  const [selectedAbilities, setSelectedAbilities] = useState<{[key: number]: string}>({
+    0: "Strength",
+    1: "Dexterity",
+    2: "Constitution"
+  });
+  
+  // For Mystic origin (subtype selection)
+  const [selectedMysticType, setSelectedMysticType] = useState<string>("Practitioner");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const handleContinue = () => {
     if (selectedOrigin) {
-      updateCharacterField('origin', selectedOrigin);
+      // For Highly Trained, store which abilities get bonuses
+      if (selectedOrigin === "Highly Trained") {
+        const originDetail = `Highly Trained (Bonuses: +1 ${selectedAbilities[0]}, +1 ${selectedAbilities[1]}, +1 ${selectedAbilities[2]})`;
+        updateCharacterField('origin', originDetail);
+      }
+      // For Mystic, store the selected subtype
+      else if (selectedOrigin === "Mystic") {
+        const originDetail = `Mystic (${selectedMysticType})`;
+        updateCharacterField('origin', originDetail);
+      }
+      // For all other origins, just store the name
+      else {
+        updateCharacterField('origin', selectedOrigin);
+      }
+      
       setCurrentStep(3);
     }
   };
@@ -84,9 +120,9 @@ export default function Step2_Origin() {
       name: "Highly Trained",
       description: "You are one of those exceptionally rare individuals who trained your body and mind to near perfection, allowing you to stand alongside Superheroes despite having no powers.",
       abilityBonuses: [
-        { ability: "Any", bonus: 1 },
-        { ability: "Any", bonus: 1 },
-        { ability: "Any", bonus: 1 }
+        { ability: "Any", bonus: 1, selectable: true },
+        { ability: "Any", bonus: 1, selectable: true },
+        { ability: "Any", bonus: 1, selectable: true }
       ],
       uniqueAdvantage: "My knowledge is my power: You gain 10 additional points to buy skills or feats. Also, unlike other Heroes, you may purchase up to three skill sets.",
       uniqueDisadvantage: "Only Human: You are ultimately only human; you may never increase your physical attributes beyond 20. You do not possess any inborn powers.",
@@ -100,7 +136,21 @@ export default function Step2_Origin() {
       ],
       uniqueAdvantage: "Spell-Casting: You use the spell-like power model and add your wisdom bonus to the burn threshold of all powers with the supernatural modifier.",
       uniqueDisadvantage: "Mystic Backlash: When you fail a burnout save by more than 5, your powers physically manifest and attack you.",
-      image: "https://placehold.co/400x225/a21caf/ffffff?text=Mystic"
+      image: "https://placehold.co/400x225/a21caf/ffffff?text=Mystic",
+      subTypes: [
+        { 
+          name: "Practitioner", 
+          description: "You have learned to tap into the mystic energy around you either through extensive training or innate talent."
+        },
+        { 
+          name: "The Chosen", 
+          description: "You have been chosen to wield an item of power, granting you abilities far beyond mortal ken." 
+        },
+        { 
+          name: "Enchanter", 
+          description: "Through extensive study and practice, you have learned to craft, wield, and master mystical items."
+        }
+      ]
     },
     {
       name: "Super-Human",
@@ -191,7 +241,68 @@ export default function Step2_Origin() {
                           </Badge>
                         ))}
                       </div>
+                      
+                      {/* Highly Trained ability score selection */}
+                      {selectedOrigin === origin.name && origin.name === "Highly Trained" && (
+                        <div className="mt-4 space-y-2 p-3 bg-gray-800 rounded-md">
+                          <h5 className="text-sm font-medium text-amber-400">Assign Ability Bonuses:</h5>
+                          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                            {[0, 1, 2].map((bonusIndex) => (
+                              <div key={bonusIndex} className="space-y-1">
+                                <label className="text-xs text-gray-400">Bonus #{bonusIndex + 1}</label>
+                                <Select
+                                  value={selectedAbilities[bonusIndex]}
+                                  onValueChange={(value) => {
+                                    setSelectedAbilities({
+                                      ...selectedAbilities,
+                                      [bonusIndex]: value
+                                    });
+                                  }}
+                                >
+                                  <SelectTrigger className="w-full">
+                                    <SelectValue placeholder="Select ability" />
+                                  </SelectTrigger>
+                                  <SelectContent>
+                                    <SelectItem value="Strength">Strength</SelectItem>
+                                    <SelectItem value="Dexterity">Dexterity</SelectItem>
+                                    <SelectItem value="Constitution">Constitution</SelectItem>
+                                    <SelectItem value="Intelligence">Intelligence</SelectItem>
+                                    <SelectItem value="Wisdom">Wisdom</SelectItem>
+                                    <SelectItem value="Charisma">Charisma</SelectItem>
+                                  </SelectContent>
+                                </Select>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
                     </div>
+
+                    {/* Mystic subtype selection */}
+                    {selectedOrigin === origin.name && origin.name === "Mystic" && origin.subTypes && (
+                      <div className="mt-4 space-y-2 p-3 bg-gray-800 rounded-md">
+                        <h5 className="text-sm font-medium text-violet-400">Select Mystic Type:</h5>
+                        <Select
+                          value={selectedMysticType}
+                          onValueChange={setSelectedMysticType}
+                        >
+                          <SelectTrigger className="w-full">
+                            <SelectValue placeholder="Select mystic type" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {origin.subTypes.map((subType) => (
+                              <SelectItem key={subType.name} value={subType.name}>
+                                {subType.name}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                        {/* Display description of selected subtype */}
+                        <div className="mt-2 text-xs text-gray-400">
+                          {origin.subTypes.find(st => st.name === selectedMysticType)?.description}
+                        </div>
+                      </div>
+                    )}
 
                     {/* Unique Advantage */}
                     <div className="space-y-1">
