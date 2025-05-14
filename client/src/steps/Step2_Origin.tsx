@@ -1,37 +1,28 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { ArrowLeft, ArrowRight } from "lucide-react";
+import { ArrowLeft, ArrowRight, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Label } from "@/components/ui/label";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 import { useCharacter } from "@/context/CharacterContext";
+import { cn } from "@/lib/utils";
+
+// Interface for origin data with ability bonuses
+interface OriginData {
+  name: string;
+  description: string;
+  abilityBonuses: {
+    ability: string;
+    bonus: number;
+  }[];
+  image?: string; // Optional image path
+}
 
 export default function Step2_Origin() {
   const { character, updateCharacterField, setCurrentStep } = useCharacter();
-  const [origins, setOrigins] = useState<string[]>([]);
   const [selectedOrigin, setSelectedOrigin] = useState<string>(character.origin || "");
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    // Fetch origin data from the JSON file
-    fetch('/src/rules/origins.json')
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('Failed to load origins data');
-        }
-        return response.json();
-      })
-      .then(data => {
-        setOrigins(data);
-        setIsLoading(false);
-      })
-      .catch(err => {
-        console.error('Error loading origins:', err);
-        setError(err.message);
-        setIsLoading(false);
-      });
-  }, []);
 
   const handleContinue = () => {
     if (selectedOrigin) {
@@ -44,15 +35,57 @@ export default function Step2_Origin() {
     setCurrentStep(1);
   };
 
-  // Origin descriptions
-  const originDescriptions: Record<string, string> = {
-    "Super-Human": "Born with extraordinary abilities that manifest during adolescence or under stress.",
-    "Tech Hero": "Relies on advanced technology and gadgets for superheroic abilities.",
-    "Mystic": "Draws power from arcane sources, ancient rituals, or otherworldly entities.",
-    "Highly Trained": "No inherent powers, but has achieved peak human condition through intense training.",
-    "Alien": "Extraterrestrial being with physiological differences that grant special abilities.",
-    "Demi-God": "Descendant of divine beings, bestowed with supernatural powers and abilities."
-  };
+  // Enhanced origin data with ability bonuses
+  const originsData: OriginData[] = [
+    {
+      name: "Super-Human",
+      description: "Born with extraordinary abilities that manifest during adolescence or under stress.",
+      abilityBonuses: [
+        { ability: "Strength", bonus: 2 },
+        { ability: "Constitution", bonus: 1 }
+      ]
+    },
+    {
+      name: "Tech Hero",
+      description: "Relies on advanced technology and gadgets for superheroic abilities.",
+      abilityBonuses: [
+        { ability: "Intelligence", bonus: 2 },
+        { ability: "Dexterity", bonus: 1 }
+      ]
+    },
+    {
+      name: "Mystic",
+      description: "Draws power from arcane sources, ancient rituals, or otherworldly entities.",
+      abilityBonuses: [
+        { ability: "Wisdom", bonus: 2 },
+        { ability: "Charisma", bonus: 1 }
+      ]
+    },
+    {
+      name: "Highly Trained",
+      description: "No inherent powers, but has achieved peak human condition through intense training.",
+      abilityBonuses: [
+        { ability: "Dexterity", bonus: 2 },
+        { ability: "Wisdom", bonus: 1 }
+      ]
+    },
+    {
+      name: "Alien",
+      description: "Extraterrestrial being with physiological differences that grant special abilities.",
+      abilityBonuses: [
+        { ability: "Constitution", bonus: 2 },
+        { ability: "Intelligence", bonus: 1 }
+      ]
+    },
+    {
+      name: "Demi-God",
+      description: "Descendant of divine beings, bestowed with supernatural powers and abilities.",
+      abilityBonuses: [
+        { ability: "Charisma", bonus: 2 },
+        { ability: "Strength", bonus: 1 }
+      ]
+    }
+  ];
 
   return (
     <motion.div 
@@ -76,27 +109,46 @@ export default function Step2_Origin() {
         </div>
       ) : (
         <div className="space-y-6">
-          <RadioGroup 
-            value={selectedOrigin}
-            onValueChange={setSelectedOrigin}
-            className="space-y-4"
-          >
-            {origins.map((origin) => (
-              <div key={origin} className="flex items-start space-x-2">
-                <RadioGroupItem 
-                  value={origin} 
-                  id={origin}
-                  className="mt-1"
-                />
-                <div className="flex-1">
-                  <Label htmlFor={origin} className="font-comic text-xl cursor-pointer">
-                    {origin}
-                  </Label>
-                  <p className="text-gray-400 text-sm mt-1">{originDescriptions[origin] || "Description not available."}</p>
-                </div>
-              </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {originsData.map((origin) => (
+              <Card 
+                key={origin.name}
+                className={cn(
+                  "cursor-pointer transition-all hover:shadow-md hover:border-accent/50",
+                  selectedOrigin === origin.name ? "border-2 border-accent shadow-lg" : ""
+                )}
+                onClick={() => setSelectedOrigin(origin.name)}
+              >
+                <CardHeader className="pb-2">
+                  <div className="flex items-center justify-between">
+                    <CardTitle className="font-comic text-xl">{origin.name}</CardTitle>
+                    {selectedOrigin === origin.name && (
+                      <div className="bg-accent rounded-full p-1">
+                        <Check className="h-4 w-4 text-white" />
+                      </div>
+                    )}
+                  </div>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-gray-400 text-sm mb-4">{origin.description}</p>
+                  <div className="space-y-2">
+                    <h4 className="text-sm font-medium text-gray-300">Ability Bonuses:</h4>
+                    <div className="flex flex-wrap gap-2">
+                      {origin.abilityBonuses.map((bonus, index) => (
+                        <Badge 
+                          key={index}
+                          variant={selectedOrigin === origin.name ? "default" : "outline"} 
+                          className="font-medium"
+                        >
+                          {bonus.ability} +{bonus.bonus}
+                        </Badge>
+                      ))}
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
             ))}
-          </RadioGroup>
+          </div>
 
           <div className="flex justify-between mt-8 pt-4 border-t-2 border-gray-700">
             <Button 
