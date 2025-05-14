@@ -377,17 +377,131 @@ export const CharacterProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const updateDerivedStats = () => {
-    // Calculate derived stats based on abilities and other factors
-    const { dexterity, constitution, wisdom } = character.abilities;
+    // Get ability bonuses from origin and archetype
+    const getOriginBonus = (ability: string): number => {
+      // For newer origin formats that include type in parentheses
+      const originName = character.origin.split('(')[0].trim();
+      
+      // Handle special cases for Highly Trained with custom ability bonuses
+      if (originName === "Highly Trained" && character.origin.includes("Bonuses:")) {
+        const bonusText = character.origin.match(/Bonuses: (.*)\)/)?.[1] || "";
+        if (bonusText.includes(`+1 ${ability.charAt(0).toUpperCase() + ability.slice(1)}`)) {
+          return 1;
+        }
+        return 0;
+      }
+      
+      // Handle special cases for Mystic with subtypes
+      if (originName === "Mystic" && character.origin.includes("(")) {
+        // Extract subtype
+        const mysticType = character.origin.match(/Mystic \(([^:]+):/)?.[1]?.trim();
+        
+        if (mysticType === "Practitioner") {
+          if (ability === "wisdom") return 2;
+          if (ability === "charisma") return 1;
+        } else if (mysticType === "The Chosen") {
+          if (ability === "wisdom") return 2;
+          if (ability === "constitution") return 1;
+        } else if (mysticType === "Enchanter") {
+          if (ability === "wisdom") return 2;
+          if (ability === "intelligence") return 1;
+        } else {
+          // Default Mystic bonuses
+          if (ability === "wisdom") return 2;
+          if (ability === "charisma") return 1;
+        }
+        
+        return 0;
+      }
+      
+      // Default bonuses by origin
+      const bonuses: Record<string, Record<string, number>> = {
+        "Super-Human": { strength: 0, constitution: 2 },
+        "Tech Hero": { intelligence: 2, dexterity: 0 },
+        "Mystic": { wisdom: 2, charisma: 0 },
+        "Highly Trained": { dexterity: 0, strength: 0, constitution: 0 },
+        "Alien": { strength: 2, intelligence: 0 },
+        "Android": { intelligence: 2 },
+        "Cosmic": { constitution: 1, strength: 0, dexterity: 0, intelligence: 0, wisdom: 0, charisma: 0 },
+        "Demigod": { strength: 0, dexterity: 0, constitution: 0, intelligence: 0, wisdom: 0, charisma: 0 }
+      };
+      
+      return bonuses[originName]?.[ability] || 0;
+    };
     
+    const getArchetypeBonus = (ability: string): number => {
+      // Get just the archetype name without any additional info
+      const archetypeName = character.archetype.split('(')[0].trim();
+      
+      const bonuses: Record<string, Record<string, number>> = {
+        "Andromorph": { constitution: 2 },
+        "Blaster": { dexterity: 1, intelligence: 1 },
+        "Brawler": { strength: 2 },
+        "Controller": { intelligence: 1, wisdom: 1 },
+        "Heavy": { constitution: 1, strength: 1 },
+        "Infiltrator": { dexterity: 2 },
+        "Transporter": { dexterity: 1, constitution: 1 },
+        // Legacy archetypes for backward compatibility
+        "Bruiser": { strength: 1, constitution: 1 },
+        "Speedster": { dexterity: 2 },
+        "Defender": { constitution: 2 },
+        "Gadgeteer": { intelligence: 2 },
+        "Mentalist": { wisdom: 1, intelligence: 1 },
+        "Mastermind": { intelligence: 1, charisma: 1 },
+        "Shapeshifter": { constitution: 1, dexterity: 1 }
+      };
+      
+      return bonuses[archetypeName]?.[ability] || 0;
+    };
+    
+    // Calculate total bonuses including origin and archetype
+    const getTotalBonus = (ability: string): number => {
+      return getOriginBonus(ability) + getArchetypeBonus(ability);
+    };
+    
+    // Calculate effective ability scores with bonuses
+    const effectiveAbilities = {
+      strength: {
+        ...character.abilities.strength,
+        value: character.abilities.strength.value + getTotalBonus('strength'),
+        modifier: calculateModifier(character.abilities.strength.value + getTotalBonus('strength'))
+      },
+      dexterity: {
+        ...character.abilities.dexterity,
+        value: character.abilities.dexterity.value + getTotalBonus('dexterity'),
+        modifier: calculateModifier(character.abilities.dexterity.value + getTotalBonus('dexterity'))
+      },
+      constitution: {
+        ...character.abilities.constitution,
+        value: character.abilities.constitution.value + getTotalBonus('constitution'),
+        modifier: calculateModifier(character.abilities.constitution.value + getTotalBonus('constitution'))
+      },
+      intelligence: {
+        ...character.abilities.intelligence,
+        value: character.abilities.intelligence.value + getTotalBonus('intelligence'),
+        modifier: calculateModifier(character.abilities.intelligence.value + getTotalBonus('intelligence'))
+      },
+      wisdom: {
+        ...character.abilities.wisdom,
+        value: character.abilities.wisdom.value + getTotalBonus('wisdom'),
+        modifier: calculateModifier(character.abilities.wisdom.value + getTotalBonus('wisdom'))
+      },
+      charisma: {
+        ...character.abilities.charisma,
+        value: character.abilities.charisma.value + getTotalBonus('charisma'),
+        modifier: calculateModifier(character.abilities.charisma.value + getTotalBonus('charisma'))
+      }
+    };
+    
+    // Use effective abilities for derived stats
     setCharacter((prev) => ({
       ...prev,
-      defense: 10 + dexterity.modifier,
-      toughness: constitution.modifier,
-      fortitude: constitution.modifier,
-      reflex: dexterity.modifier,
-      willpower: wisdom.modifier,
-      initiative: dexterity.modifier,
+      defense: 10 + effectiveAbilities.dexterity.modifier,
+      toughness: effectiveAbilities.constitution.modifier,
+      fortitude: effectiveAbilities.constitution.modifier,
+      reflex: effectiveAbilities.dexterity.modifier,
+      willpower: effectiveAbilities.wisdom.modifier,
+      initiative: effectiveAbilities.dexterity.modifier,
       updatedAt: new Date().toISOString(),
     }));
   };
