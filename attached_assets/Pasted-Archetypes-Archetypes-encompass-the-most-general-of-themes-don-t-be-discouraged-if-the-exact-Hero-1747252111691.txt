@@ -1,0 +1,56 @@
+Archetypes 
+Archetypes encompass the most general of themes; don’t be discouraged if the exact Hero you had envisioned does not fall neatly into any of these categories. Just pick the best fit and move on from there. 
+When you choose an Archetype, you gain a bonus to a particular attribute and a list of Typical Powers. 
+Typical Powers list of suggested powers for your Archetype, these are merely suggestions which fit your chosen Archetype. 
+All powers marked with a * may be acquired as a skill-based power, utilizing the All-Skill power modification (see pg. XX). 
+<side bar>
+Character creation ride along: Archetypes  
+Ruben continues with his concept. Ruben goes with the Controller, and Nani goes with the brawler. 
+Ruben notes that the controller grants him either a +1 wisdom or charisma. He chooses charisma and takes note of the typical powers list, noting that one of his powers on that list gains a +2 power score boost, and he is also trained in influence.
+Nani goes with the +1 to strength and takes note of the typical powers list as well. She notes that she gets a choice between the martial arts feat or the weapon master feat, she intends to use a sword so chooses weapon master, additionally she notes that she is also trained in the Athletics skill.
+</side bar> 
+<H2>Andromorph
+You are an animal/human hybrid. Or a super-evolved and super-intelligent animal. Or the result of some scientist’s mad experiments with genetics. In any event your animal heritage allowed you to survive the aftermath of Z-Day and now you do your best to eke out a living in the ruins. In addition, your feral senses enable you to be a great asset to your teammates, as you can often detect zombies long before they detect you.
+Ability Bonus: +1 to Strength or Dexterity 
+Beast within:  you get a +2 power score bonus to any one power on their typical powers list; you are also trained in Outdoorsman. 
+Typical Powers: Aquatic Adaptation, Bestial Transformation, Cat Fall*, Chameleon, Communicate with Animals, Endurance*, Enhanced Attack*, Enhanced Ability Score (Strength or Dexterity)*, Enhanced Sense*, Flight, Growth, Glide, Life Support, Regeneration, Shapeshift, Shrink, Summon Animal, Super-Sense, Surge*, Wall Crawl, Weird Biology.
+
+<H2>Blaster 
+You excel at blasting people from a distance, but that’s not to say that you are helpless when cornered in melee! You just prefer to use your powers to punish at a distance… a handy attribute when being faced down by a pack of zombies or fighting super zombies without range powers. 
+Ability Bonus: +1 to Dexterity or Charisma   
+Marksman: You get a +2 power score bonus to any one power on their typical powers list, and you are also trained in athletics.
+Typical Powers: Adsorb Energy, Damaging Form, Energy Blast, Energy Explosion, Energy Generation, Energy Manipulation, Energy Sheath, Enhanced Ability Score (Dexterity)*, Flight, Force Field, Force Shield, Psychic Attack. 
+ 
+
+<H2>Brawler 
+You like to get into the thick of it! While some people used to call you reckless, its nothing compared to the levels of recklessness you have displayed after Z-Day. You get in the midst of the action, right there between the chattering teeth and ripping claws… right where you like it. 
+Ability Bonus: +1 to Strength, Dexterity, or Constitution    
+Scrapper: You gain your choice between the martial arts feat and the weapon master feat, and you are also trained in Athletics.
+Typical Powers: Armor, Bestial Transformation, Endurance*, Enhanced Attack*, Enhanced Ability Score (Strength, Dexterity, or Constitution) *, Enhanced Senses, Force Field. Personal, Invulnerability, Regeneration, Resistance, Super-Sense. 
+
+<H2>Controller 
+You may be a telepath or telekinetic or might even know how to control the weather. Put simply, you have the ability to control something or someone... As a telepath, you have survived by wit and guile by “convincing” others to fight for you, or finding an enclave to take you in. As a kinetic of any kind, you have just learned to crush or throw Zombies out of your way. 
+Ability Bonus: +1 to Wisdom or Charisma     
+Manipulator: You get a +2 power score bonus to any one power on their typical powers list, and you are also trained in influence.
+Typical Powers: Animate Object, Botanokinesis, Control Weather, Darkness, Gravity Control, Emotion Control, Entangle, Mind Control, Move Object, Nullify, invulnerability (psychic), Power Boost, Sixth Sense*, Sympathy, Telepathy, Weaken.
+ 
+<H2>Infiltrator 
+Most people refer to your type as ‘ghosts’; always slipping in, out, or through and always one step ahead of trouble. 
+Maybe you walk through walls or can simply disappear; very handy abilities, especially after Z-Day. 
+Ability Bonus: +1 to Dexterity or Intelligence     
+Ghost:  you gain the Stealthy feat for free; you are also trained in Stealth
+Typical Powers: Adoptive Muscle Memory*, Catfall*, Darkness, Eidetic Memory, Endurance*, Enhanced Sense*, Illusion, Incorporeal, Invisibility, Luck*, Manifest Gear*, Surge*, Swinging, Wall Crawl*, Wireless. 
+
+<H2>Heavy 
+Some people refer to you as a “shaker” because when you throw it down, people feel it blocks away. You are a powerhouse! 
+On the surface, you have a lot in common with brawlers, but it’s the way you bring down your foes that makes you different. Your skin is tougher, you’re stronger, and bigger… much bigger. You’re the guy people hide behind. You are a wall, turning to face on oncoming horde. 
+Ability Bonus: +1 to Strength or Constitution    
+Relentless:  You gain the Toughness feat and are also trained in Athletics.
+Typical Powers:  Adsorb Matter, Armor, Bestial Transformation, Density Control, Endurance*, Enhanced Attack*, Enhanced Ability Score (Strength or Constitution) *, Enhanced Senses, Force Field. Personal, Growth, Invulnerability, Regeneration, Resistance, Super-Sense. 
+<H2>Transporter 
+You possess the ability to move from place to place with ease. Perhaps you’re a flyer or a speedster, or the rarest of Transporters: a Teleporter. 
+You have done well keeping one step ahead of the Z’d Supers; most can’t even touch you. Maybe to those you help protect, you have become the best bait, always pulling the zombies where they are best dealt with. Or maybe you are a blur of motion, taking down zombies in the midst of a fight where you do the most good. 
+Ability Bonus: +1 to Dexterity or Wisdom    
+In and Out: You get a +2 power score bonus to any one power on their typical powers list, and you are also trained in athletics.  
+Typical Powers: Celerity*, Enhanced Ability Score (Dexterity, Wisdom, Constitution), Flight, Geospatial Shift,
+Invisibility, Portal, Speed*, Surge*, Teleport, Temporal Fugue, Tunnel, Wall Crawl.
