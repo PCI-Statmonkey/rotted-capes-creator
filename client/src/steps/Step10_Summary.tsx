@@ -65,7 +65,7 @@ export default function Step10_Summary() {
     updateCharacterField('fortitude', derivedStats.fortitude);
     updateCharacterField('willpower', derivedStats.willpower);
     updateCharacterField('initiative', derivedStats.initiative);
-  }, [character.abilities, updateCharacterField, derivedStats]);
+  }, [character.abilities, updateCharacterField]);
 
   const handleSaveCharacter = () => {
     saveCharacter();
@@ -521,50 +521,6 @@ export default function Step10_Summary() {
           </CardContent>
         </Card>
       </div>
-      
-      {/* Points Allocation */}
-      <Card className="mb-6">
-        <CardHeader className="py-3">
-          <CardTitle>Points Allocation</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-4">
-            <div>
-              <div className="flex justify-between mb-1">
-                <h3 className="font-semibold">Abilities</h3>
-                <span className="font-semibold">{character.pointsSpent.abilities} / 36 points</span>
-              </div>
-              <Progress value={(character.pointsSpent.abilities / 36) * 100} className="h-2" />
-            </div>
-            
-            <div>
-              <div className="flex justify-between mb-1">
-                <h3 className="font-semibold">Skills</h3>
-                <span className="font-semibold">{character.pointsSpent.skills} / 20 points</span>
-              </div>
-              <Progress value={(character.pointsSpent.skills / 20) * 100} className="h-2" />
-            </div>
-            
-            <div>
-              <div className="flex justify-between mb-1">
-                <h3 className="font-semibold">Powers</h3>
-                <span className="font-semibold">{character.pointsSpent.powers} / 32 points</span>
-              </div>
-              <Progress value={(character.pointsSpent.powers / 32) * 100} className="h-2" />
-            </div>
-            
-            <Separator />
-            
-            <div>
-              <div className="flex justify-between mb-1">
-                <h3 className="font-semibold">Total</h3>
-                <span className="font-semibold">{character.pointsSpent.total} / 88 points</span>
-              </div>
-              <Progress value={(character.pointsSpent.total / 88) * 100} className="h-2" />
-            </div>
-          </div>
-        </CardContent>
-      </Card>
       
       {/* Character Completion Checklist */}
       <Card className="mb-6">
