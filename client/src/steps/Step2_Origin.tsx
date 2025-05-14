@@ -35,7 +35,7 @@ export default function Step2_Origin() {
     setCurrentStep(1);
   };
 
-  // Enhanced origin data with ability bonuses
+  // Enhanced origin data with ability bonuses and placeholder images
   const originsData: OriginData[] = [
     {
       name: "Super-Human",
@@ -43,7 +43,8 @@ export default function Step2_Origin() {
       abilityBonuses: [
         { ability: "Strength", bonus: 2 },
         { ability: "Constitution", bonus: 1 }
-      ]
+      ],
+      image: "https://placehold.co/400x225/6d28d9/ffffff?text=Super-Human"
     },
     {
       name: "Tech Hero",
@@ -51,7 +52,8 @@ export default function Step2_Origin() {
       abilityBonuses: [
         { ability: "Intelligence", bonus: 2 },
         { ability: "Dexterity", bonus: 1 }
-      ]
+      ],
+      image: "https://placehold.co/400x225/0284c7/ffffff?text=Tech+Hero"
     },
     {
       name: "Mystic",
@@ -59,7 +61,8 @@ export default function Step2_Origin() {
       abilityBonuses: [
         { ability: "Wisdom", bonus: 2 },
         { ability: "Charisma", bonus: 1 }
-      ]
+      ],
+      image: "https://placehold.co/400x225/a21caf/ffffff?text=Mystic"
     },
     {
       name: "Highly Trained",
@@ -67,7 +70,8 @@ export default function Step2_Origin() {
       abilityBonuses: [
         { ability: "Dexterity", bonus: 2 },
         { ability: "Wisdom", bonus: 1 }
-      ]
+      ],
+      image: "https://placehold.co/400x225/b45309/ffffff?text=Highly+Trained"
     },
     {
       name: "Alien",
@@ -75,7 +79,8 @@ export default function Step2_Origin() {
       abilityBonuses: [
         { ability: "Constitution", bonus: 2 },
         { ability: "Intelligence", bonus: 1 }
-      ]
+      ],
+      image: "https://placehold.co/400x225/047857/ffffff?text=Alien"
     },
     {
       name: "Demi-God",
@@ -83,7 +88,8 @@ export default function Step2_Origin() {
       abilityBonuses: [
         { ability: "Charisma", bonus: 2 },
         { ability: "Strength", bonus: 1 }
-      ]
+      ],
+      image: "https://placehold.co/400x225/be123c/ffffff?text=Demi-God"
     }
   ];
 
@@ -114,20 +120,27 @@ export default function Step2_Origin() {
               <Card 
                 key={origin.name}
                 className={cn(
-                  "cursor-pointer transition-all hover:shadow-md hover:border-accent/50",
+                  "cursor-pointer transition-all hover:shadow-md hover:border-accent/50 overflow-hidden",
                   selectedOrigin === origin.name ? "border-2 border-accent shadow-lg" : ""
                 )}
                 onClick={() => setSelectedOrigin(origin.name)}
               >
-                <CardHeader className="pb-2">
-                  <div className="flex items-center justify-between">
-                    <CardTitle className="font-comic text-xl">{origin.name}</CardTitle>
-                    {selectedOrigin === origin.name && (
-                      <div className="bg-accent rounded-full p-1">
-                        <Check className="h-4 w-4 text-white" />
-                      </div>
-                    )}
-                  </div>
+                {/* Origin Image */}
+                <div className="relative">
+                  <img 
+                    src={origin.image} 
+                    alt={`${origin.name} Origin`} 
+                    className="w-full h-[160px] object-cover"
+                  />
+                  {/* Selected indicator overlay */}
+                  {selectedOrigin === origin.name && (
+                    <div className="absolute top-2 right-2 bg-accent rounded-full p-1 shadow-md">
+                      <Check className="h-5 w-5 text-white" />
+                    </div>
+                  )}
+                </div>
+                <CardHeader className="pb-2 pt-4">
+                  <CardTitle className="font-comic text-xl">{origin.name}</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <p className="text-gray-400 text-sm mb-4">{origin.description}</p>
