@@ -44,22 +44,7 @@ export const trackPageView = (url: string) => {
   });
 };
 
-// Track character creation events
-export const trackCharacterEvent = (
-  action: string,
-  characterData: any
-) => {
-  if (typeof window === 'undefined' || !window.gtag) return;
-  
-  window.gtag('event', action, {
-    event_category: 'character',
-    event_label: characterData.name || 'Unnamed Character',
-    character_origin: characterData.origin || 'Unknown Origin',
-    character_archetype: characterData.archetype || 'Unknown Archetype'
-  });
-};
-
-// Track general events
+// Track events
 export const trackEvent = (
   action: string, 
   category?: string, 

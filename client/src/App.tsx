@@ -14,6 +14,8 @@ import { AuthProvider } from "@/context/AuthContext";
 // Lazy-load pages for better performance
 const Profile = lazy(() => import("@/pages/Profile"));
 const Analytics = lazy(() => import("@/pages/Analytics"));
+const Admin = lazy(() => import("@/pages/Admin"));
+const AdminOrigins = lazy(() => import("@/pages/AdminOrigins"));
 
 // Router component to track page views
 function AppRouter() {
@@ -34,6 +36,9 @@ function AppRouter() {
         </Route>
         <Route path="/profile" component={Profile} />
         <Route path="/analytics" component={Analytics} />
+        {/* Admin Routes */}
+        <Route path="/admin" component={Admin} />
+        <Route path="/admin/origins" component={AdminOrigins} />
         <Route component={NotFound} />
       </Switch>
     </Suspense>
