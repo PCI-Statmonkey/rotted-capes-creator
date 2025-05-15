@@ -1,4 +1,10 @@
-import { users, characters, analytics, type User, type InsertUser, type Character, type InsertCharacter, type InsertAnalytics, type Analytics } from "@shared/schema";
+import { 
+  users, characters, analytics, origins, archetypes, skills, feats, skillSets, powers, powerSets, powerModifiers,
+  type User, type InsertUser, type Character, type InsertCharacter, type InsertAnalytics, type Analytics,
+  type Origin, type InsertOrigin, type Archetype, type InsertArchetype, type Skill, type InsertSkill,
+  type Feat, type InsertFeat, type SkillSet, type InsertSkillSet, type Power, type InsertPower,
+  type PowerSet, type InsertPowerSet, type PowerModifier, type InsertPowerModifier
+} from "@shared/schema";
 import { db } from "./db";
 import { eq, desc } from "drizzle-orm";
 
@@ -18,6 +24,62 @@ export interface IStorage {
   // Analytics methods
   recordAnalyticsEvent(event: string, data: any, userId?: string): Promise<any>;
   getAnalyticsSummary(): Promise<any>;
+  
+  // Game content methods - Origins
+  getAllOrigins(): Promise<Origin[]>;
+  getOriginById(id: number): Promise<Origin | undefined>;
+  createOrigin(data: InsertOrigin): Promise<Origin>;
+  updateOrigin(id: number, data: Partial<InsertOrigin>): Promise<Origin | undefined>;
+  deleteOrigin(id: number): Promise<void>;
+  
+  // Game content methods - Archetypes
+  getAllArchetypes(): Promise<Archetype[]>;
+  getArchetypeById(id: number): Promise<Archetype | undefined>;
+  createArchetype(data: InsertArchetype): Promise<Archetype>;
+  updateArchetype(id: number, data: Partial<InsertArchetype>): Promise<Archetype | undefined>;
+  deleteArchetype(id: number): Promise<void>;
+  
+  // Game content methods - Skills
+  getAllSkills(): Promise<Skill[]>;
+  getSkillById(id: number): Promise<Skill | undefined>;
+  createSkill(data: InsertSkill): Promise<Skill>;
+  updateSkill(id: number, data: Partial<InsertSkill>): Promise<Skill | undefined>;
+  deleteSkill(id: number): Promise<void>;
+  
+  // Game content methods - Feats
+  getAllFeats(): Promise<Feat[]>;
+  getFeatById(id: number): Promise<Feat | undefined>;
+  createFeat(data: InsertFeat): Promise<Feat>;
+  updateFeat(id: number, data: Partial<InsertFeat>): Promise<Feat | undefined>;
+  deleteFeat(id: number): Promise<void>;
+  
+  // Game content methods - Skill Sets
+  getAllSkillSets(): Promise<SkillSet[]>;
+  getSkillSetById(id: number): Promise<SkillSet | undefined>;
+  createSkillSet(data: InsertSkillSet): Promise<SkillSet>;
+  updateSkillSet(id: number, data: Partial<InsertSkillSet>): Promise<SkillSet | undefined>;
+  deleteSkillSet(id: number): Promise<void>;
+  
+  // Game content methods - Powers
+  getAllPowers(): Promise<Power[]>;
+  getPowerById(id: number): Promise<Power | undefined>;
+  createPower(data: InsertPower): Promise<Power>;
+  updatePower(id: number, data: Partial<InsertPower>): Promise<Power | undefined>;
+  deletePower(id: number): Promise<void>;
+  
+  // Game content methods - Power Sets
+  getAllPowerSets(): Promise<PowerSet[]>;
+  getPowerSetById(id: number): Promise<PowerSet | undefined>;
+  createPowerSet(data: InsertPowerSet): Promise<PowerSet>;
+  updatePowerSet(id: number, data: Partial<InsertPowerSet>): Promise<PowerSet | undefined>;
+  deletePowerSet(id: number): Promise<void>;
+  
+  // Game content methods - Power Modifiers
+  getAllPowerModifiers(): Promise<PowerModifier[]>;
+  getPowerModifierById(id: number): Promise<PowerModifier | undefined>;
+  createPowerModifier(data: InsertPowerModifier): Promise<PowerModifier>;
+  updatePowerModifier(id: number, data: Partial<InsertPowerModifier>): Promise<PowerModifier | undefined>;
+  deletePowerModifier(id: number): Promise<void>;
 }
 
 // DATABASE STORAGE IMPLEMENTATION
