@@ -858,6 +858,21 @@ export default function Step5_Skills() {
                   const occurrences = getSkillOccurrences(skill.name);
                   const hasFocus = occurrences.count > 1;
                   
+                  // Check if this skill is already in a skill set without focus
+                  const inSkillSetWithoutFocus = selectedSkillSets.some(setName => {
+                    const skillSet = SKILL_SETS.find(set => set.name === setName);
+                    if (!skillSet) return false;
+                    
+                    // Check if this skill appears in the skill set without focus
+                    return skillSet.skills.some(setSkill => 
+                      setSkill.name === skill.name && !setSkill.focus
+                    );
+                  });
+                  
+                  // Skip rendering this skill if it's already in a skill set without focus
+                  // and not already selected as an individual skill
+                  if (inSkillSetWithoutFocus && !isSelected) return null;
+                  
                   return (
                     <div 
                       key={skill.name}
@@ -916,6 +931,19 @@ export default function Step5_Skills() {
                   const canBeSelected = isSelected || availablePoints >= 5;
                   const occurrences = getFeatOccurrences(feat);
                   const isDuplicate = occurrences.count > 1;
+                  
+                  // Check if this feat is already included in a skill set
+                  const inSkillSet = selectedSkillSets.some(setName => {
+                    const skillSet = SKILL_SETS.find(set => set.name === setName);
+                    if (!skillSet) return false;
+                    
+                    // Check if this feat appears in the skill set
+                    return skillSet.feats.includes(feat);
+                  });
+                  
+                  // Skip rendering this feat if it's already in a skill set
+                  // and not already selected as an individual feat
+                  if (inSkillSet && !isSelected) return null;
                   
                   return (
                     <div 
