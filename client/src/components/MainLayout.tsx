@@ -11,6 +11,7 @@ import {
   BarChart4,
   Settings,
   Database,
+  Globe,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Drawer, DrawerContent, DrawerTrigger } from "@/components/ui/drawer";
@@ -18,6 +19,8 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { auth, signInWithGoogle, logoutUser } from "@/lib/firebase";
@@ -344,33 +347,66 @@ export default function MainLayout({ children }: MainLayoutProps) {
             Rotted Capes 2.0 and all related IP © Paradigm Concepts.
           </div>
           
-          {/* Small admin login button */}
+          {/* Admin login dropdown */}
           <div className="opacity-50 hover:opacity-100 transition-opacity mt-2">
-            <Button 
-              variant="link" 
-              size="sm" 
-              className="text-xs text-muted-foreground"
-              onClick={() => {
-                if (localStorage.getItem('isAdmin') === 'true') {
-                  window.location.assign("/admin");
-                } else {
-                  const password = prompt("Enter admin password:");
-                  if (password === "rottedcapes2admin") {
-                    // Store admin status in localStorage
-                    localStorage.setItem('isAdmin', 'true');
-                    localStorage.setItem('mockUserEmail', 'admin@rottedcapes.com');
-                    localStorage.setItem('mockUserName', 'Admin User');
-                    
-                    alert("Admin login successful! Redirecting to admin panel.");
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button 
+                  variant="link" 
+                  size="sm" 
+                  className="text-xs text-muted-foreground"
+                >
+                  Admin Access
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="w-56">
+                <DropdownMenuLabel>Admin Login</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={() => {
+                  if (localStorage.getItem('isAdmin') === 'true') {
                     window.location.assign("/admin");
                   } else {
-                    alert("Invalid password");
+                    const password = prompt("Enter admin password:");
+                    if (password === "rottedcapes2admin") {
+                      // Store admin status in localStorage
+                      localStorage.setItem('isAdmin', 'true');
+                      localStorage.setItem('mockUserEmail', 'admin@rottedcapes.com');
+                      localStorage.setItem('mockUserName', 'Admin User');
+                      
+                      alert("Admin login successful! Redirecting to admin panel.");
+                      window.location.assign("/admin");
+                    } else {
+                      alert("Invalid password");
+                    }
                   }
-                }
-              }}
-            >
-              Admin Access
-            </Button>
+                }}>
+                  <LogIn className="mr-2 h-4 w-4" />
+                  <span>Standard Login</span>
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => {
+                  if (localStorage.getItem('isAdmin') === 'true') {
+                    window.location.assign("/admin");
+                  } else {
+                    const password = prompt("Enter Opera browser admin password:");
+                    if (password === "opera-admin-special") {
+                      // Store admin status in localStorage with Opera identifier
+                      localStorage.setItem('isAdmin', 'true');
+                      localStorage.setItem('isOperaAdmin', 'true');
+                      localStorage.setItem('mockUserEmail', 'opera-admin@rottedcapes.com');
+                      localStorage.setItem('mockUserName', 'Opera Admin User');
+                      
+                      alert("Opera admin login successful! Redirecting to admin panel.");
+                      window.location.assign("/admin");
+                    } else {
+                      alert("Invalid Opera admin password");
+                    }
+                  }
+                }}>
+                  <Globe className="mr-2 h-4 w-4" />
+                  <span>Opera Browser Login</span>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
         </div>
       </footer>
