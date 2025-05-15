@@ -90,8 +90,8 @@ export default function AdminOrigins() {
   
   // Redirect if not logged in or not admin
   useEffect(() => {
-    // Skip all checks if user has direct admin access
-    if (hasDirectAccess) {
+    // Skip all checks if user has direct admin access or localStorage admin
+    if (hasDirectAccess || localStorage.getItem('isAdmin') === 'true') {
       return;
     }
     
@@ -117,7 +117,8 @@ export default function AdminOrigins() {
   
   // Fetch origins data
   useEffect(() => {
-    if ((currentUser && isAdmin) || hasDirectAccess) {
+    const isLocalAdmin = localStorage.getItem('isAdmin') === 'true';
+    if ((currentUser && isAdmin) || hasDirectAccess || isLocalAdmin) {
       fetchOrigins();
     }
   }, [currentUser, isAdmin, hasDirectAccess]);
@@ -303,7 +304,7 @@ export default function AdminOrigins() {
   }
 
   // Only render content if user is admin or has direct access
-  if (!isAdmin && !hasDirectAccess && !isLoading) {
+  if (!isAdmin && !hasDirectAccess && localStorage.getItem('isAdmin') !== 'true' && !isLoading) {
     return null;
   }
 
