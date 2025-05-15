@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react";
 import { useLocation } from "wouter";
 import { useToast } from "@/hooks/use-toast";
-import { useAuth } from "@/context/AuthContext";
-import { saveAnalyticsEvent } from "@/lib/api";
 import { trackEvent } from "@/lib/analytics";
+import { saveAnalyticsEvent } from "@/lib/api";
 import AdminProtectedRoute from "@/components/AdminProtectedRoute";
 import { Button } from "@/components/ui/button";
 import {
@@ -35,62 +34,58 @@ import {
 export default function AdminPage() {
   const { toast } = useToast();
   const [, navigate] = useLocation();
-  const { currentUser, isAdmin, isLoading } = useAuth();
-  const [hasDirectAccess, setHasDirectAccess] = useState(false);
   const [activeTab, setActiveTab] = useState("overview");
+  const [isLoading, setIsLoading] = useState(false);
+  const [analyticsData, setAnalyticsData] = useState(null);
+  const [isLoadingAnalytics, setIsLoadingAnalytics] = useState(true);
   
-  // Check for special Opera admin access
-  useEffect(() => {
-    const directAccess = localStorage.getItem('isAdmin') === 'true';
-    setHasDirectAccess(directAccess);
-  }, []);
-  
-  // Redirect if not logged in or not admin
-  useEffect(() => {
-    // Don't redirect if the user has direct admin access OR if opera admin is set in localStorage
-    if (hasDirectAccess || localStorage.getItem('isAdmin') === 'true') {
-      return;
-    }
-    
-    if (!currentUser && !isLoading) {
-      navigate("/");
+  // Function to fetch analytics data
+  const fetchAnalyticsData = async () => {
+    setIsLoadingAnalytics(true);
+    try {
+      // This would be replaced with an actual API call
+      // const response = await getAnalyticsSummary();
+      // setAnalyticsData(response);
+      
+      // For now, we'll just set a timeout to simulate loading
+      setTimeout(() => {
+        setIsLoadingAnalytics(false);
+      }, 1000);
+    } catch (error) {
+      console.error("Error fetching analytics data:", error);
       toast({
-        title: "Login Required",
-        description: "Please login to access this page.",
+        title: "Analytics Error",
+        description: "Failed to load analytics data. Please try again.",
         variant: "destructive"
       });
-      return;
+    } finally {
+      setIsLoadingAnalytics(false);
     }
-    
-    if (currentUser && !isAdmin && !isLoading) {
-      navigate("/");
-      toast({
-        title: "Access Denied",
-        description: "You don't have permission to access the admin dashboard.",
-        variant: "destructive"
-      });
-    }
-  }, [currentUser, isAdmin, isLoading, navigate, toast, hasDirectAccess]);
+  };
   
   // Log admin page view for analytics
   useEffect(() => {
-    if ((currentUser && isAdmin) || hasDirectAccess) {
-      // Record analytics event
-      if (currentUser) {
-        saveAnalyticsEvent('admin_view', {
-          userId: currentUser.uid
-        }, currentUser.uid);
-      } else if (hasDirectAccess) {
-        saveAnalyticsEvent('admin_view', {
-          userId: 'opera-admin-user',
-          note: 'Opera browser direct access'
-        }, 'opera-admin-user');
-      }
-      
-      // Track in Google Analytics
-      trackEvent('admin_view', 'admin');
+    // Record analytics event
+    const adminUid = localStorage.getItem('adminUid');
+    const isOperaAdmin = localStorage.getItem('operaAdmin') === 'true';
+    
+    if (adminUid) {
+      saveAnalyticsEvent('admin_view', {
+        userId: adminUid
+      }, adminUid);
+    } else if (isOperaAdmin || localStorage.getItem('isAdmin') === 'true') {
+      saveAnalyticsEvent('admin_view', {
+        userId: 'opera-admin-user',
+        note: 'Opera browser direct access'
+      }, 'opera-admin-user');
     }
-  }, [currentUser, isAdmin, hasDirectAccess]);
+    
+    // Track in Google Analytics
+    trackEvent('admin_view', 'admin');
+    
+    // Fetch analytics data
+    fetchAnalyticsData();
+  }, []);
 
   // Placeholder for actual admin functionalities
   const contentCards = [
@@ -158,17 +153,7 @@ export default function AdminPage() {
     trackEvent('admin_tab_change', 'admin', value);
   };
 
-  if (isLoading) {
-    // Show loading state
-    return (
-      <AdminProtectedRoute>
-        <div className="container mx-auto py-8 text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-accent mx-auto"></div>
-          <p className="mt-4 text-muted-foreground">Loading admin dashboard...</p>
-        </div>
-      </AdminProtectedRoute>
-    );
-  }
+  // The loading state is handled by AdminProtectedRoute
 
   return (
     <AdminProtectedRoute>
