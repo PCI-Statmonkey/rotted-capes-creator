@@ -137,7 +137,7 @@ const POWER_SETS: PowerSet[] = [
       { name: "Surge", score: 14 },
       { name: "Temporal Fugue", score: 12 }
     ],
-    requiredArchetypes: ["Speedster"]
+    requiredArchetypes: ["Speedster", "Transporter"]
   }
 ];
 
