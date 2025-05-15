@@ -1004,23 +1004,72 @@ export default function Step5_Skills() {
             {selectedSkillSets.length > 0 && (
               <div>
                 <h4 className="text-gray-400">Selected Skill Sets:</h4>
-                <div className="flex flex-wrap gap-1 mt-1">
-                  {selectedSkillSets.map(setName => (
-                    <span key={setName} className="bg-gray-700 text-white px-2 py-1 rounded-full flex items-center">
-                      {setName}
-                      <Button 
-                        variant="ghost" 
-                        size="icon" 
-                        className="h-4 w-4 p-0 ml-1 hover:bg-gray-600 rounded-full"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          toggleSkillSet(setName);
-                        }}
-                      >
-                        <X className="h-3 w-3" />
-                      </Button>
-                    </span>
-                  ))}
+                <div className="space-y-3 mt-2">
+                  {selectedSkillSets.map(setName => {
+                    const skillSet = SKILL_SETS.find(set => set.name === setName);
+                    if (!skillSet) return null;
+                    
+                    return (
+                      <div key={setName} className="bg-gray-800 border border-gray-700 rounded-lg p-3 relative">
+                        <div className="flex justify-between items-center mb-2">
+                          <h5 className="font-medium text-accent">{setName}</h5>
+                          <div className="flex items-center">
+                            <span className="text-xs text-gray-400 mr-2">{skillSet.points} points</span>
+                            <Button 
+                              variant="ghost" 
+                              size="icon" 
+                              className="h-5 w-5 p-0 hover:bg-gray-600 rounded-full"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                toggleSkillSet(setName);
+                              }}
+                            >
+                              <X className="h-3 w-3" />
+                            </Button>
+                          </div>
+                        </div>
+                        
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                          <div>
+                            <span className="text-xs text-gray-400 uppercase tracking-wide">Skills:</span>
+                            <div className="flex flex-wrap gap-1 mt-1">
+                              {skillSet.skills.map((skill, idx) => (
+                                <span 
+                                  key={`${skill.name}-${idx}`}
+                                  className={`
+                                    px-2 py-0.5 text-xs rounded-full 
+                                    ${skill.focus ? 'bg-green-900/30 text-green-400 border border-green-800' : 'bg-gray-700 text-gray-300'}
+                                  `}
+                                >
+                                  {skill.name}{skill.focus === true ? " •" : ""}
+                                </span>
+                              ))}
+                            </div>
+                          </div>
+                          
+                          <div>
+                            <span className="text-xs text-gray-400 uppercase tracking-wide">Feats:</span>
+                            <div className="flex flex-wrap gap-1 mt-1">
+                              {skillSet.feats.map(feat => (
+                                <span 
+                                  key={feat}
+                                  className="bg-gray-700 text-gray-300 px-2 py-0.5 rounded-full text-xs"
+                                >
+                                  {feat}
+                                </span>
+                              ))}
+                            </div>
+                          </div>
+                        </div>
+                        
+                        {skillSet.description && (
+                          <div className="mt-2 text-xs text-gray-400">
+                            <span className="italic">{skillSet.description}</span>
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
                 </div>
               </div>
             )}
