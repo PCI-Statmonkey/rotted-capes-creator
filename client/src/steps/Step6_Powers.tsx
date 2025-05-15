@@ -1143,7 +1143,7 @@ export default function Step6_Powers() {
                             <SelectContent className="max-h-[300px]">
                               {ALL_POWERS.map(powerName => (
                                 <SelectItem key={powerName} value={powerName}>
-                                  {powerName}{ALL_SKILL_COMPATIBLE.includes(powerName) && " *"}
+                                  <span className="text-red-500">{powerName}</span>{ALL_SKILL_COMPATIBLE.includes(powerName) && " *"}
                                 </SelectItem>
                               ))}
                             </SelectContent>
