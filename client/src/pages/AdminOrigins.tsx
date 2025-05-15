@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useLocation } from "wouter";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/context/AuthContext";
+import AdminProtectedRoute from "@/components/AdminProtectedRoute";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -293,22 +294,20 @@ export default function AdminOrigins() {
     }
   };
 
-  if (isLoading || isLoadingOrigins) {
+  if (isLoadingOrigins) {
     // Show loading state
     return (
-      <div className="container mx-auto py-8 text-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-accent mx-auto"></div>
-        <p className="mt-4 text-muted-foreground">Loading origins data...</p>
-      </div>
+      <AdminProtectedRoute>
+        <div className="container mx-auto py-8 text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-accent mx-auto"></div>
+          <p className="mt-4 text-muted-foreground">Loading origins data...</p>
+        </div>
+      </AdminProtectedRoute>
     );
   }
 
-  // Only render content if user is admin or has direct access
-  if (!isAdmin && !hasDirectAccess && localStorage.getItem('isAdmin') !== 'true' && !isLoading) {
-    return null;
-  }
-
   return (
+    <AdminProtectedRoute>
     <div className="container mx-auto py-8 px-4">
       <div className="flex items-center mb-8">
         <Button 
@@ -665,5 +664,6 @@ export default function AdminOrigins() {
         </CardFooter>
       </Card>
     </div>
+    </AdminProtectedRoute>
   );
 }
