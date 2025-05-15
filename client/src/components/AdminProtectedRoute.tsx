@@ -1,6 +1,5 @@
 import { ReactNode, useEffect, useState } from "react";
 import { useLocation } from "wouter";
-import { useAuth } from "@/context/AuthContext";
 import { useToast } from "@/hooks/use-toast";
 
 interface AdminProtectedRouteProps {

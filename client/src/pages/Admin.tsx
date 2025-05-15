@@ -4,6 +4,7 @@ import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/context/AuthContext";
 import { saveAnalyticsEvent } from "@/lib/api";
 import { trackEvent } from "@/lib/analytics";
+import AdminProtectedRoute from "@/components/AdminProtectedRoute";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -160,19 +161,17 @@ export default function AdminPage() {
   if (isLoading) {
     // Show loading state
     return (
-      <div className="container mx-auto py-8 text-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-accent mx-auto"></div>
-        <p className="mt-4 text-muted-foreground">Loading admin dashboard...</p>
-      </div>
+      <AdminProtectedRoute>
+        <div className="container mx-auto py-8 text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-accent mx-auto"></div>
+          <p className="mt-4 text-muted-foreground">Loading admin dashboard...</p>
+        </div>
+      </AdminProtectedRoute>
     );
   }
 
-  // Only render content if user is admin or has direct access
-  if (!isAdmin && !hasDirectAccess && localStorage.getItem('isAdmin') !== 'true' && !isLoading) {
-    return null;
-  }
-
   return (
+    <AdminProtectedRoute>
     <div className="container mx-auto py-8 px-4">
       <div className="flex items-center mb-8">
         <Database className="h-8 w-8 mr-3 text-accent" />
@@ -304,5 +303,6 @@ export default function AdminPage() {
         </TabsContent>
       </Tabs>
     </div>
+    </AdminProtectedRoute>
   );
 }
