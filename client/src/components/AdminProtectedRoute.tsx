@@ -9,45 +9,32 @@ interface AdminProtectedRouteProps {
 export default function AdminProtectedRoute({ children }: AdminProtectedRouteProps) {
   const { toast } = useToast();
   const [, navigate] = useLocation();
-  const { currentUser, isAdmin, isLoading } = useAuth();
-  const [hasDirectAccess, setHasDirectAccess] = useState(false);
-  const [access, setAccess] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [hasAccess, setHasAccess] = useState(false);
   
-  // Check for administrative access from various sources
+  // Simplified admin check that relies only on localStorage
   useEffect(() => {
-    const directAccess = localStorage.getItem('isAdmin') === 'true';
-    setHasDirectAccess(directAccess);
-    
-    // Skip all checks if user has direct admin access or localStorage admin
-    if (directAccess || localStorage.getItem('isAdmin') === 'true') {
-      setAccess(true);
+    // Check for opera admin or standard admin flag in localStorage
+    const isAdmin = localStorage.getItem('isAdmin') === 'true';
+    const operaAdmin = localStorage.getItem('operaAdmin') === 'true';
+    const adminUid = localStorage.getItem('adminUid');
+
+    if (isAdmin || operaAdmin || adminUid) {
+      setHasAccess(true);
+      setIsLoading(false);
       return;
     }
     
-    if (!currentUser && !isLoading) {
-      navigate("/");
-      toast({
-        title: "Login Required",
-        description: "Please login to access this page.",
-        variant: "destructive"
-      });
-      return;
-    }
+    // If no admin access is found, redirect with message
+    navigate("/");
+    toast({
+      title: "Access Denied",
+      description: "You don't have permission to access the admin dashboard.",
+      variant: "destructive"
+    });
     
-    if (currentUser && !isAdmin && !isLoading) {
-      navigate("/");
-      toast({
-        title: "Access Denied",
-        description: "You don't have permission to access the admin dashboard.",
-        variant: "destructive"
-      });
-      return;
-    }
-    
-    if (currentUser && isAdmin) {
-      setAccess(true);
-    }
-  }, [currentUser, isAdmin, isLoading, navigate, toast]);
+    setIsLoading(false);
+  }, [navigate, toast]);
   
   if (isLoading) {
     // Show loading state
@@ -59,7 +46,7 @@ export default function AdminProtectedRoute({ children }: AdminProtectedRoutePro
     );
   }
   
-  if (!access && !isLoading) {
+  if (!hasAccess) {
     return null;
   }
   

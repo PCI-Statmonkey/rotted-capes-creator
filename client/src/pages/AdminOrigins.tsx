@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { useLocation } from "wouter";
 import { useToast } from "@/hooks/use-toast";
-import { useAuth } from "@/context/AuthContext";
 import AdminProtectedRoute from "@/components/AdminProtectedRoute";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -60,8 +59,6 @@ type NewOrigin = Omit<Origin, 'id' | 'createdAt' | 'updatedAt'>;
 export default function AdminOrigins() {
   const { toast } = useToast();
   const [, navigate] = useLocation();
-  const { currentUser, isAdmin, isLoading } = useAuth();
-  const [hasDirectAccess, setHasDirectAccess] = useState(false);
   const [origins, setOrigins] = useState<Origin[]>([]);
   const [isLoadingOrigins, setIsLoadingOrigins] = useState(true);
   const [selectedOrigin, setSelectedOrigin] = useState<Origin | null>(null);
@@ -83,46 +80,10 @@ export default function AdminOrigins() {
   const [isEditingOrigin, setIsEditingOrigin] = useState(false);
   const [isDeletingOrigin, setIsDeletingOrigin] = useState(false);
   
-  // Check for special Opera admin access
+  // Fetch origins data on component mount
   useEffect(() => {
-    const directAccess = localStorage.getItem('isAdmin') === 'true';
-    setHasDirectAccess(directAccess);
+    fetchOrigins();
   }, []);
-  
-  // Redirect if not logged in or not admin
-  useEffect(() => {
-    // Skip all checks if user has direct admin access or localStorage admin
-    if (hasDirectAccess || localStorage.getItem('isAdmin') === 'true') {
-      return;
-    }
-    
-    if (!currentUser && !isLoading) {
-      navigate("/");
-      toast({
-        title: "Login Required",
-        description: "Please login to access this page.",
-        variant: "destructive"
-      });
-      return;
-    }
-    
-    if (currentUser && !isAdmin && !isLoading) {
-      navigate("/");
-      toast({
-        title: "Access Denied",
-        description: "You don't have permission to access the admin dashboard.",
-        variant: "destructive"
-      });
-    }
-  }, [currentUser, isAdmin, isLoading, navigate, toast, hasDirectAccess]);
-  
-  // Fetch origins data
-  useEffect(() => {
-    const isLocalAdmin = localStorage.getItem('isAdmin') === 'true';
-    if ((currentUser && isAdmin) || hasDirectAccess || isLocalAdmin) {
-      fetchOrigins();
-    }
-  }, [currentUser, isAdmin, hasDirectAccess]);
 
   const fetchOrigins = async () => {
     setIsLoadingOrigins(true);
