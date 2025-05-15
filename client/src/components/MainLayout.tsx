@@ -373,6 +373,14 @@ export default function MainLayout({ children }: MainLayoutProps) {
                       localStorage.setItem('mockUserEmail', 'admin@rottedcapes.com');
                       localStorage.setItem('mockUserName', 'Admin User');
                       
+                      // Create a mock user for auth context
+                      const mockUser = {
+                        uid: "admin-user",
+                        email: "admin@rottedcapes.com",
+                        displayName: "Admin User"
+                      };
+                      
+                      // Force page reload to update auth context
                       alert("Admin login successful! Redirecting to admin panel.");
                       window.location.assign("/admin");
                     } else {
@@ -395,6 +403,14 @@ export default function MainLayout({ children }: MainLayoutProps) {
                       localStorage.setItem('mockUserEmail', 'opera-admin@rottedcapes.com');
                       localStorage.setItem('mockUserName', 'Opera Admin User');
                       
+                      // Create a mock user for auth context
+                      const mockUser = {
+                        uid: "opera-admin-user",
+                        email: "opera-admin@rottedcapes.com",
+                        displayName: "Opera Admin User"
+                      };
+                      
+                      // Force page reload to update auth context
                       alert("Opera admin login successful! Redirecting to admin panel.");
                       window.location.assign("/admin");
                     } else {

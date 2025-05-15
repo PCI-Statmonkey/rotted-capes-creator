@@ -46,8 +46,8 @@ export default function AdminPage() {
   
   // Redirect if not logged in or not admin
   useEffect(() => {
-    // Skip all checks if user has direct admin access
-    if (hasDirectAccess) {
+    // Don't redirect if the user has direct admin access OR if opera admin is set in localStorage
+    if (hasDirectAccess || localStorage.getItem('isAdmin') === 'true') {
       return;
     }
     
@@ -168,7 +168,7 @@ export default function AdminPage() {
   }
 
   // Only render content if user is admin or has direct access
-  if (!isAdmin && !hasDirectAccess && !isLoading) {
+  if (!isAdmin && !hasDirectAccess && localStorage.getItem('isAdmin') !== 'true' && !isLoading) {
     return null;
   }
 
