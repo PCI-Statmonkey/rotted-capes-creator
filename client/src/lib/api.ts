@@ -1,107 +1,111 @@
-/**
- * API utility functions for interacting with the backend
- */
+import { queryClient } from "./queryClient";
 
-// Record an analytics event
-export const saveAnalyticsEvent = async (event: string, data: any, userId?: string) => {
+// Base API URL for the development environment
+const baseUrl = "/api";
+
+/**
+ * Generic fetch wrapper for API requests
+ */
+const fetchApi = async <T>(
+  endpoint: string,
+  options: RequestInit = {}
+): Promise<T> => {
+  const url = `${baseUrl}${endpoint}`;
+  
+  const response = await fetch(url, {
+    ...options,
+    headers: {
+      "Content-Type": "application/json",
+      ...options.headers,
+    },
+  });
+
+  if (!response.ok) {
+    const error = await response.json().catch(() => ({}));
+    throw new Error(error.message || "An error occurred with the API request");
+  }
+
+  return response.json();
+};
+
+/**
+ * GET request helper
+ */
+export const get = <T>(endpoint: string): Promise<T> => {
+  return fetchApi<T>(endpoint);
+};
+
+/**
+ * POST request helper
+ */
+export const post = <T>(endpoint: string, data: any): Promise<T> => {
+  return fetchApi<T>(endpoint, {
+    method: "POST",
+    body: JSON.stringify(data),
+  });
+};
+
+/**
+ * PUT request helper
+ */
+export const put = <T>(endpoint: string, data: any): Promise<T> => {
+  return fetchApi<T>(endpoint, {
+    method: "PUT",
+    body: JSON.stringify(data),
+  });
+};
+
+/**
+ * PATCH request helper
+ */
+export const patch = <T>(endpoint: string, data: any): Promise<T> => {
+  return fetchApi<T>(endpoint, {
+    method: "PATCH",
+    body: JSON.stringify(data),
+  });
+};
+
+/**
+ * DELETE request helper
+ */
+export const del = <T>(endpoint: string): Promise<T> => {
+  return fetchApi<T>(endpoint, {
+    method: "DELETE",
+  });
+};
+
+/**
+ * Analytics event tracking helper
+ */
+export const saveAnalyticsEvent = async (
+  event: string, 
+  data: any, 
+  userId?: string
+): Promise<any> => {
   try {
-    const response = await fetch('/api/analytics/events', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        event,
-        data,
-        userId
-      }),
+    return await post('/analytics/events', {
+      event,
+      data,
+      userId
     });
-    
-    if (!response.ok) {
-      throw new Error('Failed to save analytics event');
-    }
-    
-    return await response.json();
   } catch (error) {
-    console.error('Error saving analytics event:', error);
+    console.error('Failed to save analytics event:', error);
     return null;
   }
 };
 
-// Fetch game content
-export const fetchGameContent = async (contentType: string) => {
+/**
+ * Character tracking helper
+ */
+export const trackCharacterEvent = async (
+  event: string, 
+  characterData: any, 
+  userId?: string
+): Promise<any> => {
   try {
-    const response = await fetch(`/api/game-content/${contentType}`);
-    
-    if (!response.ok) {
-      throw new Error(`Failed to fetch ${contentType}`);
-    }
-    
-    return await response.json();
+    return await saveAnalyticsEvent(`character_${event}`, characterData, userId);
   } catch (error) {
-    console.error(`Error fetching ${contentType}:`, error);
-    return [];
-  }
-};
-
-// Create game content
-export const createGameContent = async (contentType: string, data: any) => {
-  try {
-    const response = await fetch(`/api/game-content/${contentType}`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data),
-    });
-    
-    if (!response.ok) {
-      throw new Error(`Failed to create ${contentType}`);
-    }
-    
-    return await response.json();
-  } catch (error) {
-    console.error(`Error creating ${contentType}:`, error);
-    throw error;
-  }
-};
-
-// Update game content
-export const updateGameContent = async (contentType: string, id: number, data: any) => {
-  try {
-    const response = await fetch(`/api/game-content/${contentType}/${id}`, {
-      method: 'PATCH',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data),
-    });
-    
-    if (!response.ok) {
-      throw new Error(`Failed to update ${contentType}`);
-    }
-    
-    return await response.json();
-  } catch (error) {
-    console.error(`Error updating ${contentType}:`, error);
-    throw error;
-  }
-};
-
-// Delete game content
-export const deleteGameContent = async (contentType: string, id: number) => {
-  try {
-    const response = await fetch(`/api/game-content/${contentType}/${id}`, {
-      method: 'DELETE',
-    });
-    
-    if (!response.ok) {
-      throw new Error(`Failed to delete ${contentType}`);
-    }
-    
-    return true;
-  } catch (error) {
-    console.error(`Error deleting ${contentType}:`, error);
-    throw error;
+    console.error('Failed to track character event:', error);
+    return null;
   }
 };

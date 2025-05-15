@@ -1,3 +1,5 @@
+import { saveAnalyticsEvent } from "./api";
+
 // Define the gtag function globally
 declare global {
   interface Window {
@@ -44,18 +46,55 @@ export const trackPageView = (url: string) => {
   });
 };
 
-// Track events
-export const trackEvent = (
+// Track a general event
+export const trackEvent = async (
   action: string, 
   category?: string, 
   label?: string, 
   value?: number
 ) => {
-  if (typeof window === 'undefined' || !window.gtag) return;
-  
-  window.gtag('event', action, {
-    event_category: category,
-    event_label: label,
-    value: value,
-  });
+  try {
+    // Send to Google Analytics if available
+    if (typeof window !== 'undefined' && window.gtag) {
+      window.gtag('event', action, {
+        event_category: category,
+        event_label: label,
+        value: value,
+      });
+    }
+    
+    // Also send to our own analytics backend
+    return await saveAnalyticsEvent('ui_event', {
+      action,
+      category,
+      label,
+      value
+    });
+  } catch (error) {
+    console.error('Error tracking event:', error);
+    return null;
+  }
+};
+
+// Track a character-related event
+export const trackCharacterEvent = async (
+  event: string, 
+  characterData: any, 
+  userId?: string
+): Promise<any> => {
+  try {
+    // Send to Google Analytics if available
+    if (typeof window !== 'undefined' && window.gtag) {
+      window.gtag('event', `character_${event}`, {
+        event_category: 'character',
+        event_label: characterData.name || 'Unknown',
+      });
+    }
+    
+    // Also send to our own analytics backend
+    return await saveAnalyticsEvent(`character_${event}`, characterData, userId);
+  } catch (error) {
+    console.error('Failed to track character event:', error);
+    return null;
+  }
 };

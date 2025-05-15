@@ -1,7 +1,7 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from "react";
 import { onAuthStateChanged, User as FirebaseUser } from "firebase/auth";
 import { auth, signInWithGoogle, logoutUser } from "@/lib/firebase";
-import { saveAnalyticsEvent } from "@/lib/firebase";
+import { saveAnalyticsEvent } from "@/lib/api";
 
 interface AuthContextType {
   currentUser: FirebaseUser | null;

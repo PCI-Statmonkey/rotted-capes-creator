@@ -10,6 +10,7 @@ import {
   ChevronUp,
   BarChart4,
   Settings,
+  Database,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Drawer, DrawerContent, DrawerTrigger } from "@/components/ui/drawer";
@@ -226,17 +227,28 @@ export default function MainLayout({ children }: MainLayoutProps) {
                       </Button>
                     </Link>
                   )}
-                  {/* Only show analytics to admin users */}
+                  {/* Only show admin features to admin users */}
                   {isAdmin && (
-                    <Link href="/analytics">
-                      <Button 
-                        variant="ghost" 
-                        className="w-full justify-start"
-                      >
-                        <BarChart4 className="mr-2 h-5 w-5" />
-                        Analytics
-                      </Button>
-                    </Link>
+                    <>
+                      <Link href="/analytics">
+                        <Button 
+                          variant="ghost" 
+                          className="w-full justify-start"
+                        >
+                          <BarChart4 className="mr-2 h-5 w-5" />
+                          Analytics
+                        </Button>
+                      </Link>
+                      <Link href="/admin">
+                        <Button 
+                          variant="ghost" 
+                          className="w-full justify-start"
+                        >
+                          <Database className="mr-2 h-5 w-5" />
+                          Admin Dashboard
+                        </Button>
+                      </Link>
+                    </>
                   )}
                   {currentUser ? (
                     <Button 
@@ -327,8 +339,39 @@ export default function MainLayout({ children }: MainLayoutProps) {
 
       {/* Footer */}
       <footer className="bg-panel text-gray-400 py-4 text-center text-sm shadow-inner w-full">
-        <div className="container mx-auto">
-          Rotted Capes 2.0 and all related IP © Paradigm Concepts.
+        <div className="container mx-auto flex flex-col items-center">
+          <div className="mb-3">
+            Rotted Capes 2.0 and all related IP © Paradigm Concepts.
+          </div>
+          
+          {/* Small admin login button */}
+          <div className="opacity-50 hover:opacity-100 transition-opacity mt-2">
+            <Button 
+              variant="link" 
+              size="sm" 
+              className="text-xs text-muted-foreground"
+              onClick={() => {
+                if (localStorage.getItem('isAdmin') === 'true') {
+                  window.location.assign("/admin");
+                } else {
+                  const password = prompt("Enter admin password:");
+                  if (password === "rottedcapes2admin") {
+                    // Store admin status in localStorage
+                    localStorage.setItem('isAdmin', 'true');
+                    localStorage.setItem('mockUserEmail', 'admin@rottedcapes.com');
+                    localStorage.setItem('mockUserName', 'Admin User');
+                    
+                    alert("Admin login successful! Redirecting to admin panel.");
+                    window.location.assign("/admin");
+                  } else {
+                    alert("Invalid password");
+                  }
+                }
+              }}
+            >
+              Admin Access
+            </Button>
+          </div>
         </div>
       </footer>
     </div>
