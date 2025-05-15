@@ -695,7 +695,7 @@ export default function Step6_Powers() {
                   <p className="text-sm mb-1">Your powers with this set:</p>
                   {selectedPowers.map((power, idx) => (
                     <div key={`selected-power-${idx}`} className="flex justify-between items-center bg-gray-700 p-2 rounded">
-                      <span className="font-medium">{power.name}</span>
+                      <span className="font-medium text-red-500">{power.name}</span>
                       <span className="font-bold text-accent">{power.score}</span>
                     </div>
                   ))}
@@ -717,8 +717,8 @@ export default function Step6_Powers() {
                       <div className="flex flex-wrap gap-1 mt-1">
                         {powerSet.powers.map((power, idx) => (
                           <div key={`${power.name}-${idx}`} className="flex items-center">
-                            <span className="bg-gray-900 text-gray-300 px-2 py-0.5 rounded-full text-xs mr-1">
-                              {power.name}
+                            <span className="bg-gray-900 px-2 py-0.5 rounded-full text-xs mr-1">
+                              <span className="text-red-500 font-medium">{power.name}</span>
                             </span>
                             <span className="text-accent text-xs">{power.score}</span>
                           </div>
@@ -821,7 +821,7 @@ export default function Step6_Powers() {
                     className="p-4 bg-gray-700 rounded-lg border border-gray-600"
                   >
                     <div className="flex justify-between mb-2">
-                      <div className="font-medium">{formatPowerName(power.name)}</div>
+                      <div className="font-medium text-red-500">{formatPowerName(power.name)}</div>
                       <div className="flex items-center">
                         <span className="text-gray-400 mr-2">Score:</span>
                         <span className="text-accent">{power.score}</span>
@@ -937,7 +937,7 @@ export default function Step6_Powers() {
                                 <SelectContent className="max-h-[300px]">
                                   {ALL_POWERS.map(powerName => (
                                     <SelectItem key={powerName} value={powerName}>
-                                      {powerName}{ALL_SKILL_COMPATIBLE.includes(powerName) && " *"}
+                                      <span className="text-red-500">{powerName}</span>{ALL_SKILL_COMPATIBLE.includes(powerName) && " *"}
                                     </SelectItem>
                                   ))}
                                 </SelectContent>
