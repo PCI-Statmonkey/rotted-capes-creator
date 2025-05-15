@@ -7,6 +7,17 @@ import {
 } from "@shared/schema";
 import { z } from "zod";
 
+// TypeScript session extension
+declare module 'express-session' {
+  export interface SessionData {
+    user: {
+      id: string;
+      username: string;
+      isAdmin: boolean;
+    }
+  }
+}
+
 // Helper function to verify admin status
 function isAdmin(req: Request): boolean {
   return req.session?.user?.isAdmin === true;

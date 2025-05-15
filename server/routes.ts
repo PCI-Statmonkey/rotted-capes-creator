@@ -2,8 +2,11 @@ import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { z } from "zod";
+import gameContentRoutes from "./routes/gameContent";
 
 export async function registerRoutes(app: Express): Promise<Server> {
+  // Register game content routes
+  app.use('/api/game-content', gameContentRoutes);
   // Character data API routes
   app.get('/api/characters', async (req, res) => {
     try {
