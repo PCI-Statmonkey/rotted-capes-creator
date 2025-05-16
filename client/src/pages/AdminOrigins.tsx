@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { getGameContent, createGameContent, updateGameContent, deleteGameContent, usingFallbackData } from "@/lib/api";
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
+import { DatabaseStatusBanner } from "@/components/DatabaseStatusBanner";
 import {
   Card,
   CardContent,
@@ -303,10 +304,12 @@ export default function AdminOrigins() {
           </CardDescription>
         </CardHeader>
         <CardContent>
+          <DatabaseStatusBanner isUsingFallbackData={isFallbackData} />
+          
           <div className="flex justify-end mb-4">
             <Dialog open={isAddingOrigin} onOpenChange={setIsAddingOrigin}>
               <DialogTrigger asChild>
-                <Button>
+                <Button disabled={isFallbackData}>
                   <PlusCircle className="h-4 w-4 mr-2" />
                   Add New Origin
                 </Button>
