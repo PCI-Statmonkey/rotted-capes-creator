@@ -64,6 +64,7 @@ export default function AdminArchetypes() {
   const [, navigate] = useLocation();
   const [archetypes, setArchetypes] = useState<Archetype[]>([]);
   const [isLoadingArchetypes, setIsLoadingArchetypes] = useState(true);
+  const [isFallbackData, setIsFallbackData] = useState(false);
   const [selectedArchetype, setSelectedArchetype] = useState<Archetype | null>(null);
   const [newArchetype, setNewArchetype] = useState<NewArchetype>({
     name: '',
@@ -91,18 +92,28 @@ export default function AdminArchetypes() {
 
   const fetchArchetypes = async () => {
     setIsLoadingArchetypes(true);
+    setIsFallbackData(false);
+    
     try {
-      const response = await fetch('/api/game-content/archetypes');
-      if (!response.ok) {
-        throw new Error('Failed to fetch archetypes');
-      }
-      const data = await response.json();
+      // Using our API utility which handles fallback data internally
+      const data = await getGameContent('archetypes');
       setArchetypes(data);
+      
+      // Check if we're using fallback data
+      if (usingFallbackData) {
+        setIsFallbackData(true);
+        toast({
+          title: "Database Connection Issue",
+          description: "Unable to connect to the database. Showing sample data for demonstration purposes only. Editing functionality will be limited.",
+          variant: "destructive", 
+          duration: 7000
+        });
+      }
     } catch (error) {
       console.error('Error fetching archetypes:', error);
       toast({
         title: "Error",
-        description: "Failed to load archetypes data. Please try again.",
+        description: "Failed to load archetypes data. Please try again later.",
         variant: "destructive"
       });
     } finally {
@@ -111,20 +122,19 @@ export default function AdminArchetypes() {
   };
 
   const handleAddArchetype = async () => {
-    try {
-      const response = await fetch('/api/game-content/archetypes', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(newArchetype),
+    // Prevent adding when using fallback data
+    if (isFallbackData) {
+      toast({
+        title: "Database Unavailable",
+        description: "Can't add new archetypes while using sample data. Please try again when the database connection is restored.",
+        variant: "destructive"
       });
+      return;
+    }
+    
+    try {
+      const addedArchetype = await createGameContent('archetypes', newArchetype);
       
-      if (!response.ok) {
-        throw new Error('Failed to add archetype');
-      }
-      
-      const addedArchetype = await response.json();
       setArchetypes(prev => [...prev, addedArchetype]);
       setIsAddingArchetype(false);
       setNewArchetype({
@@ -161,27 +171,28 @@ export default function AdminArchetypes() {
   const handleUpdateArchetype = async () => {
     if (!selectedArchetype) return;
     
-    try {
-      const response = await fetch(`/api/game-content/archetypes/${selectedArchetype.id}`, {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          name: selectedArchetype.name,
-          description: selectedArchetype.description,
-          specialAbility: selectedArchetype.specialAbility,
-          keyAbilities: selectedArchetype.keyAbilities,
-          trainedSkill: selectedArchetype.trainedSkill,
-          imageUrl: selectedArchetype.imageUrl
-        }),
+    // Prevent updating when using fallback data
+    if (isFallbackData) {
+      toast({
+        title: "Database Unavailable",
+        description: "Can't update archetypes while using sample data. Please try again when the database connection is restored.",
+        variant: "destructive"
       });
+      return;
+    }
+    
+    try {
+      const updateData = {
+        name: selectedArchetype.name,
+        description: selectedArchetype.description,
+        specialAbility: selectedArchetype.specialAbility,
+        keyAbilities: selectedArchetype.keyAbilities,
+        trainedSkill: selectedArchetype.trainedSkill,
+        imageUrl: selectedArchetype.imageUrl
+      };
       
-      if (!response.ok) {
-        throw new Error('Failed to update archetype');
-      }
+      const updatedArchetype = await updateGameContent('archetypes', selectedArchetype.id, updateData);
       
-      const updatedArchetype = await response.json();
       setArchetypes(prev => prev.map(archetype => 
         archetype.id === updatedArchetype.id ? updatedArchetype : archetype
       ));
