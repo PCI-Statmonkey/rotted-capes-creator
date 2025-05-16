@@ -459,6 +459,8 @@ export default function AdminOrigins() {
                               variant="outline" 
                               size="icon"
                               onClick={() => setSelectedOrigin(origin)}
+                              disabled={isFallbackData}
+                              title={isFallbackData ? "Editing is disabled when using sample data" : "Edit origin"}
                             >
                               <Pencil className="h-4 w-4" />
                             </Button>
@@ -591,6 +593,8 @@ export default function AdminOrigins() {
                               size="icon"
                               className="text-red-500 hover:text-red-700"
                               onClick={() => setSelectedOrigin(origin)}
+                              disabled={isFallbackData}
+                              title={isFallbackData ? "Deleting is disabled when using sample data" : "Delete origin"}
                             >
                               <Trash2 className="h-4 w-4" />
                             </Button>
