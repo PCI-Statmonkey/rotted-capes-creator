@@ -217,14 +217,18 @@ export default function AdminArchetypes() {
   const handleDeleteArchetype = async () => {
     if (!selectedArchetype) return;
     
-    try {
-      const response = await fetch(`/api/game-content/archetypes/${selectedArchetype.id}`, {
-        method: 'DELETE',
+    // Prevent deleting when using fallback data
+    if (isFallbackData) {
+      toast({
+        title: "Database Unavailable",
+        description: "Can't delete archetypes while using sample data. Please try again when the database connection is restored.",
+        variant: "destructive"
       });
-      
-      if (!response.ok) {
-        throw new Error('Failed to delete archetype');
-      }
+      return;
+    }
+    
+    try {
+      await deleteGameContent('archetypes', selectedArchetype.id);
       
       setArchetypes(prev => prev.filter(archetype => archetype.id !== selectedArchetype.id));
       setIsDeletingArchetype(false);
