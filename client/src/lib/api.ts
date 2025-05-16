@@ -1,6 +1,10 @@
 /**
  * API utility functions for interacting with the backend
  */
+import { getSampleData, getSampleItemById } from './fallbackData';
+
+// Track if we're using fallback data due to database connection issues
+export let usingFallbackData = false;
 
 /**
  * Generic function to handle API request errors
@@ -74,9 +78,17 @@ export const getGameContent = async (contentType: string): Promise<any[]> => {
       throw new Error(errorData.message || `Failed to fetch ${contentType}`);
     }
 
+    // Reset fallback flag if we successfully got data
+    usingFallbackData = false;
     return await response.json();
   } catch (error) {
-    return handleApiError(error);
+    console.error(`Failed to fetch ${contentType}:`, error);
+    
+    // Set flag so UI can show appropriate messaging
+    usingFallbackData = true;
+    
+    // Return sample data as fallback
+    return getSampleData(contentType);
   }
 };
 
@@ -92,9 +104,17 @@ export const getGameContentById = async (contentType: string, id: number): Promi
       throw new Error(errorData.message || `Failed to fetch ${contentType} with ID ${id}`);
     }
 
+    // Reset fallback flag if we successfully got data
+    usingFallbackData = false;
     return await response.json();
   } catch (error) {
-    return handleApiError(error);
+    console.error(`Failed to fetch ${contentType} with ID ${id}:`, error);
+    
+    // Set flag so UI can show appropriate messaging
+    usingFallbackData = true;
+    
+    // Return sample item as fallback
+    return getSampleItemById(contentType, id);
   }
 };
 
@@ -102,6 +122,11 @@ export const getGameContentById = async (contentType: string, id: number): Promi
  * Create a new game content item
  */
 export const createGameContent = async (contentType: string, data: any): Promise<any> => {
+  // If we're using fallback data, we can't create new items
+  if (usingFallbackData) {
+    throw new Error(`Cannot create ${contentType} while database is unavailable.`);
+  }
+  
   try {
     const response = await fetch(`/api/game-content/${contentType}`, {
       method: 'POST',
@@ -118,7 +143,8 @@ export const createGameContent = async (contentType: string, data: any): Promise
 
     return await response.json();
   } catch (error) {
-    return handleApiError(error);
+    console.error(`Failed to create ${contentType}:`, error);
+    throw error;
   }
 };
 
@@ -126,6 +152,11 @@ export const createGameContent = async (contentType: string, data: any): Promise
  * Update an existing game content item
  */
 export const updateGameContent = async (contentType: string, id: number, data: any): Promise<any> => {
+  // If we're using fallback data, we can't update items
+  if (usingFallbackData) {
+    throw new Error(`Cannot update ${contentType} while database is unavailable.`);
+  }
+
   try {
     const response = await fetch(`/api/game-content/${contentType}/${id}`, {
       method: 'PATCH',
@@ -142,7 +173,8 @@ export const updateGameContent = async (contentType: string, id: number, data: a
 
     return await response.json();
   } catch (error) {
-    return handleApiError(error);
+    console.error(`Failed to update ${contentType} with ID ${id}:`, error);
+    throw error;
   }
 };
 
@@ -150,6 +182,11 @@ export const updateGameContent = async (contentType: string, id: number, data: a
  * Delete a game content item
  */
 export const deleteGameContent = async (contentType: string, id: number): Promise<void> => {
+  // If we're using fallback data, we can't delete items
+  if (usingFallbackData) {
+    throw new Error(`Cannot delete ${contentType} while database is unavailable.`);
+  }
+
   try {
     const response = await fetch(`/api/game-content/${contentType}/${id}`, {
       method: 'DELETE',
@@ -160,6 +197,7 @@ export const deleteGameContent = async (contentType: string, id: number): Promis
       throw new Error(errorData.message || `Failed to delete ${contentType} with ID ${id}`);
     }
   } catch (error) {
-    return handleApiError(error);
+    console.error(`Failed to delete ${contentType} with ID ${id}:`, error);
+    throw error;
   }
 };
