@@ -302,6 +302,11 @@ export default function AdminArchetypes() {
           <h1 className="text-3xl font-comic">Manage Archetypes</h1>
         </div>
         
+        <DatabaseStatusBanner 
+          isUsingFallbackData={isFallbackData} 
+          entityName="archetypes"
+        />
+        
         <Card className="mb-8">
           <CardHeader>
             <CardTitle>Archetypes Management</CardTitle>
@@ -313,7 +318,7 @@ export default function AdminArchetypes() {
             <div className="flex justify-end mb-4">
               <Dialog open={isAddingArchetype} onOpenChange={setIsAddingArchetype}>
                 <DialogTrigger asChild>
-                  <Button>
+                  <Button disabled={isFallbackData}>
                     <PlusCircle className="h-4 w-4 mr-2" />
                     Add New Archetype
                   </Button>
