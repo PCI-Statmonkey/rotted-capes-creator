@@ -4,9 +4,10 @@ import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
 
 interface DatabaseStatusBannerProps {
   isUsingFallbackData: boolean;
+  entityName?: string;
 }
 
-export function DatabaseStatusBanner({ isUsingFallbackData }: DatabaseStatusBannerProps) {
+export function DatabaseStatusBanner({ isUsingFallbackData, entityName }: DatabaseStatusBannerProps) {
   if (!isUsingFallbackData) {
     return null;
   }
@@ -20,7 +21,7 @@ export function DatabaseStatusBanner({ isUsingFallbackData }: DatabaseStatusBann
       </AlertTitle>
       <AlertDescription>
         <p>
-          You are currently viewing sample data due to database connection issues. 
+          You are currently viewing sample {entityName ? entityName : "data"} due to database connection issues. 
           Editing functionality is disabled until the database connection is restored.
         </p>
         <p className="mt-2 text-sm">

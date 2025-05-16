@@ -489,7 +489,11 @@ export default function AdminArchetypes() {
                             }
                           }}>
                             <DialogTrigger asChild>
-                              <Button variant="outline" size="icon">
+                              <Button 
+                                variant="outline" 
+                                size="icon" 
+                                disabled={isFallbackData}
+                              >
                                 <Pencil className="h-4 w-4" />
                               </Button>
                             </DialogTrigger>
@@ -618,7 +622,7 @@ export default function AdminArchetypes() {
                                 </Button>
                                 <Button 
                                   onClick={handleUpdateArchetype}
-                                  disabled={!selectedArchetype?.name || !selectedArchetype?.description || !selectedArchetype?.specialAbility}
+                                  disabled={!selectedArchetype?.name || !selectedArchetype?.description || !selectedArchetype?.specialAbility || isFallbackData}
                                 >
                                   Save Changes
                                 </Button>
@@ -636,7 +640,11 @@ export default function AdminArchetypes() {
                             }
                           }}>
                             <AlertDialogTrigger asChild>
-                              <Button variant="destructive" size="icon">
+                              <Button 
+                                variant="destructive" 
+                                size="icon" 
+                                disabled={isFallbackData}
+                              >
                                 <Trash2 className="h-4 w-4" />
                               </Button>
                             </AlertDialogTrigger>
