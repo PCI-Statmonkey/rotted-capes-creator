@@ -86,21 +86,57 @@ export default function AdminOrigins() {
     fetchOrigins();
   }, []);
 
+  // Demo/sample data to show when database connection fails
+  const sampleOrigins = [
+    {
+      id: 0,
+      name: "Alien",
+      description: "You are not of this world. Whether you hail from a distant planet, are a member of an extraterrestrial species that has lived among humans for generations, or were transformed through unknown cosmic means, your physiology and manner mark you as something other than human.",
+      abilityBonuses: { strength: 2, constitution: 2, charisma: -1, dexterity: 0, intelligence: 0, wisdom: 0 },
+      specialAbility: "Alien Physiology: You can survive in environments that would be harmful to humans, such as toxic atmospheres or extreme temperatures.",
+      imageUrl: null,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    },
+    {
+      id: 1,
+      name: "Experiment",
+      description: "You were either born in a laboratory or subjected to procedures that fundamentally altered your physical makeup. This process granted you enhanced capabilities but may have left physical or psychological scars.",
+      abilityBonuses: { strength: 2, dexterity: 1, wisdom: -1, constitution: 0, intelligence: 0, charisma: 0 },
+      specialAbility: "Enhanced Metabolism: Your body processes toxins and disease efficiently. You gain advantage on saves against poison and disease.",
+      imageUrl: null,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    },
+    {
+      id: 2,
+      name: "Augmented",
+      description: "You've enhanced your natural abilities through cybernetics, genetic modification, or magical alteration. These enhancements define your capabilities and possibly your appearance.",
+      abilityBonuses: { intelligence: 2, dexterity: 1, charisma: -1, strength: 0, constitution: 0, wisdom: 0 },
+      specialAbility: "Integrated Systems: You can interface directly with technology, allowing you to control and access electronic systems with a thought.",
+      imageUrl: null,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    }
+  ];
+
   const fetchOrigins = async () => {
     setIsLoadingOrigins(true);
     try {
-      const response = await fetch('/api/game-content/origins');
-      if (!response.ok) {
-        throw new Error('Failed to fetch origins');
-      }
-      const data = await response.json();
+      // First try using our API utility
+      const data = await getGameContent('origins');
       setOrigins(data);
     } catch (error) {
       console.error('Error fetching origins:', error);
+      
+      // Show sample data with a clear message that it's demo data
+      setOrigins(sampleOrigins);
+      
       toast({
-        title: "Error",
-        description: "Failed to load origins data. Please try again.",
-        variant: "destructive"
+        title: "Database Connection Issue",
+        description: "Unable to connect to the database. Showing sample data for demonstration purposes only. Editing functionality will be limited.",
+        variant: "destructive", 
+        duration: 7000
       });
     } finally {
       setIsLoadingOrigins(false);
@@ -109,19 +145,8 @@ export default function AdminOrigins() {
 
   const handleAddOrigin = async () => {
     try {
-      const response = await fetch('/api/game-content/origins', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(newOrigin),
-      });
+      const addedOrigin = await createGameContent('origins', newOrigin);
       
-      if (!response.ok) {
-        throw new Error('Failed to add origin');
-      }
-      
-      const addedOrigin = await response.json();
       setOrigins(prev => [...prev, addedOrigin]);
       setIsAddingOrigin(false);
       setNewOrigin({
@@ -146,11 +171,21 @@ export default function AdminOrigins() {
       });
     } catch (error) {
       console.error('Error adding origin:', error);
-      toast({
-        title: "Error",
-        description: "Failed to add new origin. Please try again.",
-        variant: "destructive"
-      });
+      
+      // Check if we're using sample data (database unavailable)
+      if (origins.some(o => o.id === 0 && o.name === "Alien")) {
+        toast({
+          title: "Database Unavailable",
+          description: "Can't add new origins while using sample data. Please try again when the database connection is restored.",
+          variant: "destructive"
+        });
+      } else {
+        toast({
+          title: "Error",
+          description: "Failed to add new origin. Please try again.",
+          variant: "destructive"
+        });
+      }
     }
   };
 

@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { storage } from "../storage";
+import { storage, MemStorage } from "../storage";
 import { 
   insertOriginSchema, insertArchetypeSchema, insertSkillSchema, 
   insertFeatSchema, insertSkillSetSchema, insertPowerSchema,
@@ -52,18 +52,40 @@ export const getAllOrigins = async (_req: Request, res: Response) => {
     const connectionOk = await checkConnection();
     if (!connectionOk) {
       const status = getConnectionStatus();
-      return res.status(503).json({ 
-        error: "Database connection issue", 
-        details: status.error,
-        retryAfter: 5
-      });
+      console.log("Database connection unavailable, switching to in-memory storage");
+      
+      // Use the MemStorage implementation as a fallback
+      const memStorage = new MemStorage();
+      const fallbackOrigins = await memStorage.getAllOrigins();
+      
+      // Return the data with a warning header
+      res.setHeader('X-Data-Source', 'fallback');
+      return res.json(fallbackOrigins);
     }
     
     const origins = await storage.getAllOrigins();
     res.json(origins);
   } catch (error) {
     console.error("Error fetching origins:", error);
-    res.status(500).json({ error: "Failed to fetch origins" });
+    
+    // If we encounter any error, try the fallback as well
+    try {
+      const memStorage = new MemStorage();
+      const fallbackOrigins = await memStorage.getAllOrigins();
+      
+      // Return the fallback data with appropriate headers
+      res.setHeader('X-Data-Source', 'fallback');
+      res.setHeader('X-Error-Details', error instanceof Error ? error.message : 'Unknown error');
+      
+      return res.json(fallbackOrigins);
+    } catch (fallbackError) {
+      // If even the fallback fails, return the original error
+      return res.status(500).json({ 
+        error: "Failed to fetch origins", 
+        details: error instanceof Error ? error.message : 'Unknown error',
+        fallbackAvailable: false
+      });
+    }
   }
 };
 
