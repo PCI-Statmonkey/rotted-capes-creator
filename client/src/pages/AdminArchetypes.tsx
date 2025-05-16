@@ -5,6 +5,9 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import AdminProtectedRoute from "@/components/AdminProtectedRoute";
+import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
+import { getGameContent, createGameContent, updateGameContent, deleteGameContent, usingFallbackData } from "@/lib/api";
+import { DatabaseStatusBanner } from "@/components/DatabaseStatusBanner";
 import {
   Card,
   CardContent,
