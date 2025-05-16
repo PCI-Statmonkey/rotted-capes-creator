@@ -5,6 +5,7 @@ import AdminProtectedRoute from "@/components/AdminProtectedRoute";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { getGameContent, createGameContent, updateGameContent, deleteGameContent } from "@/lib/api";
 import {
   Card,
   CardContent,

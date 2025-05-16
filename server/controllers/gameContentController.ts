@@ -6,6 +6,7 @@ import {
   insertPowerSetSchema, insertPowerModifierSchema
 } from "@shared/schema";
 import { z } from "zod";
+import { checkConnection, getConnectionStatus } from "../db";
 
 // TypeScript session extension
 declare module 'express-session' {
@@ -47,6 +48,17 @@ function handleValidationError(res: Response, result: z.SafeParseReturnType<any,
 // Origins Controllers
 export const getAllOrigins = async (_req: Request, res: Response) => {
   try {
+    // Check database connection first
+    const connectionOk = await checkConnection();
+    if (!connectionOk) {
+      const status = getConnectionStatus();
+      return res.status(503).json({ 
+        error: "Database connection issue", 
+        details: status.error,
+        retryAfter: 5
+      });
+    }
+    
     const origins = await storage.getAllOrigins();
     res.json(origins);
   } catch (error) {
