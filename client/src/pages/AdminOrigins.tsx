@@ -632,9 +632,17 @@ export default function AdminOrigins() {
           </div>
         </CardContent>
         <CardFooter className="flex justify-between">
-          <p className="text-sm text-muted-foreground">
-            {origins.length} origins in database
-          </p>
+          <div>
+            <p className="text-sm text-muted-foreground">
+              {origins.length} origins {isFallbackData ? 'in sample data' : 'in database'}
+            </p>
+            {isFallbackData && (
+              <p className="text-xs text-orange-600 mt-1">
+                <AlertTriangle className="h-3 w-3 inline mr-1" />
+                Using sample data due to database connection issues
+              </p>
+            )}
+          </div>
           <Button 
             variant="outline" 
             onClick={() => navigate("/admin")}
