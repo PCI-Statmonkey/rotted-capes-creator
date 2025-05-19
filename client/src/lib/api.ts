@@ -7,6 +7,35 @@ import { getSampleData, getSampleItemById } from './fallbackData';
 export let usingFallbackData = false;
 
 /**
+ * Helper to check if user is admin from localStorage
+ */
+const getAdminCredentials = () => {
+  try {
+    const userDataString = localStorage.getItem('user');
+    if (userDataString) {
+      const userData = JSON.parse(userDataString);
+      if (userData?.email === 'admin@rottedcapes.com') {
+        return { isAdmin: true, adminEmail: userData.email };
+      }
+    }
+    
+    // Check for Opera browser admin login
+    const operaAdminString = localStorage.getItem('operaAdmin');
+    if (operaAdminString) {
+      const operaAdmin = JSON.parse(operaAdminString);
+      if (operaAdmin?.email === 'admin@rottedcapes.com') {
+        return { isAdmin: true, adminEmail: operaAdmin.email };
+      }
+    }
+    
+    return { isAdmin: false };
+  } catch (e) {
+    console.error('Error checking admin status:', e);
+    return { isAdmin: false };
+  }
+};
+
+/**
  * Generic function to handle API request errors
  */
 const handleApiError = (error: any): never => {
@@ -127,13 +156,20 @@ export const createGameContent = async (contentType: string, data: any): Promise
     throw new Error(`Cannot create ${contentType} while database is unavailable.`);
   }
   
+  const { isAdmin, adminEmail } = getAdminCredentials();
+  if (!isAdmin) {
+    throw new Error('Admin access required to create content.');
+  }
+  
   try {
     const response = await fetch(`/api/game-content/${contentType}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        'X-Admin-Email': adminEmail, // Include admin email for verification
       },
       body: JSON.stringify(data),
+      credentials: 'include', // Include cookies for session-based auth
     });
     
     if (!response.ok) {
@@ -157,13 +193,20 @@ export const updateGameContent = async (contentType: string, id: number, data: a
     throw new Error(`Cannot update ${contentType} while database is unavailable.`);
   }
 
+  const { isAdmin, adminEmail } = getAdminCredentials();
+  if (!isAdmin) {
+    throw new Error('Admin access required to update content.');
+  }
+
   try {
     const response = await fetch(`/api/game-content/${contentType}/${id}`, {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
+        'X-Admin-Email': adminEmail, // Include admin email for verification
       },
       body: JSON.stringify(data),
+      credentials: 'include', // Include cookies for session-based auth
     });
     
     if (!response.ok) {
@@ -187,9 +230,18 @@ export const deleteGameContent = async (contentType: string, id: number): Promis
     throw new Error(`Cannot delete ${contentType} while database is unavailable.`);
   }
 
+  const { isAdmin, adminEmail } = getAdminCredentials();
+  if (!isAdmin) {
+    throw new Error('Admin access required to delete content.');
+  }
+
   try {
     const response = await fetch(`/api/game-content/${contentType}/${id}`, {
       method: 'DELETE',
+      headers: {
+        'X-Admin-Email': adminEmail, // Include admin email for verification
+      },
+      credentials: 'include', // Include cookies for session-based auth
     });
     
     if (!response.ok) {
