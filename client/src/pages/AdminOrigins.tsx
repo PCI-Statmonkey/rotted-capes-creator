@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { getGameContent, createGameContent, updateGameContent, deleteGameContent, usingFallbackData } from "@/lib/api";
+import { sampleOrigins } from "@/lib/fallbackData";
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
 import { DatabaseStatusBanner } from "@/components/DatabaseStatusBanner";
 import {
@@ -83,6 +84,7 @@ export default function AdminOrigins() {
   const [isAddingOrigin, setIsAddingOrigin] = useState(false);
   const [isEditingOrigin, setIsEditingOrigin] = useState(false);
   const [isDeletingOrigin, setIsDeletingOrigin] = useState(false);
+  const [isSeeding, setIsSeeding] = useState(false);
   
   // Fetch origins data on component mount
   useEffect(() => {
@@ -241,6 +243,52 @@ export default function AdminOrigins() {
       });
     }
   };
+  
+  // Seed the database with sample origins
+  const seedDatabase = async () => {
+    setIsSeeding(true);
+    let successCount = 0;
+    
+    try {
+      // Process each sample origin
+      for (const origin of sampleOrigins) {
+        try {
+          // Convert the sample origin to the format expected by the API
+          const originData = {
+            name: origin.name,
+            description: origin.description,
+            abilityBonuses: origin.abilityBonuses,
+            specialAbility: origin.specialAbility,
+            imageUrl: origin.imageUrl
+          };
+          
+          // Add the origin to the database
+          await createGameContent('origins', originData);
+          successCount++;
+        } catch (error) {
+          console.error(`Failed to add origin ${origin.name}:`, error);
+        }
+      }
+      
+      // Refresh the list after seeding
+      await fetchOrigins();
+      
+      toast({
+        title: "Database Seeded",
+        description: `Successfully added ${successCount} of ${sampleOrigins.length} origins to the database.`,
+        variant: "default"
+      });
+    } catch (error) {
+      console.error('Error seeding database:', error);
+      toast({
+        title: "Error",
+        description: "Failed to seed the database. Please try again.",
+        variant: "destructive"
+      });
+    } finally {
+      setIsSeeding(false);
+    }
+  };
 
   // Handle ability bonus input change
   const handleAbilityBonusChange = (ability: string, value: string, isNewOrigin: boolean = false) => {
@@ -306,7 +354,26 @@ export default function AdminOrigins() {
         <CardContent>
           <DatabaseStatusBanner isUsingFallbackData={isFallbackData} />
           
-          <div className="flex justify-end mb-4">
+          <div className="flex justify-between items-center mb-4">
+            <Button 
+              variant="outline" 
+              onClick={seedDatabase}
+              disabled={isSeeding || isFallbackData}
+              className="flex items-center"
+            >
+              {isSeeding ? (
+                <>
+                  <span className="animate-spin rounded-full h-4 w-4 border-t-2 border-b-2 border-accent mr-2"></span>
+                  Seeding...
+                </>
+              ) : (
+                <>
+                  <PlusCircle className="h-4 w-4 mr-2" />
+                  Import Sample Origins
+                </>
+              )}
+            </Button>
+            
             <Dialog open={isAddingOrigin} onOpenChange={setIsAddingOrigin}>
               <DialogTrigger asChild>
                 <Button disabled={isFallbackData}>
