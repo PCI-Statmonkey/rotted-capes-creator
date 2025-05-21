@@ -74,6 +74,48 @@ export default function Step10_Summary() {
       description: `${character.name} has been saved successfully.`,
     });
   };
+  const handleFinishCharacter = async () => {
+  try {
+    const mockUserEmail = localStorage.getItem("mockUserEmail");
+    const userId = 1; // TEMP: Replace with actual user lookup if needed
+
+    const payload = {
+      userId,
+      name: character.name,
+      data: {
+        ...character,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString()
+      }
+    };
+
+    const response = await fetch("/api/characters", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(payload)
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to save character");
+    }
+
+    const result = await response.json();
+    toast({
+      title: "Character Finalized",
+      description: `Your character has been saved as ID #${result.characterId}.`,
+    });
+
+    window.location.assign("/profile"); // or wherever you want to go next
+  } catch (err) {
+    console.error(err);
+    toast({
+      title: "Error",
+      description: "There was a problem saving your character.",
+    });
+  }
+};
 
   // Character point calculations
   const calculatePointsSpent = () => {

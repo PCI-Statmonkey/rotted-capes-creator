@@ -49,27 +49,29 @@ export const getCharacter = async (req: Request, res: Response) => {
 };
 
 // Create a new character
+import { insertCharacterSchema } from "@shared/schema";
+
 export const createCharacter = async (req: Request, res: Response) => {
   try {
-    const { userId, name, data } = req.body;
-    
-    // Validate required fields
-    if (!userId || !name || !data) {
-      return res.status(400).json({ error: 'Missing required fields' });
-    }
-    
+    const parsed = insertCharacterSchema.parse(req.body);
+
     const [character] = await db.insert(characters)
       .values({
-        userId: Number(userId),
-        name,
-        data
+        userId: Number(parsed.userId),
+        name: parsed.name,
+        data: parsed.data,
+        createdAt: new Date(),
+        updatedAt: new Date()
       })
       .returning();
-    
+
     res.status(201).json(character);
-  } catch (error) {
+  } catch (error: any) {
     console.error('Error creating character:', error);
-    res.status(500).json({ error: 'Failed to create character' });
+    res.status(400).json({
+      error: 'Failed to create character',
+      detail: error?.message ?? error
+    });
   }
 };
 

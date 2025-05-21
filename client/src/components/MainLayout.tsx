@@ -94,29 +94,23 @@ export default function MainLayout({ children }: MainLayoutProps) {
   };
   
   // Handle Opera browser direct login
-  const handleOperaLogin = () => {
-    // Store admin status in localStorage
-    localStorage.setItem('isAdmin', 'true');
-    localStorage.setItem('mockUserEmail', 'admin@rottedcapes.com');
-    localStorage.setItem('mockUserName', 'Opera Admin User');
-    
-    // Create a mock user object
-    const mockUser = {
-      uid: "opera-admin-user",
-      email: "admin@rottedcapes.com",
-      displayName: "Opera Admin User"
-    };
-    
-    // Update local state
-    setCurrentUser(mockUser as any);
-    setIsAdmin(true);
-    
-    // Show success alert
-    alert("Opera admin login successful! You now have access to all features including Analytics.");
-    
-    // Reload the page to update all components
-    window.location.reload();
+ const handleOperaLogin = () => {
+  localStorage.setItem('mockUserEmail', 'opera.user@rottedcapes.com');
+  localStorage.setItem('mockUserName', 'Opera User');
+
+  const mockUser = {
+    uid: "opera-regular-user",
+    email: "opera.user@rottedcapes.com",
+    displayName: "Opera User"
   };
+
+  setCurrentUser(mockUser as any);
+  setIsAdmin(false);
+
+  alert("Opera login successful! You are now logged in as a regular user.");
+
+  window.location.reload();
+};
 
   return (
     <div className="flex flex-col min-h-screen dark:bg-[#121212] halftone-bg bg-fixed">
