@@ -37,6 +37,7 @@ export const origins = pgTable("origins", {
   specialAbility: text("special_ability"),
   imageUrl: text("image_url"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
+  originFeatures: jsonb("origin_features").default([]).notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
 
@@ -139,6 +140,7 @@ export const insertOriginSchema = createInsertSchema(origins).pick({
   abilityBonuses: true,
   specialAbility: true,
   imageUrl: true,
+  originFeatures: true,
 });
 
 export const insertArchetypeSchema = createInsertSchema(archetypes).pick({

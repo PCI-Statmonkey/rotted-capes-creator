@@ -54,6 +54,11 @@ type Origin = {
   abilityBonuses: any;
   specialAbility: string | null;
   imageUrl: string | null;
+  originFeatures?: {
+  name: string;
+  description: string;
+  level: number;
+}[];
   createdAt: string;
   updatedAt: string;
 };
@@ -477,6 +482,69 @@ export default function AdminOrigins() {
                     </div>
                   </div>
                 </div>
+                <div className="space-y-2">
+  <label className="text-sm font-medium">Origin Features</label>
+  {newOrigin.originFeatures?.map((feature, index) => (
+    <div key={index} className="border p-3 rounded-lg space-y-2 bg-gray-900">
+      <Input
+        placeholder="Feature name"
+        value={feature.name}
+        onChange={(e) => {
+          const updated = [...newOrigin.originFeatures];
+          updated[index].name = e.target.value;
+          setNewOrigin(prev => ({ ...prev, originFeatures: updated }));
+        }}
+      />
+      <Textarea
+        placeholder="Feature description"
+        rows={2}
+        value={feature.description}
+        onChange={(e) => {
+          const updated = [...newOrigin.originFeatures];
+          updated[index].description = e.target.value;
+          setNewOrigin(prev => ({ ...prev, originFeatures: updated }));
+        }}
+      />
+      <Input
+        type="number"
+        placeholder="Unlocks at level..."
+        value={feature.level || ""}
+        onChange={(e) => {
+          const updated = [...newOrigin.originFeatures];
+          updated[index].level = parseInt(e.target.value);
+          setNewOrigin(prev => ({ ...prev, originFeatures: updated }));
+        }}
+      />
+      <Button
+        variant="outline"
+        size="sm"
+        className="text-red-500 hover:text-red-700"
+        onClick={() => {
+          const updated = newOrigin.originFeatures.filter((_, i) => i !== index);
+          setNewOrigin(prev => ({ ...prev, originFeatures: updated }));
+        }}
+      >
+        Remove Feature
+      </Button>
+    </div>
+  ))}
+
+  <Button
+    variant="secondary"
+    size="sm"
+    onClick={() => {
+      setNewOrigin(prev => ({
+        ...prev,
+        originFeatures: [
+          ...(prev.originFeatures || []),
+          { name: "", description: "", level: 1 }
+        ]
+      }));
+    }}
+  >
+    + Add Feature
+  </Button>
+</div>
                 <DialogFooter>
                   <Button 
                     variant="outline" 
@@ -629,7 +697,72 @@ export default function AdminOrigins() {
                                   </div>
                                 </div>
                               </div>
-                            )}
+                            )}<div className="space-y-2">
+  <label className="text-sm font-medium">Origin Features</label>
+  {selectedOrigin.originFeatures?.map((feature, index) => (
+    <div key={index} className="border p-3 rounded-lg space-y-2 bg-gray-900">
+      <Input
+        placeholder="Feature name"
+        value={feature.name}
+        onChange={(e) => {
+          const updated = [...selectedOrigin.originFeatures];
+          updated[index].name = e.target.value;
+          setSelectedOrigin(prev => prev ? { ...prev, originFeatures: updated } : null);
+        }}
+      />
+      <Textarea
+        placeholder="Feature description"
+        rows={2}
+        value={feature.description}
+        onChange={(e) => {
+          const updated = [...selectedOrigin.originFeatures];
+          updated[index].description = e.target.value;
+          setSelectedOrigin(prev => prev ? { ...prev, originFeatures: updated } : null);
+        }}
+      />
+      <Input
+        type="number"
+        placeholder="Unlocks at level..."
+        value={feature.level || ""}
+        onChange={(e) => {
+          const updated = [...selectedOrigin.originFeatures];
+          updated[index].level = parseInt(e.target.value);
+          setSelectedOrigin(prev => prev ? { ...prev, originFeatures: updated } : null);
+        }}
+      />
+      <Button
+        variant="outline"
+        size="sm"
+        className="text-red-500 hover:text-red-700"
+        onClick={() => {
+          const updated = selectedOrigin.originFeatures.filter((_, i) => i !== index);
+          setSelectedOrigin(prev => prev ? { ...prev, originFeatures: updated } : null);
+        }}
+      >
+        Remove Feature
+      </Button>
+    </div>
+  ))}
+
+  <Button
+    variant="secondary"
+    size="sm"
+    onClick={() => {
+      setSelectedOrigin(prev => prev
+        ? {
+            ...prev,
+            originFeatures: [
+              ...(prev.originFeatures || []),
+              { name: "", description: "", level: 1 }
+            ]
+          }
+        : null
+      );
+    }}
+  >
+    + Add Feature
+  </Button>
+</div>
                             <DialogFooter>
                               <Button 
                                 variant="outline" 
