@@ -1,4 +1,4 @@
-import { pgTable, text, serial, integer, boolean, jsonb, timestamp } from "drizzle-orm/pg-core";
+import { pgTable, text, serial, integer, boolean, json, jsonb, timestamp } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
@@ -31,14 +31,14 @@ export const analytics = pgTable("analytics", {
 // Game content tables for admin editing
 export const origins = pgTable("origins", {
   id: serial("id").primaryKey(),
-  name: text("name").notNull().unique(),
+  name: text("name").notNull(),
   description: text("description").notNull(),
-  abilityBonuses: jsonb("ability_bonuses").notNull(),
-  specialAbility: text("special_ability"),
-  imageUrl: text("image_url"),
-  createdAt: timestamp("created_at").defaultNow().notNull(),
-  originFeatures: jsonb("origin_features").default([]).notNull(),
-  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+  special_ability: text("special_ability"),
+  image_url: text("image_url"),
+  ability_bonuses: json("ability_bonuses").notNull(),
+  origin_features: json("origin_features"),
+  created_at: timestamp("created_at").defaultNow(),
+  updated_at: timestamp("updated_at").defaultNow().notNull(),
 });
 
 export const archetypes = pgTable("archetypes", {
@@ -137,10 +137,10 @@ export const insertAnalyticsSchema = createInsertSchema(analytics).pick({
 export const insertOriginSchema = createInsertSchema(origins).pick({
   name: true,
   description: true,
-  abilityBonuses: true,
-  specialAbility: true,
-  imageUrl: true,
-  originFeatures: true,
+  ability_bonuses: true,
+  special_ability: true,
+  image_url: true,
+  origin_features: true,
 });
 
 export const insertArchetypeSchema = createInsertSchema(archetypes).pick({

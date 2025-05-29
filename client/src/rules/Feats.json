@@ -1,0 +1,297 @@
+[
+  {
+    "name": "Ace",
+    "description": "You gain skill focus with any two Pilot’s fields of study.",
+    "prerequisite": "Dexterity 12+, Pilot trained"
+  },
+  {
+    "name": "Acrobatic",
+    "description": "Skill focus in Acrobatics field of study, plus Kick Up, Up the Wall, Free Running abilities.",
+    "prerequisite": "Acrobatics trained"
+  },
+  {
+    "name": "Additional Origin",
+    "description": "You gain an additional origin (restrictions and advancement only). Editor-in-Chief approval required.",
+    "prerequisite": "None"
+  },
+  {
+    "name": "Animal Affinity",
+    "description": "Skill focus in Animal Handling (Training), advantage on Empathy checks with animals, and can calm/scare them.",
+    "prerequisite": "Empathy, Animal Handling/Training trained"
+  },
+  {
+    "name": "Attack Focus",
+    "description": "+1 attack, +2 damage with a chosen attack. Can be taken multiple times for different attacks.",
+    "prerequisite": "Capable of performing chosen attack"
+  },
+  {
+    "name": "Blind-Fighting",
+    "description": "No disadvantage or enemy advantage when blind and can retaliate if missed by a concealed attacker.",
+    "prerequisite": "Wisdom 13+, Perception trained"
+  },
+  {
+    "name": "Burglar",
+    "description": "Skill focus in Larceny, +1 to bypass electronic security. +2 if focused in Technology (security systems).",
+    "prerequisite": "Larceny, Basic Technology trained"
+  },
+  {
+    "name": "Captivating Performer",
+    "description": "Skill focus in Performance field and gain Inspiring Performance maneuver.",
+    "prerequisite": "Performance trained"
+  },
+  {
+    "name": "Combat Intuition",
+    "description": "Immune to outnumbering penalties.",
+    "prerequisite": "Wisdom or Dexterity 13+, Empathy trained"
+  },
+  {
+    "name": "Critical Precision",
+    "description": "Chosen attack crits on 19–20.",
+    "prerequisite": "Capable of chosen attack"
+  },
+  {
+    "name": "Daredevil",
+    "description": "+5 bonus when failing a check causes physical harm; may gain advantage for heroic actions.",
+    "prerequisite": "None"
+  },
+  {
+    "name": "Disciplined",
+    "description": "+1 Willpower defense, advantage vs. mental control and psychosis (if used).",
+    "prerequisite": "Wisdom 12+"
+  },
+  {
+    "name": "Diehard",
+    "description": "Recover Stamina once per rest with Con roll + 2×Rank.",
+    "prerequisite": "None"
+  },
+  {
+    "name": "Eclectic Knowledge",
+    "description": "Skill focus in two Academic fields.",
+    "prerequisite": "Academic trained"
+  },
+  {
+    "name": "Engineering Prodigy",
+    "description": "Skill focus in two Engineering fields.",
+    "prerequisite": "Intelligence 12+, Engineering trained"
+  },
+  {
+    "name": "Empathic Intuition",
+    "description": "Skill focus in Empathy; calm agitated targets via skill check.",
+    "prerequisite": "Empathy trained"
+  },
+  {
+    "name": "Escape Artist Extraordinaire",
+    "description": "Skill focus in Escape Artist; escape normal restraints 1/rest without check.",
+    "prerequisite": "Escape Artist trained"
+  },
+  {
+    "name": "Exceptional Scavenger",
+    "description": "Skill focus in Scavenge field; start each issue with 6 APs of gear.",
+    "prerequisite": "Scavenge trained"
+  },
+  {
+    "name": "Gearhead",
+    "description": "Skill focus in Engineering (Auto Repair), +2 to Drive checks.",
+    "prerequisite": "Engineering, Drive trained"
+  },
+  {
+    "name": "Hacker",
+    "description": "Skill focus in Technology (Computer Hacking), half-time hacking, +2 to hacking checks.",
+    "prerequisite": "Technology trained"
+  },
+  {
+    "name": "Hawkeye",
+    "description": "No range penalties within Wisdom areas; ranged attacks ignore partial cover.",
+    "prerequisite": "Dexterity 12+"
+  },
+  {
+    "name": "Healing Hands",
+    "description": "Skill focus in two Medicine fields; revive an ally from 0 stamina 1/scene.",
+    "prerequisite": "Medicine trained"
+  },
+  {
+    "name": "Hidden Stash",
+    "description": "Find hidden stash 1/rest. Stashes have gear/AP. Plot point expands uses.",
+    "prerequisite": "I've Done Alright for Myself"
+  },
+  {
+    "name": "Honeyed Tongue",
+    "description": "Skill focus in Influence field; +2 to detect lies or persuade.",
+    "prerequisite": "Influence trained"
+  },
+  {
+    "name": "Horse Whisperer",
+    "description": "Skill focus in Animal Handling (Riding); +2 to ride/care/train horses.",
+    "prerequisite": "Animal Handling trained"
+  },
+  {
+    "name": "Hunter",
+    "description": "Skill focus in two Outdoorsman fields.",
+    "prerequisite": "Outdoorsman trained"
+  },
+  {
+    "name": "I've Done Alright for Myself",
+    "description": "Skill focus in Urban Survival field; gain a vehicle or horse and start each issue with 4 APs.",
+    "prerequisite": "Urban Survival trained"
+  },
+  {
+    "name": "Jury Rigging",
+    "description": "Skill focus in Basic Engineering; ignore penalties for DC ≤ 20.",
+    "prerequisite": "Basic Engineering trained"
+  },
+  {
+    "name": "Learn Maneuver",
+    "description": "Learn a maneuver you qualify for.",
+    "prerequisite": "As per maneuver"
+  },
+  {
+    "name": "Martial Artist",
+    "description": "Choose a stance each turn (Precision, Powerful, Quick) for unarmed combat.",
+    "prerequisite": null
+  },
+  {
+    "name": "Mind Over Body",
+    "description": "Use Willpower defense once/scene in place of Avoidance/Fortitude.",
+    "prerequisite": "Wisdom 13+"
+  },
+  {
+    "name": "Natural Born Leader",
+    "description": "Learn two leadership maneuvers, ignoring prerequisites.",
+    "prerequisite": "Charisma 17+"
+  },
+  {
+    "name": "Night Owl",
+    "description": "Need only 4 hours of sleep in 1hr chunks. +5 to passive Perception while asleep.",
+    "prerequisite": "Wisdom 13+, Constitution 13+"
+  },
+  {
+    "name": "Occult Scholar",
+    "description": "Skill focus in Occult field; +2 to identify arcane symbols and magic.",
+    "prerequisite": "Occult trained"
+  },
+  {
+    "name": "Owl Eyed",
+    "description": "Skill focus in Perception; +5 passive Perception.",
+    "prerequisite": "Perception trained"
+  },
+  {
+    "name": "Perfect Aim",
+    "description": "+1 to hit with ranged attacks; once/scene gain Advantage on a ranged attack.",
+    "prerequisite": "Hawkeye"
+  },
+  {
+    "name": "Political Maneuvering",
+    "description": "Replace ally’s failed check with Influence (Charisma) once/scene.",
+    "prerequisite": "Honeyed Tongue"
+  },
+  {
+    "name": "Polyglot",
+    "description": "Skill focus in Linguistics; learn 3 additional languages.",
+    "prerequisite": "Linguistics trained"
+  },
+  {
+    "name": "Quick",
+    "description": "+1 Avoidance and +1 walking pace.",
+    "prerequisite": "Dexterity 12+"
+  },
+  {
+    "name": "Seasoned Survivor",
+    "description": "Skill focus in Local Knowledge field, +2 to Urban Survival in known city.",
+    "prerequisite": "Local Knowledge, Urban Survival trained"
+  },
+  {
+    "name": "Sidekick",
+    "description": "Choose a bystander and upgrade them to an Upstart character.",
+    "prerequisite": "None"
+  },
+  {
+    "name": "Sharp Eyes",
+    "description": "+2 to Perception to detect traps/ambushes.",
+    "prerequisite": "Outdoorsman, Perception trained"
+  },
+  {
+    "name": "Skill Focus",
+    "description": "Gain skill focus in any trained skill’s field or the whole skill.",
+    "prerequisite": "Training in selected skill"
+  },
+  {
+    "name": "Shield Expert",
+    "description": "+1 Avoidance with shield; can throw shield and return; bonus shove action.",
+    "prerequisite": "Dexterity 12+"
+  },
+  {
+    "name": "Stealthy",
+    "description": "Skill focus in Stealth; move at full speed while hiding.",
+    "prerequisite": "Dexterity 12+, Stealth trained"
+  },
+  {
+    "name": "Street Magic",
+    "description": "Skill focus in Prestidigitation field; +2 to tricks or subtle object manipulation.",
+    "prerequisite": "Prestidigitation trained"
+  },
+  {
+    "name": "Scientific Mind",
+    "description": "Skill focus in two Science fields.",
+    "prerequisite": "Intelligence 15+, Skill focus in Science"
+  },
+  {
+    "name": "Supporting Characters",
+    "description": "Both bystanders are upgraded to supporting characters.",
+    "prerequisite": "None"
+  },
+  {
+    "name": "Technological Savant",
+    "description": "Skill focus in two Technology fields.",
+    "prerequisite": "Intelligence 12+, Technology trained"
+  },
+  {
+    "name": "Technophile",
+    "description": "Skill focus in Basic Technology; no penalties for DC ≤ 20.",
+    "prerequisite": "Basic Technology trained"
+  },
+  {
+    "name": "Third Eye",
+    "description": "+2 to detect invisible or hidden powers.",
+    "prerequisite": "Wisdom 16+ or Occult trained"
+  },
+  {
+    "name": "Toughness",
+    "description": "+1 Fortitude and +10 Max Stamina. May take twice for 1 wound.",
+    "prerequisite": "Cannot have Diminished Vitality"
+  },
+  {
+    "name": "Uncanny Reaction",
+    "description": "Take two reactions per round.",
+    "prerequisite": "Dexterity 18+"
+  },
+  {
+    "name": "Unique Device",
+    "description": "Gain a custom item with power-level bonuses. May tie to Removable power.",
+    "prerequisite": "Editor-in-Chief approval"
+  },
+  {
+    "name": "Visionary",
+    "description": "Skill focus in 3 Engineering fields. Can repair removable-powered gear.",
+    "prerequisite": "Intelligence 15+, Basic Engineering, Engineering skill focus ×3"
+  },
+  {
+    "name": "Wary",
+    "description": "+2 initiative; Advantage 1/rest on initiative.",
+    "prerequisite": "Wisdom 14+, Perception skill focus"
+  },
+  {
+    "name": "Waylay",
+    "description": "Deal bonus damage from surprise. Can take multiple times for different weapons.",
+    "prerequisite": "None"
+  },
+  {
+    "name": "Weapon Master",
+    "description": "+1 to hit, +2 damage with one weapon type. Can be taken multiple times.",
+    "prerequisite": "None"
+  },
+  {
+    "name": "Wheelman",
+    "description": "Skill focus in two Drive fields; +2 to Drive checks in combat.",
+    "prerequisite": "Dexterity 12+, Drive trained"
+  }
+]

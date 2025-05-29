@@ -1,0 +1,77 @@
+[
+  {
+    "name": "Alien",
+    "description": "You are not from this world, but either you or your ship crashed here. You are stranded and trying to make your way or help others survive.",
+    "abilityBonuses": {
+      "strength": 0,
+      "dexterity": 0,
+      "constitution": 1,
+      "intelligence": 1,
+      "wisdom": 0,
+      "charisma": 0
+    },
+    "specialAbility": "Immune to most Earth-born diseases. Can use alien tech without penalty.",
+    "originFeatures": [
+      {
+        "name": "B-Lister: Outcast Observer",
+        "description": "Gain proficiency in Technology or Survival. You can understand any Earth language after listening for a short time.",
+        "level": 1
+      },
+      {
+        "name": "A-Lister: Bioplasmic Armor",
+        "description": "Once per Long Rest, reduce incoming damage by 5 as your alien biology hardens under stress.",
+        "level": 5
+      }
+    ]
+  },
+  {
+    "name": "Supernatural",
+    "description": "You were once human but now are something else. You may be a vampire, werewolf, ghost, or other being, trying to hold onto your humanity.",
+    "abilityBonuses": {
+      "strength": 1,
+      "dexterity": 0,
+      "constitution": 1,
+      "intelligence": 0,
+      "wisdom": 0,
+      "charisma": 0
+    },
+    "specialAbility": "You don\u2019t need to eat or breathe, and you have Darkvision.",
+    "originFeatures": [
+      {
+        "name": "B-Lister: Blooded",
+        "description": "Gain advantage on saving throws against fear. Your supernatural nature makes you difficult to frighten.",
+        "level": 1
+      },
+      {
+        "name": "A-Lister: Night Stalker",
+        "description": "Once per Long Rest, teleport in shadows up to 30 ft.",
+        "level": 5
+      }
+    ]
+  },
+  {
+    "name": "Highly Trained",
+    "description": "You don\u2019t have superpowers, but you\u2019ve pushed your body and mind to the limit through discipline and training.",
+    "abilityBonuses": {
+      "strength": 0,
+      "dexterity": 1,
+      "constitution": 0,
+      "intelligence": 0,
+      "wisdom": 1,
+      "charisma": 0
+    },
+    "specialAbility": "Gain one extra Feat at character creation.",
+    "originFeatures": [
+      {
+        "name": "B-Lister: Tactical Mind",
+        "description": "Gain +1 to Initiative and may reroll one failed Intelligence or Wisdom check per Long Rest.",
+        "level": 1
+      },
+      {
+        "name": "A-Lister: Peak Human",
+        "description": "Add your proficiency bonus to all saving throws for 1 minute, once per Long Rest.",
+        "level": 5
+      }
+    ]
+  }
+]

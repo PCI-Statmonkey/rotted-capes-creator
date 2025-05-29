@@ -1,10 +1,24 @@
+import dotenv from "dotenv";
+dotenv.config();
 import express, { type Request, Response, NextFunction } from "express";
+import cors from "cors";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
 
 const app = express();
+app.use(cors({
+  origin: true,
+  credentials: true,
+  allowedHeaders: ['Content-Type', 'X-Admin-Email'],
+}));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+
+app.use((req, _res, next) => {
+  console.log(`📥 Received request: ${req.method} ${req.path}`);
+  console.log(`🧾 Headers:`, req.headers);
+  next();
+});
 
 app.use((req, res, next) => {
   const start = Date.now();

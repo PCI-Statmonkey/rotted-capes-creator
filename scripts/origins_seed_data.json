@@ -1,0 +1,72 @@
+[
+  {
+    "name": "Alien",
+    "description": "You are not of this Earth. Perhaps you were born on another planet, created in a lab beyond the stars, or are the last survivor of an ancient galactic race.",
+    "stat_boosts": [
+      "Might +2",
+      "Toughness +1"
+    ],
+    "advantages": [
+      "You begin with the Superpower Advantage for free."
+    ],
+    "disadvantages": [
+      "You suffer a -2 penalty to Social rolls with non-aliens unless disguised or acclimated."
+    ]
+  },
+  {
+    "name": "Supernatural",
+    "description": "You are touched by forces beyond mortal comprehension\u2014magic, gods, curses, or eldritch energies shape your being.",
+    "stat_boosts": [
+      "Presence +2",
+      "Awareness +1"
+    ],
+    "advantages": [
+      "You begin with the Mystic Power Advantage or gain a free Rank 1 Power with the Mystic Source tag."
+    ],
+    "disadvantages": [
+      "Your supernatural aura is detectable by those sensitive to such forces."
+    ]
+  },
+  {
+    "name": "Highly Trained",
+    "description": "You are not superhuman\u2014you\u2019re just better. Peak human ability, years of training, and relentless will have honed you into a weapon.",
+    "stat_boosts": [
+      "Agility +2",
+      "Intellect +1"
+    ],
+    "advantages": [
+      "Gain one extra Proficiency in any skill of your choice."
+    ],
+    "disadvantages": [
+      "You do not gain any Powers from your Origin."
+    ]
+  },
+  {
+    "name": "Mutant",
+    "description": "You were born different. Your powers manifested from your DNA, possibly from latent genes, exposure, or trauma.",
+    "stat_boosts": [
+      "Toughness +2",
+      "Willpower +1"
+    ],
+    "advantages": [
+      "Gain a Rank 1 Power with the Mutant Source tag for free."
+    ],
+    "disadvantages": [
+      "Your genetic signature can be tracked or detected by specialized equipment."
+    ]
+  },
+  {
+    "name": "Tech Augmented",
+    "description": "You were enhanced with technology\u2014cybernetics, nanites, exo-suits, or neural implants.",
+    "stat_boosts": [
+      "Intellect +2",
+      "Might +1"
+    ],
+    "advantages": [
+      "You may choose one Rank 1 Power with the Tech Source tag."
+    ],
+    "disadvantages": [
+      "If deprived of your tech (EMP, hacking), you lose access to your Power until restored."
+    ]
+  }
+]

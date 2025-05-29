@@ -47,17 +47,39 @@ export default function Step4_Abilities() {
     wisdom: null,
     charisma: null
   });
-  
+  const [selectedStandardScore, setSelectedStandardScore] = useState<number | null>(null);
+
+  // --- RESET ALL FUNCTION ---
+  const handleResetAll = () => {
+    setAssignmentMethod("pointBuy");
+    setAssignedStandardScores({
+      strength: null,
+      dexterity: null,
+      constitution: null,
+      intelligence: null,
+      wisdom: null,
+      charisma: null
+    });
+    setSelectedStandardScore(null);
+    // Reset abilities to default values (10)
+    const defaultAbilities = { ...character.abilities };
+    Object.keys(defaultAbilities).forEach(key => {
+      const abilityKey = key as keyof typeof defaultAbilities;
+      defaultAbilities[abilityKey] = {
+        value: 10,
+        modifier: calculateModifier(10)
+      };
+    });
+    setLocalAbilities(defaultAbilities);
+    setPointsSpent(0);
+  };
+  // --- END RESET ALL FUNCTION ---
+
   // Get origin and archetype bonuses
   const getOriginBonus = (ability: string): number => {
     const abilityLower = ability.toLowerCase();
-    // No origin selected yet
     if (!character.origin) return 0;
-    
-    // For newer origin formats that include type in parentheses
     const originName = character.origin.split('(')[0].trim();
-    
-    // Handle special cases for Highly Trained with custom ability bonuses
     if (originName === "Highly Trained" && character.origin.includes("Bonuses:")) {
       const bonusText = character.origin.match(/Bonuses: (.*)\)/)?.[1] || "";
       if (bonusText.includes(`+1 ${ability.charAt(0).toUpperCase() + ability.slice(1)}`)) {
@@ -65,13 +87,9 @@ export default function Step4_Abilities() {
       }
       return 0;
     }
-    
-    // Handle special cases for Mystic with subtypes
     if (originName === "Mystic" && character.origin.includes("(")) {
-      // If it's in the format "Mystic (Subtype: bonuses)"
       if (character.origin.includes(":")) {
         const mysticType = character.origin.match(/Mystic \(([^:]+):/)?.[1]?.trim();
-        
         if (mysticType === "Practitioner") {
           if (abilityLower === "wisdom") return 2;
           if (abilityLower === "charisma") return 1;
@@ -83,15 +101,11 @@ export default function Step4_Abilities() {
           if (abilityLower === "intelligence") return 1;
         }
       } else {
-        // Default fallback for older "Mystic" format
         if (abilityLower === "wisdom") return 2;
         if (abilityLower === "charisma") return 1;
       }
-      
       return 0;
     }
-    
-    // Handle specific origins from the rulebook
     switch(originName) {
       case "Alien":
         if (abilityLower === "strength") return 2;
@@ -101,10 +115,8 @@ export default function Step4_Abilities() {
         break;
       case "Cosmic":
         if (abilityLower === "constitution") return 1;
-        // Second ability is user-selected, handled at character creation
         break;
       case "Demigod":
-        // Ability is user-selected, handled at character creation
         break;
       case "Super-Human":
         if (abilityLower === "constitution") return 2;
@@ -113,19 +125,13 @@ export default function Step4_Abilities() {
         if (abilityLower === "intelligence") return 2;
         break;
     }
-    
     return 0;
   };
-  
+
   const getArchetypeBonus = (ability: string): number => {
     const abilityLower = ability.toLowerCase();
-    // No archetype selected yet
     if (!character.archetype) return 0;
-    
-    // Get just the archetype name without any additional info
     const archetypeName = character.archetype.split('(')[0].trim();
-    
-    // Use the exact archetypes from the rulebook
     switch(archetypeName) {
       case "Andromorph":
         if (abilityLower === "constitution") return 2;
@@ -152,7 +158,6 @@ export default function Step4_Abilities() {
         if (abilityLower === "dexterity") return 1;
         if (abilityLower === "constitution") return 1;
         break;
-      // Legacy archetypes for backward compatibility
       case "Bruiser":
         if (abilityLower === "strength") return 1;
         if (abilityLower === "constitution") return 1;
@@ -179,51 +184,37 @@ export default function Step4_Abilities() {
         if (abilityLower === "dexterity") return 1;
         break;
     }
-    
     return 0;
   };
-  
-  // Get total bonus for an ability
+
   const getTotalBonus = (ability: string): number => {
     return getOriginBonus(ability) + getArchetypeBonus(ability);
   };
 
-  // Calculate total points spent whenever abilities change
   useEffect(() => {
     if (assignmentMethod === "pointBuy") {
       let total = 0;
-      
       Object.keys(localAbilities).forEach((ability) => {
         const abilityKey = ability as keyof typeof localAbilities;
         const score = localAbilities[abilityKey].value;
         const cost = POINT_BUY_COSTS.find(item => item.score === score)?.cost || 0;
         total += cost;
       });
-      
       setPointsSpent(total);
     }
   }, [localAbilities, assignmentMethod]);
 
-  // Get cost for a specific score
   const getCostForScore = (score: number): number => {
     return POINT_BUY_COSTS.find(item => item.score === score)?.cost || 0;
   };
 
-  // Standard array selection methods
   const handleSelectStandardScore = (ability: string, score: number) => {
     if (assignmentMethod !== "standardArray") return;
-    
-    // Check if score is already assigned to another ability
     const isScoreAssigned = Object.entries(assignedStandardScores)
       .some(([key, val]) => key !== ability && val === score);
-      
     if (isScoreAssigned) return;
-    
-    // Update assigned scores
     const newAssignedScores = { ...assignedStandardScores, [ability]: score };
     setAssignedStandardScores(newAssignedScores);
-    
-    // Update local abilities
     const newAbilities = { ...localAbilities };
     newAbilities[ability as keyof typeof localAbilities] = {
       value: score,
@@ -231,16 +222,15 @@ export default function Step4_Abilities() {
     };
     setLocalAbilities(newAbilities);
   };
-  
+
   const isStandardScoreSelected = (score: number): boolean => {
     return Object.values(assignedStandardScores).includes(score);
   };
-  
+
   const getSelectedStandardScore = (ability: string): number | null => {
     return assignedStandardScores[ability];
   };
-  
-  // Reset standard array assignments
+
   const resetStandardArray = () => {
     setAssignedStandardScores({
       strength: null,
@@ -250,8 +240,7 @@ export default function Step4_Abilities() {
       wisdom: null,
       charisma: null
     });
-    
-    // Reset abilities to default values
+    setSelectedStandardScore(null);
     const defaultAbilities = { ...character.abilities };
     Object.keys(defaultAbilities).forEach(key => {
       const abilityKey = key as keyof typeof defaultAbilities;
@@ -263,28 +252,21 @@ export default function Step4_Abilities() {
     setLocalAbilities(defaultAbilities);
   };
 
-  // Handle assignment method change
   const handleAssignmentMethodChange = (method: "pointBuy" | "standardArray") => {
     setAssignmentMethod(method);
-    
     if (method === "standardArray") {
       resetStandardArray();
     }
   };
 
-  // Handle increment ability score in point buy mode
   const handleIncrement = (ability: keyof typeof localAbilities) => {
     if (assignmentMethod !== "pointBuy") return;
-    
     const currentScore = localAbilities[ability].value;
     const nextScore = currentScore + 1;
-    
-    // Check if next score is valid and within point budget
     if (nextScore <= 17) {
       const currentCost = getCostForScore(currentScore);
       const nextCost = getCostForScore(nextScore);
       const additionalCost = nextCost - currentCost;
-      
       if (pointsSpent + additionalCost <= TOTAL_POINTS) {
         const newAbilities = { ...localAbilities };
         newAbilities[ability] = {
@@ -296,13 +278,9 @@ export default function Step4_Abilities() {
     }
   };
 
-  // Handle decrement ability score in point buy mode
   const handleDecrement = (ability: keyof typeof localAbilities) => {
     if (assignmentMethod !== "pointBuy") return;
-    
     const currentScore = localAbilities[ability].value;
-    
-    // Prevent scores below 8
     if (currentScore > 8) {
       const nextScore = currentScore - 1;
       const newAbilities = { ...localAbilities };
@@ -314,36 +292,24 @@ export default function Step4_Abilities() {
     }
   };
 
-  // Handle going to previous step
   const handlePrevious = () => {
     setCurrentStep(3);
   };
 
-  // Handle going to next step
   const handleContinue = () => {
-    // Update all ability scores in the character context
-    // Base scores only - bonuses will be applied when needed
     Object.keys(localAbilities).forEach((ability) => {
       const abilityKey = ability as keyof typeof localAbilities;
       updateAbilityScore(abilityKey, localAbilities[abilityKey].value);
     });
-    
-    // Update derived stats based on new abilities (including bonuses)
     updateDerivedStats();
-    
-    // Track event in analytics
     trackEvent('abilities_selected', 'character', `Points: ${pointsSpent}`);
-    
-    // Move to the next step
     setCurrentStep(5);
   };
 
-  // Format ability name
   const formatAbilityName = (ability: string): string => {
     return ability.charAt(0).toUpperCase() + ability.slice(1);
   };
 
-  // Get short ability descriptions
   const getAbilityDescription = (ability: string): string => {
     const descriptions: Record<string, string> = {
       strength: "Physical power, melee attacks, carrying capacity",
@@ -380,6 +346,19 @@ export default function Step4_Abilities() {
           </div>
         </div>
       </div>
+
+      {/* --- RESET ALL BUTTON --- */}
+      <div className="flex justify-end mb-4">
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={handleResetAll}
+          className="flex gap-1 items-center"
+        >
+          <RotateCcw className="h-4 w-4" /> Reset All
+        </Button>
+      </div>
+      {/* --- END RESET ALL BUTTON --- */}
 
       <div className="space-y-6">
         {/* Assignment method selection */}
@@ -456,17 +435,31 @@ export default function Step4_Abilities() {
               </Button>
             </div>
             <div className="flex flex-wrap gap-2 mb-2">
-              {STANDARD_ARRAY.map(score => (
-                <div key={score} className={`
-                  p-2 rounded-md text-center w-12 font-bold 
-                  ${isStandardScoreSelected(score) ? 'bg-gray-600 text-gray-400' : 'bg-accent text-white'}
-                `}>
-                  {score}
-                </div>
-              ))}
+              {STANDARD_ARRAY.map(score => {
+                const isAssigned = isStandardScoreSelected(score);
+                const isSelected = selectedStandardScore === score;
+                return (
+                  <div
+                    key={score}
+                    className={`
+                      p-2 rounded-md text-center w-12 font-bold cursor-pointer
+                      ${isAssigned
+                        ? 'bg-gray-600 text-gray-400'
+                        : isSelected
+                          ? 'bg-blue-500 text-white'
+                          : 'bg-accent text-white'}
+                    `}
+                    onClick={() => {
+                      if (!isAssigned) setSelectedStandardScore(score);
+                    }}
+                  >
+                    {score}
+                  </div>
+                );
+              })}
             </div>
             <p className="text-xs text-gray-400">
-              Click on a score and then on an ability to assign it
+              Click a number to select, then click an ability to assign it
             </p>
           </div>
         )}
@@ -488,12 +481,13 @@ export default function Step4_Abilities() {
                     'cursor-pointer hover:border-accent' : ''}
                 `}
                 onClick={() => {
-                  if (assignmentMethod === 'standardArray') {
-                    // Find first unassigned score
-                    const availableScore = STANDARD_ARRAY.find(score => !isStandardScoreSelected(score));
-                    if (availableScore) {
-                      handleSelectStandardScore(ability, availableScore);
-                    }
+                  if (
+                    assignmentMethod === 'standardArray' &&
+                    selectedStandardScore !== null &&
+                    !isStandardScoreSelected(selectedStandardScore)
+                  ) {
+                    handleSelectStandardScore(ability, selectedStandardScore);
+                    setSelectedStandardScore(null);
                   }
                 }}
               >

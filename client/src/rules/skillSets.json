@@ -1,0 +1,92 @@
+[
+  {
+    "name": "Academic/Student",
+    "points": 6,
+    "skills": ["Academics", "Athletics", "Linguistics", "Science", "Technology"],
+    "feats": ["Eclectic Knowledge"]
+  },
+  {
+    "name": "Athlete, Pro/Semi-Pro",
+    "points": 5,
+    "skills": ["Academics", "Acrobatics", "Athletics", "Perception"],
+    "feats": ["Quick"]
+  },
+  {
+    "name": "Automobile Mechanic",
+    "points": 9,
+    "skills": ["Athletics", "Basic Technology", "Engineering"],
+    "feats": ["Gearhead", "Technophile"]
+  },
+  {
+    "name": "Business Professional",
+    "points": 12,
+    "skills": ["Academics", "Basic Technology", "Empathy", "Influence", "Linguistics"],
+    "feats": ["Empathic Intuition", "Honeyed Tongue"]
+  },
+  {
+    "name": "Criminal",
+    "points": 6,
+    "skills": ["Basic Technology", "Empathy", "Larceny", "Perception", "Stealth"],
+    "feats": ["Burglar"]
+  },
+  {
+    "name": "Computer Technician",
+    "points": 8,
+    "skills": ["Engineering", "Technology"],
+    "feats": ["Technological Savant", "Engineering Prodigy"]
+  },
+  {
+    "name": "Detective",
+    "points": 14,
+    "skills": ["Academics", "Athletics", "Drive", "Basic Technology", "Empathy", "Investigation", "Perception", "Local Knowledge"],
+    "feats": ["Empathic Intuition", "Investigator"]
+  },
+  {
+    "name": "Doctor",
+    "points": 16,
+    "skills": ["Academics", "Empathy", "Medicine", "Perception", "Science", "Technology"],
+    "feats": ["Healing Hands", "Technological Savant", "Scientific Mind"]
+  },
+  {
+    "name": "Ex-Military",
+    "points": 12,
+    "skills": ["Athletics", "Basic Technology", "Medicine", "Perception", "Outdoorsman", "Urban Survival"],
+    "feats": ["Learn Maneuver", "Learn Maneuver"]
+  },
+  {
+    "name": "Engineer",
+    "points": 11,
+    "skills": ["Academics", "Basic Engineering", "Engineering", "Science", "Technology"],
+    "feats": ["Engineering Prodigy", "Jury Rigging"]
+  },
+  {
+    "name": "Emergency Response",
+    "points": 7,
+    "skills": ["Academics", "Athletics", "Empathy", "Medicine", "Science", "Technology"],
+    "feats": ["Healing Hands"]
+  },
+  {
+    "name": "Law Enforcement",
+    "points": 6,
+    "skills": ["Academics", "Athletics", "Drive", "Perception", "Local Knowledge"],
+    "feats": ["Seasoned Survivor"]
+  },
+  {
+    "name": "Occultist",
+    "points": 6,
+    "skills": ["Academics", "Empathy", "Investigation", "Linguistics", "Occult", "Perception"],
+    "feats": ["Occultist"]
+  },
+  {
+    "name": "Public Relations/Con Artist",
+    "points": 9,
+    "skills": ["Empathy", "Influence", "Larceny", "Linguistics"],
+    "feats": ["Honeyed Tongue", "Polyglot"]
+  },
+  {
+    "name": "Scientist",
+    "points": 11,
+    "skills": ["Basic Technology", "Academics", "Investigation", "Science", "Technology", "Perception"],
+    "feats": ["Eclectic Knowledge", "Scientific Mind"]
+  }
+]

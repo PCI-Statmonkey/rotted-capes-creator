@@ -1,5 +1,6 @@
 import { Router, Request, Response, NextFunction } from "express";
 import * as gameContentController from "../controllers/gameContentController";
+import { verifyAdmin } from "../controllers/gameContentController";
 
 // TypeScript session extension
 declare module 'express-session' {
@@ -58,7 +59,7 @@ router.get("/power-modifiers/:id", gameContentController.getPowerModifierById);
 
 // Admin routes (CREATE, UPDATE, DELETE operations)
 // Origins
-router.post("/origins", ensureAdmin, gameContentController.createOrigin);
+router.post("/origins", verifyAdmin, gameContentController.createOrigin);
 router.patch("/origins/:id", ensureAdmin, gameContentController.updateOrigin);
 router.delete("/origins/:id", ensureAdmin, gameContentController.deleteOrigin);
 
