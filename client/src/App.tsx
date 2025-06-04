@@ -17,18 +17,17 @@ const Analytics = lazy(() => import("@/pages/Analytics"));
 const Admin = lazy(() => import("@/pages/Admin"));
 const AdminOrigins = lazy(() => import("@/pages/AdminOrigins"));
 const AdminArchetypes = lazy(() => import("@/pages/AdminArchetypes"));
+const AdminManeuvers = lazy(() => import("@/pages/AdminManeuvers")); // ✅ NEW
 
 // Router component to track page views
 function AppRouter() {
-  // Use our analytics hook to track page views
   useAnalytics();
-  
+
   return (
     <Suspense fallback={<div className="p-8 text-center">Loading...</div>}>
       <Switch>
         <Route path="/" component={Home} />
         <Route path="/creator/:step?">
-          {/* Wrap the Creator component with CharacterProvider */}
           {() => (
             <CharacterProvider>
               <Creator />
@@ -37,10 +36,13 @@ function AppRouter() {
         </Route>
         <Route path="/profile" component={Profile} />
         <Route path="/analytics" component={Analytics} />
+
         {/* Admin Routes */}
         <Route path="/admin" component={Admin} />
         <Route path="/admin/origins" component={AdminOrigins} />
         <Route path="/admin/archetypes" component={AdminArchetypes} />
+        <Route path="/adminmaneuvers" component={AdminManeuvers} /> {/* ✅ NEW ROUTE */}
+
         <Route component={NotFound} />
       </Switch>
     </Suspense>
@@ -48,9 +50,7 @@ function AppRouter() {
 }
 
 function App() {
-  // Initialize Google Analytics when the app loads
   useEffect(() => {
-    // Check if we have the measurement ID
     if (!import.meta.env.VITE_GA_MEASUREMENT_ID) {
       console.warn('Google Analytics Measurement ID not found in environment variables');
     } else {
@@ -58,7 +58,7 @@ function App() {
       initGA();
     }
   }, []);
-  
+
   return (
     <AuthProvider>
       <TooltipProvider>

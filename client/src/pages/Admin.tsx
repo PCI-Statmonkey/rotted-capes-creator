@@ -89,63 +89,70 @@ export default function AdminPage() {
 
   // Placeholder for actual admin functionalities
   const contentCards = [
-    {
-      id: "origins",
-      title: "Origins",
-      description: "Edit character origins and their special abilities",
-      icon: <Shield className="h-5 w-5 text-blue-500" />,
-      action: () => navigate("/admin/origins")
-    },
-    {
-      id: "archetypes",
-      title: "Archetypes",
-      description: "Manage character archetypes and their abilities",
-      icon: <Swords className="h-5 w-5 text-red-500" />,
-      action: () => navigate("/admin/archetypes")
-    },
-    {
-      id: "skills",
-      title: "Skills",
-      description: "Edit individual skills and their descriptions",
-      icon: <BookOpen className="h-5 w-5 text-green-500" />,
-      action: () => navigate("/admin/skills")
-    },
-    {
-      id: "feats",
-      title: "Feats",
-      description: "Manage feats and their prerequisites",
-      icon: <Sparkles className="h-5 w-5 text-purple-500" />,
-      action: () => navigate("/admin/feats")
-    },
-    {
-      id: "skillsets",
-      title: "Skill Sets",
-      description: "Edit skill sets and their included skills and feats",
-      icon: <BookOpen className="h-5 w-5 text-teal-500" />,
-      action: () => navigate("/admin/skill-sets")
-    },
-    {
-      id: "powers",
-      title: "Powers",
-      description: "Manage powers and their effects",
-      icon: <Zap className="h-5 w-5 text-yellow-500" />,
-      action: () => navigate("/admin/powers")
-    },
-    {
-      id: "powersets",
-      title: "Power Sets",
-      description: "Edit power sets and their included powers",
-      icon: <Lightbulb className="h-5 w-5 text-amber-500" />,
-      action: () => navigate("/admin/power-sets")
-    },
-    {
-      id: "users",
-      title: "Users",
-      description: "Manage user accounts and permissions",
-      icon: <Users className="h-5 w-5 text-gray-500" />,
-      action: () => navigate("/admin/users")
-    }
-  ];
+  {
+    id: "origins",
+    title: "Origins",
+    description: "Edit character origins and their special abilities",
+    icon: <Shield className="h-5 w-5 text-blue-500" />,
+    action: () => navigate("/admin/origins")
+  },
+  {
+    id: "archetypes",
+    title: "Archetypes",
+    description: "Manage character archetypes and their abilities",
+    icon: <Swords className="h-5 w-5 text-red-500" />,
+    action: () => navigate("/admin/archetypes")
+  },
+  {
+    id: "skills",
+    title: "Skills",
+    description: "Edit individual skills and their descriptions",
+    icon: <BookOpen className="h-5 w-5 text-green-500" />,
+    action: () => navigate("/admin/skills")
+  },
+  {
+    id: "feats",
+    title: "Feats",
+    description: "Manage feats and their prerequisites",
+    icon: <Sparkles className="h-5 w-5 text-purple-500" />,
+    action: () => navigate("/admin/feats")
+  },
+  {
+    id: "skillsets",
+    title: "Skill Sets",
+    description: "Edit skill sets and their included skills and feats",
+    icon: <BookOpen className="h-5 w-5 text-teal-500" />,
+    action: () => navigate("/admin/skill-sets")
+  },
+  {
+    id: "powers",
+    title: "Powers",
+    description: "Manage powers and their effects",
+    icon: <Zap className="h-5 w-5 text-yellow-500" />,
+    action: () => navigate("/admin/powers")
+  },
+  {
+    id: "powersets",
+    title: "Power Sets",
+    description: "Edit power sets and their included powers",
+    icon: <Lightbulb className="h-5 w-5 text-amber-500" />,
+    action: () => navigate("/admin/power-sets")
+  },
+  {
+    id: "maneuvers",
+    title: "Maneuvers",
+    description: "Manage maneuvers and their prerequisites",
+    icon: <Swords className="h-5 w-5 text-orange-500" />,
+    action: () => navigate("/adminmaneuvers")
+  },
+  {
+    id: "users",
+    title: "Users",
+    description: "Manage user accounts and permissions",
+    icon: <Users className="h-5 w-5 text-gray-500" />,
+    action: () => navigate("/admin/users")
+  }
+];
 
   const handleTabChange = (value: string) => {
     setActiveTab(value);

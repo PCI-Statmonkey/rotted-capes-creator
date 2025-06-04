@@ -1,1 +1,170 @@
-["Accurate","All Skill","Conditional","Cybernetic Implant","Efficient Power","External Power Source","Fatiguing","Limitation","Limited Uses","Linked","Penetrating","Power Armor","Removable Item","Secondary Effect","Slow","Trigger","Unpowered Form","Unreliable"]
+[
+  {
+    "name": "Accurate",
+    "type": "perk",
+    "value": -2,
+    "restriction": "Only for attack powers against defenses",
+    "effect": "+2 bonus to hit"
+  },
+  {
+    "name": "Aquatic Power",
+    "type": "perk/flaw",
+    "value": -1,
+    "restriction": "Perk: power with range; Flaw: works poorly outside water",
+    "effect": "Perk: full range underwater; Flaw: halved range outside water"
+  },
+  {
+    "name": "All-Skill",
+    "type": "perk",
+    "value": 0,
+    "restriction": "Only specific powers; no other mods except Linked, Fatiguing",
+    "effect": "Power from skill alone; score capped at 20; +1 Burnout if applicable"
+  },
+  {
+    "name": "Conditional",
+    "type": "flaw",
+    "value": 4,
+    "restriction": "Power only works in specific conditions",
+    "effect": "Useless at least half the time (e.g., only at night)"
+  },
+  {
+    "name": "Critical Depletion",
+    "type": "flaw",
+    "value": 6,
+    "restriction": "Power must have Burnout value",
+    "effect": "Auto-burnout on every use"
+  },
+  {
+    "name": "Cybernetic Implant",
+    "type": "flaw",
+    "value": 2,
+    "restriction": "Cannot be combined with Removable Item",
+    "effect": "May malfunction on Massive Damage; reboot with Plot Point"
+  },
+  {
+    "name": "Distant Power",
+    "type": "perk",
+    "value": -1,
+    "restriction": "Ranged powers only",
+    "effect": "Double the range"
+  },
+  {
+    "name": "Dual-Natured Attack",
+    "type": "perk",
+    "value": -2,
+    "restriction": "Must deal damage",
+    "effect": "Applies two energy types simultaneously"
+  },
+  {
+    "name": "Exclusive Power",
+    "type": "flaw",
+    "value": 2,
+    "restriction": "Scene/Continuous powers only, must apply to 2+ powers",
+    "effect": "Activating one power deactivates all others with this flaw"
+  },
+  {
+    "name": "External Power Source",
+    "type": "perk",
+    "value": 0,
+    "restriction": "Power must have Burnout",
+    "effect": "Shared burnout pool; burnout threshold based on modifiers"
+  },
+  {
+    "name": "Fatiguing",
+    "type": "flaw",
+    "value": 4,
+    "restriction": "Must have Burnout; cannot be combined with burnout-reduction mods",
+    "effect": "Increases Burnout cost by half (min 1)"
+  },
+  {
+    "name": "Instinct Control",
+    "type": "perk",
+    "value": -2,
+    "restriction": "Mental powers only",
+    "effect": "Affects animals or computers (or both at -4)"
+  },
+  {
+    "name": "Joined Power",
+    "type": "flaw",
+    "value": 2,
+    "restriction": "Cannot apply to All-Skill powers",
+    "effect": "Must be near another hero to use power"
+  },
+  {
+    "name": "Limited Uses",
+    "type": "flaw",
+    "value": 2,
+    "restriction": "No Burnout when using",
+    "effect": "Use twice per short rest (+2), once per short rest (+4), or once per long rest (+6)"
+  },
+  {
+    "name": "Linked",
+    "type": "flaw",
+    "value": 2,
+    "restriction": "Requires 2+ powers to share source/theme",
+    "effect": "All powers are treated as part of one theme or origin"
+  },
+  {
+    "name": "Penetrating",
+    "type": "perk",
+    "value": -2,
+    "restriction": "Only for powers that attack defenses",
+    "effect": "Bypasses DR equal to ½ your power score modifier (min 1)"
+  },
+  {
+    "name": "Removable Item",
+    "type": "flaw",
+    "value": 2,
+    "restriction": "Power is built into an item",
+    "effect": "Can be stolen/disarmed"
+  },
+  {
+    "name": "Roulette Power",
+    "type": "flaw",
+    "value": 2,
+    "restriction": "Cannot be used with Continuous or Exclusive Power; must apply to 2+ powers",
+    "effect": "Randomly determine which power activates"
+  },
+  {
+    "name": "Secondary Effect",
+    "type": "perk",
+    "value": -2,
+    "restriction": "Spend bonus action and succeed vs. secondary defense",
+    "effect": "Apply secondary condition once per scene"
+  },
+  {
+    "name": "Seeking",
+    "type": "perk",
+    "value": -2,
+    "restriction": "Ranged powers only",
+    "effect": "Ignore cover penalties and melee targeting penalties"
+  },
+  {
+    "name": "Spell Power Infusion",
+    "type": "perk",
+    "value": -2,
+    "restriction": "Requires Magical Spell flaw",
+    "effect": "Spend Plot Point to increase score by +2 (max = Wisdom)"
+  },
+  {
+    "name": "Static",
+    "type": "flaw",
+    "value": 2,
+    "restriction": "Power cannot be improved, may only be taken at creation",
+    "effect": "Power is locked forever"
+  },
+  {
+    "name": "Synergy",
+    "type": "perk",
+    "value": -2,
+    "restriction": "Must have Synergy keyword",
+    "effect": "One power controls advancement for all synergized powers"
+  },
+  {
+    "name": "Unpowered Form",
+    "type": "flaw",
+    "value": 2,
+    "restriction": "Common on Armor; must take time to activate",
+    "effect": "Requires 2 Demanding actions (or 1 with -2 to bonus)"
+  }
+]

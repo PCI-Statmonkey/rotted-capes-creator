@@ -1,246 +1,85 @@
-import { pool } from "./db";
-
-// TypeScript session extension
-declare module 'express-session' {
-  export interface SessionData {
-    user: {
-      id: string;
-      username: string;
-      isAdmin: boolean;
-    };
-  }
-}
+import { db } from "./db";
+import {
+  origins, archetypes, skills, feats, skillSets, powers,
+  powerSets, powerModifiers, originFeatures, maneuvers, gear
+} from "@shared/schema";
+import { eq } from "drizzle-orm";
 
 export const storage = {
   // ORIGIN
-  getAllOrigin: async () => {
-    const { rows } = await pool.query("SELECT * FROM origins ORDER BY id");
-    return rows;
-  },
-  getOriginById: async (id: number) => {
-    const { rows } = await pool.query("SELECT * FROM origins WHERE id = $1", [id]);
-    return rows[0];
-  },
-  createOrigin: async (data: any) => {
-    const { name, description } = data;
-    const { rows } = await pool.query(
-      "INSERT INTO origins (name, description) VALUES ($1, $2) RETURNING *",
-      [name, description]
-    );
-    return rows[0];
-  },
-  updateOrigin: async (id: number, data: any) => {
-    const { name, description } = data;
-    const { rows } = await pool.query(
-      "UPDATE origins SET name = $1, description = $2 WHERE id = $3 RETURNING *",
-      [name, description, id]
-    );
-    return rows[0];
-  },
-  deleteOrigin: async (id: number) => {
-    await pool.query("DELETE FROM origins WHERE id = $1", [id]);
-  },
+  getAllOrigin: () => db.select().from(origins),
+  getOriginById: (id: number) => db.query.origins.findFirst({ where: eq(origins.id, id) }),
+  createOrigin: (data: any) => db.insert(origins).values(data).returning().then(r => r[0]),
+  updateOrigin: (id: number, data: any) => db.update(origins).set(data).where(eq(origins.id, id)).returning().then(r => r[0]),
+  deleteOrigin: (id: number) => db.delete(origins).where(eq(origins.id, id)),
 
   // ARCHETYPE
-  getAllArchetype: async () => {
-    const { rows } = await pool.query("SELECT * FROM archetypes ORDER BY id");
-    return rows;
-  },
-  getArchetypeById: async (id: number) => {
-    const { rows } = await pool.query("SELECT * FROM archetypes WHERE id = $1", [id]);
-    return rows[0];
-  },
-  createArchetype: async (data: any) => {
-    const { name, description } = data;
-    const { rows } = await pool.query(
-      "INSERT INTO archetypes (name, description) VALUES ($1, $2) RETURNING *",
-      [name, description]
-    );
-    return rows[0];
-  },
-  updateArchetype: async (id: number, data: any) => {
-    const { name, description } = data;
-    const { rows } = await pool.query(
-      "UPDATE archetypes SET name = $1, description = $2 WHERE id = $3 RETURNING *",
-      [name, description, id]
-    );
-    return rows[0];
-  },
-  deleteArchetype: async (id: number) => {
-    await pool.query("DELETE FROM archetypes WHERE id = $1", [id]);
-  },
+  getAllArchetype: () => db.select().from(archetypes),
+  getArchetypeById: (id: number) => db.query.archetypes.findFirst({ where: eq(archetypes.id, id) }),
+  createArchetype: (data: any) => db.insert(archetypes).values(data).returning().then(r => r[0]),
+  updateArchetype: (id: number, data: any) => db.update(archetypes).set(data).where(eq(archetypes.id, id)).returning().then(r => r[0]),
+  deleteArchetype: (id: number) => db.delete(archetypes).where(eq(archetypes.id, id)),
 
   // SKILL
-  getAllSkill: async () => {
-    const { rows } = await pool.query("SELECT * FROM skills ORDER BY id");
-    return rows;
-  },
-  getSkillById: async (id: number) => {
-    const { rows } = await pool.query("SELECT * FROM skills WHERE id = $1", [id]);
-    return rows[0];
-  },
-  createSkill: async (data: any) => {
-    const { name, category, description } = data;
-    const { rows } = await pool.query(
-      "INSERT INTO skills (name, category, description) VALUES ($1, $2, $3) RETURNING *",
-      [name, category, description]
-    );
-    return rows[0];
-  },
-  updateSkill: async (id: number, data: any) => {
-    const { name, category, description } = data;
-    const { rows } = await pool.query(
-      "UPDATE skills SET name = $1, category = $2, description = $3 WHERE id = $4 RETURNING *",
-      [name, category, description, id]
-    );
-    return rows[0];
-  },
-  deleteSkill: async (id: number) => {
-    await pool.query("DELETE FROM skills WHERE id = $1", [id]);
-  },
+  getAllSkill: () => db.select().from(skills),
+  getSkillById: (id: number) => db.query.skills.findFirst({ where: eq(skills.id, id) }),
+  createSkill: (data: any) => db.insert(skills).values(data).returning().then(r => r[0]),
+  updateSkill: (id: number, data: any) => db.update(skills).set(data).where(eq(skills.id, id)).returning().then(r => r[0]),
+  deleteSkill: (id: number) => db.delete(skills).where(eq(skills.id, id)),
 
   // FEAT
-  getAllFeat: async () => {
-    const { rows } = await pool.query("SELECT * FROM feats ORDER BY id");
-    return rows;
-  },
-  getFeatById: async (id: number) => {
-    const { rows } = await pool.query("SELECT * FROM feats WHERE id = $1", [id]);
-    return rows[0];
-  },
-  createFeat: async (data: any) => {
-    const { name, description } = data;
-    const { rows } = await pool.query(
-      "INSERT INTO feats (name, description) VALUES ($1, $2) RETURNING *",
-      [name, description]
-    );
-    return rows[0];
-  },
-  updateFeat: async (id: number, data: any) => {
-    const { name, description } = data;
-    const { rows } = await pool.query(
-      "UPDATE feats SET name = $1, description = $2 WHERE id = $3 RETURNING *",
-      [name, description, id]
-    );
-    return rows[0];
-  },
-  deleteFeat: async (id: number) => {
-    await pool.query("DELETE FROM feats WHERE id = $1", [id]);
-  },
+  getAllFeat: () => db.select().from(feats),
+  getFeatById: (id: number) => db.query.feats.findFirst({ where: eq(feats.id, id) }),
+  createFeat: (data: any) => db.insert(feats).values(data).returning().then(r => r[0]),
+  updateFeat: (id: number, data: any) => db.update(feats).set(data).where(eq(feats.id, id)).returning().then(r => r[0]),
+  deleteFeat: (id: number) => db.delete(feats).where(eq(feats.id, id)),
 
   // SKILL SET
-  getAllSkillSet: async () => {
-    const { rows } = await pool.query("SELECT * FROM skill_sets ORDER BY id");
-    return rows;
-  },
-  getSkillSetById: async (id: number) => {
-    const { rows } = await pool.query("SELECT * FROM skill_sets WHERE id = $1", [id]);
-    return rows[0];
-  },
-  createSkillSet: async (data: any) => {
-    const { name, description } = data;
-    const { rows } = await pool.query(
-      "INSERT INTO skill_sets (name, description) VALUES ($1, $2) RETURNING *",
-      [name, description]
-    );
-    return rows[0];
-  },
-  updateSkillSet: async (id: number, data: any) => {
-    const { name, description } = data;
-    const { rows } = await pool.query(
-      "UPDATE skill_sets SET name = $1, description = $2 WHERE id = $3 RETURNING *",
-      [name, description, id]
-    );
-    return rows[0];
-  },
-  deleteSkillSet: async (id: number) => {
-    await pool.query("DELETE FROM skill_sets WHERE id = $1", [id]);
-  },
+  getAllSkillSet: () => db.select().from(skillSets),
+  getSkillSetById: (id: number) => db.query.skillSets.findFirst({ where: eq(skillSets.id, id) }),
+  createSkillSet: (data: any) => db.insert(skillSets).values(data).returning().then(r => r[0]),
+  updateSkillSet: (id: number, data: any) => db.update(skillSets).set(data).where(eq(skillSets.id, id)).returning().then(r => r[0]),
+  deleteSkillSet: (id: number) => db.delete(skillSets).where(eq(skillSets.id, id)),
 
   // POWER
-  getAllPower: async () => {
-    const { rows } = await pool.query("SELECT * FROM powers ORDER BY id");
-    return rows;
-  },
-  getPowerById: async (id: number) => {
-    const { rows } = await pool.query("SELECT * FROM powers WHERE id = $1", [id]);
-    return rows[0];
-  },
-  createPower: async (data: any) => {
-    const { name, description } = data;
-    const { rows } = await pool.query(
-      "INSERT INTO powers (name, description) VALUES ($1, $2) RETURNING *",
-      [name, description]
-    );
-    return rows[0];
-  },
-  updatePower: async (id: number, data: any) => {
-    const { name, description } = data;
-    const { rows } = await pool.query(
-      "UPDATE powers SET name = $1, description = $2 WHERE id = $3 RETURNING *",
-      [name, description, id]
-    );
-    return rows[0];
-  },
-  deletePower: async (id: number) => {
-    await pool.query("DELETE FROM powers WHERE id = $1", [id]);
-  },
+  getAllPower: () => db.select().from(powers),
+  getPowerById: (id: number) => db.query.powers.findFirst({ where: eq(powers.id, id) }),
+  createPower: (data: any) => db.insert(powers).values(data).returning().then(r => r[0]),
+  updatePower: (id: number, data: any) => db.update(powers).set(data).where(eq(powers.id, id)).returning().then(r => r[0]),
+  deletePower: (id: number) => db.delete(powers).where(eq(powers.id, id)),
 
   // POWER SET
-  getAllPowerSet: async () => {
-    const { rows } = await pool.query("SELECT * FROM power_sets ORDER BY id");
-    return rows;
-  },
-  getPowerSetById: async (id: number) => {
-    const { rows } = await pool.query("SELECT * FROM power_sets WHERE id = $1", [id]);
-    return rows[0];
-  },
-  createPowerSet: async (data: any) => {
-    const { name, description } = data;
-    const { rows } = await pool.query(
-      "INSERT INTO power_sets (name, description) VALUES ($1, $2) RETURNING *",
-      [name, description]
-    );
-    return rows[0];
-  },
-  updatePowerSet: async (id: number, data: any) => {
-    const { name, description } = data;
-    const { rows } = await pool.query(
-      "UPDATE power_sets SET name = $1, description = $2 WHERE id = $3 RETURNING *",
-      [name, description, id]
-    );
-    return rows[0];
-  },
-  deletePowerSet: async (id: number) => {
-    await pool.query("DELETE FROM power_sets WHERE id = $1", [id]);
-  },
+  getAllPowerSet: () => db.select().from(powerSets),
+  getPowerSetById: (id: number) => db.query.powerSets.findFirst({ where: eq(powerSets.id, id) }),
+  createPowerSet: (data: any) => db.insert(powerSets).values(data).returning().then(r => r[0]),
+  updatePowerSet: (id: number, data: any) => db.update(powerSets).set(data).where(eq(powerSets.id, id)).returning().then(r => r[0]),
+  deletePowerSet: (id: number) => db.delete(powerSets).where(eq(powerSets.id, id)),
 
   // POWER MODIFIER
-  getAllPowerModifier: async () => {
-    const { rows } = await pool.query("SELECT * FROM power_modifiers ORDER BY id");
-    return rows;
-  },
-  getPowerModifierById: async (id: number) => {
-    const { rows } = await pool.query("SELECT * FROM power_modifiers WHERE id = $1", [id]);
-    return rows[0];
-  },
-  createPowerModifier: async (data: any) => {
-    const { name, description } = data;
-    const { rows } = await pool.query(
-      "INSERT INTO power_modifiers (name, description) VALUES ($1, $2) RETURNING *",
-      [name, description]
-    );
-    return rows[0];
-  },
-  updatePowerModifier: async (id: number, data: any) => {
-    const { name, description } = data;
-    const { rows } = await pool.query(
-      "UPDATE power_modifiers SET name = $1, description = $2 WHERE id = $3 RETURNING *",
-      [name, description, id]
-    );
-    return rows[0];
-  },
-  deletePowerModifier: async (id: number) => {
-    await pool.query("DELETE FROM power_modifiers WHERE id = $1", [id]);
-  },
+  getAllPowerModifier: () => db.select().from(powerModifiers),
+  getPowerModifierById: (id: number) => db.query.powerModifiers.findFirst({ where: eq(powerModifiers.id, id) }),
+  createPowerModifier: (data: any) => db.insert(powerModifiers).values(data).returning().then(r => r[0]),
+  updatePowerModifier: (id: number, data: any) => db.update(powerModifiers).set(data).where(eq(powerModifiers.id, id)).returning().then(r => r[0]),
+  deletePowerModifier: (id: number) => db.delete(powerModifiers).where(eq(powerModifiers.id, id)),
+
+  // ORIGIN FEATURES
+  getAllOriginFeature: () => db.select().from(originFeatures),
+  getOriginFeatureById: (id: number) => db.query.originFeatures.findFirst({ where: eq(originFeatures.id, id) }),
+  createOriginFeature: (data: any) => db.insert(originFeatures).values(data).returning().then(r => r[0]),
+  updateOriginFeature: (id: number, data: any) => db.update(originFeatures).set(data).where(eq(originFeatures.id, id)).returning().then(r => r[0]),
+  deleteOriginFeature: (id: number) => db.delete(originFeatures).where(eq(originFeatures.id, id)),
+
+  // MANEUVERS
+  getAllManeuver: () => db.select().from(maneuvers),
+  getManeuverById: (id: number) => db.query.maneuvers.findFirst({ where: eq(maneuvers.id, id) }),
+  createManeuver: (data: any) => db.insert(maneuvers).values(data).returning().then(r => r[0]),
+  updateManeuver: (id: number, data: any) => db.update(maneuvers).set(data).where(eq(maneuvers.id, id)).returning().then(r => r[0]),
+  deleteManeuver: (id: number) => db.delete(maneuvers).where(eq(maneuvers.id, id)),
+
+  // GEAR
+  getAllGear: () => db.select().from(gear),
+  getGearById: (id: number) => db.query.gear.findFirst({ where: eq(gear.id, id) }),
+  createGear: (data: any) => db.insert(gear).values(data).returning().then(r => r[0]),
+  updateGear: (id: number, data: any) => db.update(gear).set(data).where(eq(gear.id, id)).returning().then(r => r[0]),
+  deleteGear: (id: number) => db.delete(gear).where(eq(gear.id, id)),
 };

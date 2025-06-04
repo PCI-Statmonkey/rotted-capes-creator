@@ -1,1 +1,144 @@
-["Andromorph","Blaster","Brawler","Controller","Infiltrator","Heavy","Transporter"]
+[
+  {
+    "name": "Andromorph",
+    "image": "andromorph.png",
+    "ability_bonus": ["strength", "dexterity"],
+    "typical_powers": [
+      "Aquatic Adaptation", "Bestial Transformation", "Cat Fall*", "Chameleon", "Communicate with Animals",
+      "Endurance*", "Enhanced Attack*", "Enhanced Ability Score (Strength or Dexterity)*", "Enhanced Sense*",
+      "Flight", "Growth", "Glide", "Life Support", "Regeneration", "Shapeshift", "Shrink",
+      "Summon Animal", "Super-Sense", "Surge*", "Wall Crawl", "Weird Biology"
+    ],
+    "mechanics": {
+      "power_bonus": {
+        "value": 2,
+        "applies_to": "one power from typical_powers"
+      },
+      "free_skill": "Outdoorsman"
+    }
+  },
+  {
+    "name": "Blaster",
+    "image": "blaster.png",
+    "ability_bonus": ["dexterity", "charisma"],
+    "typical_powers": [
+      "Adsorb Energy", "Damaging Form", "Energy Blast", "Energy Explosion", "Energy Generation", "Energy Manipulation",
+      "Energy Sheath", "Enhanced Ability Score (Dexterity)*", "Flight", "Force Field", "Force Shield", "Psychic Attack"
+    ],
+    "mechanics": {
+      "power_bonus": {
+        "value": 2,
+        "applies_to": "one power from typical_powers"
+      },
+      "free_skill": "Athletics"
+    }
+  },
+  {
+    "name": "Brawler",
+    "image": "brawler.png",
+    "ability_bonus": ["strength", "dexterity", "constitution"],
+    "typical_powers": [
+      "Armor", "Bestial Transformation", "Endurance*", "Enhanced Attack*", "Enhanced Ability Score (Strength, Dexterity, or Constitution)*",
+      "Enhanced Senses", "Force Field. Personal", "Invulnerability", "Regeneration", "Resistance", "Super-Sense"
+    ],
+    "mechanics": {
+      "choice_feat": ["Martial Arts", "Weapon Master"],
+      "free_skill": "Athletics"
+    }
+  },
+  {
+    "name": "Controller",
+    "image": "controller.png",
+    "ability_bonus": ["wisdom", "charisma"],
+    "typical_powers": [
+      "Enhanced Ability Score (Charisma or Wisdom)*", "Illusion", "Mind Control", "Mind Reading", "Mental Blast",
+      "Emotion Control", "Force Field", "Psychic Blast", "Stun", "Summon Ally", "Telekinesis", "Telepathy"
+    ],
+    "mechanics": {
+      "power_bonus": {
+        "value": 2,
+        "applies_to": "one power from typical_powers"
+      },
+      "free_skill": "Influence"
+    }
+  },
+  {
+    "name": "Defender",
+    "image": "defender.png",
+    "ability_bonus": ["constitution", "wisdom"],
+    "typical_powers": [
+      "Armor", "Endurance*", "Enhanced Ability Score (Constitution or Wisdom)*", "Force Field", "Healing",
+      "Invulnerability", "Regeneration", "Resistance", "Shield", "Super-Sense", "Toughness"
+    ],
+    "mechanics": {
+      "power_bonus": {
+        "value": 2,
+        "applies_to": "one power from typical_powers"
+      },
+      "free_skill": "Medicine"
+    }
+  },
+  {
+    "name": "Investigator",
+    "image": "investigator.png",
+    "ability_bonus": ["intelligence", "wisdom"],
+    "typical_powers": [
+      "Empathic Link", "Enhanced Ability Score (Intelligence or Wisdom)*", "Heightened Senses", "Investigation",
+      "Mind Reading", "Super-Sense", "Telepathy"
+    ],
+    "mechanics": {
+      "power_bonus": {
+        "value": 2,
+        "applies_to": "one power from typical_powers"
+      },
+      "free_skill": "Investigation"
+    }
+  },
+  {
+    "name": "Leader",
+    "image": "leader.png",
+    "ability_bonus": ["charisma", "intelligence"],
+    "typical_powers": [
+      "Command", "Coordinate", "Enhanced Ability Score (Charisma or Intelligence)*", "Influence", "Inspire", "Tactical Mastery"
+    ],
+    "mechanics": {
+      "power_bonus": {
+        "value": 2,
+        "applies_to": "one power from typical_powers"
+      },
+      "free_skill": "Influence"
+    }
+  },
+  {
+    "name": "Speedster",
+    "image": "speedster.png",
+    "ability_bonus": ["dexterity"],
+    "typical_powers": [
+      "Acceleration", "Enhanced Reflexes", "Enhanced Speed", "Enhanced Ability Score (Dexterity)*", "Vibration Control",
+      "Wall Run", "Super-Sense", "Time Dilation"
+    ],
+    "mechanics": {
+      "power_bonus": {
+        "value": 2,
+        "applies_to": "one power from typical_powers"
+      },
+      "free_skill": "Athletics"
+    }
+  },
+  {
+    "name": "Tech Specialist",
+    "image": "tech_specialist.png",
+    "ability_bonus": ["intelligence"],
+    "typical_powers": [
+      "Gadgeteer", "Hacking", "Remote Control", "Enhanced Ability Score (Intelligence)*", "Summon Drone",
+      "Shield", "Technopathy"
+    ],
+    "mechanics": {
+      "power_bonus": {
+        "value": 2,
+        "applies_to": "one power from typical_powers"
+      },
+      "free_skill": "Basic Technology"
+    }
+  }
+]

@@ -7,10 +7,13 @@ import { storage } from "../storage";
 import {
   insertOriginSchema, insertArchetypeSchema, insertSkillSchema,
   insertFeatSchema, insertSkillSetSchema, insertPowerSchema,
-  insertPowerSetSchema, insertPowerModifierSchema
+  insertPowerSetSchema, insertPowerModifierSchema,
+  insertOriginFeatureSchema, insertGearSchema
 } from "@shared/schema";
 import { z } from "zod";
-import { checkConnection, getConnectionStatus } from "../db";
+import { maneuvers } from "@shared/schema";
+import { db } from "../db";
+import { eq } from "drizzle-orm";
 
 console.log("✅ Loaded gameContentController.ts");
 
@@ -108,7 +111,7 @@ function makeCrudHandlers<T>(entityName: string, schema: z.ZodTypeAny) {
   };
 }
 
-// Export CRUD handlers for each entity
+// Origin
 export const {
   getAll: getAllOrigins,
   getOne: getOriginById,
@@ -117,6 +120,7 @@ export const {
   remove: deleteOrigin
 } = makeCrudHandlers("Origin", insertOriginSchema);
 
+// Archetype
 export const {
   getAll: getAllArchetypes,
   getOne: getArchetypeById,
@@ -125,6 +129,7 @@ export const {
   remove: deleteArchetype
 } = makeCrudHandlers("Archetype", insertArchetypeSchema);
 
+// Skill
 export const {
   getAll: getAllSkills,
   getOne: getSkillById,
@@ -133,6 +138,7 @@ export const {
   remove: deleteSkill
 } = makeCrudHandlers("Skill", insertSkillSchema);
 
+// Feat
 export const {
   getAll: getAllFeats,
   getOne: getFeatById,
@@ -141,6 +147,7 @@ export const {
   remove: deleteFeat
 } = makeCrudHandlers("Feat", insertFeatSchema);
 
+// SkillSet
 export const {
   getAll: getAllSkillSets,
   getOne: getSkillSetById,
@@ -149,6 +156,7 @@ export const {
   remove: deleteSkillSet
 } = makeCrudHandlers("SkillSet", insertSkillSetSchema);
 
+// Power
 export const {
   getAll: getAllPowers,
   getOne: getPowerById,
@@ -157,6 +165,7 @@ export const {
   remove: deletePower
 } = makeCrudHandlers("Power", insertPowerSchema);
 
+// PowerSet
 export const {
   getAll: getAllPowerSets,
   getOne: getPowerSetById,
@@ -165,6 +174,7 @@ export const {
   remove: deletePowerSet
 } = makeCrudHandlers("PowerSet", insertPowerSetSchema);
 
+// PowerModifier
 export const {
   getAll: getAllPowerModifiers,
   getOne: getPowerModifierById,
@@ -172,3 +182,49 @@ export const {
   update: updatePowerModifier,
   remove: deletePowerModifier
 } = makeCrudHandlers("PowerModifier", insertPowerModifierSchema);
+
+// OriginFeature
+export const {
+  getAll: getAllOriginFeatures,
+  getOne: getOriginFeatureById,
+  create: createOriginFeature,
+  update: updateOriginFeature,
+  remove: deleteOriginFeature
+} = makeCrudHandlers("OriginFeature", insertOriginFeatureSchema);
+
+// Gear
+export const {
+  getAll: getAllGears,
+  getOne: getGearById,
+  create: createGear,
+  update: updateGear,
+  remove: deleteGear
+} = makeCrudHandlers("Gear", insertGearSchema);
+
+// Get all maneuvers
+export async function getAllManeuvers(req, res) {
+  const result = await db.select().from(maneuvers);
+  res.json(result);
+}
+
+// Create a new maneuver
+export async function createManeuver(req, res) {
+  const { name, type, requirements } = req.body;
+  const result = await db.insert(maneuvers).values({ name, type, requirements }).returning();
+  res.status(201).json(result[0]);
+}
+
+// Update an existing maneuver
+export async function updateManeuver(req, res) {
+  const id = parseInt(req.params.id);
+  const { name, type, requirements } = req.body;
+  const result = await db.update(maneuvers).set({ name, type, requirements }).where(eq(maneuvers.id, id)).returning();
+  res.json(result[0]);
+}
+
+// Delete a maneuver
+export async function deleteManeuver(req, res) {
+  const id = parseInt(req.params.id);
+  await db.delete(maneuvers).where(eq(maneuvers.id, id));
+  res.status(204).send();
+}

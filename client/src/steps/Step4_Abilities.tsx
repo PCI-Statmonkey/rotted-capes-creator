@@ -561,23 +561,27 @@ export default function Step4_Abilities() {
                   </div>
                 )}
                 
-                {/* Origin and Archetype Bonuses */}
-                {(getOriginBonus(ability) > 0 || getArchetypeBonus(ability) > 0) && (
-                  <div className="mt-2 pt-2 border-t border-gray-700 text-xs">
-                    {getOriginBonus(ability) > 0 && (
-                      <div className="text-green-500 flex justify-between">
-                        <span>Origin: {character.origin}</span>
-                        <span>+{getOriginBonus(ability)}</span>
-                      </div>
-                    )}
-                    {getArchetypeBonus(ability) > 0 && (
-                      <div className="text-green-500 flex justify-between">
-                        <span>Archetype: {character.archetype}</span>
-                        <span>+{getArchetypeBonus(ability)}</span>
-                      </div>
-                    )}
+                {/* Origin and Archetype Bonuses (only if they apply to this ability) */}
+                {(() => {
+                  const originBonus = getOriginBonus(ability);
+                  const archetypeBonus = getArchetypeBonus(ability);
+                if (originBonus === 0 && archetypeBonus === 0) return null;
+
+                 return (
+                  <div className="mt-2 pt-2 border-t border-gray-700 text-xs text-green-500">
+                    {originBonus > 0 && (
+                    <div className="flex justify-between">
+                  <span>+{originBonus} from Origin</span>
                   </div>
                 )}
+                  {archetypeBonus > 0 && (
+                    <div className="flex justify-between">
+                    <span>+{archetypeBonus} from Archetype</span>
+                </div>
+              )}
+          </div>
+        );
+})()}
               </div>
             );
           })}

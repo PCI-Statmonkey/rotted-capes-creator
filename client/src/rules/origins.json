@@ -1,1 +1,286 @@
-["Alien","Android","Cosmic","Demigod","Highly Trained","Mystic","Super-Human","Tech Hero"]
+[
+  {
+    "name": "Alien",
+    "description": "You are not of this Earth. Perhaps you were born on another planet, created in a lab beyond the stars, or are the last survivor of an ancient galactic race.",
+    "image": "alien.png",
+    "ability_bonuses": { "Strength": 2 },
+    "advantages": [
+      {
+        "name": "Alien Resilience",
+        "description": "Your alien physiology grants you natural resistance to physical harm. You have an innate Damage Resistance (DR) of 1 against all physical damage, which stacks with any other sources of DR. Additionally, you have advantage on saving throws against poisons.",
+        "effect": {
+          "type": "mechanical",
+          "details": {
+            "damage_resistance": 1,
+            "advantage_vs_poison": true
+          }
+        }
+      },
+      {
+        "name": "Advanced Technology",
+        "description": "Your knowledge and access to advanced alien technology provide you with unique tools and gadgets. Any powers that apply the removable item power modification have their power scores increased by +1.",
+        "effect": {
+          "type": "mechanical",
+          "details": {
+            "power_mod_bonus_removable": 1
+          }
+        }
+      }
+    ],
+    "disadvantages": [
+      {
+        "name": "Cultural Misunderstanding",
+        "description": "You have a disadvantage on Insight checks when trying to understand human behavior and social cues. Additionally, actions or customs that are commonplace for your alien race may be seen as strange or alarming to humans.",
+        "effect": {
+          "type": "mechanical",
+          "details": {
+            "insight_penalty": true
+          }
+        }
+      },
+      {
+        "name": "Lost Connection",
+        "description": "You no longer have access to the resources and support from your alien civilization. Any attempt to contact or seek assistance from your home world is uncertain at best.",
+        "effect": {
+          "type": "story"
+        }
+      }
+    ]
+  },
+  {
+    "name": "Mystic: The Chosen",
+    "description": "Chosen by destiny or a divine prophecy, you carry the weight of a greater purpose. Your powers are guided by fate itself.",
+    "image": "mystic_chosen.png",
+    "ability_bonuses": { "Wisdom": 2 },
+    "advantages": [
+      {
+        "name": "Destiny is All",
+        "description": "Your path has been foretold. You gain +1 Grit and a bonus feat: Diehard.",
+        "effect": {
+          "type": "mechanical",
+          "details": {
+            "grit_bonus": 1,
+            "free_feat": "Diehard"
+          }
+        }
+      }
+    ],
+    "disadvantages": [
+      {
+        "name": "A Set Path",
+        "description": "Your mystic source has expectations. Powers must be tied to an item or patron.",
+        "effect": {
+          "type": "mechanical",
+          "details": {
+            "power_restriction": "Tied to item or patron"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "Mystic: Practitioners",
+    "description": "You are a student of mystical forces, trained through study, experience, or tradition. You wield supernatural forces through practiced ritual and deep understanding.",
+    "image": "mystic_practitioner.png",
+    "ability_bonuses": { "Wisdom": 2 },
+    "advantages": [
+      {
+        "name": "Mystic Insight",
+        "description": "You possess deep mystical understanding and esoteric knowledge.",
+        "effect": {
+          "type": "story"
+        }
+      }
+    ],
+    "disadvantages": [
+      {
+        "name": "Bound by Oath",
+        "description": "You must act according to a mystical code or tradition.",
+        "effect": {
+          "type": "story"
+        }
+      }
+    ]
+  },
+  {
+    "name": "Mystic: Enchanters",
+      "description": "You specialize in crafting and manipulating magic-infused items. Enchanters blend arcane tradition with technical creativity.",
+    "image": "mystic_enchanter.png",
+    "ability_bonuses": { "Intelligence": 2 },
+    "advantages": [
+      {
+        "name": "Arcane Tinkering",
+        "description": "You can enchant and modify magical items creatively.",
+        "effect": {
+          "type": "story"
+        }
+      }
+    ],
+    "disadvantages": [
+      {
+        "name": "Technomystic Feedback",
+        "description": "Combining magic and tech causes instability. Roleplay and story consequence.",
+        "effect": {
+          "type": "story"
+        }
+      }
+    ]
+  },
+  {
+    "name": "Super-Human",
+    "description": "Whether through genetic enhancement, scientific experimentation, or sheer evolutionary luck, your physical abilities exceed human norms.",
+    "image": "superhuman.png",
+    "ability_bonuses": { "Constitution": 2 },
+    "advantages": [
+      {
+        "name": "Power Infusion",
+        "description": "Your powers are enhanced. Gain +1 Power Score and may select a power feat.",
+        "effect": {
+          "type": "mechanical",
+          "details": {
+            "power_bonus": 1,
+            "optional_power_feat": true
+          }
+        }
+      }
+    ],
+    "disadvantages": [
+      {
+        "name": "Power Limits",
+        "description": "You are limited to powers that mimic your original infusion powers post-creation.",
+        "effect": {
+          "type": "mechanical",
+          "details": {
+            "restricted_to_emulated_powers_post_creation": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "Demi-God",
+    "description": "You are the child or chosen champion of a divine being. The blood of gods flows in your veins, granting you strength and purpose.",
+    "image": "demigod.png",
+    "ability_bonuses": {
+      "Strength": 1,
+      "Constitution": 1
+    },
+    "advantages": [
+      {
+        "name": "Divine Blood",
+        "description": "You may select the Power Surge feat for free.",
+        "effect": {
+          "type": "mechanical",
+          "details": {
+            "free_feat": "Power Surge"
+          }
+        }
+      }
+    ],
+    "disadvantages": [
+      {
+        "name": "Divine Power Limits",
+        "description": "Your powers must stem from divine objects (amulets, weapons, etc).",
+        "effect": {
+          "type": "mechanical",
+          "details": {
+            "power_restriction": "Only via object"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "Supernatural",
+    "description": "You are touched by forces beyond mortal comprehension—magic, gods, curses, or eldritch energies shape your being.",
+    "image": "supernatural.png",
+    "ability_bonuses": "Choice of +1 to any two ability scores",
+    "advantages": [
+      {
+        "name": "More Than Human",
+        "description": "You gain two bonus feats: Diehard and any non-Visionary feat.",
+        "effect": {
+          "type": "mechanical",
+          "details": {
+            "free_feats": [
+              "Diehard",
+              "Any non-Visionary feat"
+            ]
+          }
+        }
+      }
+    ],
+    "disadvantages": [
+      {
+        "name": "Strange Appearance & Vulnerability",
+        "description": "You must select a Strange Appearance Complication and a Thematic Vulnerability worth 10 pts.",
+        "effect": {
+          "type": "mechanical",
+          "details": {
+            "required_weaknesses": [
+              "Strange Appearance",
+              "Thematic Vulnerability (10 pts)"
+            ]
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "Highly Trained",
+    "description": "You are not superhuman—you’re just better. Peak human ability, years of training, and relentless will have honed you into a weapon.",
+    "image": "highly_trained.png",
+    "ability_bonuses": { "Intelligence": 2 },
+    "advantages": [
+      {
+        "name": "Skill Mastery",
+        "description": "You gain additional trained skills and access to advanced knowledge.",
+        "effect": {
+          "type": "story"
+        }
+      }
+    ],
+    "disadvantages": [
+      {
+        "name": "No Natural Powers",
+        "description": "You cannot have powers unless they have the All-Skill modification.",
+        "effect": {
+          "type": "mechanical",
+          "details": {
+            "power_limit": "Cannot have powers without All-Skill modification"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "Tech Hero",
+    "description": "Augmented with cutting-edge gear, you rely on advanced science and technology to empower your actions and defend the helpless.",
+    "image": "tech_hero.png",
+    "ability_bonuses": { "Intelligence": 2 },
+    "advantages": [
+      {
+        "name": "Technological Edge",
+        "description": "You may select the Technophile feat for free.",
+        "effect": {
+          "type": "mechanical",
+          "details": {
+            "free_feat": "Technophile"
+          }
+        }
+      }
+    ],
+    "disadvantages": [
+      {
+        "name": "Powered by Gear",
+        "description": "All of your powers must have the Removable Item modifier.",
+        "effect": {
+          "type": "mechanical",
+          "details": {
+            "restriction": "All powers must have Removable Item"
+          }
+        }
+      }
+    ]
+  }
+]

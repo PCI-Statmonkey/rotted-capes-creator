@@ -1,5 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Bangers&family=Comic+Neue:wght@300;400;700&display=swap');
-
+@import "@fontsource/inter";
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -75,6 +75,7 @@ select, select option {
 }
 
 body {
+  @apply font-sans bg-black text-white;
   font-family: 'Bangers', cursive;
   background-color: hsl(var(--background));
   color: hsl(var(--foreground));

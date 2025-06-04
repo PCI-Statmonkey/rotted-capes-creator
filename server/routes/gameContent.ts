@@ -1,19 +1,77 @@
+// server/routes/gameContent.ts
+
+import {
+  getAllManeuvers,
+  createManeuver,
+  updateManeuver,
+  deleteManeuver,
+  getAllOrigins,
+  getOriginById,
+  createOrigin,
+  updateOrigin,
+  deleteOrigin,
+  getAllArchetypes,
+  getArchetypeById,
+  createArchetype,
+  updateArchetype,
+  deleteArchetype,
+  getAllSkills,
+  getSkillById,
+  createSkill,
+  updateSkill,
+  deleteSkill,
+  getAllFeats,
+  getFeatById,
+  createFeat,
+  updateFeat,
+  deleteFeat,
+  getAllSkillSets,
+  getSkillSetById,
+  createSkillSet,
+  updateSkillSet,
+  deleteSkillSet,
+  getAllPowers,
+  getPowerById,
+  createPower,
+  updatePower,
+  deletePower,
+  getAllPowerSets,
+  getPowerSetById,
+  createPowerSet,
+  updatePowerSet,
+  deletePowerSet,
+  getAllPowerModifiers,
+  getPowerModifierById,
+  createPowerModifier,
+  updatePowerModifier,
+  deletePowerModifier,
+  getAllOriginFeatures,
+  getOriginFeatureById,
+  createOriginFeature,
+  updateOriginFeature,
+  deleteOriginFeature,
+  getAllGears,
+  getGearById,
+  createGear,
+  updateGear,
+  deleteGear,
+  verifyAdmin,
+} from "../controllers/gameContentController";
+
 import { Router, Request, Response, NextFunction } from "express";
-import * as gameContentController from "../controllers/gameContentController";
-import { verifyAdmin } from "../controllers/gameContentController";
+
+const router = Router();
 
 // TypeScript session extension
-declare module 'express-session' {
+declare module "express-session" {
   export interface SessionData {
     user: {
       id: string;
       username: string;
       isAdmin: boolean;
-    }
+    };
   }
 }
-
-const router = Router();
 
 // Middleware to ensure admin access
 function ensureAdmin(req: Request, res: Response, next: NextFunction) {
@@ -24,78 +82,106 @@ function ensureAdmin(req: Request, res: Response, next: NextFunction) {
   }
 }
 
-// Public routes (GET operations)
+// ---------------- PUBLIC ROUTES (GET ONLY) ----------------
+
 // Origins
-router.get("/origins", gameContentController.getAllOrigins);
-router.get("/origins/:id", gameContentController.getOriginById);
+router.get("/origins", getAllOrigins);
+router.get("/origins/:id", getOriginById);
 
 // Archetypes
-router.get("/archetypes", gameContentController.getAllArchetypes);
-router.get("/archetypes/:id", gameContentController.getArchetypeById);
+router.get("/archetypes", getAllArchetypes);
+router.get("/archetypes/:id", getArchetypeById);
 
 // Skills
-router.get("/skills", gameContentController.getAllSkills);
-router.get("/skills/:id", gameContentController.getSkillById);
+router.get("/skills", getAllSkills);
+router.get("/skills/:id", getSkillById);
 
 // Feats
-router.get("/feats", gameContentController.getAllFeats);
-router.get("/feats/:id", gameContentController.getFeatById);
+router.get("/feats", getAllFeats);
+router.get("/feats/:id", getFeatById);
 
 // Skill Sets
-router.get("/skill-sets", gameContentController.getAllSkillSets);
-router.get("/skill-sets/:id", gameContentController.getSkillSetById);
+router.get("/skill-sets", getAllSkillSets);
+router.get("/skill-sets/:id", getSkillSetById);
 
 // Powers
-router.get("/powers", gameContentController.getAllPowers);
-router.get("/powers/:id", gameContentController.getPowerById);
+router.get("/powers", getAllPowers);
+router.get("/powers/:id", getPowerById);
 
 // Power Sets
-router.get("/power-sets", gameContentController.getAllPowerSets);
-router.get("/power-sets/:id", gameContentController.getPowerSetById);
+router.get("/power-sets", getAllPowerSets);
+router.get("/power-sets/:id", getPowerSetById);
 
 // Power Modifiers
-router.get("/power-modifiers", gameContentController.getAllPowerModifiers);
-router.get("/power-modifiers/:id", gameContentController.getPowerModifierById);
+router.get("/power-modifiers", getAllPowerModifiers);
+router.get("/power-modifiers/:id", getPowerModifierById);
 
-// Admin routes (CREATE, UPDATE, DELETE operations)
+// Origin Features
+router.get("/origin-features", getAllOriginFeatures);
+router.get("/origin-features/:id", getOriginFeatureById);
+
+// Gear
+router.get("/gear", getAllGears);
+router.get("/gear/:id", getGearById);
+
+// Maneuvers
+router.get("/maneuvers", getAllManeuvers);
+
+// ---------------- ADMIN ROUTES (POST / PATCH / DELETE) ----------------
+
 // Origins
-router.post("/origins", verifyAdmin, gameContentController.createOrigin);
-router.patch("/origins/:id", ensureAdmin, gameContentController.updateOrigin);
-router.delete("/origins/:id", ensureAdmin, gameContentController.deleteOrigin);
+router.post("/origins", verifyAdmin, createOrigin);
+router.patch("/origins/:id", ensureAdmin, updateOrigin);
+router.delete("/origins/:id", ensureAdmin, deleteOrigin);
 
 // Archetypes
-router.post("/archetypes", ensureAdmin, gameContentController.createArchetype);
-router.patch("/archetypes/:id", ensureAdmin, gameContentController.updateArchetype);
-router.delete("/archetypes/:id", ensureAdmin, gameContentController.deleteArchetype);
+router.post("/archetypes", ensureAdmin, createArchetype);
+router.patch("/archetypes/:id", ensureAdmin, updateArchetype);
+router.delete("/archetypes/:id", ensureAdmin, deleteArchetype);
 
 // Skills
-router.post("/skills", ensureAdmin, gameContentController.createSkill);
-router.patch("/skills/:id", ensureAdmin, gameContentController.updateSkill);
-router.delete("/skills/:id", ensureAdmin, gameContentController.deleteSkill);
+router.post("/skills", ensureAdmin, createSkill);
+router.patch("/skills/:id", ensureAdmin, updateSkill);
+router.delete("/skills/:id", ensureAdmin, deleteSkill);
 
 // Feats
-router.post("/feats", ensureAdmin, gameContentController.createFeat);
-router.patch("/feats/:id", ensureAdmin, gameContentController.updateFeat);
-router.delete("/feats/:id", ensureAdmin, gameContentController.deleteFeat);
+router.post("/feats", ensureAdmin, createFeat);
+router.patch("/feats/:id", ensureAdmin, updateFeat);
+router.delete("/feats/:id", ensureAdmin, deleteFeat);
 
 // Skill Sets
-router.post("/skill-sets", ensureAdmin, gameContentController.createSkillSet);
-router.patch("/skill-sets/:id", ensureAdmin, gameContentController.updateSkillSet);
-router.delete("/skill-sets/:id", ensureAdmin, gameContentController.deleteSkillSet);
+router.post("/skill-sets", ensureAdmin, createSkillSet);
+router.patch("/skill-sets/:id", ensureAdmin, updateSkillSet);
+router.delete("/skill-sets/:id", ensureAdmin, deleteSkillSet);
 
 // Powers
-router.post("/powers", ensureAdmin, gameContentController.createPower);
-router.patch("/powers/:id", ensureAdmin, gameContentController.updatePower);
-router.delete("/powers/:id", ensureAdmin, gameContentController.deletePower);
+router.post("/powers", ensureAdmin, createPower);
+router.patch("/powers/:id", ensureAdmin, updatePower);
+router.delete("/powers/:id", ensureAdmin, deletePower);
 
 // Power Sets
-router.post("/power-sets", ensureAdmin, gameContentController.createPowerSet);
-router.patch("/power-sets/:id", ensureAdmin, gameContentController.updatePowerSet);
-router.delete("/power-sets/:id", ensureAdmin, gameContentController.deletePowerSet);
+router.post("/power-sets", ensureAdmin, createPowerSet);
+router.patch("/power-sets/:id", ensureAdmin, updatePowerSet);
+router.delete("/power-sets/:id", ensureAdmin, deletePowerSet);
 
 // Power Modifiers
-router.post("/power-modifiers", ensureAdmin, gameContentController.createPowerModifier);
-router.patch("/power-modifiers/:id", ensureAdmin, gameContentController.updatePowerModifier);
-router.delete("/power-modifiers/:id", ensureAdmin, gameContentController.deletePowerModifier);
+router.post("/power-modifiers", ensureAdmin, createPowerModifier);
+router.patch("/power-modifiers/:id", ensureAdmin, updatePowerModifier);
+router.delete("/power-modifiers/:id", ensureAdmin, deletePowerModifier);
+
+// Origin Features
+router.post("/origin-features", ensureAdmin, createOriginFeature);
+router.patch("/origin-features/:id", ensureAdmin, updateOriginFeature);
+router.delete("/origin-features/:id", ensureAdmin, deleteOriginFeature);
+
+// Gear
+router.post("/gear", ensureAdmin, createGear);
+router.patch("/gear/:id", ensureAdmin, updateGear);
+router.delete("/gear/:id", ensureAdmin, deleteGear);
+
+// Maneuvers
+router.post("/maneuvers", verifyAdmin, createManeuver);
+router.put("/maneuvers/:id", verifyAdmin, updateManeuver);
+router.delete("/maneuvers/:id", verifyAdmin, deleteManeuver);
 
 export default router;

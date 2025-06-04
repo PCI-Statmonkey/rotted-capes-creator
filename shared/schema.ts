@@ -26,9 +26,8 @@ export const analytics = pgTable("analytics", {
   data: jsonb("data"),
   userId: integer("user_id").references(() => users.id),
   createdAt: timestamp("created_at").defaultNow().notNull(),
-});
-
-// Game content tables for admin editing
+})
+// Origins table
 export const origins = pgTable("origins", {
   id: serial("id").primaryKey(),
   name: text("name").notNull(),
@@ -40,7 +39,7 @@ export const origins = pgTable("origins", {
   created_at: timestamp("created_at").defaultNow(),
   updated_at: timestamp("updated_at").defaultNow().notNull(),
 });
-
+// Archetypes table
 export const archetypes = pgTable("archetypes", {
   id: serial("id").primaryKey(),
   name: text("name").notNull().unique(),
@@ -52,7 +51,7 @@ export const archetypes = pgTable("archetypes", {
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
-
+// Skills table
 export const skills = pgTable("skills", {
   id: serial("id").primaryKey(),
   name: text("name").notNull().unique(),
@@ -65,12 +64,14 @@ export const skills = pgTable("skills", {
 
 export const feats = pgTable("feats", {
   id: serial("id").primaryKey(),
-  name: text("name").notNull().unique(),
+  name: text("name").notNull(),
   description: text("description").notNull(),
-  prerequisites: jsonb("prerequisites"), // Optional prerequisites
-  benefits: text("benefits").notNull(),
-  createdAt: timestamp("created_at").defaultNow().notNull(),
-  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+  type: text("type").notNull(),
+  // ADD THE FOLLOWING LINES:
+  repeatable: boolean("repeatable").notNull().default(false),
+  tags: text("tags").array().notNull().default([]),
+  notes: text("notes").notNull().default(""),
+  input_label: text("input_label"),
 });
 
 export const skillSets = pgTable("skill_sets", {
@@ -157,13 +158,6 @@ export const insertSkillSchema = createInsertSchema(skills).pick({
   ability: true,
   description: true,
   untrained: true,
-});
-
-export const insertFeatSchema = createInsertSchema(feats).pick({
-  name: true,
-  description: true,
-  prerequisites: true,
-  benefits: true,
 });
 
 export const insertSkillSetSchema = createInsertSchema(skillSets).pick({
@@ -288,5 +282,63 @@ export const characterDataSchema = z.object({
   createdAt: z.string().datetime(),
   updatedAt: z.string().datetime(),
 });
+// Maneuvers table
+export const maneuvers = pgTable("maneuvers", {
+  id: serial("id").primaryKey(),
+  name: text("name").notNull().unique(),
+  type: text("type").notNull(), // e.g., "Combat", "Leadership"
+  requirements: jsonb("requirements").default([]),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+// Origin features table
+export const originFeatures = pgTable("origin_features", {
+  id: serial("id").primaryKey(),
+  name: text("name").notNull().unique(),
+  description: text("description").notNull(),
+  effectType: text("effect_type").default("story").notNull(), // "mechanical", "story", etc.
+  effect: text("effect").default(""),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+// Gear table
+export const gear = pgTable("gear", {
+  id: serial("id").primaryKey(),
+  name: text("name").notNull().unique(),
+  description: text("description").notNull(),
+  category: text("category").notNull(),  // e.g., "Weapon", "Armor", "Equipment"
+  ap: integer("ap").notNull(),           // Action Point cost
+  tags: jsonb("tags").default([]),       // Optional: e.g., ["firearm", "2H"]
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
 
+export const insertManeuverSchema = createInsertSchema(maneuvers);
+
+export const maneuverSchema = insertManeuverSchema.extend({
+  id: z.number(),
+  createdAt: z.string().datetime(),
+  updatedAt: z.string().datetime(),
+});
+
+  export const insertOriginFeatureSchema = createInsertSchema(originFeatures).pick({
+  name: true,
+  description: true,
+  effectType: true,
+  effect: true,
+});
+
+  export const insertGearSchema = createInsertSchema(gear).pick({
+  name: true,
+  description: true,
+  category: true,
+  ap: true,
+  tags: true,
+});
+
+
+export type Maneuver = z.infer<typeof maneuverSchema>;
+export type NewManeuver = z.infer<typeof insertManeuverSchema>;
 export type CharacterData = z.infer<typeof characterDataSchema>;
+export type Feat = typeof feats.$inferSelect;
+export type NewFeat = typeof feats.$inferInsert;

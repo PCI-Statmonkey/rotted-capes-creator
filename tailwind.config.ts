@@ -2,9 +2,23 @@ import type { Config } from "tailwindcss";
 
 export default {
   darkMode: ["class"],
-  content: ["./client/index.html", "./client/src/**/*.{js,jsx,ts,tsx}"],
+  content: [
+  "./client/index.html",
+  "./client/**/*.{js,jsx,ts,tsx}",
+  "./src/**/*.{js,jsx,ts,tsx}"
+],
+  safelist: [
+    "text-sm",
+    "text-xs",
+    "text-white",
+    "text-gray-400",
+  ],
   theme: {
     extend: {
+      fontFamily: {
+      sans: ['Inter', 'system-ui', 'sans-serif'],
+      display: ['"Bangers"', 'cursive'], // or another display font you're using
+    },
       borderRadius: {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",

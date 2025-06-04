@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { motion } from "framer-motion";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -19,9 +20,12 @@ interface ConceptFormData {
 
 export default function Step1_Concept() {
   const { character, updateCharacterField, setCurrentStep } = useCharacter();
-  
-  const { register, handleSubmit, formState } = useForm<ConceptFormData>({
-    defaultValues: {
+
+  const { register, handleSubmit, reset } = useForm<ConceptFormData>();
+
+  // When the character changes (like on reset), update the form
+  useEffect(() => {
+    reset({
       name: character.name,
       secretIdentity: character.secretIdentity,
       concept: character.concept,
@@ -30,14 +34,13 @@ export default function Step1_Concept() {
       height: character.height,
       weight: character.weight,
       appearance: character.appearance,
-    },
-  });
+    });
+  }, [character, reset]);
 
   const onSubmit = (data: ConceptFormData) => {
     Object.entries(data).forEach(([key, value]) => {
       updateCharacterField(key as keyof typeof character, value);
     });
-    
     setCurrentStep(2);
   };
 
@@ -60,8 +63,8 @@ export default function Step1_Concept() {
             <Input
               id="characterName"
               placeholder="The Incredible..."
-              className="w-full p-3 rounded-lg bg-gray-800 border-2 border-gray-700 focus:border-accent focus:ring-accent focus:outline-none transition-colors"
-              {...register('name')}
+              className="w-full p-3 rounded-lg bg-gray-800 border-2 border-gray-700"
+              {...register("name")}
             />
           </div>
 
@@ -70,8 +73,8 @@ export default function Step1_Concept() {
             <Input
               id="secretIdentity"
               placeholder="Your alter ego..."
-              className="w-full p-3 rounded-lg bg-gray-800 border-2 border-gray-700 focus:border-accent focus:ring-accent focus:outline-none transition-colors"
-              {...register('secretIdentity')}
+              className="w-full p-3 rounded-lg bg-gray-800 border-2 border-gray-700"
+              {...register("secretIdentity")}
             />
           </div>
 
@@ -81,8 +84,8 @@ export default function Step1_Concept() {
               id="conceptDescription"
               rows={4}
               placeholder="Describe your hero's concept, motivations, and general idea..."
-              className="w-full p-3 rounded-lg bg-gray-800 border-2 border-gray-700 focus:border-accent focus:ring-accent focus:outline-none transition-colors resize-none"
-              {...register('concept')}
+              className="w-full p-3 rounded-lg bg-gray-800 border-2 border-gray-700 resize-none"
+              {...register("concept")}
             />
           </div>
 
@@ -93,32 +96,32 @@ export default function Step1_Concept() {
                 <label htmlFor="gender" className="block text-gray-300 mb-1">Gender</label>
                 <Input
                   id="gender"
-                  className="w-full p-3 rounded-lg bg-gray-800 border-2 border-gray-700 focus:border-accent focus:outline-none"
-                  {...register('gender')}
+                  className="w-full p-3 rounded-lg bg-gray-800 border-2 border-gray-700"
+                  {...register("gender")}
                 />
               </div>
               <div>
                 <label htmlFor="age" className="block text-gray-300 mb-1">Age</label>
                 <Input
                   id="age"
-                  className="w-full p-3 rounded-lg bg-gray-800 border-2 border-gray-700 focus:border-accent focus:outline-none"
-                  {...register('age')}
+                  className="w-full p-3 rounded-lg bg-gray-800 border-2 border-gray-700"
+                  {...register("age")}
                 />
               </div>
               <div>
                 <label htmlFor="height" className="block text-gray-300 mb-1">Height</label>
                 <Input
                   id="height"
-                  className="w-full p-3 rounded-lg bg-gray-800 border-2 border-gray-700 focus:border-accent focus:outline-none"
-                  {...register('height')}
+                  className="w-full p-3 rounded-lg bg-gray-800 border-2 border-gray-700"
+                  {...register("height")}
                 />
               </div>
               <div>
                 <label htmlFor="weight" className="block text-gray-300 mb-1">Weight</label>
                 <Input
                   id="weight"
-                  className="w-full p-3 rounded-lg bg-gray-800 border-2 border-gray-700 focus:border-accent focus:outline-none"
-                  {...register('weight')}
+                  className="w-full p-3 rounded-lg bg-gray-800 border-2 border-gray-700"
+                  {...register("weight")}
                 />
               </div>
             </div>
@@ -130,24 +133,17 @@ export default function Step1_Concept() {
               id="appearance"
               rows={3}
               placeholder="Describe your hero's costume and physical appearance..."
-              className="w-full p-3 rounded-lg bg-gray-800 border-2 border-gray-700 focus:border-accent focus:ring-accent focus:outline-none transition-colors resize-none"
-              {...register('appearance')}
+              className="w-full p-3 rounded-lg bg-gray-800 border-2 border-gray-700 resize-none"
+              {...register("appearance")}
             />
           </div>
         </div>
 
         <div className="flex justify-between mt-8 pt-4 border-t-2 border-gray-700">
-          <Button 
-            type="button"
-            className="px-6 py-3 rounded-lg bg-gray-700 font-comic text-white opacity-50 cursor-not-allowed"
-            disabled
-          >
+          <Button type="button" disabled className="opacity-50 cursor-not-allowed">
             <ArrowLeft className="mr-2 h-5 w-5" /> Previous
           </Button>
-          <Button 
-            type="submit"
-            className="px-6 py-3 rounded-lg bg-accent font-comic text-white hover:bg-red-700 transition-colors shadow-lg"
-          >
+          <Button type="submit" className="bg-accent hover:bg-red-700 text-white shadow-lg">
             Next <ArrowRight className="ml-2 h-5 w-5" />
           </Button>
         </div>
