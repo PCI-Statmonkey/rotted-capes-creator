@@ -335,6 +335,16 @@ export const maneuverSchema = insertManeuverSchema.extend({
   ap: true,
   tags: true,
 });
+export const insertFeatSchema = createInsertSchema(feats).pick({
+  name: true,
+  description: true,
+  type: true,
+  repeatable: true,
+  prerequisites: true,
+  tags: true,
+  notes: true,
+  input_label: true,
+});
 
 
 export type Maneuver = z.infer<typeof maneuverSchema>;

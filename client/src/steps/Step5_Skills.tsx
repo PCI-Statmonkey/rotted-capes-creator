@@ -192,87 +192,91 @@ const Step5_Skills = () => {
     setCurrentStep(6);
   };
 
-  return (
-    <motion.div className="bg-panel rounded-2xl p-6 comic-border overflow-hidden halftone-bg">
-      <h2 className="text-2xl font-comic text-accent mb-4">Step 5: Skills & Feats</h2>
-      <div className="text-sm text-white mb-2">
-        Points Available: <span className="text-accent font-bold">{availablePoints}</span>
-      </div>
-      <Tabs defaultValue="starting" className="w-full">
-        <TabsList className="mb-4">
-          <TabsTrigger value="starting">Starting</TabsTrigger>
-          <TabsTrigger value="skillsets">Skill Sets</TabsTrigger>
-          <TabsTrigger value="skills">Skills</TabsTrigger>
-          <TabsTrigger value="feats">Feats</TabsTrigger>
-        </TabsList>
+return (
+  <motion.div className="bg-panel rounded-2xl p-6 comic-border overflow-hidden halftone-bg">
+    <h2 className="text-2xl font-comic text-accent mb-4">Step 5: Skills & Feats</h2>
+    <div className="text-sm text-white mb-2">
+      Points Available: <span className="text-accent font-bold">{availablePoints}</span>
+    </div>
 
-        <TabsContent value="starting">
-          <StartingTab
-            basicStartingSkills={basicStartingSkills}
-            startingSkills={startingSkills}
-            toggleStartingSkill={toggleStartingSkill}
-            startingFeat={startingFeat}
-            setStartingFeat={setStartingFeat}
-            selectedManeuver={selectedManeuver}
-            setSelectedManeuver={setSelectedManeuver}
-            feats={feats}
-            maneuvers={maneuvers}
-            meetsPrerequisites={meetsPrerequisites}
-            getMissingPrereqs={getMissingPrereqs}
+    <Tabs defaultValue="starting" className="w-full">
+      <TabsList className="mb-4">
+        <TabsTrigger value="starting">Starting</TabsTrigger>
+        <TabsTrigger value="skillsets">Skill Sets</TabsTrigger>
+        <TabsTrigger value="skills">Skills</TabsTrigger>
+        <TabsTrigger value="feats">Feats</TabsTrigger>
+      </TabsList>
+
+      <TabsContent value="starting">
+        <StartingTab
+          basicStartingSkills={basicStartingSkills}
+          startingSkills={startingSkills}
+          toggleStartingSkill={toggleStartingSkill}
+          startingFeat={startingFeat}
+          setStartingFeat={setStartingFeat}
+          selectedManeuver={selectedManeuver}
+          setSelectedManeuver={setSelectedManeuver}
+          feats={feats}
+          maneuvers={maneuvers}
+          meetsPrerequisites={meetsPrerequisites}
+          getMissingPrereqs={getMissingPrereqs}
+        />
+      </TabsContent>
+
+      <TabsContent value="skillsets">
+        <h3 className="text-white text-md mb-2">Skill Sets</h3>
+        {skillSets.map((set) => (
+          <SkillSetCard
+            key={set.name}
+            set={set}
+            isSelected={selectedSkillSets.includes(set.name)}
+            onToggle={() => toggleSkillSet(set.name)}
           />
-        </TabsContent>
+        ))}
+      </TabsContent>
 
-        <TabsContent value="skillsets">
-          <h3 className="text-white text-md mb-2">Skill Sets</h3>
-          {skillSets.map((set) => (
-            <SkillSetCard
-              key={set.name}
-              set={set}
-              isSelected={selectedSkillSets.includes(set.name)}
-              onToggle={() => toggleSkillSet(set.name)}
+      <TabsContent value="skills">
+        <h3 className="text-white text-md mb-2">Individual Skills</h3>
+        {skills.map((skill) => {
+          const isSelected = selectedSkills.some((s) => s.name === skill.name);
+          const focus = selectedSkills.find((s) => s.name === skill.name)?.focus || "";
+          return (
+            <SkillCard
+              key={skill.name}
+              skill={skill}
+              isSelected={isSelected}
+              focus={focus}
+              onToggle={() => toggleSkill(skill.name)}
+              onFocusChange={(newFocus) => updateSkillFocus(skill.name, newFocus)}
             />
-          ))}
-        </TabsContent>
+          );
+        })}
+      </TabsContent>
 
-        <TabsContent value="skills">
-          <h3 className="text-white text-md mb-2">Individual Skills</h3>
-          {skills.map((skill) => {
-            const isSelected = selectedSkills.some((s) => s.name === skill.name);
-            const focus = selectedSkills.find((s) => s.name === skill.name)?.focus || "";
-            return (
-              <SkillCard
-                key={skill.name}
-                skill={skill}
-                isSelected={isSelected}
-                focus={focus}
-                onToggle={() => toggleSkill(skill.name)}
-                onFocusChange={(newFocus) => updateSkillFocus(skill.name, newFocus)}
+      <TabsContent value="feats">
+        <h3 className="text-white text-md mb-2">Feats</h3>
+        {feats.map((feat) => {
+          const count = selectedFeats.filter((f) => f.name === feat.name).length;
+          const isDisabled = !meetsPrerequisites(feat);
+          const missing = getMissingPrereqs(feat).map((p) => p.name);
+          return (
+            <div key={feat.name} className="mb-4">
+              <FeatCard
+                feat={feat}
+                isSelected={count > 0}
+                isDisabled={isDisabled}
+                missingPrereqs={missing}
+                onToggle={() => addFeat(feat.name)}
+                showDropdown={feat.name === "Learn Maneuver" && count > 0}
+                maneuvers={feat.name === "Learn Maneuver" ? maneuvers : undefined}
+                selectedManeuver={undefined}
               />
-            );
-          })}
-        </TabsContent>
-
-        <TabsContent value="feats">
-          <h3 className="text-white text-md mb-2">Feats</h3>
-          {feats.map((feat) => {
-            const count = selectedFeats.filter((f) => f.name === feat.name).length;
-            const isDisabled = !meetsPrerequisites(feat);
-            const missing = getMissingPrereqs(feat).map((p) => p.name);
-            return (
-              <div key={feat.name} className="mb-4">
-                <FeatCard
-                  feat={feat}
-                  isSelected={count > 0}
-                  isDisabled={isDisabled}
-                  missingPrereqs={missing}
-                  onToggle={() => addFeat(feat.name)}
-                  showDropdown={feat.name === "Learn Maneuver" && count > 0}
-                  maneuvers={feat.name === "Learn Maneuver" ? maneuvers : undefined}
-                  selectedManeuver={undefined}
-                />
-                {count > 0 && (
-                  <div className="ml-4 mt-2 space-y-2">
-                    {[...Array(count)].map((_, i) => (
+              {count > 0 && (
+                <div className="ml-4 mt-2 space-y-2">
+                  {selectedFeats
+                    .map((f, i) => ({ ...f, index: i }))
+                    .filter((f) => f.name === feat.name)
+                    .map((f, i) => (
                       <div key={i} className="flex items-center gap-2">
                         <span className="text-sm text-white">
                           {feat.name} #{i + 1}
@@ -283,13 +287,26 @@ const Step5_Skills = () => {
                           onClick={() =>
                             removeFeat(
                               selectedFeats.findIndex(
-                                (f, idx) => f.name === feat.name && idx >= i
+                                (x, idx) => x.name === feat.name && idx >= i
                               )
                             )
                           }
                         >
                           Remove
                         </Button>
+                        {feat.input_label && (
+                          <input
+                            type="text"
+                            placeholder={feat.input_label}
+                            value={selectedFeats[f.index]?.input || ""}
+                            onChange={(e) => {
+                              const updated = [...selectedFeats];
+                              updated[f.index].input = e.target.value;
+                              setSelectedFeats(updated);
+                            }}
+                            className="border rounded p-1 text-black"
+                          />
+                        )}
                         {feat.name === "Learn Maneuver" && (
                           <ManeuverDropdown
                             label={`Select Maneuver #${i + 1}`}
@@ -306,24 +323,24 @@ const Step5_Skills = () => {
                         )}
                       </div>
                     ))}
-                  </div>
-                )}
-              </div>
-            );
-          })}
-        </TabsContent>
-      </Tabs>
+                </div>
+              )}
+            </div>
+          );
+        })}
+      </TabsContent>
+    </Tabs>
 
-      <div className="flex justify-between mt-6">
-        <Button onClick={handlePrevious}>
-          <ArrowLeft className="mr-2 h-5 w-5" /> Previous
-        </Button>
-        <Button onClick={handleContinue} disabled={availablePoints < 0}>
-          Next <ArrowRight className="ml-2 h-5 w-5" />
-        </Button>
-      </div>
-    </motion.div>
-  );
+    <div className="flex justify-between mt-6">
+      <Button onClick={handlePrevious}>
+        <ArrowLeft className="mr-2 h-5 w-5" /> Previous
+      </Button>
+      <Button onClick={handleContinue} disabled={availablePoints < 0}>
+        Next <ArrowRight className="ml-2 h-5 w-5" />
+      </Button>
+    </div>
+  </motion.div>
+);
 };
 
 export default Step5_Skills;

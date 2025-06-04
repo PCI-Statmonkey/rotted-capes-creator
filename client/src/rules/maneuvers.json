@@ -1,0 +1,123 @@
+[
+  {
+    "name": "Battlefield Command",
+    "type": "Leadership",
+    "requirements": "Charisma 13+, trained in Influence",
+    "attack": "None",
+    "action": "Action",
+    "range": "5 areas",
+    "effect": "Command an ally within range who can hear and see you. As a reaction, they can move up to their full pace. This movement does not provoke attacks of opportunity.",
+    "special": "Can be used once per scene.",
+    "weapons": "None"
+  },
+  {
+    "name": "Crushing Blow",
+    "type": "Combat",
+    "requirements": "Strength 14+",
+    "attack": "Avoidance -2",
+    "action": "Action",
+    "range": "Melee",
+    "effect": "+1d8; on hit, the target's pace is reduced by half until the end of their next turn.",
+    "special": "If the target pace is already reduced, they become immobilized instead.",
+    "weapons": "Any melee weapon or unarmed attack"
+  },
+  {
+    "name": "Devastating Attack",
+    "type": "Combat",
+    "requirements": "",
+    "attack": "Avoidance -2",
+    "action": "Action",
+    "range": "Melee",
+    "effect": "+6. Any Zombie of Epsilon level or below struck is instantly destroyed.",
+    "special": "If hitting a stunned creature, may apply knockback.",
+    "weapons": "Melee weapons, unarmed attacks, or melee attack powers"
+  },
+  {
+    "name": "Feint",
+    "type": "Combat",
+    "requirements": "Trained in Influence",
+    "attack": "Influence skill check vs target's Discipline",
+    "action": "Action + Bonus Action",
+    "range": "Melee",
+    "effect": "None; if successful, may immediately attack as bonus action with +5 to hit.",
+    "special": "",
+    "weapons": "Melee weapons or unarmed attacks"
+  },
+  {
+    "name": "Guardian’s Shield",
+    "type": "Leadership",
+    "requirements": "Dexterity 12+",
+    "attack": "None",
+    "action": "Reaction",
+    "range": "Self or ally within reach",
+    "effect": "Intercept attack meant for ally and take damage instead.",
+    "special": "Add your shield's DR to your Avoidance.",
+    "weapons": "None"
+  },
+  {
+    "name": "Lure",
+    "type": "Combat",
+    "requirements": "",
+    "attack": "Charisma attack vs Discipline",
+    "action": "Action",
+    "range": "Melee or Ranged (2 areas)",
+    "effect": "Target must attack you next turn with +4 to hit. If miss, may hit another target of your choice.",
+    "special": "",
+    "weapons": "Any"
+  },
+  {
+    "name": "Palm Throw",
+    "type": "Combat",
+    "requirements": "Dexterity 14+",
+    "attack": "Avoidance",
+    "action": "Action",
+    "range": "Throwing Range",
+    "effect": "Attack up to 3 targets. If single target hit with advantage, double weapon base damage dice.",
+    "special": "",
+    "weapons": "One-handed thrown weapons (e.g., knives, shuriken)"
+  },
+  {
+    "name": "Shielding",
+    "type": "Combat",
+    "requirements": "",
+    "attack": "None",
+    "action": "Reaction",
+    "range": "Self or ally within reach",
+    "effect": "Absorb attack meant for nearby target with your body or object.",
+    "special": "See full rules for using body/object to shield.",
+    "weapons": "None"
+  },
+  {
+    "name": "Shoulder Charge",
+    "type": "Combat",
+    "requirements": "",
+    "attack": "Fortitude",
+    "action": "Action",
+    "range": "Melee",
+    "effect": "Force opponent to adjacent area or prone. Can move with them.",
+    "special": "With Enhanced Strength, knock target multiple areas away.",
+    "weapons": "Any melee or unarmed attack"
+  },
+  {
+    "name": "Team Attack",
+    "type": "Combat",
+    "requirements": "",
+    "attack": "Avoidance",
+    "action": "Ready, triggered by ally",
+    "range": "Melee or Ranged (3 Areas)",
+    "effect": "If ally hits, attack same target with Advantage. Combine damage to check for Massive Damage.",
+    "special": "",
+    "weapons": "Any melee, unarmed, or attack power"
+  },
+  {
+    "name": "Trip",
+    "type": "Combat",
+    "requirements": "",
+    "attack": "Avoidance",
+    "action": "Action",
+    "range": "Melee",
+    "effect": "Target is knocked prone on hit.",
+    "special": "",
+    "weapons": "Any melee weapon or unarmed attack"
+  }
+]

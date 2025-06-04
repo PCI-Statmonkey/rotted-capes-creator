@@ -1,0 +1,142 @@
+[
+  {
+    "name": "Apex Evolution",
+    "origin": "Super-Human",
+    "rank": "B-Lister",
+    "description": "Choose a power feat, and you may take this feature multiple times.",
+    "effect": {
+      "type": "mechanical",
+      "details": {
+        "grants_feat_choice": true,
+        "repeatable": true
+      }
+    }
+  },
+  {
+    "name": "Enhanced Physiology",
+    "origin": "Super-Human",
+    "rank": "B-Lister",
+    "description": "Increase your Constitution by 1 and any other ability score of your choice by 1. You may take this feature multiple times.",
+    "effect": {
+      "type": "mechanical",
+      "details": {
+        "ability_score_boost": [
+          "constitution",
+          "choice"
+        ],
+        "repeatable": true
+      }
+    }
+  },
+  {
+    "name": "Enhanced Strength",
+    "origin": "Any",
+    "rank": "B-Lister",
+    "description": "Your strength score is doubled for carry capacity. Advantage on Strength checks and saving throws.",
+    "effect": {
+      "type": "mechanical",
+      "details": {
+        "strength_doubled_for_carry": true,
+        "advantage_strength": true
+      }
+    }
+  },
+  {
+    "name": "Power Advancement",
+    "origin": "Super-Human",
+    "rank": "B-Lister",
+    "description": "Increase the power score of any two of your inborn powers by 1; you may take this feature multiple times.",
+    "effect": {
+      "type": "mechanical",
+      "details": {
+        "increase_power_scores": 2,
+        "repeatable": true
+      }
+    }
+  },
+  {
+    "name": "Power Focus",
+    "origin": "Super-Human",
+    "rank": "B-Lister",
+    "description": "Choose one of your inborn powers, increases its power score by 2.",
+    "effect": {
+      "type": "mechanical",
+      "details": {
+        "target_power_score_bonus": 2
+      }
+    }
+  },
+  {
+    "name": "Resilient Constitution",
+    "origin": "Super-Human",
+    "rank": "B-Lister",
+    "description": "+2 Constitution saves, resistance to poison. Repeatable, +1 each time to max +5.",
+    "effect": {
+      "type": "mechanical",
+      "details": {
+        "constitution_save_bonus": 2,
+        "resistance_poison": true,
+        "repeatable_incremental": true,
+        "max_bonus": 5
+      }
+    }
+  },
+  {
+    "name": "Superhuman Speed",
+    "origin": "Super-Human",
+    "rank": "B-Lister",
+    "description": "Apply full dexterity modifier to pace. +1 area pace or +1 avoidance. Take twice for both.",
+    "effect": {
+      "type": "mechanical",
+      "details": {
+        "pace_bonus_from_dex": true,
+        "choice_bonus": [
+          "+1 area pace",
+          "+1 avoidance"
+        ],
+        "repeatable_limit": 2
+      }
+    }
+  },
+  {
+    "name": "Versatile Power",
+    "origin": "Super-Human",
+    "rank": "A-Lister",
+    "description": "Choose one power you possess and gain a new power stunt associated with that power.",
+    "effect": {
+      "type": "mechanical",
+      "details": {
+        "grants_power_stunt": true
+      }
+    }
+  },
+  {
+    "name": "Power Surge",
+    "origin": "Super-Human",
+    "rank": "A-Lister",
+    "description": "Roll 2d4 and add that to one power score until the end of your turn. Once per long rest.",
+    "effect": {
+      "type": "mechanical",
+      "details": {
+        "bonus_power_score_duration": "end_of_turn",
+        "usable_once_per": "long_rest"
+      }
+    }
+  },
+  {
+    "name": "Apex Power Surge",
+    "origin": "Super-Human",
+    "rank": "A-Lister",
+    "description": "1 min. bonus: 2d6 to one power and half to another, -1 burnout. Repeatable at Theta level.",
+    "effect": {
+      "type": "mechanical",
+      "details": {
+        "duration": "1 minute",
+        "primary_bonus": "2d6",
+        "secondary_bonus": "half",
+        "burnout_reduction": 1,
+        "repeatable_at_rank": "Theta"
+      }
+    }
+  }
+]
