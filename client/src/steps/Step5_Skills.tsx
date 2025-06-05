@@ -121,47 +121,8 @@ const Step5_Skills = () => {
     setAvailablePoints(20 - pointsUsed);
   }, [workingSelectedSkills, workingSelectedFeats, workingSelectedSkillSets, skillSets]);
 
-  const meetsPrerequisites = (item) => {
-    if (!item?.prerequisites?.length) return true;
-    return item.prerequisites.every((prereq) => {
-      if (prereq.type === "skill") {
-        return workingSelectedSkills.some(
-          (s) => s.name === prereq.name || s.focus === prereq.name
-        );
-      }
-      if (prereq.type === "feat") {
-        return workingSelectedFeats.some((f) => f.name === prereq.name);
-      }
-      if (prereq.type === "startingSkill") {
-        return workingStartingSkills.includes(prereq.name);
-      }
-      if (prereq.type === "ability") {
-        return abilityScores?.[prereq.name] >= prereq.value;
-      }
-      return false;
-    });
-  };
-
-  const getMissingPrereqs = (item) => {
-    if (!item?.prerequisites) return [];
-    return item.prerequisites.filter((prereq) => {
-      if (prereq.type === "skill") {
-        return !workingSelectedSkills.some(
-          (s) => s.name === prereq.name || s.focus === prereq.name
-        );
-      }
-      if (prereq.type === "feat") {
-        return !workingSelectedFeats.some((f) => f.name === prereq.name);
-      }
-      if (prereq.type === "startingSkill") {
-        return !workingStartingSkills.includes(prereq.name);
-      }
-      if (prereq.type === "ability") {
-        return abilityScores?.[prereq.name] < prereq.value;
-      }
-      return true;
-    });
-  };
+  });
+};
 
   const handlePrevious = () => setCurrentStep(4);
 
@@ -255,8 +216,18 @@ const Step5_Skills = () => {
       <TabsContent value="feats">
         {feats.map((feat) => {
           const count = workingSelectedFeats.filter((f) => f.name === feat.name).length;
-          const isDisabled = !meetsPrerequisites(feat);
-          const missing = getMissingPrereqs(feat);
+          const characterData = {
+          abilityScores,
+          selectedSkills: workingSelectedSkills,
+          startingSkills: workingStartingSkills,
+          selectedFeats: workingSelectedFeats,
+          selectedSkillSets: workingSelectedSkillSets,
+          skillSets,
+        };
+
+        const isDisabled = !meetsPrerequisites(feat, characterData);
+        const missing = getMissingPrereqs(feat, characterData);
+
 
           return (
             <div key={feat.name} className={`mb-4 ${isDisabled ? 'opacity-60' : ''}`} onClick={() => {
