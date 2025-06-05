@@ -286,8 +286,14 @@ export const characterDataSchema = z.object({
 export const maneuvers = pgTable("maneuvers", {
   id: serial("id").primaryKey(),
   name: text("name").notNull().unique(),
-  type: text("type").notNull(), // e.g., "Combat", "Leadership"
-  requirements: jsonb("requirements").default([]),
+  type: text("type").notNull(),
+  requirements: jsonb("requirements").notNull().default([]),
+  attack: text("attack").notNull(),
+  action: text("action").notNull(),
+  range: text("range").notNull(),
+  effect: text("effect").notNull(),
+  special: text("special"),
+  weapons: text("weapons"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
@@ -345,7 +351,6 @@ export const insertFeatSchema = createInsertSchema(feats).pick({
   notes: true,
   input_label: true,
 });
-
 
 export type Maneuver = z.infer<typeof maneuverSchema>;
 export type NewManeuver = z.infer<typeof insertManeuverSchema>;

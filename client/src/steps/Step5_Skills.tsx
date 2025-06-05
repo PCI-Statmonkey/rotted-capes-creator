@@ -96,21 +96,24 @@ const Step5_Skills = () => {
     setAvailablePoints(20 - pointsUsed);
   }, [selectedSkills, selectedFeats, selectedSkillSets, skillSets]);
 
-  const meetsPrerequisites = (item) => {
-    if (!item?.prerequisites || item.prerequisites.length === 0) return true;
-    return item.prerequisites.every((prereq) => {
-      if (prereq.type === "skill") {
-        return selectedSkills.some((s) => s.name === prereq.name);
-      }
-      if (prereq.type === "feat") {
-        return selectedFeats.some((f) => f.name === prereq.name);
-      }
-      if (prereq.type === "startingSkill") {
-        return startingSkills.includes(prereq.name);
-      }
-      return false;
-    });
-  };
+const meetsPrerequisites = (item) => {
+  if (!item?.prerequisites || item.prerequisites.length === 0) return true;
+
+  return item.prerequisites.every((prereq) => {
+    if (prereq.type === "skill") {
+      return selectedSkills.some((s) => s.name === prereq.name);
+    }
+    if (prereq.type === "feat") {
+      return selectedFeats.some((f) => f.name === prereq.name);
+    }
+    if (prereq.type === "startingSkill") {
+      return startingSkills.includes(prereq.name);
+    }
+    return false;
+  });
+};
+
+console.log("Feats available:", feats.map(f => ({ name: f.name, valid: meetsPrerequisites(f) })));
 
   const getMissingPrereqs = (item) => {
     if (!item?.prerequisites || item.prerequisites.length === 0) return [];
@@ -182,15 +185,23 @@ const Step5_Skills = () => {
 
   const handlePrevious = () => setCurrentStep(4);
   const handleContinue = () => {
-    if (
-      availablePoints < 0 ||
-      selectedManeuvers.length === 0 ||
-      !startingFeat ||
-      startingSkills.length !== 2
-    )
-      return;
-    setCurrentStep(6);
-  };
+  if (
+    availablePoints < 0 ||
+    !startingFeat || // Make sure the user has selected the startingFeat
+    startingSkills.length !== 2
+  ) {
+    alert("You must spend all points, select 2 starting skills, and choose a feat.");
+    return;
+  }
+
+  const maneuverFeats = selectedFeats.filter((f) => f.name === "Learn Maneuver");
+  if (maneuverFeats.length > 0 && maneuverFeats.length !== selectedManeuvers.filter(Boolean).length) {
+    alert("Please select a maneuver for each 'Learn Maneuver' feat.");
+    return;
+  }
+
+  setCurrentStep(6);
+};
 
 return (
   <motion.div className="bg-panel rounded-2xl p-6 comic-border overflow-hidden halftone-bg">
@@ -294,7 +305,25 @@ return (
                         >
                           Remove
                         </Button>
-                        {feat.input_label && (
+
+                        {feat.name === "Skill Focus" ? (
+                          <select
+                            value={selectedFeats[f.index]?.input || ""}
+                            onChange={(e) => {
+                              const updated = [...selectedFeats];
+                              updated[f.index].input = e.target.value;
+                              setSelectedFeats(updated);
+                            }}
+                            className="border rounded p-1 text-black"
+                          >
+                            <option value="">Select a skill</option>
+                            {skills.map((s) => (
+                              <option key={s.name} value={s.name}>
+                                {s.name}
+                              </option>
+                            ))}
+                          </select>
+                        ) : feat.input_label && (
                           <input
                             type="text"
                             placeholder={feat.input_label}
@@ -307,6 +336,7 @@ return (
                             className="border rounded p-1 text-black"
                           />
                         )}
+
                         {feat.name === "Learn Maneuver" && (
                           <ManeuverDropdown
                             label={`Select Maneuver #${i + 1}`}
@@ -335,12 +365,20 @@ return (
       <Button onClick={handlePrevious}>
         <ArrowLeft className="mr-2 h-5 w-5" /> Previous
       </Button>
-      <Button onClick={handleContinue} disabled={availablePoints < 0}>
+      <Button
+        onClick={handleContinue}
+        disabled={
+          availablePoints < 0 ||
+          !startingFeat ||
+          startingSkills.length !== 2 ||
+          (selectedFeats.some((f) => f.name === "Learn Maneuver") &&
+            selectedManeuvers.some((m) => m === ""))
+        }
+      >
         Next <ArrowRight className="ml-2 h-5 w-5" />
       </Button>
     </div>
   </motion.div>
 );
 };
-
 export default Step5_Skills;

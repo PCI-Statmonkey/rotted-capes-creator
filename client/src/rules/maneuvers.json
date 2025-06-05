@@ -2,7 +2,7 @@
   {
     "name": "Battlefield Command",
     "type": "Leadership",
-    "requirements": "Charisma 13+, trained in Influence",
+    "requirements": ["Charisma 13+","Trained in Influence"],
     "attack": "None",
     "action": "Action",
     "range": "5 areas",
@@ -13,7 +13,7 @@
   {
     "name": "Crushing Blow",
     "type": "Combat",
-    "requirements": "Strength 14+",
+    "requirements": ["Strength 14+"],
     "attack": "Avoidance -2",
     "action": "Action",
     "range": "Melee",
@@ -24,7 +24,7 @@
   {
     "name": "Devastating Attack",
     "type": "Combat",
-    "requirements": "",
+    "requirements": [],
     "attack": "Avoidance -2",
     "action": "Action",
     "range": "Melee",
@@ -33,9 +33,53 @@
     "weapons": "Melee weapons, unarmed attacks, or melee attack powers"
   },
   {
+    "name": "Double Tap",
+    "type": "Combat",
+    "requirements": [],
+    "attack": "Avoidance -2",
+    "action": "Action",
+    "range": "3 Areas",
+    "effect": "Roll the ammunition base damage die twice, but only apply your dexterity modifier once. You expend two rounds of ammunition. ",
+    "special": "",
+    "weapons": "Semi-Auto and Auto-Pistols"
+  },
+  {
+    "name": "Duel-Strikes",
+    "type": "Combat",
+    "requirements": [],
+    "attack": "Avoidance",
+    "action": "Action + Bonus Action",
+    "range": "Melee",
+    "effect": "Base, after you attack with one weapon, you may immediately attack with the other as a bonus action. You may opt to attack the same target twice or two different targets.",
+    "special": "",
+    "weapons": "You must wield two melee weapons, one in each hand."
+  },
+  {
+    "name": "Earth Strike",
+    "type": "Combat",
+    "requirements": ["Strength of 30+"],
+    "attack": "Fortitude",
+    "action": "Action",
+    "range": "Area or adjacent Area",
+    "effect": "All affected creatures suffer your Strength base die in damage and are knocked back one Area directly away from you; members, if any mobs affected by this power, are also knocked prone.",
+    "special": "",
+    "weapons": ""
+  },
+    {
+    "name": "Earth to Sky",
+    "type": "Combat",
+    "requirements": ["Martial Artist"],
+    "attack": "Avoidance",
+    "action": "Reaction",
+    "range": "Melee",
+    "effect": "When the target of a charge, you may, as a reaction, attempt an opposed attack roll check against your attacker's attack roll. If successful, your opponent's attack misses, and you throw them a number of areas equal to half your throw range. Your opponent then suffers damage as if they had fallen the distance thrown, plus the number of areas your opponent traversed before they reached you. You must be aware of the incoming attack before using this maneuver.",
+    "special": "",
+    "weapons": ""
+  },
+  {
     "name": "Feint",
     "type": "Combat",
-    "requirements": "Trained in Influence",
+    "requirements": ["Trained in Influence"],
     "attack": "Influence skill check vs target's Discipline",
     "action": "Action + Bonus Action",
     "range": "Melee",
@@ -43,10 +87,32 @@
     "special": "",
     "weapons": "Melee weapons or unarmed attacks"
   },
+ {
+    "name": "Flowing Sand",
+    "type": "Combat",
+    "requirements": [],
+    "attack": "Avoidance -2",
+    "action": "Action",
+    "range": "Melee",
+    "effect": "Base, on hit, you may move one area without provoking attacks of opportunity and then perform another melee attack. You can repeat this attack sequence and move, targeting a maximum number of enemies equal to your rank bonus +1.",
+    "special": "",
+    "weapons": "You may perform this maneuver with melee weapons or unarmed attacks."
+  },
+   {
+    "name": "Guarded Attack",
+    "type": "Combat",
+    "requirements": [],
+    "attack": "Avoidance",
+    "action": "Action",
+    "range": "Melee",
+    "effect": "Base, Until the beginning of your next turn, you perform your melee attacks without adding your rank bonus to the attack roll but apply your rank bonus to your Avoidance until the beginning of your next turn.",
+    "special": "",
+    "weapons": ""
+  },
   {
     "name": "Guardian’s Shield",
     "type": "Leadership",
-    "requirements": "Dexterity 12+",
+    "requirements": ["Dexterity 12+"],
     "attack": "None",
     "action": "Reaction",
     "range": "Self or ally within reach",
@@ -54,10 +120,54 @@
     "special": "Add your shield's DR to your Avoidance.",
     "weapons": "None"
   },
+ {
+    "name": "Guns Akimbo",
+    "type": "Combat",
+    "requirements": ["Dexterity 14+"],
+    "attack": "Avoidance -2",
+    "action": "1 Action + 1 Bonus Action",
+    "range": "weapon range",
+    "effect": "Base, after you attack with one handgun, you may immediately attack with the other as a bonus action. You may opt to attack the same target twice or two different targets.",
+    "special": "",
+    "weapons": "Must wield two handguns."
+  },
+  {
+    "name": "Headshot",
+    "type": "Combat",
+    "requirements": [],
+    "attack": "Avoidance -2",
+    "action": "1 Action + 1 Bonus Action",
+    "range": "3 areas",
+    "effect": "You use your action to set up your next shot, then use your bonus action take your shot. If you hit, you deal your attack’s maximum base damage, expending a single round of ammo if using a firearm. Any Zombie of Epsilon level or below successfully struck with a headshot is instantly destroyed.",
+    "special": "",
+    "weapons": "Any Firearm, thrown weapon, archaic missile weapon (such as bows), or ranged single target energy blast power. "
+  },
+ {
+    "name": "Improved Team Attack",
+    "type": "Combat or Leadership",
+    "requirements": [],
+    "attack": "Avoidance",
+    "action": "Ready, triggered by an ally attacking a target you intend to attack.",
+    "range": "Melee or Ranged (3 Areas)",
+    "effect": "Base; If the ally you chose successfully hit your intended target, you may then use your reaction to attack the same target with Advantage, if you hit you combine your damage with that from your ally to determine if your attack deals Massive Damage.",
+    "special": "",
+    "weapons": "You may perform this maneuver with any melee weapon, unarmed attack, or attack powers."
+  },
+  {
+    "name": "Inspiring Performance",
+    "type": "Leadership",
+    "requirements": ["Charisma 14+"],
+    "attack": "",
+    "action": "Action",
+    "range": "3 Areas",
+    "effect": "As a bonus action, you can use your Performance skill to inspire your allies. Perform a Performance (Charisma) check. Choose up to three allies within range who can see or hear you. They gain temporary stamina equal to the result of your roll. You cannot use this ability again until you complete a short or long rest.",
+    "special": "",
+    "weapons": ""
+  },
   {
     "name": "Lure",
     "type": "Combat",
-    "requirements": "",
+    "requirements": [],
     "attack": "Charisma attack vs Discipline",
     "action": "Action",
     "range": "Melee or Ranged (2 areas)",
@@ -65,10 +175,43 @@
     "special": "",
     "weapons": "Any"
   },
+ {
+    "name": "Murderous Precision",
+    "type": "Combat",
+    "requirements": [],
+    "attack": "Avoidance",
+    "action": "Action",
+    "range": "Melee",
+    "effect": "x2. If you successfully use this maneuver on bystander, hardened, or Zeta-ranked threats, they are instantly killed.",
+    "special": "",
+    "weapons": "You may perform this maneuver with any melee weapon, unarmed attack, or melee attack powers."
+  },
+ {
+    "name": "On My Mark",
+    "type": "Combat",
+    "requirements": ["Charisma 13+","Trained in Influence"],
+    "attack": "",
+    "action": "Bonus Action",
+    "range": "3 Areas",
+    "effect": "Designate a target within range. Allies within range gain Advantage on attack rolls against this target until the start of your next turn.",
+    "special": "Can be used once per scene.",
+    "weapons": ""
+  },
+  {
+    "name": "Overwhelming Charge",
+    "type": "Combat",
+    "requirements": ["Large Size","Strength of 26+"],
+    "attack": "Avoidance",
+    "action": "Action",
+    "range": "Melee",
+    "effect": "Base, you move up to your full pace and perform a single unarmed attack against all the creatures within a single area; the creatures that are hit must make a dexterity saving throw against a DC equal to that of your attack roll or fall prone.",
+    "special": "CYour Avoidance is reduced by -4 until the beginning of your next turn.",
+    "weapons": "You may only perform this maneuver as an unarmed attack."
+  },
   {
     "name": "Palm Throw",
     "type": "Combat",
-    "requirements": "Dexterity 14+",
+    "requirements": ["Dexterity 14+"],
     "attack": "Avoidance",
     "action": "Action",
     "range": "Throwing Range",
@@ -76,10 +219,76 @@
     "special": "",
     "weapons": "One-handed thrown weapons (e.g., knives, shuriken)"
   },
+{
+    "name": "Quick Reflexes",
+    "type": "Combat",
+    "requirements": ["Dexterity 15+"],
+    "attack": "",
+    "action": "Reaction",
+    "range": "Self",
+    "effect": "When you are the target of a melee attack, you may use your reaction to give the attacker Disadvantage on their attack roll. You must be aware of the attack before using this maneuver.",
+    "special": "Can be used once per turn.",
+    "weapons": ""
+  },
+  {
+    "name": "Quick Strike",
+    "type": "Combat",
+    "requirements": ["Dexterity 15+"],
+    "attack": "Avoidance",
+    "action": "Reaction",
+    "range": "Self",
+    "effect": "Base, when a creature in your area attacks you, you may make a melee attack against your attacker as a reaction. You must be aware of the attack before using this maneuver.",
+    "special": " ",
+    "weapons": "You may perform this maneuver with any melee weapon, unarmed attack, or melee attack power."
+  },
+  {
+    "name": "Rallying Cry",
+    "type": "Leadership",
+    "requirements": ["Charisma 14+","Trained in Influence"],
+    "attack": " ",
+    "action": "Action",
+    "range": "3 Areas",
+    "effect": "Once per scene, you may roll your Charisma base die and add double your rank; all allies within 2 areas regain stamina equal to the result. Allies Defeated due to stamina loss gain 1 point of stamina but cannot act until the end of your next turn.",
+    "special": " ",
+    "weapons": " "
+  },
+  {
+    "name": "Rally the Troops",
+    "type": "Leadership",
+    "requirements": ["Charisma 13+","Trained in Influence"],
+    "attack": " ",
+    "action": "Action",
+    "range": "4 Areas",
+    "effect": "Once per scene, all allies within range gain temporary stamina equal to your Charisma modifier and Advantage on their next attack roll.",
+    "special": " ",
+    "weapons": " "
+  },
+  {
+    "name": "Rapid Strikes",
+    "type": "Combat",
+    "requirements": [],
+    "attack": "Avoidance",
+    "action": "Action",
+    "range": "Melee",
+    "effect": "Base, on hit, you can make an additional attack against any other target in the same area.",
+    "special": " ",
+    "weapons": "You may perform this maneuver with any melee weapon, unarmed attack, or melee attack powers."
+  },
+  {
+    "name": "Ricochet Throw",
+    "type": "Combat",
+    "requirements": ["Dexterity 14+"],
+    "attack": "Avoidance",
+    "action": "Action",
+    "range": "Throwing Range",
+    "effect": "Base, you may throw a blunt weapon to hit multiple targets, which all must be within your throwing range. If you are successful on your first attack roll, you may make an attack roll against another target within range. You may choose a third target within range if you successfully hit that target. Your weapon returns to your hand after the 3rd successful attack or the first miss.",
+    "special": "When you throw a blunt object, it can Ricochet off solid objects and return to your hand at the end of your turn without requiring a roll.",
+    "weapons": "You may only perform this maneuver with any one-handed blunt weapon that can be easily thrown."
+  },
   {
     "name": "Shielding",
     "type": "Combat",
-    "requirements": "",
+    "requirements": [],
     "attack": "None",
     "action": "Reaction",
     "range": "Self or ally within reach",
@@ -90,34 +299,23 @@
   {
     "name": "Shoulder Charge",
     "type": "Combat",
-    "requirements": "",
+    "requirements": [],
     "attack": "Fortitude",
     "action": "Action",
     "range": "Melee",
-    "effect": "Force opponent to adjacent area or prone. Can move with them.",
-    "special": "With Enhanced Strength, knock target multiple areas away.",
-    "weapons": "Any melee or unarmed attack"
+    "effect": "Base, on a hit, you can force your opponent into an adjacent area or knock them prone (your choice) after which you may move with your opponent into an adjacent area as a reaction. If this forced movement could cause damage (e.g., pushing a zombie into a fire), your target must succeed on a Strength saving throw against a DC equal to your attack roll. On a failure, they move to another adjacent area of their choice or fall prone.",
+    "special": " ",
+    "weapons": "(Enhanced Strength): If you possess the Enhanced Strength Origins feature, you can send your target flying, throwing them a number of areas equal to half your Strength modifire. If they hit a solid object along their path, both they and the object suffer falling damage as if they fell the distance traveled."
   },
   {
-    "name": "Team Attack",
+    "name": "Vicious Stab",
     "type": "Combat",
-    "requirements": "",
-    "attack": "Avoidance",
-    "action": "Ready, triggered by ally",
-    "range": "Melee or Ranged (3 Areas)",
-    "effect": "If ally hits, attack same target with Advantage. Combine damage to check for Massive Damage.",
-    "special": "",
-    "weapons": "Any melee, unarmed, or attack power"
-  },
-  {
-    "name": "Trip",
-    "type": "Combat",
-    "requirements": "",
+    "requirements": ["Dexterity 12+"],
     "attack": "Avoidance",
     "action": "Action",
     "range": "Melee",
-    "effect": "Target is knocked prone on hit.",
-    "special": "",
-    "weapons": "Any melee weapon or unarmed attack"
+    "effect": "Base, on hit, you cause the target to bleed, dealing 1d4 damage at the start of their turn for the next 3 turns. This maneuver is ineffective against the undead; bleeding effects can stack with other instances of bleeding.",
+    "special": " ",
+    "weapons": "You may perform this maneuver with any melee weapon or unarmed attack that deals either slashing or piercing damage."
   }
 ]

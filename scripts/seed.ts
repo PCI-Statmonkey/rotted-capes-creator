@@ -2,9 +2,10 @@
 import fs from "fs";
 import path from "path";
 import { db } from "../server/db";
-import { origins, feats } from "../shared/schema";
+import { origins, feats, maneuvers as maneuversTable } from "../shared/schema";
 import { fileURLToPath } from "url";
 import { dirname } from "path";
+import maneuvers from "@/rules/maneuvers.json";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -52,7 +53,12 @@ async function main() {
     console.log(`✅ Inserted feat: ${feat.name}`);
   }
 
-  console.log("🌱 Seeding complete.");
+  console.log("🌱 Seeding maneuvers...");
+  console.log("📦 Maneuver count:", maneuvers.length);
+
+  await db.insert(maneuversTable).values(maneuvers);
+
+  console.log("✅ Done seeding maneuvers.");
 }
 
 main().catch((err) => {
