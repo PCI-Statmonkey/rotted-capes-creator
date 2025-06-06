@@ -6,6 +6,14 @@ export type CharacterSkill = {
 };
 
 export type Character = {
+  abilityScores: {
+    STR: number;
+    DEX: number;
+    CON: number;
+    INT: number;
+    WIS: number;
+    CHA: number;
+  };
   startingSkills: string[];
   selectedSkills: CharacterSkill[];
   selectedFeats: string[];
@@ -23,8 +31,18 @@ export const useCharacterBuilder = () => {
   const [selectedManeuver, setSelectedManeuver] = useState<string | null>(null);
   const [startingFeat, setStartingFeat] = useState<string>("");
   const [currentStep, setCurrentStep] = useState<number>(1);
+  const [abilityScores, setAbilityScores] = useState({
+    STR: 10,
+    DEX: 10,
+    CON: 10,
+    INT: 10,
+    WIS: 10,
+    CHA: 10,
+  });
 
   return {
+    abilityScores,
+    setAbilityScores,
     startingSkills,
     setStartingSkills,
     selectedSkills,
