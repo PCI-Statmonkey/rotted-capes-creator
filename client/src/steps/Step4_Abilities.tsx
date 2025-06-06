@@ -8,6 +8,8 @@ import { useCharacter } from "@/context/CharacterContext";
 import { trackEvent } from "@/lib/analytics";
 import { calculateModifier, formatModifier } from "@/lib/utils";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { useCharacterBuilder } from "@/lib/Stores/characterBuilder";
+
 
 // Define the point buy cost table
 interface PointBuyCost {
@@ -33,6 +35,9 @@ const TOTAL_POINTS = 36;
 
 // Standard array option
 const STANDARD_ARRAY = [16, 15, 14, 13, 12, 11];
+
+//Set Ability Scores in Character Builder Context
+const { setAbilityScores } = useCharacterBuilder();
 
 export default function Step4_Abilities() {
   const { character, updateAbilityScore, setCurrentStep, updateDerivedStats } = useCharacter();
@@ -296,15 +301,23 @@ export default function Step4_Abilities() {
     setCurrentStep(3);
   };
 
-  const handleContinue = () => {
-    Object.keys(localAbilities).forEach((ability) => {
-      const abilityKey = ability as keyof typeof localAbilities;
-      updateAbilityScore(abilityKey, localAbilities[abilityKey].value);
-    });
-    updateDerivedStats();
-    trackEvent('abilities_selected', 'character', `Points: ${pointsSpent}`);
-    setCurrentStep(5);
-  };
+const handleContinue = () => {
+  Object.keys(localAbilities).forEach((ability) => {
+    const abilityKey = ability as keyof typeof localAbilities;
+    updateAbilityScore(abilityKey, localAbilities[abilityKey].value);
+  });
+
+  // NEW: Save the full abilityScores object for Step5 feat validation
+  setAbilityScores(
+    Object.fromEntries(
+      Object.entries(localAbilities).map(([key, data]) => [key, data.value])
+    )
+  );
+
+  updateDerivedStats();
+  trackEvent('abilities_selected', 'character', `Points: ${pointsSpent}`);
+  setCurrentStep(5);
+};
 
   const formatAbilityName = (ability: string): string => {
     return ability.charAt(0).toUpperCase() + ability.slice(1);

@@ -1,0 +1,531 @@
+# \<h1\> Ability and Power Scores Values Table
+
+Both ability scores and powers scores utilize the same chart; for
+example, ability scores or power of 14 would have a base die of d8 and a
++2 Modifier.
+
+<table>
+<colgroup>
+<col style="width: 7%" />
+<col style="width: 3%" />
+<col style="width: 5%" />
+<col style="width: 11%" />
+<col style="width: 10%" />
+<col style="width: 10%" />
+<col style="width: 15%" />
+<col style="width: 7%" />
+<col style="width: 0%" />
+<col style="width: 12%" />
+<col style="width: 14%" />
+</colgroup>
+<tbody>
+<tr>
+<td colspan="2" style="text-align: center;"></td>
+<td colspan="9" style="text-align: center;"><strong>Master Values Table
+X-X</strong></td>
+</tr>
+<tr>
+<td colspan="4"
+style="text-align: center;"><p><strong>Ability/Power</strong></p>
+<p><strong>Scores</strong></p></td>
+<td style="text-align: center;"></td>
+<td colspan="6" style="text-align: center;"><strong>Data
+Points</strong></td>
+</tr>
+<tr>
+<td style="text-align: center;"></td>
+<td colspan="2" style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td colspan="5" style="text-align: center;"><strong>Strength Data
+Points</strong></td>
+<td style="text-align: center;"><strong>Speed Power Data
+Points</strong></td>
+</tr>
+<tr>
+<td style="text-align: center;"><strong>Score</strong></td>
+<td colspan="2" style="text-align: center;"><strong>Base<br />
+Die</strong></td>
+<td style="text-align: center;"><strong>Modifier</strong></td>
+<td style="text-align: center;"><p><strong>Power</strong></p>
+<p><strong>Range</strong></p></td>
+<td style="text-align: center;"><strong>Max<br />
+Lift</strong></td>
+<td style="text-align: center;"><p><strong>Max Lift</strong></p>
+<p><strong>Examples</strong></p></td>
+<td colspan="2"
+style="text-align: center;"><p><strong>Throw</strong></p>
+<p><strong>Range</strong></p></td>
+<td style="text-align: center;"><p><strong>Max</strong></p>
+<p><strong>Push/Drag</strong></p></td>
+<td style="text-align: center;"><strong>Top MPH</strong></td>
+</tr>
+<tr>
+<td style="text-align: center;">1</td>
+<td colspan="2" style="text-align: center;">-</td>
+<td style="text-align: center;">-5</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">10 lbs.</td>
+<td style="text-align: center;">-</td>
+<td style="text-align: center;">-</td>
+<td colspan="2" style="text-align: center;">-</td>
+<td style="text-align: center;">-</td>
+</tr>
+<tr>
+<td style="text-align: center;">2-3</td>
+<td colspan="2" style="text-align: center;">-</td>
+<td style="text-align: center;">-4</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">50 lbs.</td>
+<td style="text-align: center;">-</td>
+<td style="text-align: center;">0</td>
+<td colspan="2" style="text-align: center;">100 lb.</td>
+<td style="text-align: center;">-</td>
+</tr>
+<tr>
+<td style="text-align: center;">4-5</td>
+<td colspan="2" style="text-align: center;">d4</td>
+<td style="text-align: center;">-3</td>
+<td style="text-align: center;">2</td>
+<td style="text-align: center;">79 lbs.</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">1</td>
+<td colspan="2" style="text-align: center;">150 lbs.</td>
+<td style="text-align: center;">-</td>
+</tr>
+<tr>
+<td style="text-align: center;">6-7</td>
+<td colspan="2" style="text-align: center;">d4</td>
+<td style="text-align: center;">-2</td>
+<td style="text-align: center;">3</td>
+<td style="text-align: center;">100 lbs.</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">1</td>
+<td colspan="2" style="text-align: center;">200 lbs.</td>
+<td style="text-align: center;">-</td>
+</tr>
+<tr>
+<td style="text-align: center;">8-9</td>
+<td colspan="2" style="text-align: center;">d4</td>
+<td style="text-align: center;">-1</td>
+<td style="text-align: center;">4</td>
+<td style="text-align: center;">150 lbs.</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">2</td>
+<td colspan="2" style="text-align: center;">300 lbs.</td>
+<td style="text-align: center;">-</td>
+</tr>
+<tr>
+<td style="text-align: center;">10-11</td>
+<td colspan="2" style="text-align: center;">d6</td>
+<td style="text-align: center;">+0</td>
+<td style="text-align: center;">5</td>
+<td style="text-align: center;">200 lbs.</td>
+<td style="text-align: center;">Average Human</td>
+<td style="text-align: center;">3</td>
+<td colspan="2" style="text-align: center;">400 lbs.</td>
+<td style="text-align: center;">-</td>
+</tr>
+<tr>
+<td style="text-align: center;">12-13</td>
+<td colspan="2" style="text-align: center;">d6</td>
+<td style="text-align: center;">+1</td>
+<td style="text-align: center;">6</td>
+<td style="text-align: center;">250 lbs.</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">4</td>
+<td colspan="2" style="text-align: center;">500 lbs.</td>
+<td style="text-align: center;">20</td>
+</tr>
+<tr>
+<td style="text-align: center;">14-15</td>
+<td colspan="2" style="text-align: center;">d8</td>
+<td style="text-align: center;">+2</td>
+<td style="text-align: center;">7</td>
+<td style="text-align: center;">300 lbs.</td>
+<td style="text-align: center;">Male Lion</td>
+<td style="text-align: center;">5</td>
+<td colspan="2" style="text-align: center;">600 lbs.</td>
+<td style="text-align: center;">30</td>
+</tr>
+<tr>
+<td style="text-align: center;">16-17</td>
+<td colspan="2" style="text-align: center;">d8</td>
+<td style="text-align: center;">+3</td>
+<td style="text-align: center;">8</td>
+<td style="text-align: center;">400 lbs.</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">6</td>
+<td colspan="2" style="text-align: center;">800 lbs.</td>
+<td style="text-align: center;">40</td>
+</tr>
+<tr>
+<td style="text-align: center;">18-19</td>
+<td colspan="2" style="text-align: center;">d10</td>
+<td style="text-align: center;">+4</td>
+<td style="text-align: center;">9</td>
+<td style="text-align: center;">500 lbs.</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">7</td>
+<td colspan="2" style="text-align: center;">1000 lbs.</td>
+<td style="text-align: center;">45</td>
+</tr>
+<tr>
+<td style="text-align: center;">20-21</td>
+<td colspan="2" style="text-align: center;">d10</td>
+<td style="text-align: center;">+5</td>
+<td style="text-align: center;">10</td>
+<td style="text-align: center;">600 lbs.</td>
+<td style="text-align: center;">Motorcycle</td>
+<td style="text-align: center;">7</td>
+<td colspan="2" style="text-align: center;">1200 lbs.</td>
+<td style="text-align: center;">50</td>
+</tr>
+<tr>
+<td style="text-align: center;">22-23</td>
+<td colspan="2" style="text-align: center;">d12</td>
+<td style="text-align: center;">+6</td>
+<td style="text-align: center;">11</td>
+<td style="text-align: center;">700 lbs.</td>
+<td style="text-align: center;">ATV</td>
+<td style="text-align: center;">8</td>
+<td colspan="2" style="text-align: center;">1400 lbs.</td>
+<td style="text-align: center;">60</td>
+</tr>
+<tr>
+<td style="text-align: center;">24-25</td>
+<td colspan="2" style="text-align: center;">d12</td>
+<td style="text-align: center;">+7</td>
+<td style="text-align: center;">12</td>
+<td style="text-align: center;">800 lbs.</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">8</td>
+<td colspan="2" style="text-align: center;">1600 lbs.</td>
+<td style="text-align: center;">70</td>
+</tr>
+<tr>
+<td style="text-align: center;">26-27</td>
+<td colspan="2" style="text-align: center;">2d6</td>
+<td style="text-align: center;">+8</td>
+<td style="text-align: center;">13</td>
+<td style="text-align: center;">900 lbs.</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">9</td>
+<td colspan="2" style="text-align: center;">1800 lbs.</td>
+<td style="text-align: center;">80</td>
+</tr>
+<tr>
+<td style="text-align: center;">28-29</td>
+<td colspan="2" style="text-align: center;">2d6</td>
+<td style="text-align: center;">+9</td>
+<td style="text-align: center;">14</td>
+<td style="text-align: center;">1 ton.</td>
+<td style="text-align: center;">Average Car</td>
+<td style="text-align: center;">9</td>
+<td colspan="2" style="text-align: center;">2 ton.</td>
+<td style="text-align: center;">90</td>
+</tr>
+<tr>
+<td style="text-align: center;">30-31</td>
+<td colspan="2" style="text-align: center;">2d8</td>
+<td style="text-align: center;">+10</td>
+<td style="text-align: center;">15</td>
+<td style="text-align: center;">2 tons.</td>
+<td style="text-align: center;">Large Truck</td>
+<td style="text-align: center;">10</td>
+<td colspan="2" style="text-align: center;">4 tons.</td>
+<td style="text-align: center;">100</td>
+</tr>
+<tr>
+<td style="text-align: center;">32-33</td>
+<td colspan="2" style="text-align: center;">2d8</td>
+<td style="text-align: center;">+11</td>
+<td style="text-align: center;">16</td>
+<td style="text-align: center;">4 tons.</td>
+<td style="text-align: center;">Subway Car</td>
+<td style="text-align: center;">10</td>
+<td colspan="2" style="text-align: center;">6 tons.</td>
+<td style="text-align: center;">200</td>
+</tr>
+<tr>
+<td style="text-align: center;">34-35</td>
+<td colspan="2" style="text-align: center;">2d10</td>
+<td style="text-align: center;">+12</td>
+<td style="text-align: center;">17</td>
+<td style="text-align: center;">6 tons.</td>
+<td style="text-align: center;">School Bus</td>
+<td style="text-align: center;">12</td>
+<td colspan="2" style="text-align: center;">12 tons.</td>
+<td style="text-align: center;">250</td>
+</tr>
+<tr>
+<td style="text-align: center;">36-37</td>
+<td colspan="2" style="text-align: center;">2d10</td>
+<td style="text-align: center;">+13</td>
+<td style="text-align: center;">18</td>
+<td style="text-align: center;">8 tons.</td>
+<td style="text-align: center;">Semi-Truck</td>
+<td style="text-align: center;">13</td>
+<td colspan="2" style="text-align: center;">16 tons.</td>
+<td style="text-align: center;">350</td>
+</tr>
+<tr>
+<td style="text-align: center;">38-39</td>
+<td colspan="2" style="text-align: center;">2d12</td>
+<td style="text-align: center;">+14</td>
+<td style="text-align: center;">19</td>
+<td style="text-align: center;">10 tons.</td>
+<td style="text-align: center;">Light Military Tank</td>
+<td style="text-align: center;">14</td>
+<td colspan="2" style="text-align: center;">20 tons.</td>
+<td style="text-align: center;">450</td>
+</tr>
+<tr>
+<td style="text-align: center;">40-41</td>
+<td colspan="2" style="text-align: center;">2d12</td>
+<td style="text-align: center;">+15</td>
+<td style="text-align: center;">20</td>
+<td style="text-align: center;">13 tons.</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">15</td>
+<td colspan="2" style="text-align: center;">26 tons.</td>
+<td style="text-align: center;">550</td>
+</tr>
+<tr>
+<td style="text-align: center;">42-43</td>
+<td colspan="2" style="text-align: center;">4d6</td>
+<td style="text-align: center;">+16</td>
+<td style="text-align: center;">21</td>
+<td style="text-align: center;">16 tons.</td>
+<td style="text-align: center;">Armored Personal Carrier</td>
+<td style="text-align: center;">16</td>
+<td colspan="2" style="text-align: center;">32 tons.</td>
+<td style="text-align: center;">650</td>
+</tr>
+<tr>
+<td style="text-align: center;">44-45</td>
+<td colspan="2" style="text-align: center;">4d6</td>
+<td style="text-align: center;">+17</td>
+<td style="text-align: center;">22</td>
+<td style="text-align: center;">32 tons.</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">17</td>
+<td colspan="2" style="text-align: center;">62 tons.</td>
+<td style="text-align: center;">750</td>
+</tr>
+<tr>
+<td style="text-align: center;">46-47</td>
+<td colspan="2" style="text-align: center;">4d8</td>
+<td style="text-align: center;">+18</td>
+<td style="text-align: center;">23</td>
+<td style="text-align: center;">64 tons.</td>
+<td style="text-align: center;">Heavy Military Tank</td>
+<td style="text-align: center;">18</td>
+<td colspan="2" style="text-align: center;">128 tons.</td>
+<td style="text-align: center;">Mach 1</td>
+</tr>
+<tr>
+<td style="text-align: center;">48-49</td>
+<td colspan="2" style="text-align: center;">4d8</td>
+<td style="text-align: center;">+19</td>
+<td style="text-align: center;">25</td>
+<td style="text-align: center;">128 tons.</td>
+<td style="text-align: center;">Small Coastguard Cutter</td>
+<td style="text-align: center;">19</td>
+<td colspan="2" style="text-align: center;">256 tons.</td>
+<td style="text-align: center;">Mach 1.5</td>
+</tr>
+<tr>
+<td style="text-align: center;">50</td>
+<td colspan="2" style="text-align: center;">4d10</td>
+<td style="text-align: center;">+20</td>
+<td style="text-align: center;">26</td>
+<td style="text-align: center;">256 tons.</td>
+<td style="text-align: center;">Locomotive</td>
+<td style="text-align: center;">20</td>
+<td colspan="2" style="text-align: center;">512 tons.</td>
+<td style="text-align: center;">Mach 2</td>
+</tr>
+</tbody>
+</table>
+
+<table>
+<colgroup>
+<col style="width: 14%" />
+<col style="width: 25%" />
+<col style="width: 30%" />
+<col style="width: 29%" />
+</colgroup>
+<tbody>
+<tr>
+<td colspan="4" style="text-align: center;"><strong>Effective Strength
+Data Points beyond 50 X-X</strong></td>
+</tr>
+<tr>
+<td style="text-align: center;"><strong>Score</strong></td>
+<td style="text-align: center;"><strong>Might<br />
+Max Lift</strong></td>
+<td style="text-align: center;"><p><strong>Max Lift</strong></p>
+<p><strong>Examples</strong></p></td>
+<td style="text-align: center;"><strong>Might<br />
+Push/Drag</strong></td>
+</tr>
+<tr>
+<td style="text-align: center;">51-53</td>
+<td style="text-align: center;">512 tons.</td>
+<td style="text-align: center;">Jumbo Jet</td>
+<td style="text-align: center;">1,024 tons.</td>
+</tr>
+<tr>
+<td style="text-align: center;">54-55</td>
+<td style="text-align: center;">1,024 tons.</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">2,048 tons.</td>
+</tr>
+<tr>
+<td style="text-align: center;">56-57</td>
+<td style="text-align: center;">2,048 tons.</td>
+<td style="text-align: center;">Space Shuttle</td>
+<td style="text-align: center;">4,096 tons.</td>
+</tr>
+<tr>
+<td style="text-align: center;">58-59</td>
+<td style="text-align: center;">4,096 tons.</td>
+<td style="text-align: center;">Saturn V Rocket</td>
+<td style="text-align: center;">8,192 tons.</td>
+</tr>
+<tr>
+<td style="text-align: center;">60-61</td>
+<td style="text-align: center;">8,192 tons.</td>
+<td style="text-align: center;">Attack submarine</td>
+<td style="text-align: center;">16,384 tons.</td>
+</tr>
+<tr>
+<td style="text-align: center;">62-63</td>
+<td style="text-align: center;">16,384 tons.</td>
+<td style="text-align: center;"><p>Icebreaker</p>
+<p>Ship</p></td>
+<td style="text-align: center;">32,768 tons.</td>
+</tr>
+<tr>
+<td style="text-align: center;">64-65</td>
+<td style="text-align: center;">32,768 tons.</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">65,536 tons.</td>
+</tr>
+<tr>
+<td style="text-align: center;">66-67</td>
+<td style="text-align: center;">65,536 tons.</td>
+<td style="text-align: center;">Modern US Aircraft Carrier</td>
+<td style="text-align: center;">131,072 tons.</td>
+</tr>
+<tr>
+<td style="text-align: center;">68-69</td>
+<td style="text-align: center;">131,072 tons.</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">262,144 tons.</td>
+</tr>
+<tr>
+<td style="text-align: center;">70-71</td>
+<td style="text-align: center;">262,144 tons.</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">524,288 tons.</td>
+</tr>
+<tr>
+<td style="text-align: center;">72-73</td>
+<td style="text-align: center;">524,288 tons.</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">1,048,576 tons.</td>
+</tr>
+<tr>
+<td style="text-align: center;">74+</td>
+<td style="text-align: center;">x2</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">x2</td>
+</tr>
+</tbody>
+</table>
+
+## \<h2\>Data Points
+
+You have probably noticed that the Master Values table has a few data
+points. Strength based data points are self-explanatory, with some handy
+examples of what a character with a particular Strength is able to lift.
+
+#### \<h3\>***Throw*** Range
+
+Throw Range is the number of areas an object of maximum weight can be
+thrown. Lighter objects can be thrown a number of additional areas equal
+to the difference between the Hero’s throw range and the weight of the
+object. For example, someone with 48 Strength tossing a 6-ton school bus
+would be able to throw that bus a total of 16 areas (48 Strength has a
+range of 14 areas, while a school bus would fall within 34 Strength, a
+2-area difference).
+
+\<h3\>***Speed Data Point***
+
+Top MPH, is the top speed of a character while out of combat. In combat,
+characters are limited to their speed value in areas. For example,
+someone with a Speed of 28 would have a top speed of 90 mph, but in
+combat would be limited to 9 areas of movement.
+
+<table>
+<colgroup>
+<col style="width: 16%" />
+<col style="width: 83%" />
+</colgroup>
+<thead>
+<tr>
+<th colspan="2"><strong>Table X-X: Attribute Potential</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td colspan="2">Score Example</td>
+</tr>
+<tr>
+<td>1-6</td>
+<td>Feeble. You are a bedridden elderly person or mentally
+challenged.</td>
+</tr>
+<tr>
+<td>6-9</td>
+<td>Below Average. You just have trouble keeping up, get winded easily,
+or never notice things.</td>
+</tr>
+<tr>
+<td>10-11</td>
+<td>Average. You are the common person.</td>
+</tr>
+<tr>
+<td>12-13</td>
+<td>Exceptional. You're simply a little tougher or more perceptive than
+most of your friends.</td>
+</tr>
+<tr>
+<td>14-15</td>
+<td>Remarkable. You may be a local legend, and likely a professional in
+your field of interest.</td>
+</tr>
+<tr>
+<td>16-19</td>
+<td>Amazing. You may have been an Olympian, or the valedictorian at an
+institution like Harvard Law.</td>
+</tr>
+<tr>
+<td>20-21</td>
+<td>Exceptionally Rare. You might be counted among the finest
+professional athletes or Olympians in history, or you may be considered
+one of the finest minds in your field.</td>
+</tr>
+<tr>
+<td>22+</td>
+<td>Super Human. Physical feats beyond this rank are considered super
+human, while mental attributes beyond this rank are only typical of
+legendary minds, such as Einstein, Da Vinci, Hawking, and Andrew
+Wiles.</td>
+</tr>
+</tbody>
+</table>
+
+# 
