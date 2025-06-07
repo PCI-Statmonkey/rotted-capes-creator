@@ -1,6 +1,6 @@
 // Step5_Skills.tsx
-import { useEffect, useState } from "react";
-import axios from "axios";
+import { useState } from "react";
+import useCachedGameContent from "@/hooks/useCachedGameContent";
 import { motion } from "framer-motion";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -11,9 +11,6 @@ import {
   TabsTrigger,
 } from "@/components/ui/tabs";
 import { useCharacterBuilder } from "@/lib/Stores/characterBuilder";
-import skillsData from "@/rules/skills.json";
-import featsData from "@/rules/Feats.json";
-import allSkillSets from "@/rules/skillSets.json";
 import ManeuverDropdown from "@/components/ManeuverDropdown";
 import SkillSetCard from "@/components/SkillSetCard";
 import SkillCard from "@/components/SkillCard";
@@ -45,10 +42,10 @@ const Step5_Skills = () => {
   const [workingStartingFeat, setWorkingStartingFeat] = useState<string>(""); // State for the single starting feat
 
   // --- Data loaded from JSON and API ---
-  const [skills, setSkills] = useState<any[]>([]);
-  const [feats, setFeats] = useState<any[]>([]);
-  const [skillSets, setSkillSets] = useState<any[]>([]);
-  const [maneuvers, setManeuvers] = useState<any[]>([]); // Maneuvers fetched from API
+  const { data: skills } = useCachedGameContent<any>('skills');
+  const { data: feats } = useCachedGameContent<any>('feats');
+  const { data: skillSets } = useCachedGameContent<any>('skill-sets');
+  const { data: maneuvers } = useCachedGameContent<any>('maneuvers');
 
   const [availablePoints, setAvailablePoints] = useState(20); // Initial points
   const [currentTab, setCurrentTab] = useState("starting"); // Current active tab
@@ -65,32 +62,7 @@ const Step5_Skills = () => {
   } = useCharacterBuilder();
 
   // --- Data Fetching & Initialization ---
-  // Fetch maneuvers from API on component mount
-  useEffect(() => {
-    const fetchManeuvers = async () => {
-      try {
-        const res = await axios.get("/api/game-content/maneuvers");
-        setManeuvers(Array.isArray(res.data) ? res.data : []);
-      } catch (error) {
-        console.error("Failed to fetch maneuvers:", error);
-        setManeuvers([]);
-      }
-    };
-    fetchManeuvers();
-  }, []); // Run once on component mount
-
-  // Load skills, feats, and skill sets from local JSON files
-  useEffect(() => {
-    try {
-      // Sort feats alphabetically for consistent display
-      setFeats([...featsData].sort((a: any, b: any) => a.name.localeCompare(b.name)));
-    } catch (error) {
-      console.error("Failed to load feats data:", error);
-      setFeats([]);
-    }
-    setSkills(skillsData);
-    setSkillSets(allSkillSets);
-  }, []); // Run once on component mount
+  // Data is fetched and cached via useCachedGameContent hook
 
   // --- Point Calculation Logic ---
   // Recalculate available points whenever selections change
