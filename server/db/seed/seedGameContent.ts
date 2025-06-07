@@ -2,8 +2,17 @@
 // Combined seedGameContent.ts
 import { db } from "../../db";
 import {
-  origins, archetypes, powers, powerSets, powerModifiers,
-  feats, skills, skillSets, maneuvers, originFeatures
+  origins,
+  archetypes,
+  powers,
+  powerSets,
+  powerModifiers,
+  feats,
+  skills,
+  skillSets,
+  maneuvers,
+  originFeatures,
+  gear,
 } from "../../../shared/schema";
 import featsData from "../../../client/src/rules/Feats.json" assert { type: "json" };
 import skillsData from "../../../client/src/rules/skills.json" assert { type: "json" };
@@ -122,7 +131,21 @@ async function runSeed() {
       type: maneuver.type,
       requirements: maneuver.requirements || [],
     }).onConflictDoNothing();
- 
+
+  }
+
+  console.log("🌱 Seeding gear...");
+  for (const [category, items] of Object.entries(gearData as any)) {
+    if (!Array.isArray(items)) continue;
+    for (const item of items as any[]) {
+      await db.insert(gear).values({
+        name: item.name,
+        description: item.description || item.damage || "",
+        category,
+        ap: item.ap || 0,
+        tags: item.qualities || item.tags || item.ammo_type || [],
+      }).onConflictDoNothing();
+    }
   }
 
 console.log("🌱 Seeding complete ✅");
