@@ -3,8 +3,11 @@ dotenv.config();
 
 import express, { type Request, Response, NextFunction } from "express";
 import cors from "cors";
+import session from "express-session";
+import connectPgSimple from "connect-pg-simple";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
+import { pool } from "./db";
 
 const app = express();
 
@@ -15,6 +18,17 @@ app.use(cors({
 }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+
+const PgSession = connectPgSimple(session);
+
+app.use(
+  session({
+    store: new PgSession({ pool }),
+    secret: process.env.SESSION_SECRET ?? "changeme",
+    resave: false,
+    saveUninitialized: false,
+  })
+);
 
 app.use((req, _res, next) => {
   console.log(`📥 Received request: ${req.method} ${req.path}`);
