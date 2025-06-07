@@ -1,0 +1,23 @@
+[
+  {
+    "name": "Energy Blast",
+    "description": "You can project destructive energy from your hands or eyes.",
+    "hasDamageType": true,
+    "hasTarget": true,
+    "skillCompatible": false
+  },
+  {
+    "name": "Super Strength",
+    "description": "Your physical strength far exceeds human limits.",
+    "hasDamageType": false,
+    "hasTarget": false,
+    "skillCompatible": true
+  },
+  {
+    "name": "Telekinesis",
+    "description": "You can move objects with your mind.",
+    "hasDamageType": false,
+    "hasTarget": true,
+    "skillCompatible": true
+  }
+]
