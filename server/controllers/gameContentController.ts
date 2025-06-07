@@ -29,9 +29,12 @@ declare module 'express-session' {
 }
 
 // Middleware to verify admin (disabled for development)
-export function verifyAdmin(_req: Request, _res: Response, next: NextFunction) {
-  console.log("⚠️ Admin check bypassed (development mode)");
-  return next();
+export function verifyAdmin(req: Request, res: Response, next: NextFunction) {
+  const user = (req as any).user as { email?: string } | undefined;
+  if (user && user.email === 'admin@rottedcapes.com') {
+    return next();
+  }
+  return res.status(403).json({ error: 'Unauthorized. Admin access required.' });
 }
 
 // Helper to handle validation errors

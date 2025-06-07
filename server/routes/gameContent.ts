@@ -59,23 +59,15 @@ import {
 } from "../controllers/gameContentController";
 
 import { Router, Request, Response, NextFunction } from "express";
+import { authenticateFirebaseToken } from "../middleware";
 
 const router = Router();
 
 // TypeScript session extension
-declare module "express-session" {
-  export interface SessionData {
-    user: {
-      id: string;
-      username: string;
-      isAdmin: boolean;
-    };
-  }
-}
-
 // Middleware to ensure admin access
 function ensureAdmin(req: Request, res: Response, next: NextFunction) {
-  if (req.session?.user?.isAdmin) {
+  const user = (req as any).user as { email?: string } | undefined;
+  if (user?.email === 'admin@rottedcapes.com') {
     next();
   } else {
     res.status(403).json({ error: "Unauthorized. Admin access required." });
@@ -128,6 +120,7 @@ router.get("/gear/:id", getGearById);
 router.get("/maneuvers", getAllManeuvers);
 
 // ---------------- ADMIN ROUTES (POST / PATCH / DELETE) ----------------
+router.use(authenticateFirebaseToken);
 
 // Origins
 router.post("/origins", verifyAdmin, createOrigin);

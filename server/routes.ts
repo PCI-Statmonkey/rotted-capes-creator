@@ -3,14 +3,19 @@ import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { z } from "zod";
 import gameContentRoutes from "./routes/gameContent";
+import { authenticateFirebaseToken } from "./middleware";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Register game content routes
   app.use('/api/game-content', gameContentRoutes);
+
+  // Protect API routes with Firebase auth
+  app.use('/api/characters', authenticateFirebaseToken);
+  app.use('/api/analytics', authenticateFirebaseToken);
   // Character data API routes
   app.get('/api/characters', async (req, res) => {
     try {
-      const userId = req.session?.user?.id;
+      const userId = (req as any).user?.uid;
       if (!userId) {
         return res.status(401).json({ message: 'Unauthorized' });
       }
@@ -25,7 +30,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.get('/api/characters/:id', async (req, res) => {
     try {
-      const userId = req.session?.user?.id;
+      const userId = (req as any).user?.uid;
       const characterId = req.params.id;
       
       if (!userId) {
@@ -51,7 +56,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.post('/api/characters', async (req, res) => {
     try {
-      const userId = req.session?.user?.id;
+      const userId = (req as any).user?.uid;
       
       if (!userId) {
         return res.status(401).json({ message: 'Unauthorized' });
@@ -69,7 +74,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.put('/api/characters/:id', async (req, res) => {
     try {
-      const userId = req.session?.user?.id;
+      const userId = (req as any).user?.uid;
       const characterId = req.params.id;
       
       if (!userId) {
@@ -96,7 +101,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.delete('/api/characters/:id', async (req, res) => {
     try {
-      const userId = req.session?.user?.id;
+      const userId = (req as any).user?.uid;
       const characterId = req.params.id;
       
       if (!userId) {
@@ -124,7 +129,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Analytics endpoints
   app.get('/api/analytics/summary', async (req, res) => {
     try {
-      const userId = req.session?.user?.id;
+      const userId = (req as any).user?.uid;
       
       if (!userId) {
         return res.status(401).json({ message: 'Unauthorized' });
@@ -181,64 +186,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.post('/api/auth/login', async (req, res) => {
-    try {
-      const { username, password } = req.body;
-      
-      if (!username || !password) {
-        return res.status(400).json({ message: 'Username and password are required' });
-      }
-      
-      const user = await storage.getUserByUsername(username);
-      
-      if (!user || user.password !== password) { // In a real app, proper password comparison would be used
-        return res.status(401).json({ message: 'Invalid credentials' });
-      }
-      
-      // Set user in session
-      req.session.user = {
-        id: user.id.toString(),
-        username: user.username,
-        isAdmin: user.isAdmin
-      };
-      
-      // Remove password from response
-      const { password: _, ...userWithoutPassword } = user;
-      
-      res.json(userWithoutPassword);
-    } catch (error) {
-      console.error('Error during login:', error);
-      res.status(500).json({ message: 'Login failed' });
-    }
-  });
+  // Auth routes are handled client-side via Firebase
 
-  app.post('/api/auth/logout', (req, res) => {
-    req.session.destroy((err) => {
-      if (err) {
-        return res.status(500).json({ message: 'Failed to logout' });
-      }
-      res.status(200).json({ message: 'Logged out successfully' });
-    });
-  });
-
-  app.get('/api/user/profile', async (req, res) => {
+  app.get('/api/user/profile', authenticateFirebaseToken, async (req, res) => {
     try {
-      const userId = req.session?.user?.id;
-      
-      if (!userId) {
+      const decoded = (req as any).user;
+      if (!decoded?.uid) {
         return res.status(401).json({ message: 'Unauthorized' });
       }
-      
-      const user = await storage.getUser(parseInt(userId));
-      
-      if (!user) {
-        return res.status(404).json({ message: 'User not found' });
-      }
-      
-      // Remove password from response
-      const { password, ...userWithoutPassword } = user;
-      
-      res.json(userWithoutPassword);
+
+      res.json({ uid: decoded.uid, email: decoded.email });
     } catch (error) {
       console.error('Error fetching user profile:', error);
       res.status(500).json({ message: 'Failed to retrieve user profile' });

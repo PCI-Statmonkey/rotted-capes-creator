@@ -1,6 +1,6 @@
 // Step5_Skills.tsx
 import { useEffect, useState } from "react";
-import axios from "axios";
+import { apiRequest } from "@/lib/queryClient";
 import { motion } from "framer-motion";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -69,8 +69,9 @@ const Step5_Skills = () => {
   useEffect(() => {
     const fetchManeuvers = async () => {
       try {
-        const res = await axios.get("/api/game-content/maneuvers");
-        setManeuvers(Array.isArray(res.data) ? res.data : []);
+        const res = await apiRequest('GET', '/api/game-content/maneuvers');
+        const data = await res.json();
+        setManeuvers(Array.isArray(data) ? data : []);
       } catch (error) {
         console.error("Failed to fetch maneuvers:", error);
         setManeuvers([]);

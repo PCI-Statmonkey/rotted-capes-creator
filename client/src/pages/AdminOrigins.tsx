@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { getGameContent, createGameContent, updateGameContent, deleteGameContent, usingFallbackData } from "@/lib/api";
+import { apiRequest } from "@/lib/queryClient";
 import { AlertTriangle, Shield, PlusCircle, Pencil, Trash2, ArrowLeft } from "lucide-react";
 import { DatabaseStatusBanner } from "@/components/DatabaseStatusBanner";
 import {
@@ -185,19 +186,13 @@ export default function AdminOrigins() {
     if (!selectedOrigin) return;
 
     try {
-      const response = await fetch(`/api/game-content/origins/${selectedOrigin.id}`, {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          name: selectedOrigin.name,
-          description: selectedOrigin.description,
-          abilityBonuses: selectedOrigin.abilityBonuses,
-          specialAbility: selectedOrigin.specialAbility,
-          imageUrl: selectedOrigin.imageUrl,
-          originFeatures: selectedOrigin.originFeatures
-        }),
+      const response = await apiRequest('PATCH', `/api/game-content/origins/${selectedOrigin.id}`, {
+        name: selectedOrigin.name,
+        description: selectedOrigin.description,
+        abilityBonuses: selectedOrigin.abilityBonuses,
+        specialAbility: selectedOrigin.specialAbility,
+        imageUrl: selectedOrigin.imageUrl,
+        originFeatures: selectedOrigin.originFeatures
       });
 
       if (!response.ok) {
@@ -232,9 +227,7 @@ export default function AdminOrigins() {
     if (!selectedOrigin) return;
 
     try {
-      const response = await fetch(`/api/game-content/origins/${selectedOrigin.id}`, {
-        method: 'DELETE',
-      });
+      const response = await apiRequest('DELETE', `/api/game-content/origins/${selectedOrigin.id}`);
 
       if (!response.ok) {
         throw new Error('Failed to delete origin');
