@@ -17,17 +17,6 @@ import { eq } from "drizzle-orm";
 
 console.log("✅ Loaded gameContentController.ts");
 
-// TypeScript session extension
-declare module 'express-session' {
-  export interface SessionData {
-    user: {
-      id: string;
-      username: string;
-      isAdmin: boolean;
-    };
-  }
-}
-
 // Middleware to verify admin (disabled for development)
 export function verifyAdmin(req: Request, res: Response, next: NextFunction) {
   const user = (req as any).user as { email?: string } | undefined;

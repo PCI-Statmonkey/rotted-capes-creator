@@ -63,7 +63,6 @@ import { authenticateFirebaseToken } from "../middleware";
 
 const router = Router();
 
-// TypeScript session extension
 // Middleware to ensure admin access
 function ensureAdmin(req: Request, res: Response, next: NextFunction) {
   const user = (req as any).user as { email?: string } | undefined;
