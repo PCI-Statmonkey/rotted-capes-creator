@@ -1,7 +1,8 @@
 import { db } from "./db";
 import {
   origins, archetypes, skills, feats, skillSets, powers,
-  powerSets, powerModifiers, originFeatures, maneuvers, gear
+  powerSets, powerModifiers, originFeatures, maneuvers, gear,
+  characters
 } from "@shared/schema";
 import { eq } from "drizzle-orm";
 
@@ -40,6 +41,18 @@ export const storage = {
   createSkillSet: (data: any) => db.insert(skillSets).values(data).returning().then(r => r[0]),
   updateSkillSet: (id: number, data: any) => db.update(skillSets).set(data).where(eq(skillSets.id, id)).returning().then(r => r[0]),
   deleteSkillSet: (id: number) => db.delete(skillSets).where(eq(skillSets.id, id)),
+
+  // CHARACTER
+  getCharactersByUserId: (userId: number) =>
+    db.select().from(characters).where(eq(characters.userId, userId)),
+  getCharacterById: (id: number) =>
+    db.query.characters.findFirst({ where: eq(characters.id, id) }),
+  createCharacter: (data: any) =>
+    db.insert(characters).values(data).returning().then(r => r[0]),
+  updateCharacter: (id: number, data: any) =>
+    db.update(characters).set(data).where(eq(characters.id, id)).returning().then(r => r[0]),
+  deleteCharacter: (id: number) =>
+    db.delete(characters).where(eq(characters.id, id)),
 
   // POWER
   getAllPower: () => db.select().from(powers),

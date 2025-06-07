@@ -20,7 +20,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(401).json({ message: 'Unauthorized' });
       }
       
-      const characters = await storage.getCharactersByUserId(userId);
+      const characters = await storage.getCharactersByUserId(parseInt(userId));
       res.json(characters);
     } catch (error) {
       console.error('Error fetching characters:', error);
@@ -37,7 +37,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(401).json({ message: 'Unauthorized' });
       }
       
-      const character = await storage.getCharacterById(characterId);
+      const character = await storage.getCharacterById(parseInt(characterId));
       
       if (!character) {
         return res.status(404).json({ message: 'Character not found' });
@@ -62,7 +62,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(401).json({ message: 'Unauthorized' });
       }
       
-      const characterData = { ...req.body, userId };
+      const characterData = { ...req.body, userId: parseInt(userId) };
       const newCharacter = await storage.createCharacter(characterData);
       
       res.status(201).json(newCharacter);
@@ -81,7 +81,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(401).json({ message: 'Unauthorized' });
       }
       
-      const character = await storage.getCharacterById(characterId);
+      const character = await storage.getCharacterById(parseInt(characterId));
       
       if (!character) {
         return res.status(404).json({ message: 'Character not found' });
@@ -91,7 +91,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(403).json({ message: 'Not authorized to update this character' });
       }
       
-      const updatedCharacter = await storage.updateCharacter(characterId, req.body);
+      const updatedCharacter = await storage.updateCharacter(parseInt(characterId), req.body);
       res.json(updatedCharacter);
     } catch (error) {
       console.error('Error updating character:', error);
@@ -108,7 +108,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(401).json({ message: 'Unauthorized' });
       }
       
-      const character = await storage.getCharacterById(characterId);
+      const character = await storage.getCharacterById(parseInt(characterId));
       
       if (!character) {
         return res.status(404).json({ message: 'Character not found' });
@@ -118,7 +118,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(403).json({ message: 'Not authorized to delete this character' });
       }
       
-      await storage.deleteCharacter(characterId);
+      await storage.deleteCharacter(parseInt(characterId));
       res.status(204).end();
     } catch (error) {
       console.error('Error deleting character:', error);
