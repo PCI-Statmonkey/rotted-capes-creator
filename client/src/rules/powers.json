@@ -1,0 +1,591 @@
+[
+  {
+    "name": "Aquatic Adaptation",
+    "description": "You possess the incredible ability to adapt to underwater environments, granting you enhanced swimming abilities and the ability to hold your breath for extended periods.",
+    "hasDamageType": false,
+    "hasTarget": false,
+    "skillCompatible": false
+  },
+  {
+    "name": "Absorb Energy",
+    "description": "You can use the energy of incoming attacks to boost your potential.",
+    "hasDamageType": false,
+    "hasTarget": false,
+    "skillCompatible": false
+  },
+  {
+    "name": "Absorb Matter",
+    "description": "You can absorb matter from objects or creatures to fuel your abilities or repair yourself.",
+    "hasDamageType": false,
+    "hasTarget": true,
+    "skillCompatible": false
+  },
+  {
+    "name": "Adoptive Muscle Memory",
+    "description": "You can mimic physical movements and techniques by observing them.",
+    "hasDamageType": false,
+    "hasTarget": false,
+    "skillCompatible": true
+  },
+  {
+    "name": "Animate Object",
+    "description": "You can bring inanimate objects to life to act on your behalf.",
+    "hasDamageType": false,
+    "hasTarget": true,
+    "skillCompatible": false
+  },
+  {
+    "name": "Armor",
+    "description": "Your body or suit grants you enhanced protection from damage.",
+    "hasDamageType": false,
+    "hasTarget": false,
+    "skillCompatible": false
+  },
+  {
+    "name": "Bestial Transformation",
+    "description": "You can transform into a powerful beast form.",
+    "hasDamageType": false,
+    "hasTarget": false,
+    "skillCompatible": false
+  },
+  {
+    "name": "Botanokinesis",
+    "description": "You can control and manipulate plant life.",
+    "hasDamageType": false,
+    "hasTarget": true,
+    "skillCompatible": false
+  },
+  {
+    "name": "Broadcast",
+    "description": "You can transmit your thoughts or audio over vast distances.",
+    "hasDamageType": false,
+    "hasTarget": true,
+    "skillCompatible": false
+  },
+  {
+    "name": "Catfall",
+    "description": "You can fall from great heights without taking damage.",
+    "hasDamageType": false,
+    "hasTarget": false,
+    "skillCompatible": true
+  },
+  {
+    "name": "Celerity",
+    "description": "Your reflexes and speed are far beyond normal human capability.",
+    "hasDamageType": false,
+    "hasTarget": false,
+    "skillCompatible": true
+  },
+  {
+    "name": "Chameleon",
+    "description": "You can change the color and texture of your skin to blend into your surroundings.",
+    "hasDamageType": false,
+    "hasTarget": false,
+    "skillCompatible": false
+  },
+  {
+    "name": "Communicate with Animals",
+    "description": "You can understand and speak to animals.",
+    "hasDamageType": false,
+    "hasTarget": true,
+    "skillCompatible": false
+  },
+  {
+    "name": "Communicate with Plants",
+    "description": "You can understand and communicate with plants on a rudimentary level.",
+    "hasDamageType": false,
+    "hasTarget": true,
+    "skillCompatible": false
+  }
+,
+{
+  "name": "Control Weather",
+  "description": "You can influence the weather in your surrounding area.",
+  "hasDamageType": false,
+  "hasTarget": false,
+  "skillCompatible": false
+},
+{
+  "name": "Convert Matter",
+  "description": "You can transform one type of matter into another.",
+  "hasDamageType": false,
+  "hasTarget": true,
+  "skillCompatible": false
+},
+{
+  "name": "Damaging Form",
+  "description": "Your body deals damage to those around you while transformed.",
+  "hasDamageType": true,
+  "hasTarget": false,
+  "skillCompatible": false
+},
+{
+  "name": "Darkness",
+  "description": "You can create areas of magical or unnatural darkness.",
+  "hasDamageType": false,
+  "hasTarget": true,
+  "skillCompatible": false
+},
+{
+  "name": "Defection",
+  "description": "You can compel others to abandon their allies or causes.",
+  "hasDamageType": false,
+  "hasTarget": true,
+  "skillCompatible": false
+},
+{
+  "name": "Density Control",
+  "description": "You can increase or decrease your own density or that of others.",
+  "hasDamageType": false,
+  "hasTarget": true,
+  "skillCompatible": false
+},
+{
+  "name": "Duplicate",
+  "description": "You can create clones of yourself that act independently.",
+  "hasDamageType": false,
+  "hasTarget": false,
+  "skillCompatible": false
+},
+{
+  "name": "Elemental Form",
+  "description": "You can transform into a being of pure elemental force.",
+  "hasDamageType": true,
+  "hasTarget": false,
+  "skillCompatible": false
+},
+{
+  "name": "Emotion Control",
+  "description": "You can influence the emotional state of others.",
+  "hasDamageType": false,
+  "hasTarget": true,
+  "skillCompatible": false
+},
+{
+  "name": "Empathic Projection",
+  "description": "You can transmit your emotional state to others to calm, enrage, or frighten them.",
+  "hasDamageType": false,
+  "hasTarget": true,
+  "skillCompatible": false
+},
+{
+  "name": "Energy Blast",
+  "description": "You can project destructive energy from your hands or eyes.",
+  "hasDamageType": true,
+  "hasTarget": true,
+  "skillCompatible": false
+},
+{
+  "name": "Energy Construct",
+  "description": "You can form semi-solid objects made of energy such as shields, cages, or platforms.",
+  "hasDamageType": false,
+  "hasTarget": true,
+  "skillCompatible": false
+},
+{
+  "name": "Enhanced Ability Score",
+  "description": "One of your ability scores is higher than human norms.",
+  "hasDamageType": false,
+  "hasTarget": false,
+  "skillCompatible": true
+},
+{
+  "name": "Enhanced Attack",
+  "description": "You deal more damage with your natural attacks or powers.",
+  "hasDamageType": true,
+  "hasTarget": false,
+  "skillCompatible": false
+},
+{
+  "name": "Enhanced Defense",
+  "description": "You are harder to hit thanks to natural armor, agility, or reflexes.",
+  "hasDamageType": false,
+  "hasTarget": false,
+  "skillCompatible": false
+},
+{
+  "name": "Enhanced Senses",
+  "description": "You possess keen senses beyond normal human capabilities (e.g. night vision, scent).",
+  "hasDamageType": false,
+  "hasTarget": false,
+  "skillCompatible": false
+},
+{
+  "name": "Entangle",
+  "description": "You can bind enemies in vines, energy bands, or debris.",
+  "hasDamageType": false,
+  "hasTarget": true,
+  "skillCompatible": false
+},
+{
+  "name": "Extradimensional Storage",
+  "description": "You can store items in a pocket dimension you can access at will.",
+  "hasDamageType": false,
+  "hasTarget": false,
+  "skillCompatible": false
+},
+{
+  "name": "Fear Projection",
+  "description": "You radiate an aura or illusion that instills terror in others.",
+  "hasDamageType": false,
+  "hasTarget": true,
+  "skillCompatible": false
+},
+{
+  "name": "Flight",
+  "description": "You can fly through the air, whether by wings, levitation, or propulsion.",
+  "hasDamageType": false,
+  "hasTarget": false,
+  "skillCompatible": false
+},
+{
+  "name": "Force Field",
+  "description": "You can generate a protective barrier of energy or telekinetic force.",
+  "hasDamageType": false,
+  "hasTarget": false,
+  "skillCompatible": false
+},
+{
+  "name": "Gadgeteering",
+  "description": "You can build custom devices with limited use functions, mimicking powers or creating gear.",
+  "hasDamageType": false,
+  "hasTarget": false,
+  "skillCompatible": true
+},
+{
+  "name": "Gaseous Form",
+  "description": "You can become a cloud of mist or vapor, making you hard to harm and allowing you to slip through cracks.",
+  "hasDamageType": false,
+  "hasTarget": false,
+  "skillCompatible": false
+},
+{
+  "name": "Healing",
+  "description": "You can rapidly heal yourself or others from wounds and conditions.",
+  "hasDamageType": false,
+  "hasTarget": true,
+  "skillCompatible": false
+},
+{
+  "name": "Illusions",
+  "description": "You can create realistic images, sounds, or smells to mislead the senses.",
+  "hasDamageType": false,
+  "hasTarget": true,
+  "skillCompatible": false
+},
+{
+  "name": "Immunity",
+  "description": "You are completely immune to a particular condition, type of damage, or environment.",
+  "hasDamageType": false,
+  "hasTarget": false,
+  "skillCompatible": false
+},
+{
+  "name": "Incorporeal",
+  "description": "You can become intangible, allowing you to pass through objects and ignore physical attacks.",
+  "hasDamageType": false,
+  "hasTarget": false,
+  "skillCompatible": false
+},
+{
+  "name": "Invisibility",
+  "description": "You can become invisible to the naked eye or specific senses.",
+  "hasDamageType": false,
+  "hasTarget": false,
+  "skillCompatible": false
+},
+{
+  "name": "Jump",
+  "description": "You can leap great distances, ignoring normal movement limitations.",
+  "hasDamageType": false,
+  "hasTarget": false,
+  "skillCompatible": true
+},
+{
+  "name": "Kinetic Control",
+  "description": "You can manipulate kinetic energy, slowing objects or redirecting motion.",
+  "hasDamageType": false,
+  "hasTarget": true,
+  "skillCompatible": false
+},
+{
+  "name": "Life Sense",
+  "description": "You can detect the presence and location of living creatures around you.",
+  "hasDamageType": false,
+  "hasTarget": true,
+  "skillCompatible": false
+},
+{
+  "name": "Light Generation",
+  "description": "You can emit bright light to illuminate areas or blind opponents.",
+  "hasDamageType": false,
+  "hasTarget": true,
+  "skillCompatible": false
+},
+{
+  "name": "Magnetism",
+  "description": "You can control magnetic fields to manipulate metal and generate electromagnetic pulses.",
+  "hasDamageType": true,
+  "hasTarget": true,
+  "skillCompatible": false
+},
+{
+  "name": "Manifest Gear",
+  "description": "You can summon weapons, armor, or tools from thin air or extradimensional storage.",
+  "hasDamageType": false,
+  "hasTarget": false,
+  "skillCompatible": false
+},
+{
+  "name": "Mental Blast",
+  "description": "You can project a damaging psionic attack directly into an enemy’s mind.",
+  "hasDamageType": true,
+  "hasTarget": true,
+  "skillCompatible": false
+},
+{
+  "name": "Mind Control",
+  "description": "You can seize control of another creature’s thoughts and actions.",
+  "hasDamageType": false,
+  "hasTarget": true,
+  "skillCompatible": false
+},
+{
+  "name": "Mind Link",
+  "description": "You can form a mental communication bond between yourself and others.",
+  "hasDamageType": false,
+  "hasTarget": true,
+  "skillCompatible": false
+},
+{
+  "name": "Negate Power",
+  "description": "You can temporarily nullify the powers of another individual.",
+  "hasDamageType": false,
+  "hasTarget": true,
+  "skillCompatible": false
+},
+{
+  "name": "Paralysis",
+  "description": "You can immobilize a target using energy, psychic force, or toxins.",
+  "hasDamageType": false,
+  "hasTarget": true,
+  "skillCompatible": false
+},
+{
+  "name": "Phase Shift",
+  "description": "You can shift out of sync with the physical world to avoid harm or pass through objects.",
+  "hasDamageType": false,
+  "hasTarget": false,
+  "skillCompatible": false
+},
+{
+  "name": "Poison/Venom",
+  "description": "Your attacks deliver a toxic effect that damages or debilitates targets over time.",
+  "hasDamageType": true,
+  "hasTarget": true,
+  "skillCompatible": false
+},
+{
+  "name": "Portal",
+  "description": "You can open a doorway through space, connecting two points instantly.",
+  "hasDamageType": false,
+  "hasTarget": false,
+  "skillCompatible": false
+},
+{
+  "name": "Possession",
+  "description": "You can take control of another creature’s body, suppressing their consciousness.",
+  "hasDamageType": false,
+  "hasTarget": true,
+  "skillCompatible": false
+},
+{
+  "name": "Precognition",
+  "description": "You catch glimpses of the future, gaining insight into coming events or threats.",
+  "hasDamageType": false,
+  "hasTarget": false,
+  "skillCompatible": false
+},
+{
+  "name": "Probability Control",
+  "description": "You can alter the odds, increasing or decreasing chances of success or failure.",
+  "hasDamageType": false,
+  "hasTarget": true,
+  "skillCompatible": false
+},
+{
+  "name": "Psychometry",
+  "description": "You can learn facts about people or events by touching objects.",
+  "hasDamageType": false,
+  "hasTarget": false,
+  "skillCompatible": true
+},
+{
+  "name": "Radar Sense",
+  "description": "You can sense your surroundings like a bat or dolphin, using echolocation or other sense fields.",
+  "hasDamageType": false,
+  "hasTarget": false,
+  "skillCompatible": false
+},
+{
+  "name": "Regeneration",
+  "description": "Your body rapidly recovers from damage, healing wounds over time or instantly.",
+  "hasDamageType": false,
+  "hasTarget": false,
+  "skillCompatible": false
+},
+{
+  "name": "Shadow Step",
+  "description": "You can teleport between areas of darkness or shadow.",
+  "hasDamageType": false,
+  "hasTarget": false,
+  "skillCompatible": false
+},
+{
+  "name": "Shrinking",
+  "description": "You can drastically reduce your size while retaining your normal strength.",
+  "hasDamageType": false,
+  "hasTarget": false,
+  "skillCompatible": false
+},
+{
+  "name": "Sonar",
+  "description": "You can emit and interpret sound waves to sense your environment or detect hidden objects.",
+  "hasDamageType": false,
+  "hasTarget": false,
+  "skillCompatible": false
+},
+{
+  "name": "Sound Generation",
+  "description": "You can unleash powerful blasts of sound or control audio frequencies to harm or manipulate.",
+  "hasDamageType": true,
+  "hasTarget": true,
+  "skillCompatible": false
+},
+{
+  "name": "Stretching",
+  "description": "You can elongate your limbs or body to reach far distances or squeeze through tight spaces.",
+  "hasDamageType": false,
+  "hasTarget": false,
+  "skillCompatible": true
+},
+{
+  "name": "Super Speed",
+  "description": "You move with blinding speed, acting faster than normal heroes or enemies.",
+  "hasDamageType": false,
+  "hasTarget": false,
+  "skillCompatible": true
+},
+{
+  "name": "Super Strength",
+  "description": "Your physical strength far exceeds human limits.",
+  "hasDamageType": false,
+  "hasTarget": false,
+  "skillCompatible": true
+},
+{
+  "name": "Super-Sense (Extradimensional Sensitivity)",
+  "description": "You can detect things from beyond normal space and time, such as other planes or dimensional breaches.",
+  "hasDamageType": false,
+  "hasTarget": false,
+  "skillCompatible": false
+},
+{
+  "name": "Super-Sense (Smell)",
+  "description": "You can track or detect things by scent with far greater accuracy than humans.",
+  "hasDamageType": false,
+  "hasTarget": false,
+  "skillCompatible": false
+},
+{
+  "name": "Super-Sense (Hearing)",
+  "description": "You can detect even the faintest of sounds or recognize subtle auditory clues.",
+  "hasDamageType": false,
+  "hasTarget": false,
+  "skillCompatible": false
+},
+{
+  "name": "Super-Sense (Vision)",
+  "description": "Your vision includes telescopic, night, or other extended visual capabilities.",
+  "hasDamageType": false,
+  "hasTarget": false,
+  "skillCompatible": false
+},
+{
+  "name": "Swarm Form",
+  "description": "You can break apart into a swarm of tiny creatures or components, making yourself hard to damage.",
+  "hasDamageType": false,
+  "hasTarget": false,
+  "skillCompatible": false
+},
+{
+  "name": "Telekinesis",
+  "description": "You can move objects with your mind.",
+  "hasDamageType": false,
+  "hasTarget": true,
+  "skillCompatible": true
+},
+{
+  "name": "Telepathy",
+  "description": "You can read minds and communicate mentally.",
+  "hasDamageType": false,
+  "hasTarget": true,
+  "skillCompatible": false
+},
+{
+  "name": "Teleport",
+  "description": "You can instantly transport yourself across short or long distances.",
+  "hasDamageType": false,
+  "hasTarget": false,
+  "skillCompatible": false
+},
+{
+  "name": "Tunneling",
+  "description": "You can dig through earth or solid material with incredible speed.",
+  "hasDamageType": false,
+  "hasTarget": false,
+  "skillCompatible": false
+},
+{
+  "name": "Wall Crawl",
+  "description": "You can cling to and move across walls and ceilings like a spider.",
+  "hasDamageType": false,
+  "hasTarget": false,
+  "skillCompatible": true
+},
+{
+  "name": "Water Generation",
+  "description": "You can create or summon water, useful for attacks or utility.",
+  "hasDamageType": true,
+  "hasTarget": true,
+  "skillCompatible": false
+},
+{
+  "name": "Weapon Creation",
+  "description": "You can form weapons out of energy, bone, shadow, or other materials.",
+  "hasDamageType": true,
+  "hasTarget": true,
+  "skillCompatible": false
+},
+{
+  "name": "Weather Resistance",
+  "description": "You are unaffected by extreme environmental or weather conditions.",
+  "hasDamageType": false,
+  "hasTarget": false,
+  "skillCompatible": false
+},
+{
+  "name": "X-Ray Vision",
+  "description": "You can see through objects and barriers.",
+  "hasDamageType": false,
+  "hasTarget": false,
+  "skillCompatible": false
+},
+{
+  "name": "Zombie Control",
+  "description": "You can command zombies to act according to your will.",
+  "hasDamageType": false,
+  "hasTarget": true,
+  "skillCompatible": false
+}
+]

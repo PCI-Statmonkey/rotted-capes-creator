@@ -4,6 +4,7 @@ import { apiRequest } from "@/lib/queryClient";
 import { motion } from "framer-motion";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import {
   Tabs,
   TabsContent,
   TabsList,
