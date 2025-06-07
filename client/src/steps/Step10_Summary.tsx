@@ -9,6 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { toast } from "@/hooks/use-toast";
 import { calculateModifier, formatModifier } from "@/lib/utils";
 import { Check, Save, Shield, Heart, Target } from "lucide-react";
+import { apiRequest } from "@/lib/queryClient";
 import CharacterPdfButton from "@/components/CharacterPdfButton";
 
 export default function Step10_Summary() {
@@ -89,13 +90,7 @@ export default function Step10_Summary() {
       }
     };
 
-    const response = await fetch("/api/characters", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(payload)
-    });
+    const response = await apiRequest('POST', '/api/characters', payload);
 
     if (!response.ok) {
       throw new Error("Failed to save character");

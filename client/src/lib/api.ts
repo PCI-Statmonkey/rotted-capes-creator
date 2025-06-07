@@ -52,16 +52,10 @@ export const saveAnalyticsEvent = async (
   userId?: string
 ): Promise<any> => {
   try {
-    const response = await fetch('/api/analytics/events', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        event,
-        data,
-        userId
-      }),
+    const response = await apiRequest('POST', '/api/analytics/events', {
+      event,
+      data,
+      userId,
     });
 
     if (!response.ok) {
@@ -82,7 +76,7 @@ export const saveAnalyticsEvent = async (
  */
 export const getAnalyticsSummary = async (): Promise<any> => {
   try {
-    const response = await fetch('/api/analytics/summary');
+    const response = await apiRequest('GET', '/api/analytics/summary');
     
     if (!response.ok) {
       const errorData = await response.json();
@@ -100,7 +94,7 @@ export const getAnalyticsSummary = async (): Promise<any> => {
  */
 export const getGameContent = async (contentType: string): Promise<any[]> => {
   try {
-    const response = await fetch(`/api/game-content/${contentType}`);
+    const response = await apiRequest('GET', `/api/game-content/${contentType}`);
     
     if (!response.ok) {
       const errorData = await response.json();
@@ -126,7 +120,7 @@ export const getGameContent = async (contentType: string): Promise<any[]> => {
  */
 export const getGameContentById = async (contentType: string, id: number): Promise<any> => {
   try {
-    const response = await fetch(`/api/game-content/${contentType}/${id}`);
+    const response = await apiRequest('GET', `/api/game-content/${contentType}/${id}`);
     
     if (!response.ok) {
       const errorData = await response.json();
@@ -162,15 +156,12 @@ export const createGameContent = async (contentType: string, data: any): Promise
   }
   
   try {
-    const response = await fetch(`/api/game-content/${contentType}`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-Admin-Email': adminEmail, // Include admin email for verification
-      },
-      body: JSON.stringify(data),
-      credentials: 'include', // Include cookies for session-based auth
-    });
+    const response = await apiRequest(
+      'POST',
+      `/api/game-content/${contentType}`,
+      data,
+      { 'X-Admin-Email': adminEmail }
+    );
     
     if (!response.ok) {
       const errorData = await response.json();
@@ -199,15 +190,12 @@ export const updateGameContent = async (contentType: string, id: number, data: a
   }
 
   try {
-    const response = await fetch(`/api/game-content/${contentType}/${id}`, {
-      method: 'PATCH',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-Admin-Email': adminEmail, // Include admin email for verification
-      },
-      body: JSON.stringify(data),
-      credentials: 'include', // Include cookies for session-based auth
-    });
+    const response = await apiRequest(
+      'PATCH',
+      `/api/game-content/${contentType}/${id}`,
+      data,
+      { 'X-Admin-Email': adminEmail }
+    );
     
     if (!response.ok) {
       const errorData = await response.json();
@@ -236,13 +224,12 @@ export const deleteGameContent = async (contentType: string, id: number): Promis
   }
 
   try {
-    const response = await fetch(`/api/game-content/${contentType}/${id}`, {
-      method: 'DELETE',
-      headers: {
-        'X-Admin-Email': adminEmail, // Include admin email for verification
-      },
-      credentials: 'include', // Include cookies for session-based auth
-    });
+    const response = await apiRequest(
+      'DELETE',
+      `/api/game-content/${contentType}/${id}`,
+      undefined,
+      { 'X-Admin-Email': adminEmail }
+    );
     
     if (!response.ok) {
       const errorData = await response.json();
