@@ -19,7 +19,7 @@ import skillsData from "../../../client/src/rules/skills.json" assert { type: "j
 import skillSetsData from "../../../client/src/rules/skillSets.json" assert { type: "json" };
 import originsData from "../../../client/src/rules/origins.json" assert { type: "json" };
 import archetypesData from "../../../client/src/rules/archetypes.json" assert { type: "json" };
-import powersData from "../../../client/src/rules/powerMods.json" assert { type: "json" };
+import powersData from "../../../client/src/rules/powers.json" assert { type: "json" };
 import powerSetsData from "../../../client/src/rules/powerSets.json" assert { type: "json" };
 import powerModifiersData from "../../../client/src/rules/powerMods.json" assert { type: "json" };
 import originFeaturesData from "../../../client/src/rules/origin_features.json" assert { type: "json" };
