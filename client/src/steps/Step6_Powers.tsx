@@ -443,12 +443,10 @@ export default function Step6_Powers() {
 
   // Handle power set selection
   const handlePowerSetSelection = (powerSetName: string) => {
-    console.log("Selected power set:", powerSetName);
     setSelectedPowerSet(powerSetName);
     
     const powerSet = POWER_SETS.find(set => set.name === powerSetName);
     if (!powerSet) {
-      console.log("Power set not found", powerSetName);
       return;
     }
     
@@ -462,7 +460,6 @@ export default function Step6_Powers() {
       damageType: powerUsesDamageType(power.name) ? DAMAGE_TYPES[0] : undefined
     }));
     
-    console.log("Setting powers:", powers);
     setSelectedPowers(powers);
     
     // Update activeTab to "powers" to make sure the UI shows the selected powers

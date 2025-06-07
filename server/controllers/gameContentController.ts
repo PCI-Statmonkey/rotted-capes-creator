@@ -1,6 +1,5 @@
 // server/controllers/gameContentController.ts
 
-console.log("🔥🔥🔥 THIS IS THE REAL gameContentController.ts IN USE 🔥🔥🔥");
 
 import { Request, Response, NextFunction } from "express";
 import { storage } from "../storage";
