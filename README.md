@@ -34,6 +34,16 @@ npm run dev
 
 This launches Express on `localhost:5000` with Vite providing hot module reloading for the React client.
 
+## Type Checking
+
+Run the TypeScript compiler to verify the build:
+
+```bash
+npm run check
+```
+
+Be sure to run `npm install` before executing the check script so that all required dependencies are installed.
+
 ## Database Migrations
 
 Database schema changes are managed with Drizzle. To apply pending migrations run:
