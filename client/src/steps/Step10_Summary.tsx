@@ -79,14 +79,21 @@ export default function Step10_Summary() {
     const mockUserEmail = localStorage.getItem("mockUserEmail");
     const userId = 1; // TEMP: Replace with actual user lookup if needed
 
+    const { feats, powers, skills, gear, complications, ...base } = character;
+
     const payload = {
       userId,
       name: character.name,
       data: {
-        ...character,
+        ...base,
         createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString()
-      }
+        updatedAt: new Date().toISOString(),
+      },
+      feats,
+      powers,
+      skills,
+      gear,
+      complications,
     };
 
     const response = await fetch("/api/characters", {
@@ -104,7 +111,7 @@ export default function Step10_Summary() {
     const result = await response.json();
     toast({
       title: "Character Finalized",
-      description: `Your character has been saved as ID #${result.characterId}.`,
+      description: `Your character has been saved as ID #${result.id}.`,
     });
 
     window.location.assign("/profile"); // or wherever you want to go next

@@ -319,6 +319,64 @@ export const gear = pgTable("gear", {
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
 
+// Character-related tables for normalized data
+export const characterFeats = pgTable("character_feats", {
+  id: serial("id").primaryKey(),
+  characterId: integer("character_id")
+    .references(() => characters.id, { onDelete: "cascade" })
+    .notNull(),
+  featId: integer("feat_id").references(() => feats.id),
+  name: text("name").notNull(),
+  source: text("source"),
+  skillSetName: text("skill_set_name"),
+});
+
+export const characterPowers = pgTable("character_powers", {
+  id: serial("id").primaryKey(),
+  characterId: integer("character_id")
+    .references(() => characters.id, { onDelete: "cascade" })
+    .notNull(),
+  powerId: integer("power_id").references(() => powers.id),
+  name: text("name").notNull(),
+  description: text("description"),
+  cost: integer("cost"),
+  rank: integer("rank"),
+  perks: jsonb("perks").default([]).notNull(),
+  flaws: jsonb("flaws").default([]).notNull(),
+});
+
+export const characterSkills = pgTable("character_skills", {
+  id: serial("id").primaryKey(),
+  characterId: integer("character_id")
+    .references(() => characters.id, { onDelete: "cascade" })
+    .notNull(),
+  skillId: integer("skill_id").references(() => skills.id),
+  name: text("name").notNull(),
+  ability: text("ability").notNull(),
+  ranks: integer("ranks").notNull(),
+  specialization: text("specialization"),
+  trained: boolean("trained").default(true).notNull(),
+});
+
+export const characterGear = pgTable("character_gear", {
+  id: serial("id").primaryKey(),
+  characterId: integer("character_id")
+    .references(() => characters.id, { onDelete: "cascade" })
+    .notNull(),
+  gearId: integer("gear_id").references(() => gear.id),
+  name: text("name").notNull(),
+  description: text("description"),
+});
+
+export const characterComplications = pgTable("character_complications", {
+  id: serial("id").primaryKey(),
+  characterId: integer("character_id")
+    .references(() => characters.id, { onDelete: "cascade" })
+    .notNull(),
+  name: text("name").notNull(),
+  description: text("description").notNull(),
+});
+
 export const insertManeuverSchema = createInsertSchema(maneuvers);
 
 export const maneuverSchema = insertManeuverSchema.extend({
@@ -352,8 +410,65 @@ export const insertFeatSchema = createInsertSchema(feats).pick({
   input_label: true,
 });
 
+export const insertCharacterFeatSchema = createInsertSchema(characterFeats).pick({
+  characterId: true,
+  featId: true,
+  name: true,
+  source: true,
+  skillSetName: true,
+});
+
+export const insertCharacterPowerSchema = createInsertSchema(characterPowers).pick({
+  characterId: true,
+  powerId: true,
+  name: true,
+  description: true,
+  cost: true,
+  rank: true,
+  perks: true,
+  flaws: true,
+});
+
+export const insertCharacterSkillSchema = createInsertSchema(characterSkills).pick({
+  characterId: true,
+  skillId: true,
+  name: true,
+  ability: true,
+  ranks: true,
+  specialization: true,
+  trained: true,
+});
+
+export const insertCharacterGearSchema = createInsertSchema(characterGear).pick({
+  characterId: true,
+  gearId: true,
+  name: true,
+  description: true,
+});
+
+export const insertCharacterComplicationSchema = createInsertSchema(characterComplications).pick({
+  characterId: true,
+  name: true,
+  description: true,
+});
+
 export type Maneuver = z.infer<typeof maneuverSchema>;
 export type NewManeuver = z.infer<typeof insertManeuverSchema>;
 export type CharacterData = z.infer<typeof characterDataSchema>;
 export type Feat = typeof feats.$inferSelect;
 export type NewFeat = typeof feats.$inferInsert;
+
+export type CharacterFeat = typeof characterFeats.$inferSelect;
+export type NewCharacterFeat = typeof characterFeats.$inferInsert;
+
+export type CharacterPower = typeof characterPowers.$inferSelect;
+export type NewCharacterPower = typeof characterPowers.$inferInsert;
+
+export type CharacterSkill = typeof characterSkills.$inferSelect;
+export type NewCharacterSkill = typeof characterSkills.$inferInsert;
+
+export type CharacterGearItem = typeof characterGear.$inferSelect;
+export type NewCharacterGearItem = typeof characterGear.$inferInsert;
+
+export type CharacterComplication = typeof characterComplications.$inferSelect;
+export type NewCharacterComplication = typeof characterComplications.$inferInsert;
