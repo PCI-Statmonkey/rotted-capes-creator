@@ -289,3 +289,11 @@ export const getAnalyticsSummary = async () => {
     throw error;
   }
 };
+
+export const getIdToken = async (): Promise<string | null> => {
+  const user = auth.currentUser;
+  if (user) {
+    return await user.getIdToken();
+  }
+  return null;
+};

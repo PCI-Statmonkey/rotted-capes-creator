@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
+import { apiRequest } from "@/lib/queryClient";
 import { Dialog } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 
@@ -22,9 +22,9 @@ export default function AdminManeuvers() {
   });
 
   useEffect(() => {
-    axios.get("/api/game-content/maneuvers").then((res) => {
-      setManeuvers(res.data);
-    });
+    apiRequest('GET', '/api/game-content/maneuvers')
+      .then(res => res.json())
+      .then(setManeuvers);
   }, []);
 
   const openEditor = (maneuver?: Maneuver) => {
@@ -44,19 +44,19 @@ export default function AdminManeuvers() {
 
   const saveManeuver = async () => {
     if (editing) {
-      const res = await axios.put(`/api/game-content/maneuvers/${editing.id}`, formData);
-      setManeuvers((prev) =>
-        prev.map((m) => (m.id === editing.id ? res.data : m))
-      );
+      const res = await apiRequest('PUT', `/api/game-content/maneuvers/${editing.id}`, formData);
+      const data = await res.json();
+      setManeuvers((prev) => prev.map((m) => (m.id === editing.id ? data : m)));
     } else {
-      const res = await axios.post("/api/game-content/maneuvers", formData);
-      setManeuvers((prev) => [...prev, res.data]);
+      const res = await apiRequest('POST', '/api/game-content/maneuvers', formData);
+      const data = await res.json();
+      setManeuvers((prev) => [...prev, data]);
     }
     setModalOpen(false);
   };
 
   const deleteManeuver = async (id: number) => {
-    await axios.delete(`/api/game-content/maneuvers/${id}`);
+    await apiRequest('DELETE', `/api/game-content/maneuvers/${id}`);
     setManeuvers((prev) => prev.filter((m) => m.id !== id));
   };
 

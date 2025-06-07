@@ -17,21 +17,13 @@ import { eq } from "drizzle-orm";
 
 console.log("✅ Loaded gameContentController.ts");
 
-// TypeScript session extension
-declare module 'express-session' {
-  export interface SessionData {
-    user: {
-      id: string;
-      username: string;
-      isAdmin: boolean;
-    };
-  }
-}
-
 // Middleware to verify admin (disabled for development)
-export function verifyAdmin(_req: Request, _res: Response, next: NextFunction) {
-  console.log("⚠️ Admin check bypassed (development mode)");
-  return next();
+export function verifyAdmin(req: Request, res: Response, next: NextFunction) {
+  const user = (req as any).user as { email?: string } | undefined;
+  if (user && user.email === 'admin@rottedcapes.com') {
+    return next();
+  }
+  return res.status(403).json({ error: 'Unauthorized. Admin access required.' });
 }
 
 // Helper to handle validation errors
