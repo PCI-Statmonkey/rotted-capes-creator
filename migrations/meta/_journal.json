@@ -8,6 +8,13 @@
       "when": 1747925095303,
       "tag": "0000_flippant_harrier",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1749308716749,
+      "tag": "0001_add_character_relations",
+      "breakpoints": false
     }
   ]
 }
