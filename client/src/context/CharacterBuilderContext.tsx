@@ -1,4 +1,11 @@
-import React, { createContext, useContext, useState, ReactNode } from "react";
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  ReactNode,
+} from "react";
+import { loadFromLocalStorage, saveToLocalStorage, BUILDER_STORAGE_KEY } from "@/lib/utils";
 
 export type CharacterSkill = {
   name: string;
@@ -39,22 +46,43 @@ interface CharacterBuilderContextValue extends CharacterBuilderState {
 const CharacterBuilderContext = createContext<CharacterBuilderContextValue | undefined>(undefined);
 
 export const CharacterBuilderProvider = ({ children }: { children: ReactNode }) => {
-  const [abilityScores, setAbilityScores] = useState<CharacterBuilderState["abilityScores"]>({
-    STR: 10,
-    DEX: 10,
-    CON: 10,
-    INT: 10,
-    WIS: 10,
-    CHA: 10,
-  });
-  const [startingSkills, setStartingSkills] = useState<string[]>([]);
-  const [selectedSkills, setSelectedSkills] = useState<CharacterSkill[]>([]);
-  const [selectedFeats, setSelectedFeats] = useState<{ name: string; input?: string }[]>([]);
-  const [selectedSkillSets, setSelectedSkillSets] = useState<string[]>([]);
-  const [selectedManeuvers, setSelectedManeuvers] = useState<string[]>([]);
-  const [startingFeat, setStartingFeat] = useState<string>("");
-  const [archetype, setArchetype] = useState<string>("");
-  const [currentStep, setCurrentStep] = useState<number>(1);
+  const saved = loadFromLocalStorage(BUILDER_STORAGE_KEY) as Partial<CharacterBuilderState> | null;
+  const [abilityScores, setAbilityScores] = useState<CharacterBuilderState["abilityScores"]>(
+    saved?.abilityScores || {
+      STR: 10,
+      DEX: 10,
+      CON: 10,
+      INT: 10,
+      WIS: 10,
+      CHA: 10,
+    }
+  );
+  const [startingSkills, setStartingSkills] = useState<string[]>(saved?.startingSkills || []);
+  const [selectedSkills, setSelectedSkills] = useState<CharacterSkill[]>(saved?.selectedSkills || []);
+  const [selectedFeats, setSelectedFeats] = useState<{ name: string; input?: string }[]>(
+    saved?.selectedFeats || []
+  );
+  const [selectedSkillSets, setSelectedSkillSets] = useState<string[]>(saved?.selectedSkillSets || []);
+  const [selectedManeuvers, setSelectedManeuvers] = useState<string[]>(saved?.selectedManeuvers || []);
+  const [startingFeat, setStartingFeat] = useState<string>(saved?.startingFeat || "");
+  const [archetype, setArchetype] = useState<string>(saved?.archetype || "");
+  const [currentStep, setCurrentStep] = useState<number>(saved?.currentStep || 1);
+
+  // Persist state to local storage whenever it changes
+  useEffect(() => {
+    const state: CharacterBuilderState = {
+      abilityScores,
+      startingSkills,
+      selectedSkills,
+      selectedFeats,
+      selectedSkillSets,
+      selectedManeuvers,
+      startingFeat,
+      archetype,
+      currentStep,
+    };
+    saveToLocalStorage(BUILDER_STORAGE_KEY, state);
+  }, [abilityScores, startingSkills, selectedSkills, selectedFeats, selectedSkillSets, selectedManeuvers, startingFeat, archetype, currentStep]);
 
   const value: CharacterBuilderContextValue = {
     abilityScores,

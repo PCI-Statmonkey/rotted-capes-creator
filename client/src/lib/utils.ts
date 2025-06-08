@@ -14,6 +14,7 @@ export function formatModifier(mod: number): string {
 }
 
 export const STORAGE_KEY = "rotted-capes-character";
+export const BUILDER_STORAGE_KEY = "rotted-capes-builder";
 
 export function saveToLocalStorage(key: string, data: any) {
   try {
