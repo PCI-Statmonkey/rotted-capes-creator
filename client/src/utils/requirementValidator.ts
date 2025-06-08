@@ -255,7 +255,6 @@ export const getMissingPrereqs = (feat, character) => {
         }
         break;
       }
-        break;
       
       case 'skill':
         if (!allSkills.has(req.name.toLowerCase())) {

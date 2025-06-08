@@ -445,8 +445,12 @@ const Step5_Skills = () => {
                                   setWorkingSelectedManeuvers(updated);
                                 }}
                                 maneuvers={maneuvers}
-                                meetsPrerequisites={meetsPrerequisites}
-                                getMissingPrereqs={getMissingPrereqs}
+                                meetsPrerequisites={(m) =>
+                                  meetsPrerequisites(m, characterData)
+                                }
+                                getMissingPrereqs={(m) =>
+                                  getMissingPrereqs(m, characterData)
+                                }
                               />
                             )}
                           </div>
