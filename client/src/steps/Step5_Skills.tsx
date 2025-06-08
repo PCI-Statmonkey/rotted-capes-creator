@@ -1,6 +1,5 @@
 // Step5_Skills.tsx
 import { useEffect, useState } from "react";
-import { apiRequest } from "@/lib/queryClient";
 import { motion } from "framer-motion";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
