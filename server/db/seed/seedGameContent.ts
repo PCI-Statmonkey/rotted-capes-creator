@@ -14,12 +14,12 @@ import {
   originFeatures,
   gear,
 } from "../../../shared/schema";
-import featsData from "../../../client/src/rules/Feats.json" assert { type: "json" };
+import featsData from "../../../client/src/rules/feats.json" assert { type: "json" };
 import skillsData from "../../../client/src/rules/skills.json" assert { type: "json" };
 import skillSetsData from "../../../client/src/rules/skillSets.json" assert { type: "json" };
 import originsData from "../../../client/src/rules/origins.json" assert { type: "json" };
 import archetypesData from "../../../client/src/rules/archetypes.json" assert { type: "json" };
-import powersData from "../../../client/src/rules/powerMods.json" assert { type: "json" };
+import powersData from "../../../client/src/rules/powers.json" assert { type: "json" };
 import powerSetsData from "../../../client/src/rules/powerSets.json" assert { type: "json" };
 import powerModifiersData from "../../../client/src/rules/powerMods.json" assert { type: "json" };
 import originFeaturesData from "../../../client/src/rules/origin_features.json" assert { type: "json" };
@@ -42,11 +42,13 @@ async function runSeed() {
     await db.insert(feats).values({
       name: feat.name,
       description: feat.description || "",
-      prerequisites: feat.prerequisite ? [feat.prerequisite] : [],
-      tags: feat.tags || [],
-      notes: feat.notes || "",
-      benefits: feat.benefits || "",
-    }).onConflictDoNothing();
+      type: feat.type ?? "normal",
+      repeatable: feat.repeatable ?? false,
+      prerequisites: feat.prerequisites ?? [],
+      tags: feat.tags ?? [],
+      notes: feat.notes ?? "",
+      input_label: feat.input_label ?? null,
+    } as any).onConflictDoNothing();
   }
 
   console.log("🌱 Seeding skill sets...");
@@ -130,6 +132,12 @@ async function runSeed() {
       name: maneuver.name,
       type: maneuver.type,
       requirements: maneuver.requirements || [],
+      attack: maneuver.attack || "",
+      action: maneuver.action || "",
+      range: maneuver.range || "",
+      effect: maneuver.effect || "",
+      special: maneuver.special || null,
+      weapons: maneuver.weapons || null,
     }).onConflictDoNothing();
 
   }
