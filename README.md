@@ -32,6 +32,9 @@ npm install
 npm run dev
 ```
 
+Whenever pulling new changes that update `package.json` or `package-lock.json`,
+run `npm install` again so Node can resolve the latest dependencies.
+
 This launches Express on `localhost:5000` with Vite providing hot module reloading for the React client.
 
 ## Type Checking
