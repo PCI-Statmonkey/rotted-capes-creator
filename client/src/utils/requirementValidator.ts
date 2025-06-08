@@ -115,10 +115,13 @@ export const meetsPrerequisites = (feat, character) => {
     .filter((set) => selectedSkillSets.includes(set.name))
     .flatMap((set) => set.skills);
 
+  const normalizeSkill = (s: any) =>
+    typeof s === 'string' ? s.toLowerCase() : s?.name?.toLowerCase();
+
   const allSkills = new Set([
     ...selectedSkills.map((s) => s.name.toLowerCase()),
     ...startingSkills.map((s) => s.toLowerCase()),
-    ...skillsFromSets.map((s) => s.toLowerCase())
+    ...skillsFromSets.map((s) => normalizeSkill(s))
   ]);
 
   const ownedFeats = selectedFeats.map(f => f.name);
@@ -196,10 +199,13 @@ export const getMissingPrereqs = (feat, character) => {
     .filter((set) => selectedSkillSets.includes(set.name))
     .flatMap((set) => set.skills);
 
+  const normalizeSkill = (s: any) =>
+    typeof s === 'string' ? s.toLowerCase() : s?.name?.toLowerCase();
+
   const allSkills = new Set([
     ...selectedSkills.map((s) => s.name.toLowerCase()),
     ...startingSkills.map((s) => s.toLowerCase()),
-    ...skillsFromSets.map((s) => s.toLowerCase())
+    ...skillsFromSets.map((s) => normalizeSkill(s))
   ]);
 
   const ownedFeats = selectedFeats.map(f => f.name);
