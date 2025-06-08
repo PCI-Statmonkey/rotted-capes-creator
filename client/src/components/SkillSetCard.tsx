@@ -7,8 +7,8 @@ interface SkillSetCardProps {
     name: string;
     points: number;
     description: string;
-    skills?: string[];
-    feats?: string[];
+    skills?: (string | { name: string })[];
+    feats?: (string | { name: string })[];
   };
   isSelected: boolean;
   onToggle: () => void;
@@ -33,9 +33,10 @@ const SkillSetCard: React.FC<SkillSetCardProps> = ({
             <>
               <div className="text-sm text-white font-semibold mb-1">Skills Gained:</div>
               <ul className="text-sm text-white list-disc list-inside">
-                {set.skills.map((skill) => (
-                  <li key={skill}>{skill}</li>
-                ))}
+                {set.skills.map((skill) => {
+                  const label = typeof skill === 'string' ? skill : skill.name;
+                  return <li key={label}>{label}</li>;
+                })}
               </ul>
             </>
           )}
@@ -43,9 +44,10 @@ const SkillSetCard: React.FC<SkillSetCardProps> = ({
             <>
               <div className="text-sm text-white font-semibold mt-2 mb-1">Feats Gained:</div>
               <ul className="text-sm text-white list-disc list-inside">
-                {set.feats.map((feat) => (
-                  <li key={feat}>{feat}</li>
-                ))}
+                {set.feats.map((feat) => {
+                  const label = typeof feat === 'string' ? feat : feat.name;
+                  return <li key={label}>{label}</li>;
+                })}
               </ul>
             </>
           )}
