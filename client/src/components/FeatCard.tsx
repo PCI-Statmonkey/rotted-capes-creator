@@ -20,7 +20,7 @@ interface FeatCardProps {
   isSelected: boolean;
   isDisabled: boolean;
   missingPrereqs: string[];
-  onToggle: () => void;
+  onToggle: (checked: boolean) => void;
   index?: number; // for "Learn Maneuver"
   showDropdown?: boolean;
   maneuvers?: Maneuver[];
@@ -48,7 +48,11 @@ const FeatCard: React.FC<FeatCardProps> = ({
           isDisabled ? "opacity-60 text-gray-400 cursor-not-allowed" : ""
         }`}
       >
-        <Checkbox disabled={isDisabled} checked={isSelected} onCheckedChange={onToggle} />
+        <Checkbox
+          disabled={isDisabled}
+          checked={isSelected}
+          onCheckedChange={(checked) => onToggle(!!checked)}
+        />
         {feat.name} — {feat.description}
       </Label>
       {isDisabled && (

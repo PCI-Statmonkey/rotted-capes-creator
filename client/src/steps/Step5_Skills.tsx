@@ -181,6 +181,31 @@ const Step5_Skills = () => {
     }
   };
 
+  // Remove the most recently added instance of a feat by name
+  const removeFeatByName = (featName: string) => {
+    setWorkingSelectedFeats((prev) => {
+      const index = prev.map((f) => f.name).lastIndexOf(featName);
+      if (index === -1) return prev;
+      const updated = prev.filter((_, i) => i !== index);
+      // Also remove corresponding maneuver selection if needed
+      setWorkingSelectedManeuvers((prevM) => {
+        if (prev[index]?.name === "Learn Maneuver") {
+          const m = [...prevM];
+          m.splice(index, 1);
+          return m;
+        }
+        return prevM;
+      });
+      return updated;
+    });
+  };
+
+  // Toggle a feat via checkbox interaction
+  const toggleFeat = (featName: string, checked: boolean) => {
+    if (checked) addFeat(featName);
+    else removeFeatByName(featName);
+  };
+
   // --- Navigation Handlers ---
   const handlePrevious = () => setCurrentStep(4);
 
@@ -326,7 +351,7 @@ const Step5_Skills = () => {
                     isSelected={count > 0} // Is this feat type selected at least once?
                     isDisabled={isDisabled} // Is this feat disabled due to prereqs?
                     missingPrereqs={missing} // Pass missing prereqs for display in card
-                    onToggle={() => addFeat(feat.name)} // Handler to add the feat
+                    onToggle={(checked) => toggleFeat(feat.name, checked)}
                     showDropdown={feat.name === "Learn Maneuver" && count > 0} // Show dropdown if 'Learn Maneuver' is selected
                     maneuvers={feat.name === "Learn Maneuver" ? maneuvers : undefined} // Pass maneuvers data for dropdown
                   />
