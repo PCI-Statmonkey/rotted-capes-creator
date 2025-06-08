@@ -16,6 +16,7 @@ import SkillSetCard from "@/components/SkillSetCard";
 import SkillCard from "@/components/SkillCard";
 import FeatCard from "@/components/FeatCard";
 import { meetsPrerequisites, getMissingPrereqs } from "@/utils/requirementValidator";
+import useCachedGameContent from "@/hooks/useCachedGameContent";
 
 // Basic starting skills list
 const basicStartingSkills = [
@@ -62,36 +63,7 @@ const Step5_Skills = () => {
   } = useCharacterBuilder();
 
   // --- Data Fetching & Initialization ---
-  // Fetch maneuvers from API on component mount
-  useEffect(() => {
-    const fetchManeuvers = async () => {
-      try {
-        const res = await apiRequest('GET', '/api/game-content/maneuvers');
-        const data = await res.json();
-        setManeuvers(Array.isArray(data) ? data : []);
-      } catch (error) {
-        console.error("Failed to fetch maneuvers:", error);
-        setManeuvers([]);
-      }
-    };
-    fetchManeuvers();
-  }, []); // Run once on component mount
-
-  // Load skills, feats, and skill sets from local JSON files
-  useEffect(() => {
-    try {
-      // Sort feats alphabetically for consistent display
-      setFeats([...featsData].sort((a: any, b: any) => a.name.localeCompare(b.name)));
-    } catch (error) {
-      console.error("Failed to load feats data:", error);
-      setFeats([]);
-    }
-    setSkills(skillsData);
-    setSkillSets(allSkillSets);
-  }, []); // Run once on component mount
-  
   // Data is fetched and cached via useCachedGameContent hook
-main
 
   // --- Point Calculation Logic ---
   // Recalculate available points whenever selections change

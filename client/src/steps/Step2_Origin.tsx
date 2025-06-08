@@ -54,6 +54,32 @@ export default function Step2_Origin() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  // Initialize state based on any previously saved origin details
+  useEffect(() => {
+    if (!character.origin) return;
+
+    // Handle Highly Trained with stored ability bonuses
+    if (character.origin.startsWith("Highly Trained")) {
+      setSelectedOrigin("Highly Trained");
+      const match = character.origin.match(/Bonuses:\s*\+1 ([^,]+),\s*\+1 ([^,]+),\s*\+1 ([^)]+)/);
+      if (match) {
+        setSelectedAbilities({ 0: match[1], 1: match[2], 2: match[3] });
+      }
+      return;
+    }
+
+    // Handle Mystic subtype
+    if (character.origin.startsWith("Mystic")) {
+      setSelectedOrigin("Mystic");
+      const subMatch = character.origin.match(/Mystic \(([^:]+):/);
+      if (subMatch) setSelectedMysticType(subMatch[1]);
+      return;
+    }
+
+    // Default case: just set the origin name
+    setSelectedOrigin(character.origin);
+  }, []);
+
   const handleContinue = () => {
     if (selectedOrigin) {
       // For Highly Trained, store which abilities get bonuses
