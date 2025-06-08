@@ -20,7 +20,7 @@ interface FeatCardProps {
   isSelected: boolean;
   isDisabled: boolean;
   missingPrereqs: string[];
-  onToggle: () => void;
+  onToggle: (checked: boolean) => void;
   index?: number; // for "Learn Maneuver"
   showDropdown?: boolean;
   maneuvers?: Maneuver[];
@@ -45,10 +45,16 @@ const FeatCard: React.FC<FeatCardProps> = ({
       <Label
         title={isDisabled ? "You don’t meet the prerequisites for this feat" : ""}
         className={`flex items-center gap-2 ${
-          isDisabled ? "opacity-60 text-gray-400 cursor-not-allowed" : ""
+          isDisabled
+            ? "opacity-50 text-gray-400 cursor-not-allowed pointer-events-none"
+            : ""
         }`}
       >
-        <Checkbox disabled={isDisabled} checked={isSelected} onCheckedChange={onToggle} />
+        <Checkbox
+          disabled={isDisabled}
+          checked={isSelected}
+          onCheckedChange={(checked) => onToggle(!!checked)}
+        />
         {feat.name} — {feat.description}
       </Label>
       {isDisabled && (
