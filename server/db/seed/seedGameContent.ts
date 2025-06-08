@@ -14,7 +14,7 @@ import {
   originFeatures,
   gear,
 } from "../../../shared/schema";
-import featsData from "../../../client/src/rules/Feats.json" assert { type: "json" };
+import featsData from "../../../client/src/rules/feats.json" assert { type: "json" };
 import skillsData from "../../../client/src/rules/skills.json" assert { type: "json" };
 import skillSetsData from "../../../client/src/rules/skillSets.json" assert { type: "json" };
 import originsData from "../../../client/src/rules/origins.json" assert { type: "json" };
