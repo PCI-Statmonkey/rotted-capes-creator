@@ -378,21 +378,7 @@ const Step5_Skills = () => {
                     maneuvers={feat.name === "Learn Maneuver" ? maneuvers : undefined} // Pass maneuvers data for dropdown
                   />
 
-                  {/* Display missing prerequisites if disabled */}
-                  {isDisabled && missing.length > 0 && (
-                    <ul className="text-sm text-red-500 ml-4 mt-1 list-disc">
-                      {missing.map((req: any, idx: number) => {
-                        let label = req;
-                        if (typeof req === 'object') {
-                          if (req.type === 'ability') label = `${req.name} ${req.value}`;
-                          else if (req.type === 'skill' || req.type === 'startingSkill') label = req.name;
-                          else if (req.type === 'feat') label = `Feat: ${req.name}`;
-                          else label = JSON.stringify(req);
-                        }
-                        return <li key={idx}>{label}</li>;
-                      })}
-                    </ul>
-                  )}
+
 
                   {/* Render input fields and remove buttons for each instance of a selected feat */}
                   {count > 0 && (
