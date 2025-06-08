@@ -8,7 +8,7 @@ import { useCharacter } from "@/context/CharacterContext";
 import { trackEvent } from "@/lib/analytics";
 import { calculateModifier, formatModifier } from "@/lib/utils";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import { useCharacterBuilder } from "@/lib/Stores/characterBuilder";
+import { useCharacterBuilder } from "@/context/CharacterBuilderContext";
 
 
 // Define the point buy cost table

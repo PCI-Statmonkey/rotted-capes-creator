@@ -1,6 +1,5 @@
 // Step5_Skills.tsx
 import { useEffect, useState } from "react";
-import { apiRequest } from "@/lib/queryClient";
 import { motion } from "framer-motion";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -10,12 +9,13 @@ import {
   TabsList,
   TabsTrigger,
 } from "@/components/ui/tabs";
-import { useCharacterBuilder } from "@/lib/Stores/characterBuilder";
+import { useCharacterBuilder } from "@/context/CharacterBuilderContext";
 import ManeuverDropdown from "@/components/ManeuverDropdown";
 import SkillSetCard from "@/components/SkillSetCard";
 import SkillCard from "@/components/SkillCard";
 import FeatCard from "@/components/FeatCard";
 import { meetsPrerequisites, getMissingPrereqs } from "@/utils/requirementValidator";
+import useCachedGameContent from "@/hooks/useCachedGameContent";
 
 // Basic starting skills list
 const basicStartingSkills = [
@@ -29,7 +29,23 @@ const basicStartingSkills = [
 
 const Step5_Skills = () => {
   // Destructure character builder state
-  const { abilityScores = {}, archetype } = useCharacterBuilder();
+  const {
+    abilityScores = {},
+    archetype,
+    startingSkills,
+    selectedSkills,
+    selectedFeats,
+    selectedSkillSets,
+    selectedManeuvers,
+    startingFeat,
+    setStartingSkills,
+    setSelectedSkills,
+    setSelectedFeats,
+    setSelectedSkillSets,
+    setSelectedManeuvers,
+    setStartingFeat,
+    setCurrentStep,
+  } = useCharacterBuilder();
 
   // --- Local state for working selections ---
   const [workingStartingSkills, setWorkingStartingSkills] = useState<string[]>([]);
@@ -50,48 +66,19 @@ const Step5_Skills = () => {
   const [availablePoints, setAvailablePoints] = useState(20); // Initial points
   const [currentTab, setCurrentTab] = useState("starting"); // Current active tab
 
-  // Destructure character builder setters to persist selections
-  const {
-    setStartingSkills,
-    setSelectedSkills,
-    setSelectedFeats,
-    setSelectedSkillSets,
-    setSelectedManeuver,
-    setStartingFeat,
-    setCurrentStep,
-  } = useCharacterBuilder();
+
 
   // --- Data Fetching & Initialization ---
-  // Fetch maneuvers from API on component mount
-  useEffect(() => {
-    const fetchManeuvers = async () => {
-      try {
-        const res = await apiRequest('GET', '/api/game-content/maneuvers');
-        const data = await res.json();
-        setManeuvers(Array.isArray(data) ? data : []);
-      } catch (error) {
-        console.error("Failed to fetch maneuvers:", error);
-        setManeuvers([]);
-      }
-    };
-    fetchManeuvers();
-  }, []); // Run once on component mount
-
-  // Load skills, feats, and skill sets from local JSON files
-  useEffect(() => {
-    try {
-      // Sort feats alphabetically for consistent display
-      setFeats([...featsData].sort((a: any, b: any) => a.name.localeCompare(b.name)));
-    } catch (error) {
-      console.error("Failed to load feats data:", error);
-      setFeats([]);
-    }
-    setSkills(skillsData);
-    setSkillSets(allSkillSets);
-  }, []); // Run once on component mount
-  
   // Data is fetched and cached via useCachedGameContent hook
-main
+  useEffect(() => {
+    if (startingSkills) setWorkingStartingSkills(startingSkills);
+    if (selectedSkills) setWorkingSelectedSkills(selectedSkills);
+    if (selectedFeats) setWorkingSelectedFeats(selectedFeats as any);
+    if (selectedSkillSets) setWorkingSelectedSkillSets(selectedSkillSets);
+    if (selectedManeuvers) setWorkingSelectedManeuvers(selectedManeuvers);
+    if (startingFeat) setWorkingStartingFeat(startingFeat);
+  }, []);
+
 
   // --- Point Calculation Logic ---
   // Recalculate available points whenever selections change
@@ -110,6 +97,16 @@ main
       workingSelectedSkills.length + workingSelectedFeats.length * 5 + skillSetPoints;
     setAvailablePoints(20 - pointsUsed); // Update available points
   }, [workingSelectedSkills, workingSelectedFeats, workingSelectedSkillSets, skillSets, archetype]);
+
+  // Persist selections whenever the user switches tabs
+  useEffect(() => {
+    setStartingSkills(workingStartingSkills);
+    setSelectedSkills(workingSelectedSkills);
+    setSelectedFeats(workingSelectedFeats);
+    setSelectedSkillSets(workingSelectedSkillSets);
+    setSelectedManeuvers(workingSelectedManeuvers);
+    setStartingFeat(workingStartingFeat);
+  }, [currentTab]);
 
   // --- Handlers for Toggling Selections ---
 
@@ -209,6 +206,31 @@ main
     }
   };
 
+  // Remove the most recently added instance of a feat by name
+  const removeFeatByName = (featName: string) => {
+    setWorkingSelectedFeats((prev) => {
+      const index = prev.map((f) => f.name).lastIndexOf(featName);
+      if (index === -1) return prev;
+      const updated = prev.filter((_, i) => i !== index);
+      // Also remove corresponding maneuver selection if needed
+      setWorkingSelectedManeuvers((prevM) => {
+        if (prev[index]?.name === "Learn Maneuver") {
+          const m = [...prevM];
+          m.splice(index, 1);
+          return m;
+        }
+        return prevM;
+      });
+      return updated;
+    });
+  };
+
+  // Toggle a feat via checkbox interaction
+  const toggleFeat = (featName: string, checked: boolean) => {
+    if (checked) addFeat(featName);
+    else removeFeatByName(featName);
+  };
+
   // --- Navigation Handlers ---
   const handlePrevious = () => setCurrentStep(4);
 
@@ -235,7 +257,7 @@ main
     setSelectedSkills(workingSelectedSkills);
     setSelectedFeats(workingSelectedFeats);
     setSelectedSkillSets(workingSelectedSkillSets);
-    setSelectedManeuver(workingSelectedManeuvers);
+    setSelectedManeuvers(workingSelectedManeuvers);
     setStartingFeat(workingStartingFeat);
     setCurrentStep(6); // Move to the next step
   };
@@ -342,38 +364,19 @@ main
               const isDisabled = !meetsPrerequisites(feat, characterData);
               const missing = getMissingPrereqs(feat, characterData); // Get details of missing prerequisites
 
-              return ( // <<-- This 'return' was missing, causing the syntax error
-                <div key={feat.name} className={`mb-4 ${isDisabled ? 'opacity-60' : ''}`} onClick={() => {
-                  // If the feat is disabled due to missing prerequisites, show an alert
-                  if (isDisabled) {
-                    alert(`You do not meet the prerequisites for ${feat.name}.\n\nMissing:\n` + missing.join(', '));
-                  }
-                }}>
+              return (
+                <div key={feat.name} className={`mb-4 ${isDisabled ? 'opacity-50' : ''}`}>
                   <FeatCard
                     feat={feat}
                     isSelected={count > 0} // Is this feat type selected at least once?
                     isDisabled={isDisabled} // Is this feat disabled due to prereqs?
                     missingPrereqs={missing} // Pass missing prereqs for display in card
-                    onToggle={() => addFeat(feat.name)} // Handler to add the feat
+                    onToggle={(checked) => toggleFeat(feat.name, checked)}
                     showDropdown={feat.name === "Learn Maneuver" && count > 0} // Show dropdown if 'Learn Maneuver' is selected
                     maneuvers={feat.name === "Learn Maneuver" ? maneuvers : undefined} // Pass maneuvers data for dropdown
                   />
 
-                  {/* Display missing prerequisites if disabled */}
-                  {isDisabled && missing.length > 0 && (
-                    <ul className="text-sm text-red-500 ml-4 mt-1 list-disc">
-                      {missing.map((req: any, idx: number) => {
-                        let label = req;
-                        if (typeof req === 'object') {
-                          if (req.type === 'ability') label = `${req.name} ${req.value}`;
-                          else if (req.type === 'skill' || req.type === 'startingSkill') label = req.name;
-                          else if (req.type === 'feat') label = `Feat: ${req.name}`;
-                          else label = JSON.stringify(req);
-                        }
-                        return <li key={idx}>{label}</li>;
-                      })}
-                    </ul>
-                  )}
+
 
                   {/* Render input fields and remove buttons for each instance of a selected feat */}
                   {count > 0 && (
