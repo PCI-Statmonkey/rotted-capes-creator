@@ -70,16 +70,6 @@ const Step5_Skills = () => {
 
   // --- Initialization ---
   // Load any previously saved selections on mount
-  // Destructure character builder setters to persist selections
-  const {
-    setStartingSkills,
-    setSelectedSkills,
-    setSelectedFeats,
-    setSelectedSkillSets,
-    setSelectedManeuvers,
-    setStartingFeat,
-    setCurrentStep,
-  } = useCharacterBuilder();
 
   // --- Data Fetching & Initialization ---
   // Data is fetched and cached via useCachedGameContent hook

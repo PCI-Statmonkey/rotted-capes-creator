@@ -29,22 +29,22 @@ const SkillSetCard: React.FC<SkillSetCardProps> = ({
 
       {isSelected && (
         <div className="mt-2 font-sans">
-          {set.skills?.length > 0 && (
+          {(set.skills?.length ?? 0) > 0 && (
             <>
               <div className="text-sm text-white font-semibold mb-1">Skills Gained:</div>
               <ul className="text-sm text-white list-disc list-inside">
-                {set.skills.map((skill) => {
+                {set.skills?.map((skill) => {
                   const label = typeof skill === 'string' ? skill : skill.name;
                   return <li key={label}>{label}</li>;
                 })}
               </ul>
             </>
           )}
-          {set.feats?.length > 0 && (
+          {(set.feats?.length ?? 0) > 0 && (
             <>
               <div className="text-sm text-white font-semibold mt-2 mb-1">Feats Gained:</div>
               <ul className="text-sm text-white list-disc list-inside">
-                {set.feats.map((feat) => {
+                {set.feats?.map((feat) => {
                   const label = typeof feat === 'string' ? feat : feat.name;
                   return <li key={label}>{label}</li>;
                 })}

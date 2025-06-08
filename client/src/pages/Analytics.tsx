@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { getAnalyticsSummary } from "@/lib/firebase";
 import { motion } from "framer-motion";
@@ -78,29 +78,29 @@ export default function Analytics() {
     }
   }, [currentUser, isAdmin, isLoading, navigate, toast, hasDirectAccess]);
 
-  // Fetch analytics data
-  useEffect(() => {
-    async function fetchAnalytics() {
-      if (currentUser && isAdmin) {
-        try {
-          setIsLoading(true);
-          const data = await getAnalyticsSummary();
-          setAnalyticsData(data);
-        } catch (error) {
-          console.error("Error fetching analytics:", error);
-          toast({
-            title: "Error",
-            description: "Failed to load analytics data. Please try again.",
-            variant: "destructive"
-          });
-        } finally {
-          setIsLoading(false);
-        }
+  const fetchAnalytics = useCallback(async () => {
+    if (currentUser && isAdmin) {
+      try {
+        setIsLoading(true);
+        const data = await getAnalyticsSummary();
+        setAnalyticsData(data);
+      } catch (error) {
+        console.error("Error fetching analytics:", error);
+        toast({
+          title: "Error",
+          description: "Failed to load analytics data. Please try again.",
+          variant: "destructive",
+        });
+      } finally {
+        setIsLoading(false);
       }
     }
-    
-    fetchAnalytics();
   }, [currentUser, isAdmin, toast]);
+
+  // Fetch analytics data
+  useEffect(() => {
+    fetchAnalytics();
+  }, [fetchAnalytics]);
 
   // Process analytics data for visualization
   const processAnalyticsData = () => {
@@ -125,7 +125,7 @@ export default function Analytics() {
     );
     
     // Process origin distribution
-    const origins = {};
+    const origins: Record<string, number> = {};
     characterEvents.forEach(event => {
       if (event.eventData?.origin) {
         const origin = event.eventData.origin;
@@ -139,7 +139,7 @@ export default function Analytics() {
     }));
     
     // Process archetype distribution
-    const archetypes = {};
+    const archetypes: Record<string, number> = {};
     characterEvents.forEach(event => {
       if (event.eventData?.archetype) {
         const archetype = event.eventData.archetype;
@@ -232,7 +232,7 @@ export default function Analytics() {
   };
 
   // Helper function to categorize events
-  const getEventCategory = (eventType) => {
+  const getEventCategory = (eventType: string) => {
     if (eventType.includes('character')) return 'character';
     if (eventType.includes('user') || eventType.includes('login')) return 'user';
     if (eventType.includes('error')) return 'error';
@@ -240,7 +240,7 @@ export default function Analytics() {
   };
 
   // Helper function to generate readable descriptions for events
-  const getEventDescription = (event) => {
+  const getEventDescription = (event: any) => {
     const { eventType, eventData, userId } = event;
     
     switch(eventType) {
@@ -503,11 +503,11 @@ export default function Analytics() {
                   <div className="space-y-5">
                     {recentEvents.map((event, index) => {
                       // Assign colors based on event category
-                      const colorMap = {
+                      const colorMap: Record<string, string> = {
                         character: 'bg-blue-500',
                         user: 'bg-green-500',
                         error: 'bg-red-500',
-                        system: 'bg-purple-500'
+                        system: 'bg-purple-500',
                       };
                       
                       const dotColor = colorMap[event.category] || 'bg-gray-500';
@@ -518,7 +518,7 @@ export default function Analytics() {
                             <div className={`h-2 w-2 rounded-full ${dotColor}`}></div>
                           </div>
                           <div>
-                            <h3 className="font-medium">{event.type.replace(/_/g, ' ').split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')}</h3>
+                            <h3 className="font-medium">{event.type.replace(/_/g, ' ').split(' ').map((w: string) => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')}</h3>
                             <p className="text-sm text-muted-foreground">{event.description}</p>
                             <p className="text-xs text-gray-500 mt-1">
                               {event.timestamp ? new Date(event.timestamp).toLocaleString('en-US', {
