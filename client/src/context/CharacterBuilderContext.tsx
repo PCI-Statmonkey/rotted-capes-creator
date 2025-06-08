@@ -20,6 +20,7 @@ interface CharacterBuilderState {
   selectedSkillSets: string[];
   selectedManeuvers: string[];
   startingFeat: string;
+  archetype: string;
   currentStep: number;
 }
 
@@ -31,6 +32,7 @@ interface CharacterBuilderContextValue extends CharacterBuilderState {
   setSelectedSkillSets: (sets: string[]) => void;
   setSelectedManeuvers: (moves: string[]) => void;
   setStartingFeat: (feat: string) => void;
+  setArchetype: (archetype: string) => void;
   setCurrentStep: (step: number) => void;
 }
 
@@ -51,6 +53,7 @@ export const CharacterBuilderProvider = ({ children }: { children: ReactNode }) 
   const [selectedSkillSets, setSelectedSkillSets] = useState<string[]>([]);
   const [selectedManeuvers, setSelectedManeuvers] = useState<string[]>([]);
   const [startingFeat, setStartingFeat] = useState<string>("");
+  const [archetype, setArchetype] = useState<string>("");
   const [currentStep, setCurrentStep] = useState<number>(1);
 
   const value: CharacterBuilderContextValue = {
@@ -61,6 +64,7 @@ export const CharacterBuilderProvider = ({ children }: { children: ReactNode }) 
     selectedSkillSets,
     selectedManeuvers,
     startingFeat,
+    archetype,
     currentStep,
     setAbilityScores,
     setStartingSkills,
@@ -69,6 +73,7 @@ export const CharacterBuilderProvider = ({ children }: { children: ReactNode }) 
     setSelectedSkillSets,
     setSelectedManeuvers,
     setStartingFeat,
+    setArchetype,
     setCurrentStep,
   };
 
