@@ -41,14 +41,14 @@ const FeatCard: React.FC<FeatCardProps> = ({
   onSelectManeuver,
 }) => {
   return (
-    <div className="bg-gray-800 p-3 rounded-lg border border-gray-700 mb-2">
+    <div
+      className={`bg-gray-800 p-3 rounded-lg border border-gray-700 mb-2 ${
+        isDisabled ? "opacity-50 pointer-events-none" : ""
+      }`}
+    >
       <Label
         title={isDisabled ? "You don’t meet the prerequisites for this feat" : ""}
-        className={`flex items-center gap-2 ${
-          isDisabled
-            ? "opacity-50 text-gray-400 cursor-not-allowed pointer-events-none"
-            : ""
-        }`}
+        className="flex items-center gap-2"
       >
         <Checkbox
           disabled={isDisabled}
@@ -57,10 +57,12 @@ const FeatCard: React.FC<FeatCardProps> = ({
         />
         {feat.name} — {feat.description}
       </Label>
-      {isDisabled && (
-        <div className="text-xs text-gray-400 mt-1">
-          Missing: {missingPrereqs.join(", ")}
-        </div>
+      {isDisabled && missingPrereqs.length > 0 && (
+        <ul className="text-xs text-red-500 mt-1 ml-6 list-disc">
+          {missingPrereqs.map((req, idx) => (
+            <li key={idx}>{req}</li>
+          ))}
+        </ul>
       )}
 
       {showDropdown && maneuvers && (
