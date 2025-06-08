@@ -58,18 +58,16 @@ const Step5_Skills = () => {
   const [workingStartingFeat, setWorkingStartingFeat] = useState<string>(""); // State for the single starting feat
 
   // --- Data loaded from JSON and API ---
-  const { data: skills } = useCachedGameContent<any>('skills');
-  const { data: feats } = useCachedGameContent<any>('feats');
-  const { data: skillSets } = useCachedGameContent<any>('skill-sets');
-  const { data: maneuvers } = useCachedGameContent<any>('maneuvers');
+  const { data: skills } = useCachedGameContent<any>("skills");
+  const { data: feats } = useCachedGameContent<any>("feats");
+  const { data: skillSets } = useCachedGameContent<any>("skill-sets");
+  const { data: maneuvers } = useCachedGameContent<any>("maneuvers");
 
   const [availablePoints, setAvailablePoints] = useState(20); // Initial points
   const [currentTab, setCurrentTab] = useState("starting"); // Current active tab
 
-
-
-  // --- Data Fetching & Initialization ---
-  // Data is fetched and cached via useCachedGameContent hook
+  // --- Initialization ---
+  // Load any previously saved selections on mount
   useEffect(() => {
     if (startingSkills) setWorkingStartingSkills(startingSkills);
     if (selectedSkills) setWorkingSelectedSkills(selectedSkills);
@@ -78,8 +76,6 @@ const Step5_Skills = () => {
     if (selectedManeuvers) setWorkingSelectedManeuvers(selectedManeuvers);
     if (startingFeat) setWorkingStartingFeat(startingFeat);
   }, []);
-
-
   // --- Point Calculation Logic ---
   // Recalculate available points whenever selections change
   useEffect(() => {
