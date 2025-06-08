@@ -16,6 +16,7 @@ import SkillSetCard from "@/components/SkillSetCard";
 import SkillCard from "@/components/SkillCard";
 import FeatCard from "@/components/FeatCard";
 import { meetsPrerequisites, getMissingPrereqs } from "@/utils/requirementValidator";
+import useCachedGameContent from "@/hooks/useCachedGameContent";
 
 // Basic starting skills list
 const basicStartingSkills = [
