@@ -84,8 +84,8 @@ const Step5_Skills = () => {
       return acc + (found?.points || 0); // Add points for each selected skill set
     }, 0);
 
-    // Archetype affects maximum skill sets, but current calculation only uses points from selected ones.
-    // The 'maxSkillSets' variable can be used for UI validation or display if needed.
+    // Archetype affects the allowed number of skill sets, but this value is
+    // currently only used for validation in the UI when calculating points.
     const maxSkillSets = archetype === "Highly Trained" ? 3 : 2;
 
     // Calculate total points used: 1 point per skill, 5 points per feat, and points from skill sets
