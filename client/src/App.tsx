@@ -9,6 +9,7 @@ import MainLayout from "./components/MainLayout";
 import { initGA } from "@/lib/analytics";
 import { useAnalytics } from "@/hooks/use-analytics";
 import { CharacterProvider } from "@/context/CharacterContext";
+import { CharacterBuilderProvider } from "@/context/CharacterBuilderContext";
 import { AuthProvider } from "@/context/AuthContext";
 
 // Lazy-load pages for better performance
@@ -30,7 +31,9 @@ function AppRouter() {
         <Route path="/creator/:step?">
           {() => (
             <CharacterProvider>
-              <Creator />
+              <CharacterBuilderProvider>
+                <Creator />
+              </CharacterBuilderProvider>
             </CharacterProvider>
           )}
         </Route>

@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { useCharacter } from "@/context/CharacterContext";
+import { useCharacterBuilder } from "@/context/CharacterBuilderContext";
 import { trackEvent } from "@/lib/analytics";
 import { cn } from "@/lib/utils";
 
@@ -20,13 +21,15 @@ interface ArchetypeData {
 
 export default function Step3_Archetype() {
   const { character, updateCharacterField, setCurrentStep } = useCharacter();
-  const [selectedArchetype, setSelectedArchetype] = useState<string>(character.archetype || "");
+  const { archetype, setArchetype } = useCharacterBuilder();
+  const [selectedArchetype, setSelectedArchetype] = useState<string>(archetype || character.archetype || "");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const handleContinue = () => {
     if (selectedArchetype) {
       updateCharacterField('archetype', selectedArchetype);
+      setArchetype(selectedArchetype);
       
       // Track the selection in analytics
       trackEvent('archetype_selected', 'character', selectedArchetype);

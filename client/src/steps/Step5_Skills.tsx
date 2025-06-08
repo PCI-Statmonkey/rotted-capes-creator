@@ -9,7 +9,7 @@ import {
   TabsList,
   TabsTrigger,
 } from "@/components/ui/tabs";
-import { useCharacterBuilder } from "@/lib/Stores/characterBuilder";
+import { useCharacterBuilder } from "@/context/CharacterBuilderContext";
 import ManeuverDropdown from "@/components/ManeuverDropdown";
 import SkillSetCard from "@/components/SkillSetCard";
 import SkillCard from "@/components/SkillCard";
@@ -38,6 +38,15 @@ const Step5_Skills = () => {
     selectedSkillSets,
     selectedManeuvers,
     startingFeat,
+
+    setStartingSkills,
+    setSelectedSkills,
+    setSelectedFeats,
+    setSelectedSkillSets,
+    setSelectedManeuvers,
+    setStartingFeat,
+    setCurrentStep,
+
   } = useCharacterBuilder();
 
   // --- Local state for working selections ---
@@ -51,14 +60,16 @@ const Step5_Skills = () => {
   const [workingStartingFeat, setWorkingStartingFeat] = useState<string>(""); // State for the single starting feat
 
   // --- Data loaded from JSON and API ---
-  const { data: skills } = useCachedGameContent<any>('skills');
-  const { data: feats } = useCachedGameContent<any>('feats');
-  const { data: skillSets } = useCachedGameContent<any>('skill-sets');
-  const { data: maneuvers } = useCachedGameContent<any>('maneuvers');
+  const { data: skills } = useCachedGameContent<any>("skills");
+  const { data: feats } = useCachedGameContent<any>("feats");
+  const { data: skillSets } = useCachedGameContent<any>("skill-sets");
+  const { data: maneuvers } = useCachedGameContent<any>("maneuvers");
 
   const [availablePoints, setAvailablePoints] = useState(20); // Initial points
   const [currentTab, setCurrentTab] = useState("starting"); // Current active tab
 
+  // --- Initialization ---
+  // Load any previously saved selections on mount
   // Destructure character builder setters to persist selections
   const {
     setStartingSkills,
@@ -72,6 +83,7 @@ const Step5_Skills = () => {
 
   // --- Data Fetching & Initialization ---
   // Data is fetched and cached via useCachedGameContent hook
+
   useEffect(() => {
     if (startingSkills) setWorkingStartingSkills(startingSkills);
     if (selectedSkills) setWorkingSelectedSkills(selectedSkills);
@@ -90,8 +102,8 @@ const Step5_Skills = () => {
       return acc + (found?.points || 0); // Add points for each selected skill set
     }, 0);
 
-    // Archetype affects maximum skill sets, but current calculation only uses points from selected ones.
-    // The 'maxSkillSets' variable can be used for UI validation or display if needed.
+    // Archetype affects the allowed number of skill sets, but this value is
+    // currently only used for validation in the UI when calculating points.
     const maxSkillSets = archetype === "Highly Trained" ? 3 : 2;
 
     // Calculate total points used: 1 point per skill, 5 points per feat, and points from skill sets
@@ -447,8 +459,12 @@ const Step5_Skills = () => {
                                   setWorkingSelectedManeuvers(updated);
                                 }}
                                 maneuvers={maneuvers}
-                                meetsPrerequisites={meetsPrerequisites}
-                                getMissingPrereqs={getMissingPrereqs}
+                                meetsPrerequisites={(m) =>
+                                  meetsPrerequisites(m, characterData)
+                                }
+                                getMissingPrereqs={(m) =>
+                                  getMissingPrereqs(m, characterData)
+                                }
                               />
                             )}
                           </div>
