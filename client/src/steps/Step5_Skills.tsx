@@ -30,7 +30,16 @@ const basicStartingSkills = [
 
 const Step5_Skills = () => {
   // Destructure character builder state
-  const { abilityScores = {}, archetype } = useCharacterBuilder();
+  const {
+    abilityScores = {},
+    archetype,
+    startingSkills,
+    selectedSkills,
+    selectedFeats,
+    selectedSkillSets,
+    selectedManeuvers,
+    startingFeat,
+  } = useCharacterBuilder();
 
   // --- Local state for working selections ---
   const [workingStartingSkills, setWorkingStartingSkills] = useState<string[]>([]);
@@ -57,13 +66,22 @@ const Step5_Skills = () => {
     setSelectedSkills,
     setSelectedFeats,
     setSelectedSkillSets,
-    setSelectedManeuver,
+    setSelectedManeuvers,
     setStartingFeat,
     setCurrentStep,
   } = useCharacterBuilder();
 
   // --- Data Fetching & Initialization ---
   // Data is fetched and cached via useCachedGameContent hook
+  useEffect(() => {
+    if (startingSkills) setWorkingStartingSkills(startingSkills);
+    if (selectedSkills) setWorkingSelectedSkills(selectedSkills);
+    if (selectedFeats) setWorkingSelectedFeats(selectedFeats as any);
+    if (selectedSkillSets) setWorkingSelectedSkillSets(selectedSkillSets);
+    if (selectedManeuvers) setWorkingSelectedManeuvers(selectedManeuvers);
+    if (startingFeat) setWorkingStartingFeat(startingFeat);
+  }, []);
+
 
   // --- Point Calculation Logic ---
   // Recalculate available points whenever selections change
@@ -82,6 +100,16 @@ const Step5_Skills = () => {
       workingSelectedSkills.length + workingSelectedFeats.length * 5 + skillSetPoints;
     setAvailablePoints(20 - pointsUsed); // Update available points
   }, [workingSelectedSkills, workingSelectedFeats, workingSelectedSkillSets, skillSets, archetype]);
+
+  // Persist selections whenever the user switches tabs
+  useEffect(() => {
+    setStartingSkills(workingStartingSkills);
+    setSelectedSkills(workingSelectedSkills);
+    setSelectedFeats(workingSelectedFeats);
+    setSelectedSkillSets(workingSelectedSkillSets);
+    setSelectedManeuvers(workingSelectedManeuvers);
+    setStartingFeat(workingStartingFeat);
+  }, [currentTab]);
 
   // --- Handlers for Toggling Selections ---
 
@@ -232,7 +260,7 @@ const Step5_Skills = () => {
     setSelectedSkills(workingSelectedSkills);
     setSelectedFeats(workingSelectedFeats);
     setSelectedSkillSets(workingSelectedSkillSets);
-    setSelectedManeuver(workingSelectedManeuvers);
+    setSelectedManeuvers(workingSelectedManeuvers);
     setStartingFeat(workingStartingFeat);
     setCurrentStep(6); // Move to the next step
   };

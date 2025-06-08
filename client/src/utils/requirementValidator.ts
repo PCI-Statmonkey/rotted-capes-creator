@@ -137,8 +137,20 @@ export const meetsPrerequisites = (feat, character) => {
   return parsedPrereqs.every((req) => {
     switch (req.type) {
       case 'ability': {
+        const abilityMap: Record<string, string> = {
+          str: 'strength',
+          dex: 'dexterity',
+          con: 'constitution',
+          int: 'intelligence',
+          wis: 'wisdom',
+          cha: 'charisma',
+        };
         const normalized = Object.fromEntries(
-          Object.entries(abilityScores).map(([k, v]) => [k.toLowerCase(), v])
+          Object.entries(abilityScores).map(([k, v]) => {
+            const lower = k.toLowerCase();
+            const name = abilityMap[lower] || lower;
+            return [name, v];
+          })
         );
         return (normalized[req.name.toLowerCase()] || 0) >= req.value;
       }
@@ -223,8 +235,20 @@ export const getMissingPrereqs = (feat, character) => {
   for (const req of parsedPrereqs) {
     switch (req.type) {
       case 'ability': {
+        const abilityMap: Record<string, string> = {
+          str: 'strength',
+          dex: 'dexterity',
+          con: 'constitution',
+          int: 'intelligence',
+          wis: 'wisdom',
+          cha: 'charisma',
+        };
         const normalized = Object.fromEntries(
-          Object.entries(abilityScores).map(([k, v]) => [k.toLowerCase(), v])
+          Object.entries(abilityScores).map(([k, v]) => {
+            const lower = k.toLowerCase();
+            const name = abilityMap[lower] || lower;
+            return [name, v];
+          })
         );
         if ((normalized[req.name.toLowerCase()] || 0) < req.value) {
           missing.push(`${req.name} ${req.value}+`);
