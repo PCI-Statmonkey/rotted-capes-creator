@@ -45,7 +45,9 @@ const FeatCard: React.FC<FeatCardProps> = ({
       <Label
         title={isDisabled ? "You don’t meet the prerequisites for this feat" : ""}
         className={`flex items-center gap-2 ${
-          isDisabled ? "opacity-60 text-gray-400 cursor-not-allowed" : ""
+          isDisabled
+            ? "opacity-50 text-gray-400 cursor-not-allowed pointer-events-none"
+            : ""
         }`}
       >
         <Checkbox

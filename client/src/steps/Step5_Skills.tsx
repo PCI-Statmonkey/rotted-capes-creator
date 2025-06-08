@@ -339,13 +339,8 @@ const Step5_Skills = () => {
               const isDisabled = !meetsPrerequisites(feat, characterData);
               const missing = getMissingPrereqs(feat, characterData); // Get details of missing prerequisites
 
-              return ( // <<-- This 'return' was missing, causing the syntax error
-                <div key={feat.name} className={`mb-4 ${isDisabled ? 'opacity-60' : ''}`} onClick={() => {
-                  // If the feat is disabled due to missing prerequisites, show an alert
-                  if (isDisabled) {
-                    alert(`You do not meet the prerequisites for ${feat.name}.\n\nMissing:\n` + missing.join(', '));
-                  }
-                }}>
+              return (
+                <div key={feat.name} className={`mb-4 ${isDisabled ? 'opacity-50' : ''}`}>
                   <FeatCard
                     feat={feat}
                     isSelected={count > 0} // Is this feat type selected at least once?
