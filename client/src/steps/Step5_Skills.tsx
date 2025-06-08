@@ -38,6 +38,7 @@ const Step5_Skills = () => {
     selectedSkillSets,
     selectedManeuvers,
     startingFeat,
+
     setStartingSkills,
     setSelectedSkills,
     setSelectedFeats,
@@ -45,6 +46,7 @@ const Step5_Skills = () => {
     setSelectedManeuvers,
     setStartingFeat,
     setCurrentStep,
+
   } = useCharacterBuilder();
 
   // --- Local state for working selections ---
@@ -68,6 +70,20 @@ const Step5_Skills = () => {
 
   // --- Initialization ---
   // Load any previously saved selections on mount
+  // Destructure character builder setters to persist selections
+  const {
+    setStartingSkills,
+    setSelectedSkills,
+    setSelectedFeats,
+    setSelectedSkillSets,
+    setSelectedManeuvers,
+    setStartingFeat,
+    setCurrentStep,
+  } = useCharacterBuilder();
+
+  // --- Data Fetching & Initialization ---
+  // Data is fetched and cached via useCachedGameContent hook
+
   useEffect(() => {
     if (startingSkills) setWorkingStartingSkills(startingSkills);
     if (selectedSkills) setWorkingSelectedSkills(selectedSkills);
@@ -76,6 +92,8 @@ const Step5_Skills = () => {
     if (selectedManeuvers) setWorkingSelectedManeuvers(selectedManeuvers);
     if (startingFeat) setWorkingStartingFeat(startingFeat);
   }, []);
+
+
   // --- Point Calculation Logic ---
   // Recalculate available points whenever selections change
   useEffect(() => {
