@@ -36,11 +36,10 @@ const TOTAL_POINTS = 36;
 // Standard array option
 const STANDARD_ARRAY = [16, 15, 14, 13, 12, 11];
 
-//Set Ability Scores in Character Builder Context
-const { setAbilityScores } = useCharacterBuilder();
-
 export default function Step4_Abilities() {
   const { character, updateAbilityScore, setCurrentStep, updateDerivedStats } = useCharacter();
+  // Set Ability Scores in Character Builder Context
+  const { setAbilityScores } = useCharacterBuilder();
   const [pointsSpent, setPointsSpent] = useState(0);
   const [localAbilities, setLocalAbilities] = useState({ ...character.abilities });
   const [assignmentMethod, setAssignmentMethod] = useState<"pointBuy" | "standardArray">("pointBuy");
