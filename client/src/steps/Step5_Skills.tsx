@@ -38,6 +38,7 @@ const Step5_Skills = () => {
     selectedSkillSets,
     selectedManeuvers,
     startingFeat,
+    startingManeuver,
   } = useCharacterBuilder();
   const { character } = useCharacter();
   const archetype = character.archetype;
@@ -51,6 +52,7 @@ const Step5_Skills = () => {
   // Maneuvers are stored separately, indexed to correspond with 'Learn Maneuver' feats
   const [workingSelectedManeuvers, setWorkingSelectedManeuvers] = useState<string[]>([]);
   const [workingStartingFeat, setWorkingStartingFeat] = useState<string>(""); // State for the single starting feat
+  const [workingStartingManeuver, setWorkingStartingManeuver] = useState<string>(""); // State for the free starting maneuver
 
   // --- Data loaded from JSON and API ---
   const { data: skills } = useCachedGameContent<any>('skills');
@@ -67,6 +69,18 @@ const Step5_Skills = () => {
     });
   }, [workingSelectedSkillSets, skillSets]);
 
+  const availableStartingManeuvers = useMemo(() => {
+    const characterData = {
+      abilityScores,
+      selectedSkills: workingSelectedSkills,
+      startingSkills: workingStartingSkills,
+      selectedFeats: workingSelectedFeats,
+      selectedSkillSets: workingSelectedSkillSets,
+      skillSets,
+    };
+    return maneuvers.filter((m: any) => meetsPrerequisites(m, characterData));
+  }, [maneuvers, abilityScores, workingSelectedSkills, workingStartingSkills, workingSelectedFeats, workingSelectedSkillSets, skillSets]);
+
   const [availablePoints, setAvailablePoints] = useState(20); // Initial points
   const [currentTab, setCurrentTab] = useState("starting"); // Current active tab
 
@@ -78,6 +92,7 @@ const Step5_Skills = () => {
     setSelectedSkillSets,
     setSelectedManeuvers,
     setStartingFeat,
+    setStartingManeuver,
     setCurrentStep,
   } = useCharacterBuilder();
 
@@ -90,6 +105,7 @@ const Step5_Skills = () => {
     if (selectedSkillSets) setWorkingSelectedSkillSets(selectedSkillSets);
     if (selectedManeuvers) setWorkingSelectedManeuvers(selectedManeuvers);
     if (startingFeat) setWorkingStartingFeat(startingFeat);
+    if (startingManeuver) setWorkingStartingManeuver(startingManeuver);
   }, []);
 
 
@@ -119,6 +135,7 @@ const Step5_Skills = () => {
     setSelectedSkillSets(workingSelectedSkillSets);
     setSelectedManeuvers(workingSelectedManeuvers);
     setStartingFeat(workingStartingFeat);
+    setStartingManeuver(workingStartingManeuver);
   }, [currentTab]);
 
   // --- Handlers for Toggling Selections ---
@@ -252,9 +269,10 @@ const Step5_Skills = () => {
     if (
       availablePoints < 0 || // Points must not be negative
       !workingStartingFeat || // A starting feat must be selected
+      !workingStartingManeuver || // A starting maneuver must be selected
       workingStartingSkills.length !== 2 // Exactly two starting skills must be selected
     ) {
-      alert("You must spend all points (or have 0 remaining), select 2 starting skills, and choose a starting feat.");
+      alert("You must spend all points (or have 0 remaining), select 2 starting skills, choose a starting feat, and select a starting maneuver.");
       return;
     }
 
@@ -272,6 +290,7 @@ const Step5_Skills = () => {
     setSelectedSkillSets(workingSelectedSkillSets);
     setSelectedManeuvers(workingSelectedManeuvers);
     setStartingFeat(workingStartingFeat);
+    setStartingManeuver(workingStartingManeuver);
     setCurrentStep(6); // Move to the next step
   };
 
@@ -314,9 +333,24 @@ const Step5_Skills = () => {
             className="border rounded p-2 text-black w-full bg-white focus:outline-none focus:ring-2 focus:ring-accent"
           >
             <option value="">Select a starting feat</option>
-            {feats.map((feat) => (
-              <option key={feat.name} value={feat.name}>
-                {feat.name}
+          {feats.map((feat) => (
+            <option key={feat.name} value={feat.name}>
+              {feat.name}
+            </option>
+          ))}
+          </select>
+
+          {/* Section for selecting a starting maneuver */}
+          <h3 className="text-white text-md mt-4 mb-2">Starting Maneuver: Pick one</h3>
+          <select
+            value={workingStartingManeuver}
+            onChange={(e) => setWorkingStartingManeuver(e.target.value)}
+            className="border rounded p-2 text-black w-full bg-white focus:outline-none focus:ring-2 focus:ring-accent"
+          >
+            <option value="">Select a starting maneuver</option>
+            {availableStartingManeuvers.map((m) => (
+              <option key={m.name} value={m.name}>
+                {m.name}
               </option>
             ))}
           </select>
