@@ -2,6 +2,7 @@
  * API utility functions for interacting with the backend
  */
 import { getSampleData, getSampleItemById } from './fallbackData';
+import { apiRequest } from './queryClient';
 
 // Track if we're using fallback data due to database connection issues
 export let usingFallbackData = false;

@@ -78,27 +78,27 @@ export default function Analytics() {
     }
   }, [currentUser, isAdmin, isLoading, navigate, toast, hasDirectAccess]);
 
-  // Fetch analytics data
-  useEffect(() => {
-    async function fetchAnalytics() {
-      if (currentUser && isAdmin) {
-        try {
-          setIsLoading(true);
-          const data = await getAnalyticsSummary();
-          setAnalyticsData(data);
-        } catch (error) {
-          console.error("Error fetching analytics:", error);
-          toast({
-            title: "Error",
-            description: "Failed to load analytics data. Please try again.",
-            variant: "destructive"
-          });
-        } finally {
-          setIsLoading(false);
-        }
+  const fetchAnalytics = async () => {
+    if (currentUser && isAdmin) {
+      try {
+        setIsLoading(true);
+        const data = await getAnalyticsSummary();
+        setAnalyticsData(data);
+      } catch (error) {
+        console.error("Error fetching analytics:", error);
+        toast({
+          title: "Error",
+          description: "Failed to load analytics data. Please try again.",
+          variant: "destructive",
+        });
+      } finally {
+        setIsLoading(false);
       }
     }
-    
+  };
+
+  // Fetch analytics data
+  useEffect(() => {
     fetchAnalytics();
   }, [currentUser, isAdmin, toast]);
 
@@ -125,7 +125,7 @@ export default function Analytics() {
     );
     
     // Process origin distribution
-    const origins = {};
+    const origins: Record<string, number> = {};
     characterEvents.forEach(event => {
       if (event.eventData?.origin) {
         const origin = event.eventData.origin;
@@ -139,7 +139,7 @@ export default function Analytics() {
     }));
     
     // Process archetype distribution
-    const archetypes = {};
+    const archetypes: Record<string, number> = {};
     characterEvents.forEach(event => {
       if (event.eventData?.archetype) {
         const archetype = event.eventData.archetype;
@@ -232,7 +232,7 @@ export default function Analytics() {
   };
 
   // Helper function to categorize events
-  const getEventCategory = (eventType) => {
+  const getEventCategory = (eventType: string) => {
     if (eventType.includes('character')) return 'character';
     if (eventType.includes('user') || eventType.includes('login')) return 'user';
     if (eventType.includes('error')) return 'error';
@@ -240,7 +240,7 @@ export default function Analytics() {
   };
 
   // Helper function to generate readable descriptions for events
-  const getEventDescription = (event) => {
+  const getEventDescription = (event: any) => {
     const { eventType, eventData, userId } = event;
     
     switch(eventType) {
@@ -509,8 +509,10 @@ export default function Analytics() {
                         error: 'bg-red-500',
                         system: 'bg-purple-500'
                       };
-                      
-                      const dotColor = colorMap[event.category] || 'bg-gray-500';
+
+                      const dotColor =
+                        colorMap[event.category as keyof typeof colorMap] ||
+                        'bg-gray-500';
                       
                       return (
                         <div key={index} className="flex items-start">
@@ -518,7 +520,7 @@ export default function Analytics() {
                             <div className={`h-2 w-2 rounded-full ${dotColor}`}></div>
                           </div>
                           <div>
-                            <h3 className="font-medium">{event.type.replace(/_/g, ' ').split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')}</h3>
+                            <h3 className="font-medium">{event.type.replace(/_/g, ' ').split(' ').map((w: string) => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')}</h3>
                             <p className="text-sm text-muted-foreground">{event.description}</p>
                             <p className="text-xs text-gray-500 mt-1">
                               {event.timestamp ? new Date(event.timestamp).toLocaleString('en-US', {

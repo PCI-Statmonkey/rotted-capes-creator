@@ -136,12 +136,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
       
       // Check if user is admin
-      const user = await storage.getUser(parseInt(userId));
+      const user = await (storage as any).getUser(parseInt(userId));
       if (!user || !user.isAdmin) {
         return res.status(403).json({ message: 'Access denied' });
       }
       
-      const analyticsSummary = await storage.getAnalyticsSummary();
+      const analyticsSummary = await (storage as any).getAnalyticsSummary();
       res.json(analyticsSummary);
     } catch (error) {
       console.error('Error fetching analytics:', error);
@@ -161,12 +161,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const validatedData = userSchema.parse(req.body);
       
       // Check if username already exists
-      const existingUser = await storage.getUserByUsername(validatedData.username);
+      const existingUser = await (storage as any).getUserByUsername(validatedData.username);
       if (existingUser) {
         return res.status(400).json({ message: 'Username already exists' });
       }
       
-      const newUser = await storage.createUser({
+      const newUser = await (storage as any).createUser({
         username: validatedData.username,
         password: validatedData.password, // In a real app, this would be hashed
         email: validatedData.email,

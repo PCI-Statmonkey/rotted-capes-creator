@@ -310,7 +310,7 @@ const handleContinue = () => {
   setAbilityScores(
     Object.fromEntries(
       Object.entries(localAbilities).map(([key, data]) => [key, data.value])
-    )
+    ) as any
   );
 
   updateDerivedStats();
