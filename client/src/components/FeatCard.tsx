@@ -1,6 +1,7 @@
 import React from "react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
+import { parsePrerequisite } from "@/utils/requirementValidator";
 
 interface Prerequisite {
   type: string;
@@ -40,6 +41,20 @@ const FeatCard: React.FC<FeatCardProps> = ({
   selectedManeuver,
   onSelectManeuver,
 }) => {
+  const parsedPrereqs = feat.prerequisites
+    ? feat.prerequisites.flatMap((p) => parsePrerequisite(p as any))
+    : [];
+
+  const formatReq = (req: any) =>
+    typeof req === "object"
+      ? req.type === "ability"
+        ? `${req.name} ${req.value}`
+        : req.type === "feat"
+        ? `Feat: ${req.name}`
+        : req.name
+      : String(req);
+
+  const missingStrings = missingPrereqs.map(formatReq);
   return (
     <div
       className={`bg-gray-800 p-3 rounded-lg border border-gray-700 mb-2 ${
@@ -57,19 +72,17 @@ const FeatCard: React.FC<FeatCardProps> = ({
         />
         {feat.name} — {feat.description}
       </Label>
-      {isDisabled && missingPrereqs.length > 0 && (
-        <ul className="text-xs text-red-500 mt-1 ml-6 list-disc">
-          {missingPrereqs.map((req, idx) => (
-            <li key={idx}>
-          {typeof req === "object"
-            ? req.type === "ability"
-              ? `${req.name} ${req.value}`
-              : req.type === "feat"
-            ? `Feat: ${req.name}`
-            : req.name
-          : String(req)}
-        </li>
-          ))}
+      {parsedPrereqs.length > 0 && (
+        <ul className="text-xs mt-1 ml-6 list-disc">
+          {parsedPrereqs.map((req, idx) => {
+            const text = formatReq(req);
+            const missing = missingStrings.includes(text);
+            return (
+              <li key={idx} className={missing ? "text-red-500" : "text-white"}>
+                {text}
+              </li>
+            );
+          })}
         </ul>
       )}
 
