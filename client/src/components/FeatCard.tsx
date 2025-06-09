@@ -60,7 +60,15 @@ const FeatCard: React.FC<FeatCardProps> = ({
       {isDisabled && missingPrereqs.length > 0 && (
         <ul className="text-xs text-red-500 mt-1 ml-6 list-disc">
           {missingPrereqs.map((req, idx) => (
-            <li key={idx}>{req}</li>
+            <li key={idx}>
+          {typeof req === "object"
+            ? req.type === "ability"
+              ? `${req.name} ${req.value}`
+              : req.type === "feat"
+            ? `Feat: ${req.name}`
+            : req.name
+          : String(req)}
+        </li>
           ))}
         </ul>
       )}

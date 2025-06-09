@@ -380,16 +380,22 @@ const Step5_Skills = () => {
                     maneuvers={feat.name === "Learn Maneuver" ? maneuvers : undefined} // Pass maneuvers data for dropdown
                   />
                   {isDisabled && missing.length > 0 && (
-                    <ul className="text-xs text-red-500 mt-1 ml-6 list-disc">
-                      {missing.map((req, idx) => (
-                        <li key={idx}>{req}</li>
-                      ))}
-                    </ul>
-                  )}
-
-
-
-                  {/* Render input fields and remove buttons for each instance of a selected feat */}
+                      <ul className="text-xs text-red-500 mt-1 ml-6 list-disc">
+                        {missing.map((req, idx) => (
+                          <li key={idx}>
+                            {typeof req === "object"
+                              ? req.type === "ability"
+                                ? `${req.name} ${req.value}`
+                                : req.type === "feat"
+                                  ? `Feat: ${req.name}`
+                                  : req.name
+                              : String(req)}
+                          </li>
+                        ))}
+                      </ul>
+                    )}  
+                    
+{/* Render input fields and remove buttons for each instance of a selected feat */}
                   {count > 0 && (
                     <div className="ml-4 mt-2 space-y-2">
                       {workingSelectedFeats
