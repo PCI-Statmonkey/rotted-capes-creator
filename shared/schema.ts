@@ -66,6 +66,7 @@ export const feats = pgTable("feats", {
   id: serial("id").primaryKey(),
   name: text("name").notNull(),
   description: text("description").notNull(),
+  prerequisites: jsonb("prerequisites"),
   type: text("type").notNull(),
   // ADD THE FOLLOWING LINES:
   repeatable: boolean("repeatable").notNull().default(false),
@@ -402,6 +403,7 @@ export const maneuverSchema = insertManeuverSchema.extend({
 export const insertFeatSchema = createInsertSchema(feats).pick({
   name: true,
   description: true,
+  prerequisites: true,
   type: true,
   repeatable: true,
   tags: true,
