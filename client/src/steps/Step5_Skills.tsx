@@ -38,6 +38,7 @@ const Step5_Skills = () => {
     selectedSkillSets,
     selectedManeuvers,
     startingFeat,
+    startingManeuver,
   } = useCharacterBuilder();
   const { character } = useCharacter();
   const archetype = character.archetype;
@@ -51,6 +52,7 @@ const Step5_Skills = () => {
   // Maneuvers are stored separately, indexed to correspond with 'Learn Maneuver' feats
   const [workingSelectedManeuvers, setWorkingSelectedManeuvers] = useState<string[]>([]);
   const [workingStartingFeat, setWorkingStartingFeat] = useState<string>(""); // State for the single starting feat
+  const [workingStartingManeuver, setWorkingStartingManeuver] = useState<string>("");
 
   // --- Data loaded from JSON and API ---
   const { data: skills } = useCachedGameContent<any>('skills');
@@ -78,6 +80,7 @@ const Step5_Skills = () => {
     setSelectedSkillSets,
     setSelectedManeuvers,
     setStartingFeat,
+    setStartingManeuver,
     setCurrentStep,
   } = useCharacterBuilder();
 
@@ -90,6 +93,7 @@ const Step5_Skills = () => {
     if (selectedSkillSets) setWorkingSelectedSkillSets(selectedSkillSets);
     if (selectedManeuvers) setWorkingSelectedManeuvers(selectedManeuvers);
     if (startingFeat) setWorkingStartingFeat(startingFeat);
+    if (startingManeuver) setWorkingStartingManeuver(startingManeuver);
   }, []);
 
 
@@ -119,7 +123,8 @@ const Step5_Skills = () => {
     setSelectedSkillSets(workingSelectedSkillSets);
     setSelectedManeuvers(workingSelectedManeuvers);
     setStartingFeat(workingStartingFeat);
-  }, [workingStartingSkills, workingSelectedSkills, workingSelectedFeats, workingSelectedSkillSets, workingSelectedManeuvers, workingStartingFeat]);
+    setStartingManeuver(workingStartingManeuver);
+  }, [workingStartingSkills, workingSelectedSkills, workingSelectedFeats, workingSelectedSkillSets, workingSelectedManeuvers, workingStartingFeat, workingStartingManeuver]);
 
   // --- Handlers for Toggling Selections ---
 
@@ -252,9 +257,10 @@ const Step5_Skills = () => {
     if (
       availablePoints < 0 || // Points must not be negative
       !workingStartingFeat || // A starting feat must be selected
-      workingStartingSkills.length !== 2 // Exactly two starting skills must be selected
+      workingStartingSkills.length !== 2 || // Exactly two starting skills must be selected
+      !workingStartingManeuver // A starting maneuver must be selected
     ) {
-      alert("You must spend all points (or have 0 remaining), select 2 starting skills, and choose a starting feat.");
+      alert("You must spend all points (or have 0 remaining), select 2 starting skills, choose a starting feat, and pick a starting maneuver.");
       return;
     }
 
@@ -272,6 +278,7 @@ const Step5_Skills = () => {
     setSelectedSkillSets(workingSelectedSkillSets);
     setSelectedManeuvers(workingSelectedManeuvers);
     setStartingFeat(workingStartingFeat);
+    setStartingManeuver(workingStartingManeuver);
     setCurrentStep(6); // Move to the next step
   };
 
@@ -319,6 +326,31 @@ const Step5_Skills = () => {
                 {feat.name}
               </option>
             ))}
+          </select>
+
+          <h3 className="text-white text-md mt-4 mb-2">Starting Maneuver: Pick one</h3>
+          <select
+            value={workingStartingManeuver}
+            onChange={(e) => setWorkingStartingManeuver(e.target.value)}
+            className="border rounded p-2 text-black w-full bg-white focus:outline-none focus:ring-2 focus:ring-accent"
+          >
+            <option value="">Select a starting maneuver</option>
+            {maneuvers
+              .filter((m) =>
+                meetsPrerequisites(m, {
+                  abilityScores,
+                  selectedSkills: workingSelectedSkills,
+                  startingSkills: workingStartingSkills,
+                  selectedFeats: workingSelectedFeats,
+                  selectedSkillSets: workingSelectedSkillSets,
+                  skillSets,
+                })
+              )
+              .map((m) => (
+                <option key={m.name} value={m.name}>
+                  {m.name}
+                </option>
+              ))}
           </select>
         </TabsContent>
 
