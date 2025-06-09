@@ -1,5 +1,5 @@
 // Step5_Skills.tsx
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { motion } from "framer-motion";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -57,6 +57,15 @@ const Step5_Skills = () => {
   const { data: feats } = useCachedGameContent<any>('feats');
   const { data: skillSets } = useCachedGameContent<any>('skill-sets');
   const { data: maneuvers } = useCachedGameContent<any>('maneuvers');
+
+  const skillsFromSets = useMemo(() => {
+    return workingSelectedSkillSets.flatMap((setName) => {
+      const found = skillSets.find((s) => s.name === setName);
+      return (
+        found?.skills?.map((s: any) => (typeof s === "string" ? s : s.name)) || []
+      );
+    });
+  }, [workingSelectedSkillSets, skillSets]);
 
   const [availablePoints, setAvailablePoints] = useState(20); // Initial points
   const [currentTab, setCurrentTab] = useState("starting"); // Current active tab
@@ -331,14 +340,18 @@ const Step5_Skills = () => {
           <h3 className="text-white text-md mb-2">Individual Skills</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {skills.map((skill) => {
-              const isSelected = workingSelectedSkills.some((s) => s.name === skill.name);
-              const focus = workingSelectedSkills.find((s) => s.name === skill.name)?.focus || "";
+              const fromSkillSet = skillsFromSets.includes(skill.name);
+              const isSelected =
+                fromSkillSet || workingSelectedSkills.some((s) => s.name === skill.name);
+              const focus =
+                workingSelectedSkills.find((s) => s.name === skill.name)?.focus || "";
               return (
                 <SkillCard
                   key={skill.name}
                   skill={skill}
                   isSelected={isSelected}
                   focus={focus}
+                  fromSkillSet={fromSkillSet}
                   onToggle={() => toggleSkill(skill.name)}
                   onFocusChange={(newFocus) => updateSkillFocus(skill.name, newFocus)}
                 />
