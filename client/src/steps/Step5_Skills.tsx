@@ -17,6 +17,8 @@ import FeatCard from "@/components/FeatCard";
 import { meetsPrerequisites, getMissingPrereqs } from "@/utils/requirementValidator";
 import useCachedGameContent from "@/hooks/useCachedGameContent";
 import { useCharacter } from "@/context/CharacterContext";
+import rawSkillFocuses from "@/rules/skillFocuses.json";
+const skillFocuses: Record<string, string[]> = rawSkillFocuses as Record<string, string[]>;
 
 // Basic starting skills list
 const basicStartingSkills = [
@@ -388,6 +390,7 @@ const Step5_Skills = () => {
                   skill={skill}
                   isSelected={isSelected}
                   focuses={focuses}
+                  focusOptions={skillFocuses[skill.name] || []}
                   fromSkillSet={fromSkillSet}
                   onToggle={() => toggleSkill(skill.name)}
                   onFocusChange={(index, newFocus) => updateSkillFocus(skill.name, index, newFocus)}

@@ -13,6 +13,7 @@ interface SkillCardProps {
   onToggle: () => void;
   onFocusChange: (index: number, focus: string) => void;
   fromSkillSet?: boolean;
+  focusOptions?: string[];
 }
 
 const SkillCard: React.FC<SkillCardProps> = ({
@@ -22,6 +23,7 @@ const SkillCard: React.FC<SkillCardProps> = ({
   onToggle,
   onFocusChange,
   fromSkillSet = false,
+  focusOptions = [],
 }) => {
   return (
     <div
@@ -39,14 +41,40 @@ const SkillCard: React.FC<SkillCardProps> = ({
       </Label>
       {isSelected && (
         <div className="mt-1 space-y-1">
-          {focuses.map((f, i) => (
-            <Input
-              key={i}
-              placeholder="Focus (optional)"
-              value={f}
-              onChange={(e) => onFocusChange(i, e.target.value)}
-            />
-          ))}
+          {focuses.map((f, i) => {
+            const isCustom = f !== "" && !focusOptions.includes(f);
+            return (
+              <div key={i} className="flex gap-2 items-center">
+                <select
+                  className="border rounded p-1 text-black"
+                  value={isCustom ? "custom" : f}
+                  onChange={(e) => {
+                    const value = e.target.value;
+                    if (value === "custom") {
+                      onFocusChange(i, "");
+                    } else {
+                      onFocusChange(i, value);
+                    }
+                  }}
+                >
+                  <option value="">Select Focus</option>
+                  {focusOptions.map((opt) => (
+                    <option key={opt} value={opt}>
+                      {opt}
+                    </option>
+                  ))}
+                  <option value="custom">Player Defined</option>
+                </select>
+                {isCustom && (
+                  <Input
+                    placeholder="Enter focus"
+                    value={f}
+                    onChange={(e) => onFocusChange(i, e.target.value)}
+                  />
+                )}
+              </div>
+            );
+          })}
         </div>
       )}
     </div>

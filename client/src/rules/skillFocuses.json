@@ -1,0 +1,49 @@
+{
+  "Academics": ["Psychology", "Political Science", "Sociology", "Mathematics", "History"],
+  "Acrobatics": ["Tumbling", "Parkour (Free Running)", "Balance"],
+  "Animal Handling": ["Riding", "Animal Handling", "Animal Training"],
+  "Athletics": ["Climbing", "Running", "Jumping", "Swimming", "Feats of Strength"],
+  "Drive": ["Automobiles", "Motorcycle", "Power Boat", "Sailboat", "Trucks"],
+  "Engineering": [
+    "Aeronautical Engineering",
+    "Automobile Mechanic",
+    "Cybernetics",
+    "Electrical Engineering",
+    "Metalworking",
+    "Mechanical Engineering",
+    "Robotics",
+    "Structural Engineering",
+    "Weapons Engineering"
+  ],
+  "Influence": ["Diplomacy", "Intimidation", "Persuasion", "Seduction"],
+  "Larceny": ["Pick Pockets", "Open Locks", "Security Systems", "Disable Traps"],
+  "Local Knowledge": ["Downtown", "Subway System", "City Restaurants"],
+  "Medicine": [
+    "Cybernetics",
+    "Emergency Treatment (EMT)",
+    "Genetics",
+    "Infectious Diseases",
+    "Surgery",
+    "Veterinary Medicine",
+    "Psychiatry"
+  ],
+  "Occult": ["Cults", "Eldritch Horrors", "Magical Spells", "Magical History"],
+  "Outdoorsman": ["Hunting", "Tracking", "Navigation", "Survival"],
+  "Prestidigitation": ["Sleight of Hand", "Object Manipulation", "Misdirection", "Showmanship"],
+  "Performance": ["Acting", "Dancing", "Singing", "Mimicry", "Electronic Music Production", "Specific Instrument"],
+  "Pilot": ["Fixed Wing Aircraft", "Lighter than Air", "Helicopters", "Ultra-lights", "VTOL"],
+  "Scavenge": ["Appraising", "Finding"],
+  "Science": ["Chemistry", "Biology", "Physics", "Demolitions"],
+  "Technology": [
+    "Computer Repair",
+    "Computer Engineering",
+    "Computer Hacking",
+    "Computer Systems",
+    "Medical Technologies",
+    "Security Systems",
+    "Programming",
+    "Robotics",
+    "Radio Broadcasting"
+  ],
+  "Urban Survival": ["Hunting", "Tracking", "Navigation"]
+}
