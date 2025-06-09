@@ -37,7 +37,6 @@ const Step5_Skills = () => {
     selectedFeats,
     selectedSkillSets,
     selectedManeuvers,
-    startingFeat,
   } = useCharacterBuilder();
   const { character } = useCharacter();
   const archetype = character.archetype;
@@ -50,7 +49,6 @@ const Step5_Skills = () => {
   const [workingSelectedSkillSets, setWorkingSelectedSkillSets] = useState<string[]>([]);
   // Maneuvers are stored separately, indexed to correspond with 'Learn Maneuver' feats
   const [workingSelectedManeuvers, setWorkingSelectedManeuvers] = useState<string[]>([]);
-  const [workingStartingFeat, setWorkingStartingFeat] = useState<string>(""); // State for the single starting feat
 
   // --- Data loaded from JSON and API ---
   const { data: skills } = useCachedGameContent<any>('skills');
@@ -77,7 +75,6 @@ const Step5_Skills = () => {
     setSelectedFeats,
     setSelectedSkillSets,
     setSelectedManeuvers,
-    setStartingFeat,
     setCurrentStep,
   } = useCharacterBuilder();
 
@@ -89,7 +86,6 @@ const Step5_Skills = () => {
     if (selectedFeats) setWorkingSelectedFeats(selectedFeats as any);
     if (selectedSkillSets) setWorkingSelectedSkillSets(selectedSkillSets);
     if (selectedManeuvers) setWorkingSelectedManeuvers(selectedManeuvers);
-    if (startingFeat) setWorkingStartingFeat(startingFeat);
   }, []);
 
 
@@ -105,9 +101,11 @@ const Step5_Skills = () => {
     // The 'maxSkillSets' variable can be used for UI validation or display if needed.
     const maxSkillSets = archetype === "Highly Trained" ? 3 : 2;
 
-    // Calculate total points used: 1 point per skill, 5 points per feat, and points from skill sets
+    // Calculate total points used: first feat is free, additional feats cost 5 points each
+    const featPoints =
+      workingSelectedFeats.length > 0 ? (workingSelectedFeats.length - 1) * 5 : 0;
     const pointsUsed =
-      workingSelectedSkills.length + workingSelectedFeats.length * 5 + skillSetPoints;
+      workingSelectedSkills.length + featPoints + skillSetPoints;
     setAvailablePoints(20 - pointsUsed); // Update available points
   }, [workingSelectedSkills, workingSelectedFeats, workingSelectedSkillSets, skillSets, archetype]);
 
@@ -118,7 +116,6 @@ const Step5_Skills = () => {
     setSelectedFeats(workingSelectedFeats);
     setSelectedSkillSets(workingSelectedSkillSets);
     setSelectedManeuvers(workingSelectedManeuvers);
-    setStartingFeat(workingStartingFeat);
   }, [currentTab]);
 
   // --- Handlers for Toggling Selections ---
@@ -197,8 +194,9 @@ const Step5_Skills = () => {
       return;
     }
 
-    // Check if enough points are available (assuming 5 points per feat)
-    if (availablePoints < 5) {
+    // Determine cost: first feat is free, others cost 5 points
+    const featCost = workingSelectedFeats.length === 0 ? 0 : 5;
+    if (availablePoints < featCost) {
         alert("Not enough points to select this feat.");
         return;
     }
@@ -251,10 +249,9 @@ const Step5_Skills = () => {
     // Validation checks before proceeding to the next step
     if (
       availablePoints < 0 || // Points must not be negative
-      !workingStartingFeat || // A starting feat must be selected
       workingStartingSkills.length !== 2 // Exactly two starting skills must be selected
     ) {
-      alert("You must spend all points (or have 0 remaining), select 2 starting skills, and choose a starting feat.");
+      alert("You must spend all points (or have 0 remaining) and select 2 starting skills.");
       return;
     }
 
@@ -271,7 +268,6 @@ const Step5_Skills = () => {
     setSelectedFeats(workingSelectedFeats);
     setSelectedSkillSets(workingSelectedSkillSets);
     setSelectedManeuvers(workingSelectedManeuvers);
-    setStartingFeat(workingStartingFeat);
     setCurrentStep(6); // Move to the next step
   };
 
@@ -306,20 +302,6 @@ const Step5_Skills = () => {
             </div>
           ))}
 
-          {/* Section for selecting a starting feat */}
-          <h3 className="text-white text-md mt-4 mb-2">Starting Feat: Pick one</h3>
-          <select
-            value={workingStartingFeat}
-            onChange={(e) => setWorkingStartingFeat(e.target.value)}
-            className="border rounded p-2 text-black w-full bg-white focus:outline-none focus:ring-2 focus:ring-accent"
-          >
-            <option value="">Select a starting feat</option>
-            {feats.map((feat) => (
-              <option key={feat.name} value={feat.name}>
-                {feat.name}
-              </option>
-            ))}
-          </select>
         </TabsContent>
 
         <TabsContent value="skillsets">
@@ -361,6 +343,9 @@ const Step5_Skills = () => {
         </TabsContent>
 
         <TabsContent value="feats">
+          <p className="text-white text-sm mb-2">
+            Your hero gets one free feat. The first feat you select costs 0 points.
+          </p>
           {(() => {
             // Prepare character data for prerequisite checks dynamically
             const characterData = {
