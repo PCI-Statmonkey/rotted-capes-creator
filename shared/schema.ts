@@ -58,6 +58,7 @@ export const skills = pgTable("skills", {
   ability: text("ability").notNull(), // Which ability it's tied to (e.g., "Strength")
   description: text("description").notNull(),
   untrained: boolean("untrained").default(true).notNull(), // Can it be used untrained?
+  focusOptions: text("focus_options").array().notNull().default([]),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
@@ -159,6 +160,7 @@ export const insertSkillSchema = createInsertSchema(skills).pick({
   ability: true,
   description: true,
   untrained: true,
+  focusOptions: true,
 });
 
 export const insertSkillSetSchema = createInsertSchema(skillSets).pick({

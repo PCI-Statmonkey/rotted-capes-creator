@@ -34,6 +34,7 @@ async function runSeed() {
       ability: skill.ability || "Intelligence",
       description: skill.description || "",
       untrained: skill.untrained ?? true,
+      focusOptions: skill.focusOptions || [],
     }).onConflictDoNothing();
   }
 

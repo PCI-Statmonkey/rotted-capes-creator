@@ -159,15 +159,16 @@ const Step5_Skills = () => {
         if (s.name !== skillName) return s;
         const focuses = [...s.focuses];
         focuses[index] = focus;
-        // If editing the last focus and it's non-empty, add a new blank field
-        if (index === focuses.length - 1 && focus.trim() !== "") {
-          focuses.push("");
-        }
-        // Remove trailing blank focuses beyond one empty at the end
-        while (focuses.length > 1 && focuses[focuses.length - 1] === "" && focuses[focuses.length - 2] === "") {
-          focuses.pop();
-        }
         return { ...s, focuses };
+      })
+    );
+  };
+
+  const addSkillFocus = (skillName: string) => {
+    setWorkingSelectedSkills((prev) =>
+      prev.map((s) => {
+        if (s.name !== skillName) return s;
+        return { ...s, focuses: [...s.focuses, ""] };
       })
     );
   };
@@ -180,7 +181,7 @@ const Step5_Skills = () => {
       setWorkingSelectedSkills(workingSelectedSkills.filter((s) => s.name !== skillName));
     } else if (availablePoints >= 1) {
       const skill = skills.find((s) => s.name === skillName);
-      if (skill) setWorkingSelectedSkills([...workingSelectedSkills, { name: skill.name, focuses: [""] }]);
+      if (skill) setWorkingSelectedSkills([...workingSelectedSkills, { name: skill.name, focuses: [] }]);
     }
   };
 
@@ -400,7 +401,7 @@ const Step5_Skills = () => {
                 startingSkill ||
                 workingSelectedSkills.some((s) => s.name === skill.name);
               const focuses =
-                workingSelectedSkills.find((s) => s.name === skill.name)?.focuses || [""];
+                workingSelectedSkills.find((s) => s.name === skill.name)?.focuses || [];
               const freeFocus = (skillCounts[skill.name] || 0) > 1;
               return (
                 <SkillCard
@@ -412,6 +413,7 @@ const Step5_Skills = () => {
                   freeFocus={freeFocus}
                   onToggle={() => toggleSkill(skill.name)}
                   onFocusChange={(index, newFocus) => updateSkillFocus(skill.name, index, newFocus)}
+                  onAddFocus={() => addSkillFocus(skill.name)}
                 />
               );
             })}
