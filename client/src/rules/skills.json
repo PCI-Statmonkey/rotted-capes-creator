@@ -1,30 +1,170 @@
 [
-  { "name": "Academics", "allowsFocus": true },
-  { "name": "Acrobatics", "allowsFocus": true },
-  { "name": "Animal Handling", "allowsFocus": true },
-  { "name": "Athletics", "allowsFocus": true },
+  {
+    "name": "Academics",
+    "allowsFocus": true,
+    "focusOptions": [
+      "Psychology",
+      "Political Science",
+      "Sociology",
+      "Mathematics",
+      "History"
+    ]
+  },
+  {
+    "name": "Acrobatics",
+    "allowsFocus": true,
+    "focusOptions": ["Tumbling", "Parkour", "Balance"]
+  },
+  {
+    "name": "Animal Handling",
+    "allowsFocus": true,
+    "focusOptions": ["Riding", "Animal Handling", "Animal Training"]
+  },
+  {
+    "name": "Athletics",
+    "allowsFocus": true,
+    "focusOptions": [
+      "Climbing",
+      "Running",
+      "Jumping",
+      "Swimming",
+      "Feats of Strength"
+    ]
+  },
   { "name": "Basic Engineering", "allowsFocus": true, "tags": ["★", "*"] },
   { "name": "Basic Technology", "allowsFocus": true, "tags": ["★", "*"] },
-  { "name": "Drive", "allowsFocus": true },
+  {
+    "name": "Drive",
+    "allowsFocus": true,
+    "focusOptions": ["Automobiles", "Motorcycle", "Power Boat", "Sailboat", "Trucks"]
+  },
   { "name": "Empathy", "allowsFocus": false },
-  { "name": "Engineering", "allowsFocus": true, "tags": ["★", "*"] },
+  {
+    "name": "Engineering",
+    "allowsFocus": true,
+    "tags": ["★", "*"],
+    "focusOptions": [
+      "Aeronautical Engineering",
+      "Automobile Mechanic",
+      "Cybernetics",
+      "Electrical Engineering",
+      "Metalworking",
+      "Mechanical Engineering",
+      "Robotics",
+      "Structural Engineering",
+      "Weapons Engineering"
+    ]
+  },
   { "name": "Escape Artist", "allowsFocus": false },
-  { "name": "Influence", "allowsFocus": false },
+  {
+    "name": "Influence",
+    "allowsFocus": true,
+    "focusOptions": ["Diplomacy", "Intimidation", "Persuasion", "Seduction"]
+  },
   { "name": "Instruction", "allowsFocus": false },
   { "name": "Investigation", "allowsFocus": false },
-  { "name": "Larceny", "allowsFocus": true },
-  { "name": "Linguistics", "allowsFocus": true },
-  { "name": "Local Knowledge", "allowsFocus": true },
-  { "name": "Medicine", "allowsFocus": true, "tags": ["*"] },
-  { "name": "Occult", "allowsFocus": true, "tags": ["*"] },
-  { "name": "Outdoorsman", "allowsFocus": true },
+  {
+    "name": "Larceny",
+    "allowsFocus": true,
+    "focusOptions": ["Pick Pockets", "Open Locks", "Security Systems", "Disable Traps"]
+  },
+  {
+    "name": "Linguistics",
+    "allowsFocus": true,
+    "focusOptions": ["Cryptology"]
+  },
+  {
+    "name": "Local Knowledge",
+    "allowsFocus": true,
+    "focusOptions": ["Downtown", "Subway System", "Restaurants"]
+  },
+  {
+    "name": "Medicine",
+    "allowsFocus": true,
+    "tags": ["*"],
+    "focusOptions": [
+      "Cybernetics",
+      "Emergency Treatment (EMT)",
+      "Genetics",
+      "Infectious diseases",
+      "Surgery",
+      "Veterinary medicine",
+      "Psychiatry"
+    ]
+  },
+  {
+    "name": "Occult",
+    "allowsFocus": true,
+    "tags": ["*"],
+    "focusOptions": [
+      "Cults",
+      "Eldritch Horrors",
+      "Magical Spells",
+      "Magical History"
+    ]
+  },
+  {
+    "name": "Outdoorsman",
+    "allowsFocus": true,
+    "focusOptions": ["Hunting", "Tracking", "Navigation", "Survival"]
+  },
   { "name": "Prestidigitation", "allowsFocus": false },
   { "name": "Perception", "allowsFocus": false },
-  { "name": "Performance", "allowsFocus": true },
-  { "name": "Pilot", "allowsFocus": true, "tags": ["★", "*"] },
-  { "name": "Scavenge", "allowsFocus": false },
-  { "name": "Science", "allowsFocus": true, "tags": ["★", "*"] },
+  {
+    "name": "Performance",
+    "allowsFocus": true,
+    "focusOptions": [
+      "Acting",
+      "Dancing",
+      "Singing",
+      "Mimicry",
+      "Electronic Music Production",
+      "Specific Instrument"
+    ]
+  },
+  {
+    "name": "Pilot",
+    "allowsFocus": true,
+    "tags": ["★", "*"],
+    "focusOptions": [
+      "Fixed Wing Aircraft",
+      "Lighter than Air",
+      "Helicopters",
+      "Ultra-lights",
+      "VTOL"
+    ]
+  },
+  {
+    "name": "Scavenge",
+    "allowsFocus": true,
+    "focusOptions": ["Appraising", "Finding"]
+  },
+  {
+    "name": "Science",
+    "allowsFocus": true,
+    "tags": ["★", "*"],
+    "focusOptions": ["Chemistry", "Biology", "Physics", "Demolitions"]
+  },
   { "name": "Stealth", "allowsFocus": false },
-  { "name": "Technology", "allowsFocus": true, "tags": ["★", "*"] },
-  { "name": "Urban Survival", "allowsFocus": true }
+  {
+    "name": "Technology",
+    "allowsFocus": true,
+    "tags": ["★", "*"],
+    "focusOptions": [
+      "Computer Repair",
+      "Computer Engineering",
+      "Computer Hacking",
+      "Computer Systems",
+      "Medical Technologies",
+      "Security Systems",
+      "Programming",
+      "Robotics",
+      "Radio Broadcasting"
+    ]
+  },
+  {
+    "name": "Urban Survival",
+    "allowsFocus": true,
+    "focusOptions": ["Hunting", "Tracking", "Navigation"]
+  }
 ]

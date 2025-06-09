@@ -3,16 +3,26 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 interface SkillCardProps {
   skill: {
     name: string;
     ability: string;
+    focusOptions?: string[];
   };
   isSelected: boolean;
   focuses: string[];
   onToggle: () => void;
   onFocusChange: (index: number, focus: string) => void;
+  onAddFocus: () => void;
   autoSelected?: boolean;
   freeFocus?: boolean;
 }
@@ -23,6 +33,7 @@ const SkillCard: React.FC<SkillCardProps> = ({
   focuses,
   onToggle,
   onFocusChange,
+  onAddFocus,
   autoSelected = false,
   freeFocus = false,
 }) => {
@@ -47,14 +58,43 @@ const SkillCard: React.FC<SkillCardProps> = ({
       </Label>
       {isSelected && (
         <div className="mt-1 space-y-1">
-          {focuses.map((f, i) => (
-            <Input
-              key={i}
-              placeholder="Focus (optional)"
-              value={f}
-              onChange={(e) => onFocusChange(i, e.target.value)}
-            />
-          ))}
+          {focuses.map((f, i) => {
+            const isCustom = !skill.focusOptions?.includes(f);
+            return (
+              <div key={i} className="flex gap-2 items-center">
+                {isCustom ? (
+                  <Input
+                    placeholder="Custom focus"
+                    value={f}
+                    onChange={(e) => onFocusChange(i, e.target.value)}
+                  />
+                ) : (
+                  <Select
+                    value={f}
+                    onValueChange={(val) => {
+                      if (val === "__custom__") onFocusChange(i, "");
+                      else onFocusChange(i, val);
+                    }}
+                  >
+                    <SelectTrigger className="w-full">
+                      <SelectValue placeholder="Select focus" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {skill.focusOptions?.map((opt) => (
+                        <SelectItem key={opt} value={opt}>
+                          {opt}
+                        </SelectItem>
+                      ))}
+                      <SelectItem value="__custom__">User Defined Focus</SelectItem>
+                    </SelectContent>
+                  </Select>
+                )}
+              </div>
+            );
+          })}
+          <Button type="button" onClick={onAddFocus} size="sm">
+            Add Focus
+          </Button>
         </div>
       )}
     </div>
