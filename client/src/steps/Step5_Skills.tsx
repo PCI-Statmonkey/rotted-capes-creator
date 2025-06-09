@@ -111,7 +111,7 @@ const Step5_Skills = () => {
     setAvailablePoints(20 - pointsUsed); // Update available points
   }, [workingSelectedSkills, workingSelectedFeats, workingSelectedSkillSets, skillSets, archetype]);
 
-  // Persist selections whenever the user switches tabs
+  // Persist selections whenever any working state changes
   useEffect(() => {
     setStartingSkills(workingStartingSkills);
     setSelectedSkills(workingSelectedSkills);
@@ -119,7 +119,7 @@ const Step5_Skills = () => {
     setSelectedSkillSets(workingSelectedSkillSets);
     setSelectedManeuvers(workingSelectedManeuvers);
     setStartingFeat(workingStartingFeat);
-  }, [currentTab]);
+  }, [workingStartingSkills, workingSelectedSkills, workingSelectedFeats, workingSelectedSkillSets, workingSelectedManeuvers, workingStartingFeat]);
 
   // --- Handlers for Toggling Selections ---
 
