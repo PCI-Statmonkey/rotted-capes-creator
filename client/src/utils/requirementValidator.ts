@@ -1,32 +1,46 @@
+// Safely lowercase and trim strings
+export function normalizeName(name: string | undefined): string {
+  return name?.toLowerCase().trim() || "";
+}
+
+// Parse a single prerequisite string into a structured object
+export function parsePrerequisiteString(str: string) {
+  const lower = normalizeName(str);
+
+  if (lower.includes("trained")) {
+    return { type: "skill", name: str.replace(/trained/i, "").trim() };
+  }
+
+  const abilityMatch = str.match(/^([a-z]+)\s+(\d+)\+?$/i);
+  if (abilityMatch) {
+    return {
+      type: "ability",
+      name: abilityMatch[1][0].toUpperCase() + abilityMatch[1].slice(1),
+      value: parseInt(abilityMatch[2], 10),
+    };
+  }
+
+  if (lower.startsWith("feat:")) {
+    return { type: "feat", name: str.split(":")[1].trim() };
+  }
+
+  return { type: "unknown", value: str };
+}
+
 // Parse a prerequisite string into structured requirements
 const parsePrerequisite = (prereqString: string) => {
-  const requirements = [];
+  const requirements = [] as any[];
 
   // Split by comma and clean up each part
   const parts = prereqString.split(',').map((part: string) => part.trim());
-  
+
   for (const part of parts) {
-    // Check for ability score requirements (e.g., "Dexterity 12+", "Wisdom 13+")
-    const abilityMatch = part.match(/^(Strength|Dexterity|Constitution|Intelligence|Wisdom|Charisma)\s+(\d+)\+?$/i);
-    if (abilityMatch) {
-      requirements.push({
-        type: 'ability',
-        name: abilityMatch[1],
-        value: parseInt(abilityMatch[2])
-      });
+    const basic = parsePrerequisiteString(part);
+    if (basic.type !== 'unknown') {
+      requirements.push(basic);
       continue;
     }
-    
-    // Check for skill requirements ending with "trained"
-    const skillMatch = part.match(/^(.+?)\s+trained$/i);
-    if (skillMatch) {
-      requirements.push({
-        type: 'skill',
-        name: skillMatch[1].trim()
-      });
-      continue;
-    }
-    
+
     // Check for specific skill focus requirements (e.g., "Engineering skill focus ×3")
     const skillFocusMatch = part.match(/^(.+?)\s+skill\s+focus(?:\s+×(\d+))?$/i);
     if (skillFocusMatch) {
@@ -39,35 +53,34 @@ const parsePrerequisite = (prereqString: string) => {
       });
       continue;
     }
-    
+
     // Check for "As per maneuver" (special case for Learn Maneuver)
-    if (part.toLowerCase().includes('as per maneuver')) {
-      // This is a special case - we'll handle it separately
+    if (normalizeName(part).includes('as per maneuver')) {
       requirements.push({
         type: 'maneuverPrereq',
         name: 'As per maneuver'
       });
       continue;
     }
-    
+
     // Check for "Editor-in-Chief approval" or similar
-    if (part.toLowerCase().includes('editor') || part.toLowerCase().includes('approval')) {
+    if (normalizeName(part).includes('editor') || normalizeName(part).includes('approval')) {
       requirements.push({
         type: 'approval',
         name: part
       });
       continue;
     }
-    
+
     // Check for "Cannot have" requirements
-    if (part.toLowerCase().startsWith('cannot have')) {
+    if (normalizeName(part).startsWith('cannot have')) {
       requirements.push({
         type: 'cannot_have',
         name: part.replace(/^cannot have\s+/i, '').trim()
       });
       continue;
     }
-    
+
     // Check for "Used the [something] 10 times"
     const usageMatch = part.match(/^Used the (.+?) (\d+) times$/i);
     if (usageMatch) {
@@ -78,23 +91,23 @@ const parsePrerequisite = (prereqString: string) => {
       });
       continue;
     }
-    
+
     // Check for power requirements
-    if (part.toLowerCase().includes('power')) {
+    if (normalizeName(part).includes('power')) {
       requirements.push({
         type: 'power',
         name: part
       });
       continue;
     }
-    
+
     // Default: treat as feat name requirement
     requirements.push({
       type: 'feat',
       name: part
     });
   }
-  
+
   return requirements;
 };
 
@@ -116,11 +129,11 @@ export const meetsPrerequisites = (feat: any, character: any) => {
     .flatMap((set: any) => set.skills);
 
   const normalizeSkill = (s: any) =>
-    typeof s === 'string' ? s.toLowerCase() : s?.name?.toLowerCase();
+    typeof s === 'string' ? normalizeName(s) : normalizeName(s?.name);
 
   const allSkills = new Set([
-    ...selectedSkills.map((s: any) => s.name.toLowerCase()),
-    ...startingSkills.map((s: any) => s.toLowerCase()),
+    ...selectedSkills.map((s: any) => normalizeName(s.name)),
+    ...startingSkills.map((s: any) => normalizeName(s)),
     ...skillsFromSets.map((s: any) => normalizeSkill(s))
   ]);
 
@@ -212,11 +225,11 @@ export const getMissingPrereqs = (feat: any, character: any) => {
     .flatMap((set: any) => set.skills);
 
   const normalizeSkill = (s: any) =>
-    typeof s === 'string' ? s.toLowerCase() : s?.name?.toLowerCase();
+    typeof s === 'string' ? normalizeName(s) : normalizeName(s?.name);
 
   const allSkills = new Set([
-    ...selectedSkills.map((s: any) => s.name.toLowerCase()),
-    ...startingSkills.map((s: any) => s.toLowerCase()),
+    ...selectedSkills.map((s: any) => normalizeName(s.name)),
+    ...startingSkills.map((s: any) => normalizeName(s)),
     ...skillsFromSets.map((s: any) => normalizeSkill(s))
   ]);
 
@@ -251,7 +264,7 @@ export const getMissingPrereqs = (feat: any, character: any) => {
           })
         );
         if ((normalized[req.name.toLowerCase()] || 0) < req.value) {
-          missing.push(`${req.name} ${req.value}+`);
+          missing.push(req);
         }
         break;
       }
@@ -259,25 +272,25 @@ export const getMissingPrereqs = (feat: any, character: any) => {
       
       case 'skill':
         if (!allSkills.has(req.name.toLowerCase())) {
-        missing.push(`${req.name} trained`);
+        missing.push(req);
         }
         break;
       
       case 'startingSkill':
         if (!startingSkills.includes(req.name)) {
-          missing.push(`${req.name} (starting skill)`);
+          missing.push(req);
         }
         break;
       
       case 'feat':
         if (!ownedFeats.includes(req.name)) {
-          missing.push(`Feat: ${req.name}`);
+          missing.push(req);
         }
         break;
       
       case 'skillFocus':
         if (!allSkills.has(req.name.toLowerCase())) {
-        missing.push(`${req.name} skill focus`);
+        missing.push(req);
         }
         break;
       
@@ -294,11 +307,11 @@ export const getMissingPrereqs = (feat: any, character: any) => {
         break;
       
       case 'usage':
-        missing.push(`Used ${req.name} ${req.count} times`);
+        missing.push(req);
         break;
-      
+
       case 'power':
-        missing.push(req.name);
+        missing.push(req);
         break;
     }
   }

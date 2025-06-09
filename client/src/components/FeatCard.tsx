@@ -19,7 +19,7 @@ interface FeatCardProps {
   };
   isSelected: boolean;
   isDisabled: boolean;
-  missingPrereqs: string[];
+  missingPrereqs: any[];
   onToggle: (checked: boolean) => void;
   index?: number; // for "Learn Maneuver"
   showDropdown?: boolean;
