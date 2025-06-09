@@ -379,6 +379,13 @@ const Step5_Skills = () => {
                     showDropdown={feat.name === "Learn Maneuver" && count > 0} // Show dropdown if 'Learn Maneuver' is selected
                     maneuvers={feat.name === "Learn Maneuver" ? maneuvers : undefined} // Pass maneuvers data for dropdown
                   />
+                  {isDisabled && missing.length > 0 && (
+                    <ul className="text-xs text-red-500 mt-1 ml-6 list-disc">
+                      {missing.map((req, idx) => (
+                        <li key={idx}>{req}</li>
+                      ))}
+                    </ul>
+                  )}
 
 
 
