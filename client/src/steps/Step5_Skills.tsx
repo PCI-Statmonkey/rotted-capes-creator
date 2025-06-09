@@ -67,6 +67,24 @@ const Step5_Skills = () => {
     });
   }, [workingSelectedSkillSets, skillSets]);
 
+  const skillCounts = useMemo(() => {
+    const counts: Record<string, number> = {};
+    workingStartingSkills.forEach((s) => {
+      counts[s] = (counts[s] || 0) + 1;
+    });
+    workingSelectedSkills.forEach((s) => {
+      counts[s.name] = (counts[s.name] || 0) + 1;
+    });
+    workingSelectedSkillSets.forEach((setName) => {
+      const found = skillSets.find((s) => s.name === setName);
+      found?.skills?.forEach((sk: any) => {
+        const name = typeof sk === "string" ? sk : sk.name;
+        counts[name] = (counts[name] || 0) + 1;
+      });
+    });
+    return counts;
+  }, [workingStartingSkills, workingSelectedSkills, workingSelectedSkillSets, skillSets]);
+
   const [availablePoints, setAvailablePoints] = useState(20); // Initial points
   const [currentTab, setCurrentTab] = useState("starting"); // Current active tab
 
@@ -376,19 +394,22 @@ const Step5_Skills = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {skills.map((skill) => {
               const fromSkillSet = skillsFromSets.includes(skill.name);
+              const startingSkill = workingStartingSkills.includes(skill.name);
               const isSelected =
                 fromSkillSet ||
-                workingSelectedSkills.some((s) => s.name === skill.name) ||
-                workingStartingSkills.includes(skill.name);
+                startingSkill ||
+                workingSelectedSkills.some((s) => s.name === skill.name);
               const focuses =
                 workingSelectedSkills.find((s) => s.name === skill.name)?.focuses || [""];
+              const freeFocus = (skillCounts[skill.name] || 0) > 1;
               return (
                 <SkillCard
                   key={skill.name}
                   skill={skill}
                   isSelected={isSelected}
                   focuses={focuses}
-                  fromSkillSet={fromSkillSet}
+                  autoSelected={fromSkillSet || startingSkill}
+                  freeFocus={freeFocus}
                   onToggle={() => toggleSkill(skill.name)}
                   onFocusChange={(index, newFocus) => updateSkillFocus(skill.name, index, newFocus)}
                 />
