@@ -28,7 +28,7 @@ export function parsePrerequisiteString(str: string) {
 }
 
 // Parse a prerequisite string into structured requirements
-const parsePrerequisite = (prereqString: string) => {
+export const parsePrerequisite = (prereqString: string) => {
   const requirements = [] as any[];
 
   // Split by comma and clean up each part

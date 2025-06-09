@@ -428,21 +428,7 @@ const Step5_Skills = () => {
                     showDropdown={feat.name === "Learn Maneuver" && count > 0} // Show dropdown if 'Learn Maneuver' is selected
                     maneuvers={feat.name === "Learn Maneuver" ? maneuvers : undefined} // Pass maneuvers data for dropdown
                   />
-                  {isDisabled && missing.length > 0 && (
-                      <ul className="text-xs text-red-500 mt-1 ml-6 list-disc">
-                        {missing.map((req, idx) => (
-                          <li key={idx}>
-                            {typeof req === "object"
-                              ? req.type === "ability"
-                                ? `${req.name} ${req.value}`
-                                : req.type === "feat"
-                                  ? `Feat: ${req.name}`
-                                  : req.name
-                              : String(req)}
-                          </li>
-                        ))}
-                      </ul>
-                    )}  
+
                     
 {/* Render input fields and remove buttons for each instance of a selected feat */}
                   {count > 0 && (
