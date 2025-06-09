@@ -12,6 +12,7 @@ interface SkillCardProps {
   focus: string;
   onToggle: () => void;
   onFocusChange: (focus: string) => void;
+  fromSkillSet?: boolean;
 }
 
 const SkillCard: React.FC<SkillCardProps> = ({
@@ -20,11 +21,20 @@ const SkillCard: React.FC<SkillCardProps> = ({
   focus,
   onToggle,
   onFocusChange,
+  fromSkillSet = false,
 }) => {
   return (
-    <div className="mb-2 p-2 border border-gray-700 rounded">
+    <div
+      className={`mb-2 p-2 border rounded ${
+        fromSkillSet ? "bg-accent/20 border-accent" : "border-gray-700"
+      }`}
+    >
       <Label className="flex items-center gap-2">
-        <Checkbox checked={isSelected} onCheckedChange={onToggle} />
+        <Checkbox
+          checked={isSelected}
+          onCheckedChange={onToggle}
+          disabled={fromSkillSet}
+        />
         {skill.name} ({skill.ability})
       </Label>
       {isSelected && (
