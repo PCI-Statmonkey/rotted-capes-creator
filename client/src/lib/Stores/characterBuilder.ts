@@ -2,7 +2,7 @@ import { useState } from "react";
 
 export type CharacterSkill = {
   name: string;
-  focus?: string;
+  focuses: string[];
 };
 
 export type Character = {
