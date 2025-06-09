@@ -16,6 +16,7 @@ import SkillCard from "@/components/SkillCard";
 import FeatCard from "@/components/FeatCard";
 import { meetsPrerequisites, getMissingPrereqs } from "@/utils/requirementValidator";
 import useCachedGameContent from "@/hooks/useCachedGameContent";
+import { useCharacter } from "@/context/CharacterContext";
 
 // Basic starting skills list
 const basicStartingSkills = [
@@ -31,7 +32,6 @@ const Step5_Skills = () => {
   // Destructure character builder state
   const {
     abilityScores = {},
-    archetype,
     startingSkills,
     selectedSkills,
     selectedFeats,
@@ -39,6 +39,8 @@ const Step5_Skills = () => {
     selectedManeuvers,
     startingFeat,
   } = useCharacterBuilder();
+  const { character } = useCharacter();
+  const archetype = character.archetype;
 
   // --- Local state for working selections ---
   const [workingStartingSkills, setWorkingStartingSkills] = useState<string[]>([]);
@@ -447,8 +449,12 @@ const Step5_Skills = () => {
                                   setWorkingSelectedManeuvers(updated);
                                 }}
                                 maneuvers={maneuvers}
-                                meetsPrerequisites={meetsPrerequisites}
-                                getMissingPrereqs={getMissingPrereqs}
+                                meetsPrerequisites={(item) =>
+                                  meetsPrerequisites(item, characterData)
+                                }
+                                getMissingPrereqs={(item) =>
+                                  getMissingPrereqs(item, characterData)
+                                }
                               />
                             )}
                           </div>

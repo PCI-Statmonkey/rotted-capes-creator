@@ -21,7 +21,7 @@ export const getCharacters = async (req: Request, res: Response) => {
     // Allow filtering by userId
     const userId = req.query.userId ? Number(req.query.userId) : undefined;
     
-    let query = db.select().from(characters);
+    let query: any = db.select().from(characters);
     
     if (userId) {
       query = query.where(eq(characters.userId, userId));
@@ -77,7 +77,7 @@ export const getCharacter = async (req: Request, res: Response) => {
     res.json({
       ...character,
       data: {
-        ...character.data,
+        ...(character.data as any),
         feats,
         powers,
         skills,

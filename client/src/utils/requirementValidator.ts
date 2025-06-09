@@ -1,9 +1,9 @@
 // Parse a prerequisite string into structured requirements
-const parsePrerequisite = (prereqString) => {
+const parsePrerequisite = (prereqString: string) => {
   const requirements = [];
-  
+
   // Split by comma and clean up each part
-  const parts = prereqString.split(',').map(part => part.trim());
+  const parts = prereqString.split(',').map((part: string) => part.trim());
   
   for (const part of parts) {
     // Check for ability score requirements (e.g., "Dexterity 12+", "Wisdom 13+")
@@ -98,7 +98,7 @@ const parsePrerequisite = (prereqString) => {
   return requirements;
 };
 
-export const meetsPrerequisites = (feat, character) => {
+export const meetsPrerequisites = (feat: any, character: any) => {
   if (!feat || !feat.prerequisites || feat.prerequisites.length === 0) return true;
 
   const {
@@ -112,29 +112,29 @@ export const meetsPrerequisites = (feat, character) => {
 
   // Combine all skill names from starting, selected, and skill sets
   const skillsFromSets = skillSets
-    .filter((set) => selectedSkillSets.includes(set.name))
-    .flatMap((set) => set.skills);
+    .filter((set: any) => selectedSkillSets.includes(set.name))
+    .flatMap((set: any) => set.skills);
 
   const normalizeSkill = (s: any) =>
     typeof s === 'string' ? s.toLowerCase() : s?.name?.toLowerCase();
 
   const allSkills = new Set([
-    ...selectedSkills.map((s) => s.name.toLowerCase()),
-    ...startingSkills.map((s) => s.toLowerCase()),
-    ...skillsFromSets.map((s) => normalizeSkill(s))
+    ...selectedSkills.map((s: any) => s.name.toLowerCase()),
+    ...startingSkills.map((s: any) => s.toLowerCase()),
+    ...skillsFromSets.map((s: any) => normalizeSkill(s))
   ]);
 
-  const ownedFeats = selectedFeats.map(f => f.name);
+  const ownedFeats = selectedFeats.map((f: any) => f.name);
 
   // Parse all prerequisites
-  const parsedPrereqs = feat.prerequisites.flatMap(prereqString => {
+  const parsedPrereqs = feat.prerequisites.flatMap((prereqString: any) => {
     if (typeof prereqString === 'string') {
       return parsePrerequisite(prereqString);
     }
     return [prereqString]; // Already an object
   });
 
-  return parsedPrereqs.every((req) => {
+  return parsedPrereqs.every((req: any) => {
     switch (req.type) {
       case 'ability': {
         const abilityMap: Record<string, string> = {
@@ -195,7 +195,7 @@ export const meetsPrerequisites = (feat, character) => {
   });
 };
 
-export const getMissingPrereqs = (feat, character) => {
+export const getMissingPrereqs = (feat: any, character: any) => {
   const missing = [];
 
   const {
@@ -208,31 +208,31 @@ export const getMissingPrereqs = (feat, character) => {
   } = character;
 
   const skillsFromSets = skillSets
-    .filter((set) => selectedSkillSets.includes(set.name))
-    .flatMap((set) => set.skills);
+    .filter((set: any) => selectedSkillSets.includes(set.name))
+    .flatMap((set: any) => set.skills);
 
   const normalizeSkill = (s: any) =>
     typeof s === 'string' ? s.toLowerCase() : s?.name?.toLowerCase();
 
   const allSkills = new Set([
-    ...selectedSkills.map((s) => s.name.toLowerCase()),
-    ...startingSkills.map((s) => s.toLowerCase()),
-    ...skillsFromSets.map((s) => normalizeSkill(s))
+    ...selectedSkills.map((s: any) => s.name.toLowerCase()),
+    ...startingSkills.map((s: any) => s.toLowerCase()),
+    ...skillsFromSets.map((s: any) => normalizeSkill(s))
   ]);
 
-  const ownedFeats = selectedFeats.map(f => f.name);
+  const ownedFeats = selectedFeats.map((f: any) => f.name);
 
   if (!feat.prerequisites || feat.prerequisites.length === 0) return [];
 
   // Parse all prerequisites
-  const parsedPrereqs = feat.prerequisites.flatMap(prereqString => {
+  const parsedPrereqs = feat.prerequisites.flatMap((prereqString: any) => {
     if (typeof prereqString === 'string') {
       return parsePrerequisite(prereqString);
     }
     return [prereqString]; // Already an object
   });
 
-  for (const req of parsedPrereqs) {
+  for (const req of parsedPrereqs as any[]) {
     switch (req.type) {
       case 'ability': {
         const abilityMap: Record<string, string> = {

@@ -28,7 +28,7 @@ import gearData from "../../../client/src/rules/gear.json" assert { type: "json"
 
 async function runSeed() {
   console.log("🌱 Seeding skills...");
-  for (const skill of skillsData) {
+  for (const skill of skillsData as any[]) {
     await db.insert(skills).values({
       name: skill.name,
       ability: skill.ability || "Intelligence",
@@ -38,7 +38,7 @@ async function runSeed() {
   }
 
   console.log("🌱 Seeding feats...");
-  for (const feat of featsData) {
+  for (const feat of featsData as any[]) {
     await db.insert(feats).values({
       name: feat.name,
       description: feat.description || "",
@@ -52,18 +52,18 @@ async function runSeed() {
   }
 
   console.log("🌱 Seeding skill sets...");
-  for (const set of skillSetsData) {
+  for (const set of skillSetsData as any[]) {
     await db.insert(skillSets).values({
       name: set.name,
       points: set.points || 0,
-      skills: set.skills.map(s => typeof s === "string" ? { name: s } : s),
+      skills: set.skills.map((s: any) => (typeof s === "string" ? { name: s } : s)),
       feats: set.feats || [],
       description: set.description || "",
     }).onConflictDoNothing();
   }
 
   console.log("🌱 Seeding origins...");
-  for (const origin of originsData) {
+  for (const origin of originsData as any[]) {
     await db.insert(origins).values({
       name: origin.name,
       description: origin.description || "",
@@ -75,7 +75,7 @@ async function runSeed() {
   }
 
   console.log("🌱 Seeding origin features...");
-  for (const feature of originFeaturesData) {
+  for (const feature of originFeaturesData as any[]) {
   await db.insert(originFeatures).values({
     name: feature.name,
     description: feature.description || "",
@@ -85,7 +85,7 @@ async function runSeed() {
   }
 
   console.log("🌱 Seeding archetypes...");
-  for (const arch of archetypesData) {
+  for (const arch of archetypesData as any[]) {
     await db.insert(archetypes).values({
       name: arch.name,
       description: arch.description || "",
@@ -97,7 +97,7 @@ async function runSeed() {
   }
 
   console.log("🌱 Seeding powers...");
-  for (const power of powersData) {
+  for (const power of powersData as any[]) {
     await db.insert(powers).values({
       name: power.name,
       description: power.description || "",
@@ -108,7 +108,7 @@ async function runSeed() {
   }
 
   console.log("🌱 Seeding power sets...");
-  for (const ps of powerSetsData) {
+  for (const ps of powerSetsData as any[]) {
     await db.insert(powerSets).values({
       name: ps.name,
       powers: ps.powers || [],
@@ -117,7 +117,7 @@ async function runSeed() {
   }
 
   console.log("🌱 Seeding power modifiers...");
-  for (const mod of powerModifiersData) {
+  for (const mod of powerModifiersData as any[]) {
     await db.insert(powerModifiers).values({
       name: mod.name,
       description: mod.effect || "",
@@ -127,7 +127,7 @@ async function runSeed() {
   }
 
   console.log("🌱 Seeding maneuvers...");
-  for (const maneuver of maneuversData) {
+  for (const maneuver of maneuversData as any[]) {
     await db.insert(maneuvers).values({
       name: maneuver.name,
       type: maneuver.type,

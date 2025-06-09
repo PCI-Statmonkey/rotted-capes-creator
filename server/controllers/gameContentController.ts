@@ -42,7 +42,7 @@ function makeCrudHandlers<T>(entityName: string, schema: z.ZodTypeAny) {
   return {
     getAll: async (_req: Request, res: Response) => {
       try {
-        const result = await storage[`getAll${entityName}`]() as T[];
+        const result = await (storage as any)[`getAll${entityName}`]() as T[];
         res.json(result);
       } catch (err) {
         console.error(`Error fetching ${entityName}s:`, err);
@@ -53,7 +53,7 @@ function makeCrudHandlers<T>(entityName: string, schema: z.ZodTypeAny) {
       try {
         const id = parseInt(req.params.id);
         if (isNaN(id)) return res.status(400).json({ error: "Invalid ID format" });
-        const item = await storage[`get${entityName}ById`](id) as T | undefined;
+        const item = await (storage as any)[`get${entityName}ById`](id) as T | undefined;
         if (!item) return res.status(404).json({ error: `${entityName} not found` });
         res.json(item);
       } catch (err) {
@@ -65,7 +65,7 @@ function makeCrudHandlers<T>(entityName: string, schema: z.ZodTypeAny) {
       const validationResult = schema.safeParse(req.body);
       if (handleValidationError(res, validationResult)) return;
       try {
-        const item = await storage[`create${entityName}`](validationResult.data) as T;
+        const item = await (storage as any)[`create${entityName}`](validationResult.data) as T;
         res.status(201).json(item);
       } catch (err) {
         console.error(`Error creating ${entityName}:`, err);
@@ -76,9 +76,9 @@ function makeCrudHandlers<T>(entityName: string, schema: z.ZodTypeAny) {
       try {
         const id = parseInt(req.params.id);
         if (isNaN(id)) return res.status(400).json({ error: "Invalid ID format" });
-        const validationResult = schema.partial().safeParse(req.body);
+        const validationResult = (schema as any).partial().safeParse(req.body);
         if (handleValidationError(res, validationResult)) return;
-        const updated = await storage[`update${entityName}`](id, validationResult.data) as T | null;
+        const updated = await (storage as any)[`update${entityName}`](id, validationResult.data) as T | null;
         if (!updated) return res.status(404).json({ error: `${entityName} not found` });
         res.json(updated);
       } catch (err) {
@@ -90,9 +90,9 @@ function makeCrudHandlers<T>(entityName: string, schema: z.ZodTypeAny) {
       try {
         const id = parseInt(req.params.id);
         if (isNaN(id)) return res.status(400).json({ error: "Invalid ID format" });
-        const existing = await storage[`get${entityName}ById`](id) as T | undefined;
+        const existing = await (storage as any)[`get${entityName}ById`](id) as T | undefined;
         if (!existing) return res.status(404).json({ error: `${entityName} not found` });
-        await storage[`delete${entityName}`](id);
+        await (storage as any)[`delete${entityName}`](id);
         res.status(204).send();
       } catch (err) {
         console.error(`Error deleting ${entityName}:`, err);
@@ -193,20 +193,20 @@ export const {
 } = makeCrudHandlers("Gear", insertGearSchema);
 
 // Get all maneuvers
-export async function getAllManeuvers(req, res) {
+export async function getAllManeuvers(req: Request, res: Response) {
   const result = await db.select().from(maneuvers);
   res.json(result);
 }
 
 // Create a new maneuver
-export async function createManeuver(req, res) {
+export async function createManeuver(req: Request, res: Response) {
   const { name, type, requirements } = req.body;
-  const result = await db.insert(maneuvers).values({ name, type, requirements }).returning();
+  const result = await db.insert(maneuvers).values({ name, type, requirements } as any).returning();
   res.status(201).json(result[0]);
 }
 
 // Update an existing maneuver
-export async function updateManeuver(req, res) {
+export async function updateManeuver(req: Request, res: Response) {
   const id = parseInt(req.params.id);
   const { name, type, requirements } = req.body;
   const result = await db.update(maneuvers).set({ name, type, requirements }).where(eq(maneuvers.id, id)).returning();
@@ -214,7 +214,7 @@ export async function updateManeuver(req, res) {
 }
 
 // Delete a maneuver
-export async function deleteManeuver(req, res) {
+export async function deleteManeuver(req: Request, res: Response) {
   const id = parseInt(req.params.id);
   await db.delete(maneuvers).where(eq(maneuvers.id, id));
   res.status(204).send();

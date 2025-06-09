@@ -404,7 +404,6 @@ export const insertFeatSchema = createInsertSchema(feats).pick({
   description: true,
   type: true,
   repeatable: true,
-  prerequisites: true,
   tags: true,
   notes: true,
   input_label: true,
@@ -455,7 +454,6 @@ export const insertCharacterComplicationSchema = createInsertSchema(characterCom
 export type Maneuver = z.infer<typeof maneuverSchema>;
 export type NewManeuver = z.infer<typeof insertManeuverSchema>;
 export type CharacterData = z.infer<typeof characterDataSchema>;
-export type Feat = typeof feats.$inferSelect;
 export type NewFeat = typeof feats.$inferInsert;
 
 export type CharacterFeat = typeof characterFeats.$inferSelect;

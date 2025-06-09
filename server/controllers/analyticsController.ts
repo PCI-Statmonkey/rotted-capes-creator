@@ -49,7 +49,7 @@ export const getEvents = async (req: Request, res: Response) => {
     const offset = (pageNum - 1) * limitNum;
     
     // Build query with filters
-    let query = db.select().from(analytics);
+    let query: any = db.select().from(analytics);
     
     if (event) {
       query = query.where(eq(analytics.event, String(event)));
