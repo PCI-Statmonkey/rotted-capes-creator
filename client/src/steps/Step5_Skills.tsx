@@ -342,7 +342,9 @@ const Step5_Skills = () => {
             {skills.map((skill) => {
               const fromSkillSet = skillsFromSets.includes(skill.name);
               const isSelected =
-                fromSkillSet || workingSelectedSkills.some((s) => s.name === skill.name);
+                fromSkillSet ||
+                workingSelectedSkills.some((s) => s.name === skill.name) ||
+                workingStartingSkills.includes(skill.name);
               const focus =
                 workingSelectedSkills.find((s) => s.name === skill.name)?.focus || "";
               return (
