@@ -45,7 +45,7 @@ const Step5_Skills = () => {
 
   // --- Local state for working selections ---
   const [workingStartingSkills, setWorkingStartingSkills] = useState<string[]>([]);
-  const [workingSelectedSkills, setWorkingSelectedSkills] = useState<{ name: string; focus?: string }[]>([]);
+  const [workingSelectedSkills, setWorkingSelectedSkills] = useState<{ name: string; focuses: string[] }[]>([]);
   // Store selected feats with an optional input for feats like 'Skill Focus' or 'Learn Maneuver'
   const [workingSelectedFeats, setWorkingSelectedFeats] = useState<{ name: string; input?: string }[]>([]);
   const [workingSelectedSkillSets, setWorkingSelectedSkillSets] = useState<string[]>([]);
@@ -88,7 +88,13 @@ const Step5_Skills = () => {
   // Data is fetched and cached via useCachedGameContent hook
   useEffect(() => {
     if (startingSkills) setWorkingStartingSkills(startingSkills);
-    if (selectedSkills) setWorkingSelectedSkills(selectedSkills);
+    if (selectedSkills)
+      setWorkingSelectedSkills(
+        selectedSkills.map((s: any) => ({
+          name: s.name,
+          focuses: s.focuses || (s.focus ? [s.focus] : []),
+        }))
+      );
     if (selectedFeats) setWorkingSelectedFeats(selectedFeats as any);
     if (selectedSkillSets) setWorkingSelectedSkillSets(selectedSkillSets);
     if (selectedManeuvers) setWorkingSelectedManeuvers(selectedManeuvers);
@@ -110,8 +116,12 @@ const Step5_Skills = () => {
     const maxSkillSets = archetype === "Highly Trained" ? 3 : 2;
 
     // Calculate total points used: 1 point per skill, 5 points per feat, and points from skill sets
+    const focusPoints = workingSelectedSkills.reduce(
+      (acc, s) => acc + s.focuses.filter((f) => f.trim() !== "").length,
+      0
+    );
     const pointsUsed =
-      workingSelectedSkills.length + workingSelectedFeats.length * 5 + skillSetPoints;
+      workingSelectedSkills.length + focusPoints + workingSelectedFeats.length * 5 + skillSetPoints;
     setAvailablePoints(20 - pointsUsed); // Update available points
   }, [workingSelectedSkills, workingSelectedFeats, workingSelectedSkillSets, skillSets, archetype]);
 
@@ -129,9 +139,22 @@ const Step5_Skills = () => {
   // --- Handlers for Toggling Selections ---
 
   // Update focus for a specific skill
-  const updateSkillFocus = (skillName: string, focus: string) => {
+  const updateSkillFocus = (skillName: string, index: number, focus: string) => {
     setWorkingSelectedSkills((prev) =>
-      prev.map((s) => (s.name === skillName ? { ...s, focus } : s))
+      prev.map((s) => {
+        if (s.name !== skillName) return s;
+        const focuses = [...s.focuses];
+        focuses[index] = focus;
+        // If editing the last focus and it's non-empty, add a new blank field
+        if (index === focuses.length - 1 && focus.trim() !== "") {
+          focuses.push("");
+        }
+        // Remove trailing blank focuses beyond one empty at the end
+        while (focuses.length > 1 && focuses[focuses.length - 1] === "" && focuses[focuses.length - 2] === "") {
+          focuses.pop();
+        }
+        return { ...s, focuses };
+      })
     );
   };
 
@@ -141,9 +164,9 @@ const Step5_Skills = () => {
     if (exists) {
       // If skill is already selected, remove it
       setWorkingSelectedSkills(workingSelectedSkills.filter((s) => s.name !== skillName));
-    } else if (availablePoints >= 1) { // Only add if enough points (assuming 1 point per skill)
+    } else if (availablePoints >= 1) {
       const skill = skills.find((s) => s.name === skillName);
-      if (skill) setWorkingSelectedSkills([...workingSelectedSkills, { name: skill.name }]);
+      if (skill) setWorkingSelectedSkills([...workingSelectedSkills, { name: skill.name, focuses: [""] }]);
     }
   };
 
@@ -377,17 +400,17 @@ const Step5_Skills = () => {
                 fromSkillSet ||
                 workingSelectedSkills.some((s) => s.name === skill.name) ||
                 workingStartingSkills.includes(skill.name);
-              const focus =
-                workingSelectedSkills.find((s) => s.name === skill.name)?.focus || "";
+              const focuses =
+                workingSelectedSkills.find((s) => s.name === skill.name)?.focuses || [""];
               return (
                 <SkillCard
                   key={skill.name}
                   skill={skill}
                   isSelected={isSelected}
-                  focus={focus}
+                  focuses={focuses}
                   fromSkillSet={fromSkillSet}
                   onToggle={() => toggleSkill(skill.name)}
-                  onFocusChange={(newFocus) => updateSkillFocus(skill.name, newFocus)}
+                  onFocusChange={(index, newFocus) => updateSkillFocus(skill.name, index, newFocus)}
                 />
               );
             })}
