@@ -127,7 +127,7 @@ const Step5_Skills = () => {
     setAvailablePoints(20 - pointsUsed); // Update available points
   }, [workingSelectedSkills, workingSelectedFeats, workingSelectedSkillSets, skillSets, archetype]);
 
-  // Persist selections whenever the user switches tabs
+  // Persist selections whenever any working state changes
   useEffect(() => {
     setStartingSkills(workingStartingSkills);
     setSelectedSkills(workingSelectedSkills);
@@ -136,7 +136,7 @@ const Step5_Skills = () => {
     setSelectedManeuvers(workingSelectedManeuvers);
     setStartingFeat(workingStartingFeat);
     setStartingManeuver(workingStartingManeuver);
-  }, [currentTab]);
+  }, [workingStartingSkills, workingSelectedSkills, workingSelectedFeats, workingSelectedSkillSets, workingSelectedManeuvers, workingStartingFeat, workingStartingManeuver]);
 
   // --- Handlers for Toggling Selections ---
 
@@ -376,7 +376,9 @@ const Step5_Skills = () => {
             {skills.map((skill) => {
               const fromSkillSet = skillsFromSets.includes(skill.name);
               const isSelected =
-                fromSkillSet || workingSelectedSkills.some((s) => s.name === skill.name);
+                fromSkillSet ||
+                workingSelectedSkills.some((s) => s.name === skill.name) ||
+                workingStartingSkills.includes(skill.name);
               const focus =
                 workingSelectedSkills.find((s) => s.name === skill.name)?.focus || "";
               return (

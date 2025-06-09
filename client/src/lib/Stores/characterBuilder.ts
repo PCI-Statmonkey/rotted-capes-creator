@@ -1,4 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { saveToLocalStorage, loadFromLocalStorage } from "@/lib/utils";
+
+const BUILDER_STORAGE_KEY = "rotted-capes-builder";
 
 export type CharacterSkill = {
   name: string;
@@ -25,15 +28,17 @@ export type Character = {
 };
 
 export const useCharacterBuilder = () => {
-  const [startingSkills, setStartingSkills] = useState<string[]>([]);
-  const [selectedSkills, setSelectedSkills] = useState<CharacterSkill[]>([]);
-  const [selectedFeats, setSelectedFeats] = useState<{ name: string; input?: string }[]>([]);
-  const [selectedSkillSets, setSelectedSkillSets] = useState<string[]>([]);
-  const [selectedManeuvers, setSelectedManeuvers] = useState<string[]>([]);
-  const [startingFeat, setStartingFeat] = useState<string>("");
-  const [startingManeuver, setStartingManeuver] = useState<string>("");
-  const [currentStep, setCurrentStep] = useState<number>(1);
-  const [abilityScores, setAbilityScores] = useState({
+  const saved = loadFromLocalStorage(BUILDER_STORAGE_KEY) as Partial<Character> | null;
+
+  const [startingSkills, setStartingSkills] = useState<string[]>(saved?.startingSkills || []);
+  const [selectedSkills, setSelectedSkills] = useState<CharacterSkill[]>(saved?.selectedSkills || []);
+  const [selectedFeats, setSelectedFeats] = useState<{ name: string; input?: string }[]>(saved?.selectedFeats || []);
+  const [selectedSkillSets, setSelectedSkillSets] = useState<string[]>(saved?.selectedSkillSets || []);
+  const [selectedManeuvers, setSelectedManeuvers] = useState<string[]>(saved?.selectedManeuvers || []);
+  const [startingFeat, setStartingFeat] = useState<string>(saved?.startingFeat || "");
+  const [startingManeuver, setStartingManeuver] = useState<string>(saved?.startingManeuver || "");
+  const [currentStep, setCurrentStep] = useState<number>(saved?.currentStep || 1);
+  const [abilityScores, setAbilityScores] = useState(saved?.abilityScores || {
     STR: 10,
     DEX: 10,
     CON: 10,
@@ -41,6 +46,20 @@ export const useCharacterBuilder = () => {
     WIS: 10,
     CHA: 10,
   });
+
+  useEffect(() => {
+    saveToLocalStorage(BUILDER_STORAGE_KEY, {
+      abilityScores,
+      startingSkills,
+      selectedSkills,
+      selectedFeats,
+      selectedSkillSets,
+      selectedManeuvers,
+      startingFeat,
+      startingManeuver,
+      currentStep,
+    });
+  }, [abilityScores, startingSkills, selectedSkills, selectedFeats, selectedSkillSets, selectedManeuvers, startingFeat, startingManeuver, currentStep]);
 
   return {
     abilityScores,
