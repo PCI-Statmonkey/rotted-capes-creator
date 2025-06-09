@@ -9,16 +9,16 @@ interface SkillCardProps {
     ability: string;
   };
   isSelected: boolean;
-  focus: string;
+  focuses: string[];
   onToggle: () => void;
-  onFocusChange: (focus: string) => void;
+  onFocusChange: (index: number, focus: string) => void;
   fromSkillSet?: boolean;
 }
 
 const SkillCard: React.FC<SkillCardProps> = ({
   skill,
   isSelected,
-  focus,
+  focuses,
   onToggle,
   onFocusChange,
   fromSkillSet = false,
@@ -38,12 +38,16 @@ const SkillCard: React.FC<SkillCardProps> = ({
         {skill.name} ({skill.ability})
       </Label>
       {isSelected && (
-        <Input
-          placeholder="Focus (optional)"
-          value={focus}
-          onChange={(e) => onFocusChange(e.target.value)}
-          className="mt-1"
-        />
+        <div className="mt-1 space-y-1">
+          {focuses.map((f, i) => (
+            <Input
+              key={i}
+              placeholder="Focus (optional)"
+              value={f}
+              onChange={(e) => onFocusChange(i, e.target.value)}
+            />
+          ))}
+        </div>
       )}
     </div>
   );
