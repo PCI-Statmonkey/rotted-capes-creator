@@ -45,6 +45,25 @@ export const useCharacterBuilder = () => {
     CHA: 10,
   });
 
+  const resetBuilder = () => {
+    localStorage.removeItem(BUILDER_STORAGE_KEY);
+    setStartingSkills([]);
+    setSelectedSkills([]);
+    setSelectedFeats([]);
+    setSelectedSkillSets([]);
+    setSelectedManeuvers([]);
+    setStartingManeuver("");
+    setAbilityScores({
+      STR: 10,
+      DEX: 10,
+      CON: 10,
+      INT: 10,
+      WIS: 10,
+      CHA: 10,
+    });
+    setCurrentStep(1);
+  };
+
   useEffect(() => {
     saveToLocalStorage(BUILDER_STORAGE_KEY, {
       abilityScores,
@@ -75,5 +94,6 @@ export const useCharacterBuilder = () => {
     setStartingManeuver,
     currentStep,
     setCurrentStep,
+    resetBuilder,
   };
 };

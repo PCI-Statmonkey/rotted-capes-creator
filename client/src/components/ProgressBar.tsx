@@ -5,6 +5,7 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { RefreshCcw } from "lucide-react";
 import { useState } from "react";
+import { useCharacterBuilder } from "@/lib/Stores/characterBuilder";
 import { 
   AlertDialog,
   AlertDialogAction,
@@ -18,6 +19,7 @@ import {
 
 export default function ProgressBar() {
   const { currentStep, setCurrentStep, saveCharacter, resetCharacter } = useCharacter();
+  const { resetBuilder } = useCharacterBuilder();
   const [confirmDialogOpen, setConfirmDialogOpen] = useState(false);
   
   const handleStartOver = () => {
@@ -26,6 +28,7 @@ export default function ProgressBar() {
   
   const confirmStartOver = () => {
     resetCharacter(); // Reset character to empty state
+    resetBuilder(); // Clear builder progress
     setConfirmDialogOpen(false);
   };
 
