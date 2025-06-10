@@ -131,7 +131,11 @@ const Step5_Skills = () => {
 
     // Calculate total points used: 1 point per skill, 5 points per feat, and points from skill sets
     const focusPoints = workingSelectedSkills.reduce(
-      (acc, s) => acc + s.focuses.filter((f) => f.trim() !== "").length,
+      (acc, s) =>
+        acc +
+        s.focuses.filter(
+          (f) => f.trim() !== "" && f !== "__custom__"
+        ).length,
       0
     );
     const featCost = Math.max(0, workingSelectedFeats.length - 1) * 5; // first feat is free
@@ -180,6 +184,18 @@ const Step5_Skills = () => {
         ...updated[idx],
         focuses: [...updated[idx].focuses, ""],
       };
+      return updated;
+    });
+  };
+
+  const removeSkillFocus = (skillName: string, index: number) => {
+    setWorkingSelectedSkills((prev) => {
+      const idx = prev.findIndex((s) => s.name === skillName);
+      if (idx === -1) return prev;
+      const updated = [...prev];
+      const focuses = [...updated[idx].focuses];
+      focuses.splice(index, 1);
+      updated[idx] = { ...updated[idx], focuses };
       return updated;
     });
   };
@@ -441,6 +457,7 @@ const Step5_Skills = () => {
                   onToggle={() => toggleSkill(skill.name)}
                   onFocusChange={(index, newFocus) => updateSkillFocus(skill.name, index, newFocus)}
                   onAddFocus={() => addSkillFocus(skill.name)}
+                  onRemoveFocus={(index) => removeSkillFocus(skill.name, index)}
                 />
               );
             })}
