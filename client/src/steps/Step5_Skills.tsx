@@ -38,6 +38,8 @@ const Step5_Skills = () => {
     selectedSkillSets,
     selectedManeuvers,
     startingManeuver,
+    skillsTab,
+    setSkillsTab,
   } = useCharacterBuilder();
   const { character, setCurrentStep, setCurrentSubStep } = useCharacter();
   const archetype = character.archetype;
@@ -84,7 +86,11 @@ const Step5_Skills = () => {
   }, [workingStartingSkills, workingSelectedSkillSets, skillSets]);
 
   const [availablePoints, setAvailablePoints] = useState(20); // Initial points
-  const [currentTab, setCurrentTab] = useState("starting"); // Current active tab
+  const [currentTab, setCurrentTab] = useState(skillsTab || "starting"); // Current active tab
+
+  useEffect(() => {
+    setSkillsTab(currentTab);
+  }, [currentTab]);
 
   // Destructure character builder setters to persist selections
   const {
@@ -387,6 +393,7 @@ const Step5_Skills = () => {
     setSelectedSkillSets(workingSelectedSkillSets);
     setSelectedManeuvers(workingSelectedManeuvers);
     setStartingManeuver(workingStartingManeuver);
+    setSkillsTab("feats");
     setCurrentSubStep(1); // Move to feats sub-step
   };
 

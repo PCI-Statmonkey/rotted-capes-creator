@@ -23,6 +23,7 @@ export type Character = {
   selectedSkillSets: string[];
   selectedManeuvers: string[];
   startingManeuver: string;
+  skillsTab: string;
   currentStep: number;
 };
 
@@ -35,6 +36,7 @@ export const useCharacterBuilder = () => {
   const [selectedSkillSets, setSelectedSkillSets] = useState<string[]>(saved?.selectedSkillSets || []);
   const [selectedManeuvers, setSelectedManeuvers] = useState<string[]>(saved?.selectedManeuvers || []);
   const [startingManeuver, setStartingManeuver] = useState<string>(saved?.startingManeuver || "");
+  const [skillsTab, setSkillsTab] = useState<string>(saved?.skillsTab || "starting");
   const [currentStep, setCurrentStep] = useState<number>(saved?.currentStep || 1);
   const [abilityScores, setAbilityScores] = useState(saved?.abilityScores || {
     STR: 10,
@@ -53,6 +55,7 @@ export const useCharacterBuilder = () => {
     setSelectedSkillSets([]);
     setSelectedManeuvers([]);
     setStartingManeuver("");
+    setSkillsTab("starting");
     setAbilityScores({
       STR: 10,
       DEX: 10,
@@ -73,9 +76,10 @@ export const useCharacterBuilder = () => {
       selectedSkillSets,
       selectedManeuvers,
       startingManeuver,
+      skillsTab,
       currentStep,
     });
-  }, [abilityScores, startingSkills, selectedSkills, selectedFeats, selectedSkillSets, selectedManeuvers, startingManeuver, currentStep]);
+  }, [abilityScores, startingSkills, selectedSkills, selectedFeats, selectedSkillSets, selectedManeuvers, startingManeuver, skillsTab, currentStep]);
 
   return {
     abilityScores,
@@ -92,6 +96,8 @@ export const useCharacterBuilder = () => {
     setSelectedManeuvers,
     startingManeuver,
     setStartingManeuver,
+    skillsTab,
+    setSkillsTab,
     currentStep,
     setCurrentStep,
     resetBuilder,
