@@ -81,6 +81,7 @@ export const sampleSkills = [
     name: "Athletics",
     description: "Your physical prowess allows you to perform feats of strength and endurance.",
     ability: "Strength",
+    focusOptions: ["Climbing", "Running"],
     untrained: true,
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString()
@@ -90,6 +91,7 @@ export const sampleSkills = [
     name: "Acrobatics",
     description: "Your agility and balance allow you to perform dangerous maneuvers and avoid hazards.",
     ability: "Dexterity",
+    focusOptions: ["Tumbling", "Parkour"],
     untrained: true,
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString()
@@ -99,6 +101,7 @@ export const sampleSkills = [
     name: "Investigation",
     description: "Your analytical mind allows you to find clues and draw conclusions from evidence.",
     ability: "Intelligence",
+    focusOptions: ["Forensics"],
     untrained: true,
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString()
