@@ -47,11 +47,9 @@ const SkillCard: React.FC<SkillCardProps> = ({
       }`}
     >
       <Label className="flex items-center gap-2">
-        <Checkbox
-          checked={isSelected}
-          onCheckedChange={onToggle}
-          disabled={autoSelected}
-        />
+        {!autoSelected && (
+          <Checkbox checked={isSelected} onCheckedChange={onToggle} />
+        )}
         {skill.name}
         {freeFocus && (
           <Badge variant="secondary" className="ml-2">
