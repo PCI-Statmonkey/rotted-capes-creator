@@ -306,7 +306,7 @@ const DAMAGE_TYPES = [
 ];
 
 export default function Step6_Powers() {
-  const { character, updateCharacterField, setCurrentStep } = useCharacter();
+  const { character, updateCharacterField, setCurrentStep, setCurrentSubStep } = useCharacter();
   const [powerCreationMethod, setPowerCreationMethod] = useState<"powerSet" | "array" | "pointBuy">("powerSet");
   const [selectedPowerSet, setSelectedPowerSet] = useState<string>("");
   const [selectedPowerArray, setSelectedPowerArray] = useState<string>("");
@@ -541,6 +541,7 @@ export default function Step6_Powers() {
   // Handle going to previous step
   const handlePrevious = () => {
     setCurrentStep(5);
+    setCurrentSubStep(1);
   };
 
   // Handle going to next step
