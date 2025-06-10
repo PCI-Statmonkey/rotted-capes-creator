@@ -128,7 +128,8 @@ export default function Step3_Archetype() {
                 key={archetype.name}
                 className={cn(
                   "cursor-pointer transition-all hover:shadow-md hover:border-accent/50 overflow-hidden",
-                  selectedArchetype === archetype.name ? "border-2 border-accent shadow-lg" : ""
+                  selectedArchetype === archetype.name ? "border-2 border-accent shadow-lg" : "",
+                  selectedArchetype && selectedArchetype !== archetype.name ? "opacity-50" : ""
                 )}
                 onClick={() => setSelectedArchetype(archetype.name)}
               >
