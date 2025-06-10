@@ -51,7 +51,11 @@ export function parsePrerequisiteString(str: string) {
 
   // General ability parsing - can include multiple abilities with values
   const abilityRegex = /(str|dex|con|int|wis|cha|strength|dexterity|constitution|intelligence|wisdom|charisma)\s*(\d+)\+?/gi;
-  const abilityMatches = [...str.matchAll(abilityRegex)];
+  const abilityMatches: RegExpExecArray[] = [];
+  let abilityMatch;
+  while ((abilityMatch = abilityRegex.exec(str)) !== null) {
+    abilityMatches.push(abilityMatch);
+  }
   if (abilityMatches.length > 0) {
     const abilities = abilityMatches.map((m) => ({
       type: "ability",
