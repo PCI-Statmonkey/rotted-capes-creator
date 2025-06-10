@@ -52,7 +52,7 @@ const SkillCard: React.FC<SkillCardProps> = ({
           onCheckedChange={onToggle}
           disabled={autoSelected}
         />
-        {skill.name} ({skill.ability})
+        {skill.name}
         {freeFocus && (
           <Badge variant="secondary" className="ml-2">
             Free Focus
@@ -92,11 +92,7 @@ const SkillCard: React.FC<SkillCardProps> = ({
                     </SelectContent>
                   </Select>
                 )}
-                {freeFocus && i === 0 && (
-                  <Badge variant="secondary" className="ml-2">
-                    Free Focus
-                  </Badge>
-                )}
+                {/* Free focus indicator shown next to skill name */}
                 <Button
                   type="button"
                   variant="destructive"

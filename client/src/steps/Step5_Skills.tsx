@@ -67,13 +67,11 @@ const Step5_Skills = () => {
     });
   }, [workingSelectedSkillSets, skillSets]);
 
+  // Count how many times each skill is granted for free via starting skills or skill sets
   const skillCounts = useMemo(() => {
     const counts: Record<string, number> = {};
     workingStartingSkills.forEach((s) => {
       counts[s] = (counts[s] || 0) + 1;
-    });
-    workingSelectedSkills.forEach((s) => {
-      counts[s.name] = (counts[s.name] || 0) + 1;
     });
     workingSelectedSkillSets.forEach((setName) => {
       const found = skillSets.find((s) => s.name === setName);
@@ -83,7 +81,7 @@ const Step5_Skills = () => {
       });
     });
     return counts;
-  }, [workingStartingSkills, workingSelectedSkills, workingSelectedSkillSets, skillSets]);
+  }, [workingStartingSkills, workingSelectedSkillSets, skillSets]);
 
   const [availablePoints, setAvailablePoints] = useState(20); // Initial points
   const [currentTab, setCurrentTab] = useState("starting"); // Current active tab
