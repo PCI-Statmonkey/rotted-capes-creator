@@ -11,13 +11,61 @@ export function parsePrerequisiteString(str: string) {
     return { type: "skill", name: str.replace(/trained/i, "").trim() };
   }
 
-  const abilityMatch = str.match(/^([a-z]+)\s+(\d+)\+?$/i);
-  if (abilityMatch) {
+  const isAbility = (name: string) =>
+    [
+      "str",
+      "strength",
+      "dex",
+      "dexterity",
+      "con",
+      "constitution",
+      "int",
+      "intelligence",
+      "wis",
+      "wisdom",
+      "cha",
+      "charisma",
+    ].includes(normalizeName(name));
+
+  const cap = (n: string) => n[0].toUpperCase() + n.slice(1);
+
+  // Handle patterns like "Str/Dex 13" or "Str or Dex 13"
+  const orSameValueMatch = str.match(
+    /^([a-z]+)\s*(?:\/|or)\s*([a-z]+)\s+(\d+)\+?$/i
+  );
+  if (
+    orSameValueMatch &&
+    isAbility(orSameValueMatch[1]) &&
+    isAbility(orSameValueMatch[2])
+  ) {
+    const value = parseInt(orSameValueMatch[3], 10);
     return {
-      type: "ability",
-      name: abilityMatch[1][0].toUpperCase() + abilityMatch[1].slice(1),
-      value: parseInt(abilityMatch[2], 10),
+      type: "compound",
+      operator: "or",
+      requirements: [
+        { type: "ability", name: cap(orSameValueMatch[1]), value },
+        { type: "ability", name: cap(orSameValueMatch[2]), value },
+      ],
     };
+  }
+
+  // General ability parsing - can include multiple abilities with values
+  const abilityRegex = /(str|dex|con|int|wis|cha|strength|dexterity|constitution|intelligence|wisdom|charisma)\s*(\d+)\+?/gi;
+  const abilityMatches = [...str.matchAll(abilityRegex)];
+  if (abilityMatches.length > 0) {
+    const abilities = abilityMatches.map((m) => ({
+      type: "ability",
+      name: cap(m[1]),
+      value: parseInt(m[2], 10),
+    }));
+    if (abilities.length > 1) {
+      return {
+        type: "compound",
+        operator: lower.includes(" or ") ? "or" : "and",
+        requirements: abilities,
+      };
+    }
+    return abilities[0];
   }
 
   if (lower.startsWith("feat:")) {
@@ -155,8 +203,13 @@ export const meetsPrerequisites = (feat: any, character: any) => {
     return [prereqString]; // Already an object
   });
 
-  return parsedPrereqs.every((req: any) => {
+  const evaluate = (req: any): boolean => {
     switch (req.type) {
+      case 'compound':
+        return req.operator === 'or'
+          ? req.requirements.some((r: any) => evaluate(r))
+          : req.requirements.every((r: any) => evaluate(r));
+
       case 'ability': {
         const abilityMap: Record<string, string> = {
           str: 'strength',
@@ -175,45 +228,47 @@ export const meetsPrerequisites = (feat: any, character: any) => {
         );
         return (normalized[req.name.toLowerCase()] || 0) >= req.value;
       }
-      
+
       case 'skill':
         return allSkills.has(req.name.toLowerCase());
-      
+
       case 'startingSkill':
         return startingSkills.includes(req.name);
-      
+
       case 'feat':
         return ownedFeats.includes(req.name);
-      
+
       case 'skillFocus':
         return allSkills.has(req.name.toLowerCase());
-      
+
       case 'maneuverPrereq':
         // Special handling for "Learn Maneuver" - always return true for now
         // You might want to implement actual maneuver prerequisite checking
         return true;
-      
+
       case 'approval':
         // Editor approval requirements - might want to add a flag for this
         return true;
-      
+
       case 'cannot_have':
         // Check that they don't have the specified thing
         // This is complex and depends on what they "cannot have"
         return true; // For now, assume they don't have it
-      
+
       case 'usage':
         // Usage requirements - you'd need to track usage counts
         return true; // For now, assume they meet usage requirements
-      
+
       case 'power':
         // Power requirements - you'd need to track powers
         return true; // For now, assume they meet power requirements
-      
+
       default:
         return true;
     }
-  });
+  };
+
+  return parsedPrereqs.every(evaluate);
 };
 
 export const getMissingPrereqs = (feat: any, character: any) => {
@@ -261,8 +316,13 @@ export const getMissingPrereqs = (feat: any, character: any) => {
     return [prereqString]; // Already an object
   });
 
-  for (const req of parsedPrereqs as any[]) {
+  const evaluate = (req: any): boolean => {
     switch (req.type) {
+      case 'compound':
+        return req.operator === 'or'
+          ? req.requirements.some((r: any) => evaluate(r))
+          : req.requirements.every((r: any) => evaluate(r));
+
       case 'ability': {
         const abilityMap: Record<string, string> = {
           str: 'strength',
@@ -279,58 +339,58 @@ export const getMissingPrereqs = (feat: any, character: any) => {
             return [name, v];
           })
         );
-        if ((normalized[req.name.toLowerCase()] || 0) < req.value) {
-          missing.push(req);
-        }
-        break;
+        return (normalized[req.name.toLowerCase()] || 0) >= req.value;
       }
-        break;
-      
+
       case 'skill':
-        if (!allSkills.has(req.name.toLowerCase())) {
-        missing.push(req);
-        }
-        break;
-      
+        return allSkills.has(req.name.toLowerCase());
+
       case 'startingSkill':
-        if (!startingSkills.includes(req.name)) {
-          missing.push(req);
-        }
-        break;
-      
+        return startingSkills.includes(req.name);
+
       case 'feat':
-        if (!ownedFeats.includes(req.name)) {
-          missing.push(req);
-        }
-        break;
-      
+        return ownedFeats.includes(req.name);
+
       case 'skillFocus':
-        if (!allSkills.has(req.name.toLowerCase())) {
-        missing.push(req);
-        }
-        break;
-      
+        return allSkills.has(req.name.toLowerCase());
+
       case 'maneuverPrereq':
-        // Don't add to missing for now
-        break;
-      
+        return true;
+
       case 'approval':
-        // Don't add to missing for now
-        break;
-      
+        return true;
+
       case 'cannot_have':
-        // This would require checking if they DO have something they shouldn't
-        break;
-      
+        return true;
+
       case 'usage':
-        missing.push(req);
-        break;
+        return false;
 
       case 'power':
-        missing.push(req);
-        break;
+        return false;
+
+      default:
+        return true;
     }
-  }
+  };
+
+  const collectMissing = (req: any) => {
+    if (req.type === 'compound') {
+      if (req.operator === 'or') {
+        if (!req.requirements.some((r: any) => evaluate(r))) {
+          missing.push(req);
+        }
+      } else {
+        req.requirements.forEach((r: any) => collectMissing(r));
+      }
+      return;
+    }
+    if (!evaluate(req)) {
+      missing.push(req);
+    }
+  };
+
+  parsedPrereqs.forEach((req: any) => collectMissing(req));
 
   return missing;
 };
