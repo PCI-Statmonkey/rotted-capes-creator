@@ -230,7 +230,8 @@ export const meetsPrerequisites = (feat: any, character: any) => {
             return [name, v];
           })
         );
-        return (normalized[req.name.toLowerCase()] || 0) >= req.value;
+        const abilityName = abilityMap[req.name.toLowerCase()] || req.name.toLowerCase();
+        return (normalized[abilityName] || 0) >= req.value;
       }
 
       case 'skill':
@@ -343,7 +344,8 @@ export const getMissingPrereqs = (feat: any, character: any) => {
             return [name, v];
           })
         );
-        return (normalized[req.name.toLowerCase()] || 0) >= req.value;
+        const abilityName = abilityMap[req.name.toLowerCase()] || req.name.toLowerCase();
+        return (normalized[abilityName] || 0) >= req.value;
       }
 
       case 'skill':
