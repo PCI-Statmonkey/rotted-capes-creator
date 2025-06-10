@@ -73,17 +73,20 @@ const FeatCard: React.FC<FeatCardProps> = ({
         {feat.name} — {feat.description}
       </Label>
       {parsedPrereqs.length > 0 && (
-        <ul className="text-xs mt-1 ml-6 list-disc">
-          {parsedPrereqs.map((req, idx) => {
-            const text = formatReq(req);
-            const missing = missingStrings.includes(text);
-            return (
-              <li key={idx} className={missing ? "text-red-500" : "text-white"}>
-                {text}
-              </li>
-            );
-          })}
-        </ul>
+        <div className="text-xs mt-1 ml-6">
+          <span className="font-semibold text-white">Prerequisites:</span>
+          <ul className="list-disc pl-5 mt-1">
+            {parsedPrereqs.map((req, idx) => {
+              const text = formatReq(req);
+              const missing = missingStrings.includes(text);
+              return (
+                <li key={idx} className={missing ? "text-red-500" : "text-white"}>
+                  {text}
+                </li>
+              );
+            })}
+          </ul>
+        </div>
       )}
 
       {showDropdown && maneuvers && (
