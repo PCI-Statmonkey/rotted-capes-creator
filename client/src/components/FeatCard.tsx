@@ -41,9 +41,15 @@ const FeatCard: React.FC<FeatCardProps> = ({
   selectedManeuver,
   onSelectManeuver,
 }) => {
-  const parsedPrereqs = feat.prerequisites
-    ? feat.prerequisites.flatMap((p) => parsePrerequisite(p as any))
+  const prereqList = Array.isArray(feat.prerequisites)
+    ? feat.prerequisites
+    : feat.prerequisites
+    ? [feat.prerequisites]
     : [];
+
+  const parsedPrereqs = prereqList.flatMap((p) =>
+    typeof p === "string" ? parsePrerequisite(p as any) : [p]
+  );
 
   const formatReq = (req: any) =>
     typeof req === "object"

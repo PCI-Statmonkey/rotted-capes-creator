@@ -112,7 +112,15 @@ export const parsePrerequisite = (prereqString: string) => {
 };
 
 export const meetsPrerequisites = (feat: any, character: any) => {
-  if (!feat || !feat.prerequisites || feat.prerequisites.length === 0) return true;
+  if (!feat) return true;
+
+  const prereqList = Array.isArray(feat.prerequisites)
+    ? feat.prerequisites
+    : feat.prerequisites
+    ? [feat.prerequisites]
+    : [];
+
+  if (prereqList.length === 0) return true;
 
   const {
     abilityScores = {},
@@ -140,7 +148,7 @@ export const meetsPrerequisites = (feat: any, character: any) => {
   const ownedFeats = selectedFeats.map((f: any) => f.name);
 
   // Parse all prerequisites
-  const parsedPrereqs = feat.prerequisites.flatMap((prereqString: any) => {
+  const parsedPrereqs = prereqList.flatMap((prereqString: any) => {
     if (typeof prereqString === 'string') {
       return parsePrerequisite(prereqString);
     }
@@ -209,7 +217,7 @@ export const meetsPrerequisites = (feat: any, character: any) => {
 };
 
 export const getMissingPrereqs = (feat: any, character: any) => {
-  const missing = [];
+  const missing = [] as any[];
 
   const {
     abilityScores = {},
@@ -235,10 +243,18 @@ export const getMissingPrereqs = (feat: any, character: any) => {
 
   const ownedFeats = selectedFeats.map((f: any) => f.name);
 
-  if (!feat.prerequisites || feat.prerequisites.length === 0) return [];
+  if (!feat) return [];
+
+  const prereqList = Array.isArray(feat.prerequisites)
+    ? feat.prerequisites
+    : feat.prerequisites
+    ? [feat.prerequisites]
+    : [];
+
+  if (prereqList.length === 0) return [];
 
   // Parse all prerequisites
-  const parsedPrereqs = feat.prerequisites.flatMap((prereqString: any) => {
+  const parsedPrereqs = prereqList.flatMap((prereqString: any) => {
     if (typeof prereqString === 'string') {
       return parsePrerequisite(prereqString);
     }
