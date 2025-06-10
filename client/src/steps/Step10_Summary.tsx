@@ -11,6 +11,7 @@ import { calculateModifier, formatModifier } from "@/lib/utils";
 import { Check, Save, Shield, Heart, Target } from "lucide-react";
 import { apiRequest } from "@/lib/queryClient";
 import CharacterPdfButton from "@/components/CharacterPdfButton";
+import { parsePrerequisite, getMissingPrereqs } from "@/utils/requirementValidator";
 
 export default function Step10_Summary() {
   const { character, updateCharacterField, saveCharacter } = useCharacter();
@@ -59,6 +60,17 @@ export default function Step10_Summary() {
 
   // Derived stats are calculated on the fly
   const derivedStats = calculateDerivedStats();
+
+  const prereqCharacterData = {
+    abilityScores: Object.fromEntries(
+      Object.entries(character.abilities).map(([k, v]) => [k, (v as any).value])
+    ),
+    selectedSkills: character.skills,
+    startingSkills: [] as any[],
+    selectedFeats: character.feats,
+    selectedSkillSets: [] as any[],
+    skillSets: [] as any[],
+  };
   
   // Update character defense to match avoidance for compatibility
   useEffect(() => {
@@ -550,14 +562,49 @@ export default function Step10_Summary() {
           <CardContent className="max-h-64 overflow-y-auto">
             {character.feats.length > 0 ? (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-                {character.feats.map((feat, index) => (
-                  <div key={index} className="border border-gray-700 rounded-lg p-2">
-                    <div className="font-semibold">{feat.name}</div>
-                    {feat.source && (
-                      <div className="text-xs text-gray-400">Source: {feat.source}</div>
-                    )}
-                  </div>
-                ))}
+                {character.feats.map((feat, index) => {
+                  const prereqList = Array.isArray((feat as any).prerequisites)
+                    ? (feat as any).prerequisites
+                    : (feat as any).prerequisites
+                    ? [(feat as any).prerequisites]
+                    : [];
+                  const parsed = prereqList.flatMap((p: any) =>
+                    typeof p === "string" ? parsePrerequisite(p) : [p]
+                  );
+                  const formatReq = (req: any) =>
+                    typeof req === "object"
+                      ? req.type === "ability"
+                        ? `${req.name} ${req.value}`
+                        : req.type === "feat"
+                        ? `Feat: ${req.name}`
+                        : req.name
+                      : String(req);
+                  const missing = getMissingPrereqs(feat, prereqCharacterData).map(formatReq);
+                  return (
+                    <div key={index} className="border border-gray-700 rounded-lg p-2">
+                      <div className="font-semibold">{feat.name}</div>
+                      {feat.source && (
+                        <div className="text-xs text-gray-400">Source: {feat.source}</div>
+                      )}
+                      {parsed.length > 0 && (
+                        <div className="text-xs mt-1">
+                          <span className="font-semibold text-white">Prerequisites:</span>
+                          <ul className="list-disc pl-5 mt-1">
+                            {parsed.map((req, idx) => {
+                              const text = formatReq(req);
+                              const unmet = missing.includes(text);
+                              return (
+                                <li key={idx} className={unmet ? "text-red-500" : "text-white"}>
+                                  {text}
+                                </li>
+                              );
+                            })}
+                          </ul>
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
               </div>
             ) : (
               <div className="text-center py-6 text-gray-500">No feats selected</div>
