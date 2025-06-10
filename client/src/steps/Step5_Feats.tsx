@@ -1,34 +1,17 @@
-// Step5_Skills.tsx
+// Step5_Feats.tsx
 import { useEffect, useState, useMemo } from "react";
 import { motion } from "framer-motion";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "@/components/ui/tabs";
 import { useCharacterBuilder } from "@/lib/Stores/characterBuilder";
 import ManeuverDropdown from "@/components/ManeuverDropdown";
-import SkillSetCard from "@/components/SkillSetCard";
-import SkillCard from "@/components/SkillCard";
 import FeatCard from "@/components/FeatCard";
 import { meetsPrerequisites, getMissingPrereqs } from "@/utils/requirementValidator";
 import useCachedGameContent from "@/hooks/useCachedGameContent";
 import { useCharacter } from "@/context/CharacterContext";
 
 // Basic starting skills list
-const basicStartingSkills = [
-  "Athletics",
-  "Drive",
-  "Local Knowledge",
-  "Basic Technology",
-  "Basic Engineering",
-  "Urban Survival",
-];
-
-const Step5_Skills = () => {
+const Step5_Feats = () => {
   // Destructure character builder state
   const {
     abilityScores = {},
@@ -84,7 +67,6 @@ const Step5_Skills = () => {
   }, [workingStartingSkills, workingSelectedSkillSets, skillSets]);
 
   const [availablePoints, setAvailablePoints] = useState(20); // Initial points
-  const [currentTab, setCurrentTab] = useState("starting"); // Current active tab
 
   // Destructure character builder setters to persist selections
   const {
@@ -364,7 +346,7 @@ const Step5_Skills = () => {
   };
 
   // --- Navigation Handlers ---
-  const handlePrevious = () => setCurrentStep(4);
+  const handlePrevious = () => setCurrentSubStep(0);
 
   const handleContinue = () => {
     // Validation checks before proceeding to the next step
@@ -391,125 +373,123 @@ const Step5_Skills = () => {
     setSelectedSkillSets(workingSelectedSkillSets);
     setSelectedManeuvers(workingSelectedManeuvers);
     setStartingManeuver(workingStartingManeuver);
-    setCurrentSubStep(1); // Move to feats sub-step
+    setCurrentStep(6); // Proceed to next main step
+    setCurrentSubStep(0);
   };
 
   return (
     <motion.div className="bg-panel rounded-2xl p-6 comic-border overflow-hidden halftone-bg">
-      <h2 className="text-2xl font-comic text-accent mb-4">Step 5: Skills</h2>
-      <div className="text-sm text-white mb-2">
+      <h2 className="text-2xl font-comic text-accent mb-4">Step 5: Feats</h2>
+      <div className="text-sm text-white mb-4">
         Points Available: <span className="text-accent font-bold">{availablePoints}</span>
       </div>
 
-      <Tabs value={currentTab} onValueChange={setCurrentTab} className="w-full">
-        <TabsList className="mb-4">
-          <TabsTrigger value="starting">Starting</TabsTrigger>
-          <TabsTrigger value="skillsets">Skill Sets</TabsTrigger>
-          <TabsTrigger value="skills">Skills</TabsTrigger>
-        </TabsList>
+      <p className="text-white text-sm mb-2">
+        Your hero gets 1 free feat. The first feat chosen costs zero points.
+      </p>
+      {(() => {
+        const characterData = {
+          abilityScores,
+          selectedSkills: workingSelectedSkills,
+          startingSkills: workingStartingSkills,
+          selectedFeats: workingSelectedFeats,
+          selectedSkillSets: workingSelectedSkillSets,
+          skillSets,
+        };
 
-        <TabsContent value="starting">
-          <h3 className="text-white text-md mb-2">Starting Skills: Pick any two</h3>
-          {basicStartingSkills.map((skill) => (
-            <div key={skill} className="text-white">
-              <label className="flex items-center space-x-2 cursor-pointer">
-                <input
-                  type="checkbox"
-                  className="form-checkbox h-4 w-4 text-accent rounded focus:ring-accent"
-                  checked={workingStartingSkills.includes(skill)}
-                  onChange={() => toggleStartingSkill(skill)}
-                />
-                <span>{skill}</span>
-              </label>
-            </div>
-          ))}
+        return feats.map((feat) => {
+          const count = workingSelectedFeats.filter((f) => f.name === feat.name).length;
+          const isDisabled = !meetsPrerequisites(feat, characterData);
+          const missing = getMissingPrereqs(feat, characterData);
 
-
-          <h3 className="text-white text-md mt-4 mb-2">Starting Maneuver: Pick one</h3>
-          <select
-            value={workingStartingManeuver}
-            onChange={(e) => setWorkingStartingManeuver(e.target.value)}
-            className="border rounded p-2 text-black w-full bg-white focus:outline-none focus:ring-2 focus:ring-accent"
-          >
-            <option value="">Select a starting maneuver</option>
-            {maneuvers
-              .filter((m) =>
-                meetsPrerequisites(m, {
-                  abilityScores,
-                  selectedSkills: workingSelectedSkills,
-                  startingSkills: workingStartingSkills,
-                  selectedFeats: workingSelectedFeats,
-                  selectedSkillSets: workingSelectedSkillSets,
-                  skillSets,
-                })
-              )
-              .map((m) => (
-                <option key={m.name} value={m.name}>
-                  {m.name}
-                </option>
-              ))}
-          </select>
-        </TabsContent>
-
-        <TabsContent value="skillsets">
-          <h3 className="text-white text-md mb-2">Skill Sets</h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {skillSets.map((set) => (
-              <SkillSetCard
-                key={set.name}
-                set={set}
-                isSelected={workingSelectedSkillSets.includes(set.name)}
-                onToggle={() => toggleSkillSet(set.name)}
+          return (
+            <div
+              key={feat.name}
+              className={`mb-4 ${isDisabled ? 'opacity-50 pointer-events-none' : ''}`}
+            >
+              <FeatCard
+                feat={feat}
+                isSelected={count > 0}
+                isDisabled={isDisabled}
+                missingPrereqs={missing}
+                onToggle={(checked) => toggleFeat(feat.name, checked)}
+                showDropdown={feat.name === 'Learn Maneuver' && count > 0}
+                maneuvers={feat.name === 'Learn Maneuver' ? maneuvers : undefined}
               />
-            ))}
-          </div>
-        </TabsContent>
 
-        <TabsContent value="skills">
-          <h3 className="text-white text-md mb-2">Individual Skills</h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {skills.map((skill) => {
-              const fromSkillSet = skillsFromSets.includes(skill.name);
-              const startingSkill = workingStartingSkills.includes(skill.name);
-              const isSelected =
-                fromSkillSet ||
-                startingSkill ||
-                workingSelectedSkills.some((s) => s.name === skill.name);
-              const focuses =
-                workingSelectedSkills.find((s) => s.name === skill.name)?.focuses || [];
-              const freeFocus = (skillCounts[skill.name] || 0) > 1;
-              return (
-                <SkillCard
-                  key={skill.name}
-                  skill={skill}
-                  isSelected={isSelected}
-                  focuses={focuses}
-                  autoSelected={fromSkillSet || startingSkill}
-                  freeFocus={freeFocus}
-                  onToggle={() => toggleSkill(skill.name)}
-                  onFocusChange={(index, newFocus) => updateSkillFocus(skill.name, index, newFocus)}
-                  onAddFocus={() => addSkillFocus(skill.name)}
-                  onRemoveFocus={(index) => removeSkillFocus(skill.name, index)}
-                />
-              );
-            })}
-          </div>
-        </TabsContent>
-
-      </Tabs>
+              {count > 0 && (
+                <div className="ml-4 mt-2 space-y-2">
+                  {workingSelectedFeats
+                    .map((f, originalIndex) => ({ ...f, originalIndex }))
+                    .filter((f) => f.name === feat.name)
+                    .map((f, i) => (
+                      <div key={f.originalIndex} className="flex items-center gap-2">
+                        <span className="text-sm text-white">{feat.name} #{i + 1}</span>
+                        <Button
+                          size="sm"
+                          variant="destructive"
+                          onClick={() => removeFeat(f.originalIndex)}
+                        >
+                          Remove
+                        </Button>
+                        {feat.name === 'Skill Focus' ? (
+                          <select
+                            value={workingSelectedFeats[f.originalIndex]?.input || ''}
+                            onChange={(e) => {
+                              const updated = [...workingSelectedFeats];
+                              updated[f.originalIndex].input = e.target.value;
+                              setWorkingSelectedFeats(updated);
+                            }}
+                            className="border rounded p-1 text-black"
+                          >
+                            <option value="">Select a skill</option>
+                            {skills.map((s) => (
+                              <option key={s.name} value={s.name}>
+                                {s.name}
+                              </option>
+                            ))}
+                          </select>
+                        ) : feat.input_label && (
+                          <input
+                            type="text"
+                            placeholder={feat.input_label}
+                            value={workingSelectedFeats[f.originalIndex]?.input || ''}
+                            onChange={(e) => {
+                              const updated = [...workingSelectedFeats];
+                              updated[f.originalIndex].input = e.target.value;
+                              setWorkingSelectedFeats(updated);
+                            }}
+                            className="border rounded p-1 text-black"
+                          />
+                        )}
+                        {feat.name === 'Learn Maneuver' && (
+                          <ManeuverDropdown
+                            label={`Select Maneuver #${i + 1}`}
+                            value={workingSelectedManeuvers[f.originalIndex] || ''}
+                            onChange={(value) => {
+                              const updated = [...workingSelectedManeuvers];
+                              updated[f.originalIndex] = value;
+                              setWorkingSelectedManeuvers(updated);
+                            }}
+                            maneuvers={maneuvers}
+                            meetsPrerequisites={(item) => meetsPrerequisites(item, characterData)}
+                            getMissingPrereqs={(item) => getMissingPrereqs(item, characterData)}
+                          />
+                        )}
+                      </div>
+                    ))}
+                </div>
+              )}
+            </div>
+          );
+        });
+      })()}
 
       <div className="flex justify-between mt-6">
         <Button onClick={handlePrevious}>
           <ArrowLeft className="mr-2 h-5 w-5" /> Previous
         </Button>
-        <Button
-          onClick={() => {
-            // Logic to navigate between tabs or continue to the next step
-            if (currentTab === "starting") setCurrentTab("skillsets");
-            else if (currentTab === "skillsets") setCurrentTab("skills");
-            else handleContinue(); // If on the last tab, call handleContinue
-          }}
-        >
+        <Button onClick={handleContinue}>
           Next <ArrowRight className="ml-2 h-5 w-5" />
         </Button>
       </div>
@@ -517,4 +497,4 @@ const Step5_Skills = () => {
   );
 };
 
-export default Step5_Skills;
+export default Step5_Feats;

@@ -147,7 +147,9 @@ interface CharacterContextType {
   character: Character;
   setCharacter: React.Dispatch<React.SetStateAction<Character>>;
   currentStep: number;
+  currentSubStep: number;
   setCurrentStep: React.Dispatch<React.SetStateAction<number>>;
+  setCurrentSubStep: React.Dispatch<React.SetStateAction<number>>;
   updateCharacterField: <K extends keyof Character>(field: K, value: Character[K]) => void;
   updateAbilityScore: (ability: keyof Abilities, value: number) => void;
   addSkill: (skill: Skill) => void;
@@ -172,6 +174,7 @@ export const CharacterProvider = ({ children }: { children: ReactNode }) => {
     return savedCharacter ? savedCharacter : createEmptyCharacter();
   });
   const [currentStep, setCurrentStep] = useState(1);
+  const [currentSubStep, setCurrentSubStep] = useState(0);
 
   useEffect(() => {
     saveToLocalStorage(STORAGE_KEY, character);
@@ -568,7 +571,9 @@ export const CharacterProvider = ({ children }: { children: ReactNode }) => {
     character,
     setCharacter,
     currentStep,
+    currentSubStep,
     setCurrentStep,
+    setCurrentSubStep,
     updateCharacterField,
     updateAbilityScore,
     addSkill,
