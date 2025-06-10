@@ -23,6 +23,8 @@ interface SkillCardProps {
   onToggle: () => void;
   onFocusChange: (index: number, focus: string) => void;
   onAddFocus: () => void;
+  /** Remove a focus at the given index */
+  onRemoveFocus: (index: number) => void;
   autoSelected?: boolean;
   freeFocus?: boolean;
 }
@@ -34,6 +36,7 @@ const SkillCard: React.FC<SkillCardProps> = ({
   onToggle,
   onFocusChange,
   onAddFocus,
+  onRemoveFocus,
   autoSelected = false,
   freeFocus = false,
 }) => {
@@ -59,23 +62,20 @@ const SkillCard: React.FC<SkillCardProps> = ({
       {isSelected && (
         <div className="mt-1 space-y-1">
           {focuses.map((f, i) => {
-            // Show an input field when the user selects "User Defined Focus"
-            // or when the current focus is not part of the predefined options
-            const isCustom = f === "" || !skill.focusOptions?.includes(f);
+            const isCustom = f === "__custom__" || (f !== "" && !skill.focusOptions?.includes(f));
             return (
               <div key={i} className="flex gap-2 items-center">
                 {isCustom ? (
                   <Input
                     placeholder="Custom focus"
-                    value={f}
+                    value={f === "__custom__" ? "" : f}
                     onChange={(e) => onFocusChange(i, e.target.value)}
                   />
                 ) : (
                   <Select
                     value={f}
                     onValueChange={(val) => {
-                      if (val === "__custom__") onFocusChange(i, "");
-                      else onFocusChange(i, val);
+                      onFocusChange(i, val);
                     }}
                   >
                     <SelectTrigger className="w-full">
@@ -91,6 +91,14 @@ const SkillCard: React.FC<SkillCardProps> = ({
                     </SelectContent>
                   </Select>
                 )}
+                <Button
+                  type="button"
+                  variant="destructive"
+                  size="icon"
+                  onClick={() => onRemoveFocus(i)}
+                >
+                  ×
+                </Button>
               </div>
             );
           })}
