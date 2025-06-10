@@ -154,23 +154,34 @@ const Step5_Skills = () => {
 
   // Update focus for a specific skill
   const updateSkillFocus = (skillName: string, index: number, focus: string) => {
-    setWorkingSelectedSkills((prev) =>
-      prev.map((s) => {
-        if (s.name !== skillName) return s;
-        const focuses = [...s.focuses];
+    setWorkingSelectedSkills((prev) => {
+      const idx = prev.findIndex((s) => s.name === skillName);
+      if (idx === -1) {
+        const focuses: string[] = [];
         focuses[index] = focus;
-        return { ...s, focuses };
-      })
-    );
+        return [...prev, { name: skillName, focuses }];
+      }
+      const updated = [...prev];
+      const focuses = [...updated[idx].focuses];
+      focuses[index] = focus;
+      updated[idx] = { ...updated[idx], focuses };
+      return updated;
+    });
   };
 
   const addSkillFocus = (skillName: string) => {
-    setWorkingSelectedSkills((prev) =>
-      prev.map((s) => {
-        if (s.name !== skillName) return s;
-        return { ...s, focuses: [...s.focuses, ""] };
-      })
-    );
+    setWorkingSelectedSkills((prev) => {
+      const idx = prev.findIndex((s) => s.name === skillName);
+      if (idx === -1) {
+        return [...prev, { name: skillName, focuses: [""] }];
+      }
+      const updated = [...prev];
+      updated[idx] = {
+        ...updated[idx],
+        focuses: [...updated[idx].focuses, ""],
+      };
+      return updated;
+    });
   };
 
   // Toggle selection of an individual skill
