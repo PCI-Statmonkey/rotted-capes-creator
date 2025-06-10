@@ -283,6 +283,22 @@ const Step5_Skills = () => {
 
   // Toggle a feat via checkbox interaction
   const toggleFeat = (featName: string, checked: boolean) => {
+    const feat = feats.find((f) => f.name === featName);
+    if (!feat) return;
+
+    const characterData = {
+      abilityScores,
+      selectedSkills: workingSelectedSkills,
+      startingSkills: workingStartingSkills,
+      selectedFeats: workingSelectedFeats,
+      selectedSkillSets: workingSelectedSkillSets,
+      skillSets,
+    };
+
+    if (!meetsPrerequisites(feat, characterData)) {
+      return;
+    }
+
     if (checked) addFeat(featName);
     else removeFeatByName(featName);
   };
@@ -445,7 +461,10 @@ const Step5_Skills = () => {
               const missing = getMissingPrereqs(feat, characterData); // Get details of missing prerequisites
 
               return (
-                <div key={feat.name} className={`mb-4 ${isDisabled ? 'opacity-50' : ''}`}>
+                <div
+                  key={feat.name}
+                  className={`mb-4 ${isDisabled ? 'opacity-50 pointer-events-none' : ''}`}
+                >
                   <FeatCard
                     feat={feat}
                     isSelected={count > 0} // Is this feat type selected at least once?
