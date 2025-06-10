@@ -3,6 +3,12 @@ import { useEffect, useState, useMemo } from "react";
 import { motion } from "framer-motion";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@/components/ui/tabs";
 import { useCharacterBuilder } from "@/lib/Stores/characterBuilder";
 import ManeuverDropdown from "@/components/ManeuverDropdown";
 import FeatCard from "@/components/FeatCard";
@@ -21,6 +27,8 @@ const Step5_Feats = () => {
     selectedSkillSets,
     selectedManeuvers,
     startingManeuver,
+    skillsTab,
+    setSkillsTab,
   } = useCharacterBuilder();
   const { character, setCurrentStep, setCurrentSubStep } = useCharacter();
   const archetype = character.archetype;
@@ -386,23 +394,41 @@ const Step5_Feats = () => {
         Points Available: <span className="text-accent font-bold">{availablePoints}</span>
       </div>
 
-      <p className="text-white text-sm mb-2">
-        Your hero gets 1 free feat. The first feat chosen costs zero points.
-      </p>
-      {(() => {
-        const characterData = {
-          abilityScores,
-          selectedSkills: workingSelectedSkills,
-          startingSkills: workingStartingSkills,
-          selectedFeats: workingSelectedFeats,
+      <Tabs
+        value="feats"
+        onValueChange={(value) => {
+          if (value !== "feats") {
+            setSkillsTab(value);
+            setCurrentSubStep(0);
+          }
+        }}
+        className="w-full"
+      >
+        <TabsList className="mb-4">
+          <TabsTrigger value="starting">Starting</TabsTrigger>
+          <TabsTrigger value="skillsets">Skill Sets</TabsTrigger>
+          <TabsTrigger value="skills">Skills</TabsTrigger>
+          <TabsTrigger value="feats">Feats</TabsTrigger>
+        </TabsList>
+
+        <TabsContent value="feats">
+          <p className="text-white text-sm mb-2">
+            Your hero gets 1 free feat. The first feat chosen costs zero points.
+          </p>
+          {(() => {
+            const characterData = {
+              abilityScores,
+              selectedSkills: workingSelectedSkills,
+              startingSkills: workingStartingSkills,
+              selectedFeats: workingSelectedFeats,
           selectedSkillSets: workingSelectedSkillSets,
           skillSets,
         };
 
-        return feats.map((feat) => {
-          const count = workingSelectedFeats.filter((f) => f.name === feat.name).length;
-          const isDisabled = !meetsPrerequisites(feat, characterData);
-          const missing = getMissingPrereqs(feat, characterData);
+            return feats.map((feat) => {
+              const count = workingSelectedFeats.filter((f) => f.name === feat.name).length;
+              const isDisabled = !meetsPrerequisites(feat, characterData);
+              const missing = getMissingPrereqs(feat, characterData);
 
           return (
             <div
@@ -484,17 +510,19 @@ const Step5_Feats = () => {
               )}
             </div>
           );
-        });
-      })()}
+            });
+          })()}
 
-      <div className="flex justify-between mt-6">
-        <Button onClick={handlePrevious}>
-          <ArrowLeft className="mr-2 h-5 w-5" /> Previous
-        </Button>
-        <Button onClick={handleContinue}>
-          Next <ArrowRight className="ml-2 h-5 w-5" />
-        </Button>
-      </div>
+          <div className="flex justify-between mt-6">
+            <Button onClick={handlePrevious}>
+              <ArrowLeft className="mr-2 h-5 w-5" /> Previous
+            </Button>
+            <Button onClick={handleContinue}>
+              Next <ArrowRight className="ml-2 h-5 w-5" />
+            </Button>
+          </div>
+        </TabsContent>
+      </Tabs>
     </motion.div>
   );
 };
