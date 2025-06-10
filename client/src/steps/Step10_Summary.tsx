@@ -590,7 +590,7 @@ export default function Step10_Summary() {
                         <div className="text-xs mt-1">
                           <span className="font-semibold text-white">Prerequisites:</span>
                           <ul className="list-disc pl-5 mt-1">
-                            {parsed.map((req, idx) => {
+                            {parsed.map((req: any, idx: number) => {
                               const text = formatReq(req);
                               const unmet = missing.includes(text);
                               return (

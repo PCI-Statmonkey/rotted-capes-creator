@@ -94,7 +94,7 @@ const Step5_Skills = () => {
     setSelectedSkillSets,
     setSelectedManeuvers,
     setStartingManeuver,
-    setCurrentStep,
+    setCurrentStep: builderSetCurrentStep,
   } = useCharacterBuilder();
 
   // --- Data Fetching & Initialization ---
