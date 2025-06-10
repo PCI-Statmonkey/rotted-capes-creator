@@ -59,9 +59,9 @@ const SkillCard: React.FC<SkillCardProps> = ({
       {isSelected && (
         <div className="mt-1 space-y-1">
           {focuses.map((f, i) => {
-            // Treat empty string as needing a dropdown so the user can
-            // choose from the provided options or enter a custom focus
-            const isCustom = f !== "" && !skill.focusOptions?.includes(f);
+            // Show an input field when the user selects "User Defined Focus"
+            // or when the current focus is not part of the predefined options
+            const isCustom = f === "" || !skill.focusOptions?.includes(f);
             return (
               <div key={i} className="flex gap-2 items-center">
                 {isCustom ? (
