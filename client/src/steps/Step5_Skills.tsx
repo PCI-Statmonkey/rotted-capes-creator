@@ -161,6 +161,34 @@ const Step5_Skills = () => {
     setStartingManeuver(workingStartingManeuver);
   }, [workingStartingSkills, workingSelectedSkills, workingSelectedFeats, workingSelectedSkillSets, workingSelectedManeuvers, workingStartingManeuver]);
 
+  // Ensure skills with free focuses have placeholders for those focuses
+  useEffect(() => {
+    setWorkingSelectedSkills((prev) => {
+      let changed = false;
+      let updated = [...prev];
+
+      const allSkillNames = new Set<string>([...prev.map((s) => s.name), ...workingStartingSkills, ...skillsFromSets]);
+
+      allSkillNames.forEach((skillName) => {
+        const freeCount = Math.max(0, (skillCounts[skillName] || 0) - 1);
+        if (freeCount > 0) {
+          const idx = updated.findIndex((s) => s.name === skillName);
+          if (idx === -1) {
+            updated.push({ name: skillName, focuses: Array(freeCount).fill("") });
+            changed = true;
+          } else if (updated[idx].focuses.length < freeCount) {
+            const focuses = [...updated[idx].focuses];
+            while (focuses.length < freeCount) focuses.push("");
+            updated[idx] = { ...updated[idx], focuses };
+            changed = true;
+          }
+        }
+      });
+
+      return changed ? updated : prev;
+    });
+  }, [skillCounts, workingStartingSkills, skillsFromSets]);
+
   // --- Handlers for Toggling Selections ---
 
   // Update focus for a specific skill
