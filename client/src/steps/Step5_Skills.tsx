@@ -367,13 +367,9 @@ const Step5_Skills = () => {
   const handlePrevious = () => setCurrentStep(4);
 
   const handleContinue = () => {
-    // Validation checks before proceeding to the next step
-    if (
-      availablePoints < 0 || // Points must not be negative
-      workingStartingSkills.length !== 2 || // Exactly two starting skills must be selected
-      !workingStartingManeuver // A starting maneuver must be selected
-    ) {
-      alert("You must spend all points (or have 0 remaining), select 2 starting skills, and pick a starting maneuver.");
+    // Prevent navigating forward if points are overspent
+    if (availablePoints < 0) {
+      alert("You have spent more points than available.");
       return;
     }
 
