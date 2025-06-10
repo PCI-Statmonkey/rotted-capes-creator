@@ -62,7 +62,8 @@ const SkillCard: React.FC<SkillCardProps> = ({
       {isSelected && (
         <div className="mt-1 space-y-1">
           {focuses.map((f, i) => {
-            const isCustom = f === "__custom__" || (f !== "" && !skill.focusOptions?.includes(f));
+            const isCustom =
+              f === "__custom__" || (f !== "" && !skill.focusOptions?.includes(f));
             return (
               <div key={i} className="flex gap-2 items-center">
                 {isCustom ? (
@@ -91,6 +92,11 @@ const SkillCard: React.FC<SkillCardProps> = ({
                     </SelectContent>
                   </Select>
                 )}
+                {freeFocus && i === 0 && (
+                  <Badge variant="secondary" className="ml-2">
+                    Free Focus
+                  </Badge>
+                )}
                 <Button
                   type="button"
                   variant="destructive"
@@ -103,7 +109,7 @@ const SkillCard: React.FC<SkillCardProps> = ({
             );
           })}
           <Button type="button" onClick={onAddFocus} size="sm">
-            Add Focus
+            Add Focus (+1 pt)
           </Button>
         </div>
       )}
