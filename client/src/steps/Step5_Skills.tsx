@@ -401,11 +401,22 @@ const Step5_Skills = () => {
         Points Available: <span className="text-accent font-bold">{availablePoints}</span>
       </div>
 
-      <Tabs value={currentTab} onValueChange={setCurrentTab} className="w-full">
+      <Tabs
+        value={currentTab}
+        onValueChange={(value) => {
+          if (value === "feats") {
+            handleContinue();
+          } else {
+            setCurrentTab(value);
+          }
+        }}
+        className="w-full"
+      >
         <TabsList className="mb-4">
           <TabsTrigger value="starting">Starting</TabsTrigger>
           <TabsTrigger value="skillsets">Skill Sets</TabsTrigger>
           <TabsTrigger value="skills">Skills</TabsTrigger>
+          <TabsTrigger value="feats">Feats</TabsTrigger>
         </TabsList>
 
         <TabsContent value="starting">
