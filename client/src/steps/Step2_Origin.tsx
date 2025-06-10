@@ -261,7 +261,8 @@ export default function Step2_Origin() {
                 key={origin.name}
                 className={cn(
                   "cursor-pointer transition-all hover:shadow-md hover:border-accent/50 overflow-hidden",
-                  selectedOrigin === origin.name ? "border-2 border-accent shadow-lg" : ""
+                  selectedOrigin === origin.name ? "border-2 border-accent shadow-lg" : "",
+                  selectedOrigin && selectedOrigin !== origin.name ? "opacity-50" : ""
                 )}
                 onClick={() => setSelectedOrigin(origin.name)}
               >
