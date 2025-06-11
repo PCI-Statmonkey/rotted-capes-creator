@@ -34,6 +34,7 @@ const Step5_Feats = () => {
   } = useCharacterBuilder();
   const { character, setCurrentStep, setCurrentSubStep } = useCharacter();
   const archetype = character.archetype;
+  const currentOrigin = character.origin?.split('(')[0].trim();
 
   // --- Local state for working selections ---
   const [workingStartingSkills, setWorkingStartingSkills] = useState<string[]>([]);
@@ -50,6 +51,7 @@ const Step5_Feats = () => {
   const { data: feats } = useCachedGameContent<any>('feats');
   const { data: skillSets } = useCachedGameContent<any>('skill-sets');
   const { data: maneuvers } = useCachedGameContent<any>('maneuvers');
+  const { data: origins } = useCachedGameContent<any>('origins');
 
   // Deduplicate feats by name to avoid rendering duplicates
   const uniqueFeats = useMemo(() => {
@@ -586,6 +588,25 @@ const Step5_Feats = () => {
                                 {s.name}
                               </option>
                             ))}
+                          </select>
+                        ) : feat.name === 'Additional Origin' ? (
+                          <select
+                            value={workingSelectedFeats[f.originalIndex]?.input || ''}
+                            onChange={(e) => {
+                              const updated = [...workingSelectedFeats];
+                              updated[f.originalIndex].input = e.target.value;
+                              setWorkingSelectedFeats(updated);
+                            }}
+                            className="border rounded p-1 bg-black text-red-500"
+                          >
+                            <option value="">Select an origin</option>
+                            {origins
+                              .filter((o) => o.name !== currentOrigin)
+                              .map((o) => (
+                                <option key={o.name} value={o.name}>
+                                  {o.name}
+                                </option>
+                              ))}
                           </select>
                         ) : feat.input_label && (
                           <input
