@@ -37,7 +37,7 @@ const Step5_Feats = () => {
 
   // --- Data loaded from JSON and API ---
   const { data: skills } = useCachedGameContent<any>('skills');
-  const { data: feats } = useCachedGameContent<any>('feats');
+  const { data: feats } = useCachedGameContent<any>('feats', (d) => d.every((f: any) => f.prerequisites !== undefined));
   const { data: skillSets } = useCachedGameContent<any>('skill-sets');
   const { data: maneuvers } = useCachedGameContent<any>('maneuvers');
 
