@@ -7,6 +7,11 @@ export interface CachedResult<T> {
   error: string | null;
 }
 
+/**
+ * Retrieve game content from `/api/game-content/{type}` while caching results
+ * in localStorage. If a validation callback is provided, cached data that fails
+ * the check will be ignored and replaced by a fresh request.
+ */
 export default function useCachedGameContent<T = any>(
   type: string,
   validate?: (data: T[]) => boolean
