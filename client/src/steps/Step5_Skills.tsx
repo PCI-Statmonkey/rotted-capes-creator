@@ -443,9 +443,9 @@ const Step5_Skills = () => {
           <select
             value={workingStartingManeuver}
             onChange={(e) => setWorkingStartingManeuver(e.target.value)}
-            className="border rounded p-2 text-black w-full bg-white focus:outline-none focus:ring-2 focus:ring-accent"
+            className="w-full p-2 rounded bg-gray-800 border border-gray-600 text-accent focus:outline-none focus:ring-2 focus:ring-accent"
           >
-            <option value="">Select a starting maneuver</option>
+            <option className="text-accent" value="">Select a starting maneuver</option>
             {maneuvers
               .filter((m) =>
                 meetsPrerequisites(
@@ -461,7 +461,7 @@ const Step5_Skills = () => {
                 )
               )
               .map((m) => (
-                <option key={m.name} value={m.name}>
+                <option key={m.name} value={m.name} className="text-accent">
                   {m.name}
                 </option>
               ))}
