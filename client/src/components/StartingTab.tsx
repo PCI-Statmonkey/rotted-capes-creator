@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
+import { parsePrerequisite } from "@/utils/requirementValidator";
 
 interface StartingTabProps {
   basicStartingSkills: string[];
@@ -31,6 +32,31 @@ const StartingTab = ({
   meetsPrerequisites,
   getMissingPrereqs
 }: StartingTabProps) => {
+  const selectedFeatObj = feats.find((f) => f.name === startingFeat);
+
+  const prereqList = selectedFeatObj
+    ? Array.isArray(selectedFeatObj.prerequisites)
+      ? selectedFeatObj.prerequisites
+      : selectedFeatObj.prerequisites
+      ? [selectedFeatObj.prerequisites]
+      : []
+    : [];
+
+  const parsedPrereqs = prereqList.flatMap((p: any) =>
+    typeof p === "string" ? parsePrerequisite(p as any) : [p]
+  );
+
+  const formatReq = (req: any) =>
+    typeof req === "object"
+      ? req.type === "ability"
+        ? `${req.name} ${req.value}`
+        : req.type === "feat"
+        ? `Feat: ${req.name}`
+        : req.name
+      : String(req);
+
+  const missingPrereqs = selectedFeatObj ? getMissingPrereqs(selectedFeatObj) : [];
+  const missingStrings = missingPrereqs.map(formatReq);
   return (
     <>
       <h3 className="text-white text-md mb-2">Select 2 Starting Skills</h3>
@@ -74,6 +100,22 @@ const StartingTab = ({
           );
         })}
       </select>
+      {selectedFeatObj && parsedPrereqs.length > 0 && (
+        <div className="text-xs mt-1">
+          <span className="font-semibold text-white">Prerequisites:</span>
+          <ul className="list-disc pl-5 mt-1">
+            {parsedPrereqs.map((req: any, idx: number) => {
+              const text = formatReq(req);
+              const missing = missingStrings.includes(text);
+              return (
+                <li key={idx} className={missing ? "text-red-500" : "text-white"}>
+                  {text}
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+      )}
 
       <h3 className="text-white text-md mb-2 mt-4">Choose a Starting Maneuver</h3>
       <select
