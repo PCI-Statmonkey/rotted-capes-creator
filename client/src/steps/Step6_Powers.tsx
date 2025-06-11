@@ -626,7 +626,7 @@ export default function Step6_Powers() {
                 <RadioGroupItem value="powerSet" id="powerSet" />
                 <div>
                   <Label htmlFor="powerSet" className="font-medium">Power Set</Label>
-                  <p className="text-xs text-gray-400">Choose a themed collection of powers aligned with your archetype.</p>
+                  <p className="text-sm text-gray-400">Choose a themed collection of powers aligned with your archetype.</p>
                 </div>
               </div>
             )}
@@ -635,7 +635,7 @@ export default function Step6_Powers() {
               <RadioGroupItem value="array" id="array" />
               <div>
                 <Label htmlFor="array" className="font-medium">Power Score Array</Label>
-                <p className="text-xs text-gray-400">Choose an array of power scores and assign them to powers of your choice.</p>
+                <p className="text-sm text-gray-400">Choose an array of power scores and assign them to powers of your choice.</p>
               </div>
             </div>
             
@@ -643,7 +643,7 @@ export default function Step6_Powers() {
               <RadioGroupItem value="pointBuy" id="pointBuy" />
               <div>
                 <Label htmlFor="pointBuy" className="font-medium">Point Buy</Label>
-                <p className="text-xs text-gray-400">Customize your powers using 32 points to buy power scores.</p>
+                <p className="text-sm text-gray-400">Customize your powers using 32 points to buy power scores.</p>
               </div>
             </div>
           </RadioGroup>
@@ -660,7 +660,7 @@ export default function Step6_Powers() {
                 <p className="text-sm">Power sets available for your <span className="font-bold text-accent">{character.archetype}</span> archetype:</p>
                 <div className="mt-2">
                   {eligiblePowerSets.filter(set => set.requiredArchetypes?.includes(character.archetype)).map(set => (
-                    <span key={set.name} className="inline-block mr-2 mb-2 px-2 py-1 bg-accent/20 text-accent text-xs rounded-full">{set.name}</span>
+                    <span key={set.name} className="inline-block mr-2 mb-2 px-2 py-1 bg-accent/20 text-accent text-sm rounded-full">{set.name}</span>
                   ))}
                 </div>
               </div>
@@ -693,7 +693,7 @@ export default function Step6_Powers() {
                   <p className="text-sm mb-1">Your powers with this set:</p>
                   {selectedPowers.map((power, idx) => (
                     <div key={`selected-power-${idx}`} className="flex justify-between items-center bg-gray-700 p-2 rounded">
-                      <span className="font-medium text-red-500">{power.name}</span>
+                      <span className="text-red-500 font-comic-light">{power.name}</span>
                       <span className="font-bold text-accent">{power.score}</span>
                     </div>
                   ))}
@@ -716,7 +716,7 @@ export default function Step6_Powers() {
                         {powerSet.powers.map((power, idx) => (
                           <div key={`${power.name}-${idx}`} className="flex items-center">
                             <span className="bg-gray-900 px-2 py-0.5 rounded-full text-xs mr-1">
-                              <span className="text-red-500 font-medium">{power.name}</span>
+                              <span className="text-red-500 font-comic-light">{power.name}</span>
                             </span>
                             <span className="text-accent text-xs">{power.score}</span>
                           </div>
@@ -1290,7 +1290,7 @@ export default function Step6_Powers() {
                       <div className="flex justify-between">
                         <div>
                           <h4 className="font-medium">{flaw.name}</h4>
-                          <p className="text-xs text-gray-400">{flaw.description}</p>
+                          <p className="text-xs text-gray-400 font-comic-light">{flaw.description}</p>
                         </div>
                         <div className="text-red-400 font-medium">+{flaw.bonus}</div>
                       </div>
@@ -1334,7 +1334,7 @@ export default function Step6_Powers() {
                       <div className="flex justify-between">
                         <div>
                           <h4 className="font-medium">{perk.name}</h4>
-                          <p className="text-xs text-gray-400">{perk.description}</p>
+                          <p className="text-xs text-gray-400 font-comic-light">{perk.description}</p>
                         </div>
                         <div className="text-green-400 font-medium">{perk.bonus}</div>
                       </div>
