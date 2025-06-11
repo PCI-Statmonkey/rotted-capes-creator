@@ -376,6 +376,31 @@ const Step5_Feats = () => {
       return;
     }
 
+    // Ensure prerequisites for each selected maneuver are met
+    const learnFeat = feats.find((f) => f.name === "Learn Maneuver");
+    for (let i = 0; i < maneuverFeats.length; i++) {
+      const maneuverName = workingSelectedManeuvers[i];
+      const maneuver = maneuvers.find((m) => m.name === maneuverName);
+      if (!maneuver) continue;
+      const prereqCharacterData = {
+        abilityScores,
+        selectedSkills: workingSelectedSkills,
+        startingSkills: workingStartingSkills,
+        selectedFeats: workingSelectedFeats,
+        selectedSkillSets: workingSelectedSkillSets,
+        skillSets,
+      };
+      if (
+        learnFeat &&
+        !meetsPrerequisites(learnFeat, prereqCharacterData, maneuver.requirements)
+      ) {
+        alert(
+          `You do not meet the prerequisites for ${maneuver.name}.`
+        );
+        return;
+      }
+    }
+
     // Persist working selections to the global character builder store
     setStartingSkills(workingStartingSkills);
     setSelectedSkills(workingSelectedSkills);

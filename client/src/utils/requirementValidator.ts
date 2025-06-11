@@ -163,7 +163,11 @@ export const parsePrerequisite = (prereqString: string) => {
   return requirements;
 };
 
-export const meetsPrerequisites = (feat: any, character: any) => {
+export const meetsPrerequisites = (
+  feat: any,
+  character: any,
+  maneuverRequirements: any[] = []
+) => {
   if (!feat) return true;
 
   const prereqList = Array.isArray(feat.prerequisites)
@@ -246,10 +250,18 @@ export const meetsPrerequisites = (feat: any, character: any) => {
       case 'skillFocus':
         return allSkills.has(req.name.toLowerCase());
 
-      case 'maneuverPrereq':
-        // Special handling for "Learn Maneuver" - always return true for now
-        // You might want to implement actual maneuver prerequisite checking
-        return true;
+      case 'maneuverPrereq': {
+        if (!maneuverRequirements || maneuverRequirements.length === 0) {
+          return true;
+        }
+        const reqs = Array.isArray(maneuverRequirements)
+          ? maneuverRequirements
+          : [maneuverRequirements];
+        const parsed = reqs.flatMap((p: any) =>
+          typeof p === 'string' ? parsePrerequisite(p) : [p]
+        );
+        return parsed.every((r: any) => evaluate(r));
+      }
 
       case 'approval':
         // Editor approval requirements - might want to add a flag for this
@@ -276,7 +288,11 @@ export const meetsPrerequisites = (feat: any, character: any) => {
   return parsedPrereqs.every(evaluate);
 };
 
-export const getMissingPrereqs = (feat: any, character: any) => {
+export const getMissingPrereqs = (
+  feat: any,
+  character: any,
+  maneuverRequirements: any[] = []
+) => {
   const missing = [] as any[];
 
   const {
@@ -360,8 +376,18 @@ export const getMissingPrereqs = (feat: any, character: any) => {
       case 'skillFocus':
         return allSkills.has(req.name.toLowerCase());
 
-      case 'maneuverPrereq':
-        return true;
+      case 'maneuverPrereq': {
+        if (!maneuverRequirements || maneuverRequirements.length === 0) {
+          return true;
+        }
+        const reqs = Array.isArray(maneuverRequirements)
+          ? maneuverRequirements
+          : [maneuverRequirements];
+        const parsed = reqs.flatMap((p: any) =>
+          typeof p === 'string' ? parsePrerequisite(p) : [p]
+        );
+        return parsed.every((r: any) => evaluate(r));
+      }
 
       case 'approval':
         return true;
@@ -388,6 +414,18 @@ export const getMissingPrereqs = (feat: any, character: any) => {
         }
       } else {
         req.requirements.forEach((r: any) => collectMissing(r));
+      }
+      return;
+    }
+    if (req.type === 'maneuverPrereq') {
+      if (maneuverRequirements && maneuverRequirements.length > 0) {
+        const reqs = Array.isArray(maneuverRequirements)
+          ? maneuverRequirements
+          : [maneuverRequirements];
+        const parsed = reqs.flatMap((p: any) =>
+          typeof p === 'string' ? parsePrerequisite(p) : [p]
+        );
+        parsed.forEach((r: any) => collectMissing(r));
       }
       return;
     }

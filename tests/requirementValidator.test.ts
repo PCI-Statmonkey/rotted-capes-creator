@@ -59,4 +59,27 @@ assert(
   missing.some(r => r.type === 'ability' && r.name.toLowerCase() === 'dex' && r.value === 15)
 );
 
+// Test maneuverPrereq handling
+const learnManeuverFeat = { prerequisites: ['As per maneuver'] };
+const maneuver = { requirements: ['Dex 13'] };
+const characterDex14 = {
+  ...character,
+  abilityScores: { ...character.abilityScores, dexterity: 14 },
+};
+
+assert(
+  meetsPrerequisites(learnManeuverFeat, characterDex14, maneuver.requirements)
+);
+
+assert(
+  !meetsPrerequisites(learnManeuverFeat, character, ['Dex 16'])
+);
+
+const missingManeuver = getMissingPrereqs(
+  learnManeuverFeat,
+  character,
+  ['Dex 16']
+);
+assert(missingManeuver.length > 0);
+
 console.log('All tests passed');
