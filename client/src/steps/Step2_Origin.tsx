@@ -284,7 +284,7 @@ export default function Step2_Origin() {
                   <CardTitle className="font-comic text-xl">{origin.name}</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-gray-400 text-sm mb-4">{origin.description}</p>
+                  <p className="text-gray-400 text-sm mb-4 font-comic-light">{origin.description}</p>
                   
                   <div className="space-y-4">
                     {/* Ability Score Bonus */}
@@ -385,11 +385,11 @@ export default function Step2_Origin() {
                     <div className="space-y-1">
                       <h4 className="text-sm font-medium text-green-400">Unique Advantage:</h4>
                       {selectedOrigin === origin.name && origin.name === "Mystic" && origin.subTypes ? (
-                        <p className="text-gray-400 text-xs">
+                        <p className="text-gray-400 text-xs font-comic-light">
                           {origin.subTypes.find(st => st.name === selectedMysticType)?.uniqueAdvantage}
                         </p>
                       ) : (
-                        <p className="text-gray-400 text-xs">{origin.uniqueAdvantage}</p>
+                        <p className="text-gray-400 text-xs font-comic-light">{origin.uniqueAdvantage}</p>
                       )}
                     </div>
                     
@@ -397,11 +397,11 @@ export default function Step2_Origin() {
                     <div className="space-y-1">
                       <h4 className="text-sm font-medium text-red-400">Unique Disadvantage:</h4>
                       {selectedOrigin === origin.name && origin.name === "Mystic" && origin.subTypes ? (
-                        <p className="text-gray-400 text-xs">
+                        <p className="text-gray-400 text-xs font-comic-light">
                           {origin.subTypes.find(st => st.name === selectedMysticType)?.uniqueDisadvantage}
                         </p>
                       ) : (
-                        <p className="text-gray-400 text-xs">{origin.uniqueDisadvantage}</p>
+                        <p className="text-gray-400 text-xs font-comic-light">{origin.uniqueDisadvantage}</p>
                       )}
                     </div>
                   </div>
