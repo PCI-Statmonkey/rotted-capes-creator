@@ -14,7 +14,7 @@ export interface CachedResult<T> {
  */
 export default function useCachedGameContent<T = any>(
   type: string,
-  validate?: (data: T[]) => boolean
+  validate?: (data: T[]) => boolean,
 ): CachedResult<T> {
   const key = `gameContent_${type}`;
   const initialCache =
@@ -26,8 +26,11 @@ export default function useCachedGameContent<T = any>(
         if (!validate || validate(parsed)) {
           return parsed;
         }
+        // remove invalid cache
+        localStorage.removeItem(key);
       } catch {
-        // ignore parse errors
+        // invalid JSON, clear cache entry
+        localStorage.removeItem(key);
       }
     }
     return [];
@@ -43,9 +46,11 @@ export default function useCachedGameContent<T = any>(
         if (!validate || validate(parsed)) {
           setData(parsed);
           setLoading(false);
+        } else {
+          localStorage.removeItem(key);
         }
       } catch {
-        // ignore parse errors
+        localStorage.removeItem(key);
       }
     }
 
