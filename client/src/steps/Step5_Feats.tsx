@@ -421,14 +421,17 @@ const Step5_Feats = () => {
               selectedSkills: workingSelectedSkills,
               startingSkills: workingStartingSkills,
               selectedFeats: workingSelectedFeats,
-          selectedSkillSets: workingSelectedSkillSets,
-          skillSets,
-        };
+              selectedSkillSets: workingSelectedSkillSets,
+              skillSets,
+            };
 
-            return feats.map((feat) => {
+            const allFeats = feats ?? [];
+
+            return allFeats.map((feat) => {
               const count = workingSelectedFeats.filter((f) => f.name === feat.name).length;
-              const isDisabled = !meetsPrerequisites(feat, characterData);
               const missing = getMissingPrereqs(feat, characterData);
+              const meetsReqs = missing.length === 0;
+              const isDisabled = !meetsReqs;
 
           return (
             <div
