@@ -79,12 +79,12 @@ const StartingTab = ({
         className="w-full p-2 rounded bg-gray-800 border border-gray-600 text-white"
       >
         <option value="">-- Select --</option>
-        {feats.map((f) => {
+        {feats.map((f, index) => {
           const missing = getMissingPrereqs(f);
           const disabled = missing.length > 0;
           return (
             <option
-              key={f.id ?? f.name}
+              key={f.id ? String(f.id) : `${f.name}-${index}`}
               value={f.name}
               disabled={disabled}
               title={
