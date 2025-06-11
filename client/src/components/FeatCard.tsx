@@ -16,6 +16,7 @@ interface FeatCardProps {
   feat: {
     name: string;
     description: string;
+    type?: string;
     prerequisites?: Prerequisite[];
   };
   isSelected: boolean;
@@ -71,7 +72,12 @@ const FeatCard: React.FC<FeatCardProps> = ({
           className="mt-1"
         />
         <div>
-          <div className="font-semibold text-white">{feat.name}</div>
+          <div className="font-semibold text-white">
+            {feat.name}
+            {feat.type && (
+              <span className="ml-1">({feat.type.charAt(0).toUpperCase() + feat.type.slice(1)})</span>
+            )}
+          </div>
           <div className="text-white text-sm">{feat.description}</div>
         </div>
       </Label>
