@@ -7,18 +7,38 @@ export interface CachedResult<T> {
   error: string | null;
 }
 
-export default function useCachedGameContent<T = any>(type: string): CachedResult<T> {
-  const [data, setData] = useState<T[]>([]);
-  const [loading, setLoading] = useState(true);
+export default function useCachedGameContent<T = any>(
+  type: string,
+  validate?: (data: T[]) => boolean
+): CachedResult<T> {
+  const key = `gameContent_${type}`;
+  const initialCache =
+    typeof window !== "undefined" ? localStorage.getItem(key) : null;
+  const [data, setData] = useState<T[]>(() => {
+    if (initialCache) {
+      try {
+        const parsed = JSON.parse(initialCache);
+        if (!validate || validate(parsed)) {
+          return parsed;
+        }
+      } catch {
+        // ignore parse errors
+      }
+    }
+    return [];
+  });
+  const [loading, setLoading] = useState(!initialCache);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const key = `gameContent_${type}`;
     const cached = localStorage.getItem(key);
     if (cached) {
       try {
-        setData(JSON.parse(cached));
-        setLoading(false);
+        const parsed = JSON.parse(cached);
+        if (!validate || validate(parsed)) {
+          setData(parsed);
+          setLoading(false);
+        }
       } catch {
         // ignore parse errors
       }
@@ -39,7 +59,7 @@ export default function useCachedGameContent<T = any>(type: string): CachedResul
         setError(e.message);
       })
       .finally(() => setLoading(false));
-  }, [type]);
+  }, [type, validate]);
 
   return { data, loading, error };
 }
