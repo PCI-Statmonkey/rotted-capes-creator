@@ -46,6 +46,8 @@ export interface Complication {
 export interface GearItem {
   name: string;
   description: string;
+  ap?: number;
+  starting?: boolean;
 }
 
 export interface Feat {
