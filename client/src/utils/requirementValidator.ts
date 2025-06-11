@@ -180,7 +180,8 @@ export const meetsPrerequisites = (feat: any, character: any) => {
     startingSkills = [],
     selectedSkillSets = [],
     skillSets = [],
-    selectedFeats = []
+    selectedFeats = [],
+    maneuverRequirements = []
   } = character;
 
   // Combine all skill names from starting, selected, and skill sets
@@ -246,13 +247,20 @@ export const meetsPrerequisites = (feat: any, character: any) => {
       case 'skillFocus':
         return allSkills.has(req.name.toLowerCase());
 
-      case 'maneuverPrereq':
+      case 'maneuverPrereq': {
+        if (Array.isArray(maneuverRequirements) && maneuverRequirements.length > 0) {
+          const parsed = maneuverRequirements.flatMap((r: any) =>
+            typeof r === 'string' ? parsePrerequisite(r) : [r]
+          );
+          return parsed.every((r) => evaluate(r));
+        }
         const maneuvers = character.maneuvers || [];
         return maneuvers
           .map((m: any) =>
             typeof m === 'string' ? normalizeName(m) : normalizeName(m.name)
           )
           .includes(normalizeName(req.name));
+      }
 
       case 'approval':
         return Boolean(character.editorApproved);
@@ -301,7 +309,8 @@ export const getMissingPrereqs = (feat: any, character: any) => {
     startingSkills = [],
     selectedSkillSets = [],
     skillSets = [],
-    selectedFeats = []
+    selectedFeats = [],
+    maneuverRequirements = []
   } = character;
 
   const skillsFromSets = skillSets
@@ -376,13 +385,20 @@ export const getMissingPrereqs = (feat: any, character: any) => {
       case 'skillFocus':
         return allSkills.has(req.name.toLowerCase());
 
-      case 'maneuverPrereq':
+      case 'maneuverPrereq': {
+        if (Array.isArray(maneuverRequirements) && maneuverRequirements.length > 0) {
+          const parsed = maneuverRequirements.flatMap((r: any) =>
+            typeof r === 'string' ? parsePrerequisite(r) : [r]
+          );
+          return parsed.every((r) => evaluate(r));
+        }
         const maneuvers = character.maneuvers || [];
         return maneuvers
           .map((m: any) =>
             typeof m === 'string' ? normalizeName(m) : normalizeName(m.name)
           )
           .includes(normalizeName(req.name));
+      }
 
       case 'approval':
         return Boolean(character.editorApproved);
