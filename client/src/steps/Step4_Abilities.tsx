@@ -138,29 +138,33 @@ export default function Step4_Abilities() {
     const archetypeName = character.archetype.split('(')[0].trim();
     switch(archetypeName) {
       case "Andromorph":
-        if (abilityLower === "constitution") return 2;
+        if (abilityLower === "strength") return 1;
+        if (abilityLower === "dexterity") return 1;
         break;
       case "Blaster":
         if (abilityLower === "dexterity") return 1;
-        if (abilityLower === "intelligence") return 1;
+        if (abilityLower === "charisma") return 1;
         break;
       case "Brawler":
-        if (abilityLower === "strength") return 2;
+        if (abilityLower === "strength") return 1;
+        if (abilityLower === "dexterity") return 1;
+        if (abilityLower === "constitution") return 1;
         break;
       case "Controller":
-        if (abilityLower === "intelligence") return 1;
         if (abilityLower === "wisdom") return 1;
+        if (abilityLower === "charisma") return 1;
         break;
       case "Heavy":
         if (abilityLower === "constitution") return 1;
         if (abilityLower === "strength") return 1;
         break;
       case "Infiltrator":
-        if (abilityLower === "dexterity") return 2;
+        if (abilityLower === "dexterity") return 1;
+        if (abilityLower === "intelligence") return 1;
         break;
       case "Transporter":
         if (abilityLower === "dexterity") return 1;
-        if (abilityLower === "constitution") return 1;
+        if (abilityLower === "wisdom") return 1;
         break;
       case "Bruiser":
         if (abilityLower === "strength") return 1;
