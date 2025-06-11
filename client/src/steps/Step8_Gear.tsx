@@ -487,24 +487,24 @@ export default function Step8_Gear() {
                     {weapons.map((weapon, index) => (
                       <Card key={index} className="bg-gray-700 border-gray-600">
                         <CardHeader className="pb-2">
-                          <CardTitle className="text-base flex justify-between">
-                            <span>{weapon.name}</span>
-                            <Badge>{weapon.ap} AP</Badge>
+                          <CardTitle className="text-base flex justify-between font-comic">
+                            <span className="font-comic">{weapon.name}</span>
+                            <Badge className="font-comic-light">{weapon.ap} AP</Badge>
                           </CardTitle>
-                          <CardDescription className="text-gray-300">
+                          <CardDescription className="text-gray-300 font-comic-light">
                             {weapon.category.charAt(0).toUpperCase() + weapon.category.slice(1)}
                           </CardDescription>
                         </CardHeader>
-                        <CardContent className="pb-3 text-sm">
+                        <CardContent className="pb-3 text-sm font-comic-light">
                           <p>{weapon.description}</p>
                           {weapon.damage && <p className="text-amber-400">Damage: {weapon.damage}</p>}
                           {weapon.range && <p className="text-blue-400">Range: {weapon.range}</p>}
                         </CardContent>
                         <CardFooter className="pt-0">
-                          <Button 
-                            variant="secondary" 
-                            size="sm" 
-                            className="w-full"
+                          <Button
+                            variant="secondary"
+                            size="sm"
+                            className="w-full font-comic"
                             onClick={() => handleAddWeapon(weapon)}
                             disabled={acquisitionPoints < weapon.ap}
                           >
@@ -532,19 +532,19 @@ export default function Step8_Gear() {
                     {equipment.map((equip, index) => (
                       <Card key={index} className="bg-gray-700 border-gray-600">
                         <CardHeader className="pb-2">
-                          <CardTitle className="text-base flex justify-between">
-                            <span>{equip.name}</span>
-                            <Badge>{equip.ap} AP</Badge>
+                          <CardTitle className="text-base flex justify-between font-comic">
+                            <span className="font-comic">{equip.name}</span>
+                            <Badge className="font-comic-light">{equip.ap} AP</Badge>
                           </CardTitle>
                         </CardHeader>
-                        <CardContent className="pb-3 text-sm">
+                        <CardContent className="pb-3 text-sm font-comic-light">
                           <p>{equip.description}</p>
                         </CardContent>
                         <CardFooter className="pt-0">
-                          <Button 
-                            variant="secondary" 
-                            size="sm" 
-                            className="w-full"
+                          <Button
+                            variant="secondary"
+                            size="sm"
+                            className="w-full font-comic"
                             onClick={() => handleAddEquipment(equip)}
                             disabled={acquisitionPoints < equip.ap}
                           >
@@ -590,10 +590,11 @@ export default function Step8_Gear() {
                       />
                     </div>
                     
-                    <Button 
+                    <Button
                       variant="secondary"
                       onClick={handleAddCustomGear}
                       disabled={!newCustomGear.name || !newCustomGear.description}
+                      className="font-comic"
                     >
                       <Plus className="h-4 w-4 mr-2" />
                       Add Custom Item
