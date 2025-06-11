@@ -434,7 +434,7 @@ export default function Step8_Gear() {
             className="mb-6"
           >
             <AccordionItem value="go-bag">
-              <AccordionTrigger className="text-lg font-semibold text-gray-300">
+              <AccordionTrigger className="text-lg font-semibold text-gray-300 font-comic-light">
                 Select a Go-Bag
               </AccordionTrigger>
               <AccordionContent>
@@ -445,15 +445,15 @@ export default function Step8_Gear() {
                   </p>
                   
                   <Select value={selectedGoBag} onValueChange={handleGoBagSelect}>
-                    <SelectTrigger className="w-full bg-gray-800 text-red-500 border border-gray-600">
+                    <SelectTrigger className="w-full bg-gray-800 text-red-500 border border-gray-600 font-comic-light">
                       <SelectValue placeholder="Select a Go-Bag type" />
                     </SelectTrigger>
-                    <SelectContent className="bg-gray-800 text-red-500 border border-gray-600">
-                      <SelectItem className="text-red-500" value="survivalist">Survivalist Go-Bag</SelectItem>
-                      <SelectItem className="text-red-500" value="infiltrator">Infiltrator Go-Bag</SelectItem>
-                      <SelectItem className="text-red-500" value="technician">Technician Go-Bag</SelectItem>
-                      <SelectItem className="text-red-500" value="medic">Medic Go-Bag</SelectItem>
-                      <SelectItem className="text-red-500" value="bystander">Bystander Go-Bag</SelectItem>
+                    <SelectContent className="bg-gray-800 text-red-500 border border-gray-600 font-comic-light">
+                      <SelectItem className="text-red-500 font-comic-light" value="survivalist">Survivalist Go-Bag</SelectItem>
+                      <SelectItem className="text-red-500 font-comic-light" value="infiltrator">Infiltrator Go-Bag</SelectItem>
+                      <SelectItem className="text-red-500 font-comic-light" value="technician">Technician Go-Bag</SelectItem>
+                      <SelectItem className="text-red-500 font-comic-light" value="medic">Medic Go-Bag</SelectItem>
+                      <SelectItem className="text-red-500 font-comic-light" value="bystander">Bystander Go-Bag</SelectItem>
                     </SelectContent>
                   </Select>
                   
@@ -462,7 +462,7 @@ export default function Step8_Gear() {
                       <h3 className="font-medium mb-2">{goBags[selectedGoBag].name}</h3>
                       <p className="text-gray-300 text-sm mb-2 font-comic-light">{goBags[selectedGoBag].description}</p>
                       <h4 className="text-sm font-medium mb-1">Contents:</h4>
-                      <ul className="list-disc pl-5 text-sm text-gray-300 space-y-1">
+                      <ul className="list-disc pl-5 text-sm text-gray-300 space-y-1 font-comic-light">
                         {goBags[selectedGoBag].items.map((item, index) => (
                           <li key={index}>{item}</li>
                         ))}
@@ -474,7 +474,7 @@ export default function Step8_Gear() {
             </AccordionItem>
             
             <AccordionItem value="weapons">
-              <AccordionTrigger className="text-lg font-semibold text-gray-300">
+              <AccordionTrigger className="text-lg font-semibold text-gray-300 font-comic-light">
                 Weapons
               </AccordionTrigger>
               <AccordionContent>
@@ -519,7 +519,7 @@ export default function Step8_Gear() {
             </AccordionItem>
             
             <AccordionItem value="equipment">
-              <AccordionTrigger className="text-lg font-semibold text-gray-300">
+              <AccordionTrigger className="text-lg font-semibold text-gray-300 font-comic-light">
                 Equipment
               </AccordionTrigger>
               <AccordionContent>
@@ -559,7 +559,7 @@ export default function Step8_Gear() {
             </AccordionItem>
             
             <AccordionItem value="custom">
-              <AccordionTrigger className="text-lg font-semibold text-gray-300">
+              <AccordionTrigger className="text-lg font-semibold text-gray-300 font-comic-light">
                 Custom Gear
               </AccordionTrigger>
               <AccordionContent>
