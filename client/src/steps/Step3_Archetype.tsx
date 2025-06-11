@@ -151,7 +151,7 @@ export default function Step3_Archetype() {
                   <CardTitle className="font-comic text-xl">{archetype.name}</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-gray-400 text-sm mb-4">{archetype.description}</p>
+                  <p className="text-gray-400 text-sm mb-4 font-comic-light">{archetype.description}</p>
                   
                   <div className="space-y-4">
                     {/* Ability Score Bonus */}
@@ -173,7 +173,7 @@ export default function Step3_Archetype() {
                     {/* Special Ability */}
                     <div className="space-y-1">
                       <h4 className="text-sm font-medium text-gray-300">Special Ability:</h4>
-                      <p className="text-gray-400 text-xs">{archetype.specialAbility}</p>
+                      <p className="text-gray-400 text-xs font-comic-light">{archetype.specialAbility}</p>
                     </div>
                     
                     {/* Trained Skill */}
