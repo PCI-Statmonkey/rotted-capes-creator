@@ -39,7 +39,7 @@ const Step5_Feats = () => {
   const [workingStartingSkills, setWorkingStartingSkills] = useState<string[]>([]);
   const [workingSelectedSkills, setWorkingSelectedSkills] = useState<{ name: string; focuses: string[] }[]>([]);
   // Store selected feats with an optional input for feats like 'Skill Focus' or 'Learn Maneuver'
-  const [workingSelectedFeats, setWorkingSelectedFeats] = useState<{ name: string; input?: string }[]>([]);
+  const [workingSelectedFeats, setWorkingSelectedFeats] = useState<{ name: string; input?: string; source?: string; free?: boolean }[]>([]);
   const [workingSelectedSkillSets, setWorkingSelectedSkillSets] = useState<string[]>([]);
   // Maneuvers are stored separately, indexed to correspond with 'Learn Maneuver' feats
   const [workingSelectedManeuvers, setWorkingSelectedManeuvers] = useState<string[]>([]);
@@ -60,21 +60,10 @@ const Step5_Feats = () => {
     return Array.from(map.values());
   }, [feats]);
 
-  const featTypes = useMemo(
-    () => Array.from(new Set((feats ?? []).map((f: any) => f.type))).sort(),
-    [feats]
-  );
-  const [typeFilter, setTypeFilter] = useState<Record<string, boolean>>({});
-
-  useEffect(() => {
-    if (featTypes.length && Object.keys(typeFilter).length === 0) {
-      const initial: Record<string, boolean> = {};
-      featTypes.forEach((t) => {
-        initial[t] = true;
-      });
-      setTypeFilter(initial);
-    }
-  }, [featTypes, typeFilter]);
+  const [typeFilter, setTypeFilter] = useState<{ power: boolean; others: boolean }>({
+    power: true,
+    others: true,
+  });
 
   const skillsFromSets = useMemo(() => {
     return workingSelectedSkillSets.flatMap((setName) => {
@@ -500,20 +489,26 @@ const Step5_Feats = () => {
             Your hero gets 1 free feat. The first feat chosen costs zero points.
           </p>
           <div className="flex gap-4 mb-4">
-            {featTypes.map((type) => (
-              <div key={type} className="flex items-center space-x-2">
-                <Checkbox
-                  id={`filter-${type}`}
-                  checked={typeFilter[type]}
-                  onCheckedChange={(checked) =>
-                    setTypeFilter((prev) => ({ ...prev, [type]: !!checked }))
-                  }
-                />
-                <Label htmlFor={`filter-${type}`} className="capitalize">
-                  {type}
-                </Label>
-              </div>
-            ))}
+            <div className="flex items-center space-x-2">
+              <Checkbox
+                id="filter-power"
+                checked={typeFilter.power}
+                onCheckedChange={(checked) =>
+                  setTypeFilter((prev) => ({ ...prev, power: !!checked }))
+                }
+              />
+              <Label htmlFor="filter-power">Power Feats</Label>
+            </div>
+            <div className="flex items-center space-x-2">
+              <Checkbox
+                id="filter-others"
+                checked={typeFilter.others}
+                onCheckedChange={(checked) =>
+                  setTypeFilter((prev) => ({ ...prev, others: !!checked }))
+                }
+              />
+              <Label htmlFor="filter-others">Others</Label>
+            </div>
           </div>
           {(() => {
             const characterData = {
@@ -525,9 +520,12 @@ const Step5_Feats = () => {
               skillSets,
             };
 
-            const allFeats = uniqueFeats.filter(
-              (f) => !typeFilter || typeFilter[f.type]
-            );
+            const allFeats = uniqueFeats.filter((f) => {
+              if (f.type === 'power') {
+                return typeFilter.power;
+              }
+              return typeFilter.others;
+            });
 
             return allFeats.map((feat, index) => {
               const selected = workingSelectedFeats.filter((f) => f.name === feat.name);

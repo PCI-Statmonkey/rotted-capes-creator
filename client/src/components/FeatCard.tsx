@@ -78,9 +78,7 @@ const FeatCard: React.FC<FeatCardProps> = ({
         <div>
           <div className="font-semibold text-white">
             {feat.name}
-            {feat.type && (
-              <span className="ml-1">({feat.type.charAt(0).toUpperCase() + feat.type.slice(1)})</span>
-            )}
+            {feat.type === 'power' && <span className="ml-1">(power)</span>}
           </div>
           <div className="text-white text-sm">{feat.description}</div>
           {source && (
