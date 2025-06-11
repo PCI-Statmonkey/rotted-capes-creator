@@ -16,7 +16,7 @@ interface SkillCardProps {
   skill: {
     name: string;
     ability: string;
-    focusOptions?: string[];
+    focusOptions?: string[] | null;
   };
   isSelected: boolean;
   focuses: string[];
@@ -57,7 +57,7 @@ const SkillCard: React.FC<SkillCardProps> = ({
           </Badge>
         )}
       </Label>
-      {isSelected && (
+      {isSelected && skill.focusOptions !== null && (
         <div className="mt-1 space-y-1">
           {focuses.map((f, i) => {
             const isCustom =

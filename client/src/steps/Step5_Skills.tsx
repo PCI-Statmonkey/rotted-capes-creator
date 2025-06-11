@@ -174,6 +174,8 @@ const Step5_Skills = () => {
       const allSkillNames = new Set<string>([...prev.map((s) => s.name), ...workingStartingSkills, ...skillsFromSets]);
 
       allSkillNames.forEach((skillName) => {
+        const skillData = skills.find((s) => s.name === skillName);
+        if (skillData?.focusOptions === null) return;
         const freeCount = Math.max(0, (skillCounts[skillName] || 0) - 1);
         if (freeCount > 0) {
           const idx = updated.findIndex((s) => s.name === skillName);
@@ -191,12 +193,14 @@ const Step5_Skills = () => {
 
       return changed ? updated : prev;
     });
-  }, [skillCounts, workingStartingSkills, skillsFromSets]);
+  }, [skillCounts, workingStartingSkills, skillsFromSets, skills]);
 
   // --- Handlers for Toggling Selections ---
 
   // Update focus for a specific skill
   const updateSkillFocus = (skillName: string, index: number, focus: string) => {
+    const skill = skills.find((s) => s.name === skillName);
+    if (skill?.focusOptions === null) return;
     setWorkingSelectedSkills((prev) => {
       const idx = prev.findIndex((s) => s.name === skillName);
       if (idx === -1) {
@@ -213,6 +217,8 @@ const Step5_Skills = () => {
   };
 
   const addSkillFocus = (skillName: string) => {
+    const skill = skills.find((s) => s.name === skillName);
+    if (skill?.focusOptions === null) return; // cannot add focus
     setWorkingSelectedSkills((prev) => {
       const idx = prev.findIndex((s) => s.name === skillName);
       if (idx === -1) {
@@ -228,6 +234,8 @@ const Step5_Skills = () => {
   };
 
   const removeSkillFocus = (skillName: string, index: number) => {
+    const skill = skills.find((s) => s.name === skillName);
+    if (skill?.focusOptions === null) return;
     setWorkingSelectedSkills((prev) => {
       const idx = prev.findIndex((s) => s.name === skillName);
       if (idx === -1) return prev;
