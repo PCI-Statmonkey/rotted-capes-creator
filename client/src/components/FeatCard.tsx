@@ -30,6 +30,7 @@ interface FeatCardProps {
   onSelectManeuver?: (maneuverName: string) => void;
   source?: string;
   locked?: boolean;
+  autoSelected?: boolean;
 }
 
 const FeatCard: React.FC<FeatCardProps> = ({
@@ -45,6 +46,7 @@ const FeatCard: React.FC<FeatCardProps> = ({
   onSelectManeuver,
   source,
   locked,
+  autoSelected = false,
 }) => {
   const prereqList = Array.isArray(feat.prerequisites)
     ? feat.prerequisites
@@ -61,9 +63,9 @@ const FeatCard: React.FC<FeatCardProps> = ({
   const missingStrings = missingPrereqs.map(formatReq);
   return (
     <div
-      className={`bg-gray-800 p-3 rounded-lg border border-gray-700 mb-2 ${
-        isDisabled ? "opacity-50 pointer-events-none" : ""
-      }`}
+      className={`p-3 rounded-lg border mb-2 ${
+        autoSelected ? 'bg-accent/20 border-accent' : 'bg-gray-800 border-gray-700'
+      } ${isDisabled && !autoSelected ? 'opacity-50 pointer-events-none' : ''}`}
     >
       <Label
         title={isDisabled ? "You don’t meet the prerequisites for this feat" : ""}

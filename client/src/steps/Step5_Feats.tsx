@@ -554,15 +554,16 @@ const Step5_Feats = () => {
               const count = selected.length;
               const missing = getMissingPrereqs(feat, characterData);
               const meetsReqs = missing.length === 0;
-              const isDisabled = feat.name === "Learn Maneuver" ? false : !meetsReqs;
               const sources = selected.filter(f => f.source).map(f => f.source as string);
               const source = sources.join(', ');
               const locked = sources.length > 0;
+              const isDisabled = feat.name === "Learn Maneuver" ? false : !(meetsReqs || locked);
+              const autoSelected = locked;
 
           return (
             <div
               key={feat.id ? String(feat.id) : `${feat.name}-${index}`}
-              className={`mb-4 ${isDisabled ? 'opacity-50 pointer-events-none' : ''}`}
+              className={`mb-4 ${isDisabled && !autoSelected ? 'opacity-50 pointer-events-none' : ''}`}
             >
               <FeatCard
                 feat={feat}
@@ -574,6 +575,7 @@ const Step5_Feats = () => {
                 maneuvers={undefined}
                 source={source}
                 locked={locked}
+                autoSelected={autoSelected}
               />
 
               {count > 0 && (
