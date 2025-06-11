@@ -247,26 +247,42 @@ export const meetsPrerequisites = (feat: any, character: any) => {
         return allSkills.has(req.name.toLowerCase());
 
       case 'maneuverPrereq':
-        // Special handling for "Learn Maneuver" - always return true for now
-        // You might want to implement actual maneuver prerequisite checking
-        return true;
+        const maneuvers = character.maneuvers || [];
+        return maneuvers
+          .map((m: any) =>
+            typeof m === 'string' ? normalizeName(m) : normalizeName(m.name)
+          )
+          .includes(normalizeName(req.name));
 
       case 'approval':
-        // Editor approval requirements - might want to add a flag for this
-        return true;
+        return Boolean(character.editorApproved);
 
       case 'cannot_have':
-        // Check that they don't have the specified thing
-        // This is complex and depends on what they "cannot have"
-        return true; // For now, assume they don't have it
+        const cannot = normalizeName(req.name);
+        const hasFeat = ownedFeats
+          .map((f: any) => normalizeName(f))
+          .includes(cannot);
+        const hasSkill = allSkills.has(cannot);
+        const hasPower = (character.powers || [])
+          .map((p: any) =>
+            typeof p === 'string' ? normalizeName(p) : normalizeName(p.name)
+          )
+          .includes(cannot);
+        return !(hasFeat || hasSkill || hasPower);
 
       case 'usage':
-        // Usage requirements - you'd need to track usage counts
-        return true; // For now, assume they meet usage requirements
+        const usageCounts = character.usageCounts || {};
+        return (
+          (usageCounts[normalizeName(req.name)] || 0) >= (req.count || 0)
+        );
 
       case 'power':
-        // Power requirements - you'd need to track powers
-        return true; // For now, assume they meet power requirements
+        const reqPower = normalizeName(req.name).replace(/\bpower\b/, '').trim();
+        return (character.powers || [])
+          .map((p: any) =>
+            typeof p === 'string' ? normalizeName(p) : normalizeName(p.name)
+          )
+          .some((p: string) => reqPower.includes(p) || p.includes(reqPower));
 
       default:
         return true;
@@ -361,19 +377,42 @@ export const getMissingPrereqs = (feat: any, character: any) => {
         return allSkills.has(req.name.toLowerCase());
 
       case 'maneuverPrereq':
-        return true;
+        const maneuvers = character.maneuvers || [];
+        return maneuvers
+          .map((m: any) =>
+            typeof m === 'string' ? normalizeName(m) : normalizeName(m.name)
+          )
+          .includes(normalizeName(req.name));
 
       case 'approval':
-        return true;
+        return Boolean(character.editorApproved);
 
       case 'cannot_have':
-        return true;
+        const cannot = normalizeName(req.name);
+        const hasFeat = ownedFeats
+          .map((f: any) => normalizeName(f))
+          .includes(cannot);
+        const hasSkill = allSkills.has(cannot);
+        const hasPower = (character.powers || [])
+          .map((p: any) =>
+            typeof p === 'string' ? normalizeName(p) : normalizeName(p.name)
+          )
+          .includes(cannot);
+        return !(hasFeat || hasSkill || hasPower);
 
       case 'usage':
-        return false;
+        const usageCounts = character.usageCounts || {};
+        return (
+          (usageCounts[normalizeName(req.name)] || 0) >= (req.count || 0)
+        );
 
       case 'power':
-        return false;
+        const reqPower = normalizeName(req.name).replace(/\bpower\b/, '').trim();
+        return (character.powers || [])
+          .map((p: any) =>
+            typeof p === 'string' ? normalizeName(p) : normalizeName(p.name)
+          )
+          .some((p: string) => reqPower.includes(p) || p.includes(reqPower));
 
       default:
         return true;
