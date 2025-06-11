@@ -1,5 +1,5 @@
 // Step5_Skills.tsx
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState, useMemo, useCallback } from "react";
 import { motion } from "framer-motion";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -54,7 +54,11 @@ const Step5_Skills = () => {
 
   // --- Data loaded from JSON and API ---
   const { data: skills } = useCachedGameContent<any>('skills');
-  const { data: feats } = useCachedGameContent<any>('feats', (d) => d.every((f: any) => f.prerequisites !== undefined));
+  const validateFeats = useCallback(
+    (d: any[]) => d.every((f: any) => f.prerequisites !== undefined),
+    []
+  );
+  const { data: feats } = useCachedGameContent<any>('feats', validateFeats);
   const { data: skillSets } = useCachedGameContent<any>('skill-sets');
   const { data: maneuvers } = useCachedGameContent<any>('maneuvers');
 
