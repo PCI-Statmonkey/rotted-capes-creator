@@ -1290,7 +1290,7 @@ export default function Step6_Powers() {
                       <div className="flex justify-between">
                         <div>
                           <h4 className="font-medium">{flaw.name}</h4>
-                          <p className="text-xs text-gray-400 font-comic-light">{flaw.description}</p>
+                          <p className="text-gray-400 text-sm font-comic-light">{flaw.description}</p>
                         </div>
                         <div className="text-red-400 font-medium">+{flaw.bonus}</div>
                       </div>
@@ -1334,7 +1334,7 @@ export default function Step6_Powers() {
                       <div className="flex justify-between">
                         <div>
                           <h4 className="font-medium">{perk.name}</h4>
-                          <p className="text-xs text-gray-400 font-comic-light">{perk.description}</p>
+                          <p className="text-gray-400 text-sm font-comic-light">{perk.description}</p>
                         </div>
                         <div className="text-green-400 font-medium">{perk.bonus}</div>
                       </div>
