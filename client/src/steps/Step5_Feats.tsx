@@ -61,6 +61,15 @@ const Step5_Feats = () => {
     return Array.from(map.values());
   }, [feats]);
 
+  // Deduplicate origins by name to avoid duplicates in dropdowns
+  const uniqueOrigins = useMemo(() => {
+    const map = new Map<string, any>();
+    (origins ?? []).forEach((o: any) => {
+      if (!map.has(o.name)) map.set(o.name, o);
+    });
+    return Array.from(map.values());
+  }, [origins]);
+
   const [typeFilter, setTypeFilter] = useState<{ power: boolean; others: boolean }>({
     power: true,
     others: true,
@@ -611,7 +620,7 @@ const Step5_Feats = () => {
                             className="border rounded p-1 bg-black text-red-500"
                           >
                             <option value="">Select an origin</option>
-                            {origins
+                            {uniqueOrigins
                               .filter((o) => o.name !== currentOrigin)
                               .map((o) => (
                                 <option key={o.name} value={o.name}>
