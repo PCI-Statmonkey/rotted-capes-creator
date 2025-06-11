@@ -69,14 +69,18 @@ const FeatCard: React.FC<FeatCardProps> = ({
     >
       <Label
         title={isDisabled ? "You don’t meet the prerequisites for this feat" : ""}
-        className="flex items-center gap-2"
+        className="flex items-start gap-2"
       >
         <Checkbox
           disabled={isDisabled}
           checked={isSelected}
           onCheckedChange={(checked) => onToggle(!!checked)}
+          className="mt-1"
         />
-        {feat.name} — {feat.description}
+        <div>
+          <div className="font-semibold text-white">{feat.name}</div>
+          <div className="text-white text-sm">{feat.description}</div>
+        </div>
       </Label>
       {parsedPrereqs.length > 0 && (
         <div className="text-xs mt-1 ml-6">
