@@ -427,7 +427,7 @@ const Step5_Feats = () => {
 
             const allFeats = feats ?? [];
 
-            return allFeats.map((feat) => {
+            return allFeats.map((feat, index) => {
               const count = workingSelectedFeats.filter((f) => f.name === feat.name).length;
               const missing = getMissingPrereqs(feat, characterData);
               const meetsReqs = missing.length === 0;
@@ -435,7 +435,7 @@ const Step5_Feats = () => {
 
           return (
             <div
-              key={feat.id ?? feat.name}
+              key={feat.id ? String(feat.id) : `${feat.name}-${index}`}
               className={`mb-4 ${isDisabled ? 'opacity-50 pointer-events-none' : ''}`}
             >
               <FeatCard
