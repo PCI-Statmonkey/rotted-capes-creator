@@ -49,6 +49,15 @@ const Step5_Feats = () => {
   const { data: skillSets } = useCachedGameContent<any>('skill-sets');
   const { data: maneuvers } = useCachedGameContent<any>('maneuvers');
 
+  // Deduplicate feats by name to avoid rendering duplicates
+  const uniqueFeats = useMemo(() => {
+    const map = new Map<string, any>();
+    (feats ?? []).forEach((f: any) => {
+      if (!map.has(f.name)) map.set(f.name, f);
+    });
+    return Array.from(map.values());
+  }, [feats]);
+
   const skillsFromSets = useMemo(() => {
     return workingSelectedSkillSets.flatMap((setName) => {
       const found = skillSets.find((s) => s.name === setName);
@@ -425,7 +434,7 @@ const Step5_Feats = () => {
               skillSets,
             };
 
-            const allFeats = feats ?? [];
+            const allFeats = uniqueFeats;
 
             return allFeats.map((feat, index) => {
               const count = workingSelectedFeats.filter((f) => f.name === feat.name).length;
