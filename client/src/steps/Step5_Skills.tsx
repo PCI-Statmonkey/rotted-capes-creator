@@ -448,14 +448,17 @@ const Step5_Skills = () => {
             <option value="">Select a starting maneuver</option>
             {maneuvers
               .filter((m) =>
-                meetsPrerequisites(m, {
-                  abilityScores,
-                  selectedSkills: workingSelectedSkills,
-                  startingSkills: workingStartingSkills,
-                  selectedFeats: workingSelectedFeats,
-                  selectedSkillSets: workingSelectedSkillSets,
-                  skillSets,
-                })
+                meetsPrerequisites(
+                  { prerequisites: m.requirements },
+                  {
+                    abilityScores,
+                    selectedSkills: workingSelectedSkills,
+                    startingSkills: workingStartingSkills,
+                    selectedFeats: workingSelectedFeats,
+                    selectedSkillSets: workingSelectedSkillSets,
+                    skillSets,
+                  }
+                )
               )
               .map((m) => (
                 <option key={m.name} value={m.name}>
