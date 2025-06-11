@@ -58,7 +58,7 @@ export const skills = pgTable("skills", {
   ability: text("ability").notNull(), // Which ability it's tied to (e.g., "Strength")
   description: text("description").notNull(),
   untrained: boolean("untrained").default(true).notNull(), // Can it be used untrained?
-  focusOptions: text("focus_options").array().notNull().default([]),
+  focusOptions: text("focus_options").array(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
