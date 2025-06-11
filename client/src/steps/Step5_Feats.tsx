@@ -131,6 +131,52 @@ const Step5_Feats = () => {
     if (startingManeuver) setWorkingStartingManeuver(startingManeuver);
   }, []);
 
+  // Auto select feats granted by skill sets or archetype
+  useEffect(() => {
+    if (!skillSets || !feats) return;
+
+    const archetypeFreeMap: Record<string, string[]> = {
+      Infiltrator: ["Stealthy"],
+      Heavy: ["Toughness"],
+      Brawler: ["Martial Arts"],
+    };
+
+    setWorkingSelectedFeats((prev) => {
+      let updated = prev.filter((f) => {
+        if (f.free && f.source?.startsWith("Skill Set: ")) {
+          const setName = f.source.replace("Skill Set: ", "");
+          return workingSelectedSkillSets.includes(setName);
+        }
+        if (f.free && f.source?.startsWith("Archetype: ")) {
+          const arch = f.source.replace("Archetype: ", "");
+          return arch === archetype;
+        }
+        return true;
+      });
+
+      const existing = updated.map((f) => f.name);
+
+      workingSelectedSkillSets.forEach((setName) => {
+        const set = skillSets.find((s) => s.name === setName);
+        set?.feats?.forEach((name: string) => {
+          if (!existing.includes(name)) {
+            existing.push(name);
+            updated.push({ name, input: "", source: `Skill Set: ${setName}`, free: true });
+          }
+        });
+      });
+
+      (archetypeFreeMap[archetype] || []).forEach((name) => {
+        if (!existing.includes(name)) {
+          existing.push(name);
+          updated.push({ name, input: "", source: `Archetype: ${archetype}`, free: true });
+        }
+      });
+
+      return updated;
+    });
+  }, [workingSelectedSkillSets, archetype, skillSets, feats]);
+
 
   // --- Point Calculation Logic ---
   // Recalculate available points whenever selections change
@@ -153,7 +199,8 @@ const Step5_Feats = () => {
       const freeFocuses = Math.max(0, (skillCounts[s.name] || 0) - 1);
       return acc + Math.max(0, totalFocuses - freeFocuses);
     }, 0);
-    const featCost = Math.max(0, workingSelectedFeats.length - 1) * 5; // first feat is free
+    const paidFeatCount = workingSelectedFeats.filter(f => !f.free).length;
+    const featCost = Math.max(0, paidFeatCount - 1) * 5; // first paid feat is free
     const pointsUsed =
       workingSelectedSkills.length + focusPoints + featCost + skillSetPoints;
     setAvailablePoints(20 - pointsUsed); // Update available points
@@ -324,17 +371,23 @@ const Step5_Feats = () => {
     }
 
     // Add the feat with an empty input field, ready for user selection if needed
-    setWorkingSelectedFeats((prev) => [...prev, { name: featName, input: "" }]);
+    setWorkingSelectedFeats((prev) => [...prev, { name: featName, input: "", free: false }]);
   };
 
   // Remove a feat by its index in the workingSelectedFeats array
   const removeFeat = (indexToRemove: number) => {
-    setWorkingSelectedFeats((prev) => prev.filter((_, index) => index !== indexToRemove));
+    let removed = false;
+    setWorkingSelectedFeats((prev) => {
+      const feat = prev[indexToRemove];
+      if (feat?.free) return prev; // can't remove free feats
+      const updated = prev.filter((_, index) => index !== indexToRemove);
+      removed = true;
+      return updated;
+    });
 
-    // If a 'Learn Maneuver' feat was removed, also clear its corresponding maneuver selection
-    if (workingSelectedFeats[indexToRemove]?.name === "Learn Maneuver") {
+    if (removed && workingSelectedFeats[indexToRemove]?.name === "Learn Maneuver") {
       const updatedManeuvers = [...workingSelectedManeuvers];
-      updatedManeuvers.splice(indexToRemove, 1); // Remove the maneuver at the same index
+      updatedManeuvers.splice(indexToRemove, 1);
       setWorkingSelectedManeuvers(updatedManeuvers);
     }
   };
@@ -342,7 +395,11 @@ const Step5_Feats = () => {
   // Remove the most recently added instance of a feat by name
   const removeFeatByName = (featName: string) => {
     setWorkingSelectedFeats((prev) => {
-      const index = prev.map((f) => f.name).lastIndexOf(featName);
+      // find last non-free instance
+      let index = -1;
+      for (let i = prev.length - 1; i >= 0; i--) {
+        if (prev[i].name === featName && !prev[i].free) { index = i; break; }
+      }
       if (index === -1) return prev;
       const updated = prev.filter((_, i) => i !== index);
       // Also remove corresponding maneuver selection if needed
@@ -473,10 +530,14 @@ const Step5_Feats = () => {
             );
 
             return allFeats.map((feat, index) => {
-              const count = workingSelectedFeats.filter((f) => f.name === feat.name).length;
+              const selected = workingSelectedFeats.filter((f) => f.name === feat.name);
+              const count = selected.length;
               const missing = getMissingPrereqs(feat, characterData);
               const meetsReqs = missing.length === 0;
               const isDisabled = !meetsReqs;
+              const sources = selected.filter(f => f.source).map(f => f.source as string);
+              const source = sources.join(', ');
+              const locked = sources.length > 0;
 
           return (
             <div
@@ -491,6 +552,8 @@ const Step5_Feats = () => {
                 onToggle={(checked) => toggleFeat(feat.name, checked)}
                 showDropdown={feat.name === 'Learn Maneuver' && count > 0}
                 maneuvers={feat.name === 'Learn Maneuver' ? maneuvers : undefined}
+                source={source}
+                locked={locked}
               />
 
               {count > 0 && (
@@ -505,6 +568,7 @@ const Step5_Feats = () => {
                           size="sm"
                           variant="destructive"
                           onClick={() => removeFeat(f.originalIndex)}
+                          disabled={Boolean(f.free)}
                         >
                           Remove
                         </Button>
