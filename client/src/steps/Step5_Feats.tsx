@@ -12,7 +12,6 @@ import {
   TabsTrigger,
 } from "@/components/ui/tabs";
 import { useCharacterBuilder } from "@/lib/Stores/characterBuilder";
-import ManeuverDropdown from "@/components/ManeuverDropdown";
 import FeatCard from "@/components/FeatCard";
 import { meetsPrerequisites, getMissingPrereqs } from "@/utils/requirementValidator";
 import useCachedGameContent from "@/hooks/useCachedGameContent";
@@ -340,18 +339,30 @@ const Step5_Feats = () => {
       skillSets,
     };
 
-    // Check if prerequisites are met
-    if (!meetsPrerequisites(featToAdd, characterData)) {
+    // Check prerequisites unless this is Learn Maneuver
+    if (
+      featName !== "Learn Maneuver" &&
+      !meetsPrerequisites(featToAdd, characterData)
+    ) {
       const missing = getMissingPrereqs(featToAdd, characterData);
-      alert(`You do not meet the prerequisites for ${featName}.\n\nMissing:\n` + missing.map((req: any) => {
-        if (typeof req === 'object') {
-          if (req.type === 'ability') return `${req.name} ${req.value}`;
-          else if (req.type === 'skill' || req.type === 'startingSkill') return req.name;
-          else if (req.type === 'feat') return `Feat: ${req.name}`;
-          return JSON.stringify(req);
-        }
-        return req;
-      }).join(', '));
+      alert(
+        `You do not meet the prerequisites for ${featName}.\n\nMissing:\n` +
+          missing
+            .map((req: any) => {
+              if (typeof req === "object") {
+                if (req.type === "ability") return `${req.name} ${req.value}`;
+                else if (
+                  req.type === "skill" ||
+                  req.type === "startingSkill"
+                )
+                  return req.name;
+                else if (req.type === "feat") return `Feat: ${req.name}`;
+                return JSON.stringify(req);
+              }
+              return req;
+            })
+            .join(", ")
+      );
       return;
     }
 
@@ -420,7 +431,7 @@ const Step5_Feats = () => {
       skillSets,
     };
 
-    if (!meetsPrerequisites(feat, characterData)) {
+    if (featName !== "Learn Maneuver" && !meetsPrerequisites(feat, characterData)) {
       return;
     }
 
@@ -534,7 +545,7 @@ const Step5_Feats = () => {
               const count = selected.length;
               const missing = getMissingPrereqs(feat, characterData);
               const meetsReqs = missing.length === 0;
-              const isDisabled = !meetsReqs;
+              const isDisabled = feat.name === "Learn Maneuver" ? false : !meetsReqs;
               const sources = selected.filter(f => f.source).map(f => f.source as string);
               const source = sources.join(', ');
               const locked = sources.length > 0;
@@ -550,8 +561,8 @@ const Step5_Feats = () => {
                 isDisabled={isDisabled}
                 missingPrereqs={missing}
                 onToggle={(checked) => toggleFeat(feat.name, checked)}
-                showDropdown={feat.name === 'Learn Maneuver' && count > 0}
-                maneuvers={feat.name === 'Learn Maneuver' ? maneuvers : undefined}
+                showDropdown={false}
+                maneuvers={undefined}
                 source={source}
                 locked={locked}
               />
@@ -622,18 +633,36 @@ const Step5_Feats = () => {
                           />
                         )}
                         {feat.name === 'Learn Maneuver' && (
-                          <ManeuverDropdown
-                            label={`Select Maneuver #${i + 1}`}
-                            value={workingSelectedManeuvers[f.originalIndex] || ''}
-                            onChange={(value) => {
-                              const updated = [...workingSelectedManeuvers];
-                              updated[f.originalIndex] = value;
-                              setWorkingSelectedManeuvers(updated);
-                            }}
-                            maneuvers={maneuvers}
-                            meetsPrerequisites={(item) => meetsPrerequisites(item, characterData)}
-                            getMissingPrereqs={(item) => getMissingPrereqs(item, characterData)}
-                          />
+                          <div className="mt-2">
+                            <label className="text-white text-sm mb-1 block">
+                              Select Maneuver #{i + 1}
+                            </label>
+                            <select
+                              value={workingSelectedManeuvers[f.originalIndex] || ''}
+                              onChange={(e) => {
+                                const updated = [...workingSelectedManeuvers];
+                                updated[f.originalIndex] = e.target.value;
+                                setWorkingSelectedManeuvers(updated);
+                              }}
+                              className="w-full p-2 rounded bg-gray-800 border border-gray-600 text-accent focus:outline-none focus:ring-2 focus:ring-accent"
+                            >
+                              <option className="text-accent" value="">
+                                Select a maneuver
+                              </option>
+                              {maneuvers
+                                .filter((m) =>
+                                  meetsPrerequisites(
+                                    { prerequisites: m.requirements },
+                                    characterData
+                                  )
+                                )
+                                .map((m) => (
+                                  <option key={m.name} value={m.name} className="text-accent">
+                                    {m.name}
+                                  </option>
+                                ))}
+                            </select>
+                          </div>
                         )}
                       </div>
                     ))}
