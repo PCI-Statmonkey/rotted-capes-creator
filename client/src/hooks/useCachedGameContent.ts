@@ -8,12 +8,23 @@ export interface CachedResult<T> {
 }
 
 export default function useCachedGameContent<T = any>(type: string): CachedResult<T> {
-  const [data, setData] = useState<T[]>([]);
-  const [loading, setLoading] = useState(true);
+  const key = `gameContent_${type}`;
+  const initialCache =
+    typeof window !== "undefined" ? localStorage.getItem(key) : null;
+  const [data, setData] = useState<T[]>(() => {
+    if (initialCache) {
+      try {
+        return JSON.parse(initialCache);
+      } catch {
+        return [];
+      }
+    }
+    return [];
+  });
+  const [loading, setLoading] = useState(!initialCache);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const key = `gameContent_${type}`;
     const cached = localStorage.getItem(key);
     if (cached) {
       try {
