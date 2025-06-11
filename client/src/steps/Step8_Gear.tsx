@@ -445,10 +445,10 @@ export default function Step8_Gear() {
                   </p>
                   
                   <Select value={selectedGoBag} onValueChange={handleGoBagSelect}>
-                    <SelectTrigger className="w-full bg-black text-red-500 border border-red-500">
+                    <SelectTrigger className="w-full bg-gray-800 text-red-500 border border-gray-600">
                       <SelectValue placeholder="Select a Go-Bag type" />
                     </SelectTrigger>
-                    <SelectContent className="bg-black text-red-500 border border-red-500">
+                    <SelectContent className="bg-gray-800 text-red-500 border border-gray-600">
                       <SelectItem className="text-red-500" value="survivalist">Survivalist Go-Bag</SelectItem>
                       <SelectItem className="text-red-500" value="infiltrator">Infiltrator Go-Bag</SelectItem>
                       <SelectItem className="text-red-500" value="technician">Technician Go-Bag</SelectItem>
@@ -609,7 +609,7 @@ export default function Step8_Gear() {
         <div className="col-span-1">
           <div className="bg-gray-800 rounded-lg p-4">
             <div className="flex justify-between items-center mb-4">
-              <h2 className="text-xl font-semibold">Your Inventory</h2>
+              <h2 className="text-xl font-semibold font-comic-light">Your Inventory</h2>
               <Badge variant="secondary" className="font-comic-light">
                 {character.gear.length} Items
               </Badge>
@@ -629,7 +629,7 @@ export default function Step8_Gear() {
                     className={`bg-gray-700 p-3 rounded-md ${item.name.includes('Go-Bag:') ? 'border-l-4 border-blue-500' : ''}`}
                   >
                     <div className="flex justify-between">
-                      <h3 className="font-medium">{item.name}</h3>
+                      <h3 className="font-medium font-comic-light">{item.name}</h3>
                       <Button 
                         variant="ghost" 
                         size="icon" 
@@ -639,7 +639,7 @@ export default function Step8_Gear() {
                         <Trash2 className="h-4 w-4" />
                       </Button>
                     </div>
-                    <p className="text-gray-300 text-sm mt-1">{item.description}</p>
+                    <p className="text-gray-300 text-sm mt-1 font-comic-light">{item.description}</p>
                   </div>
                 ))}
               </div>
