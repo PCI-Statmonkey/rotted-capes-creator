@@ -1,7 +1,7 @@
 import React from "react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
-import { parsePrerequisite } from "@/utils/requirementValidator";
+import { parsePrerequisite, formatPrerequisite } from "@/utils/requirementValidator";
 
 interface Prerequisite {
   type: string;
@@ -51,14 +51,7 @@ const FeatCard: React.FC<FeatCardProps> = ({
     typeof p === "string" ? parsePrerequisite(p as any) : [p]
   );
 
-  const formatReq = (req: any) =>
-    typeof req === "object"
-      ? req.type === "ability"
-        ? `${req.name} ${req.value}`
-        : req.type === "feat"
-        ? `Feat: ${req.name}`
-        : req.name
-      : String(req);
+  const formatReq = (req: any) => formatPrerequisite(req);
 
   const missingStrings = missingPrereqs.map(formatReq);
   return (
