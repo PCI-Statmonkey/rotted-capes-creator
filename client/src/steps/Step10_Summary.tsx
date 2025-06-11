@@ -11,7 +11,7 @@ import { calculateModifier, formatModifier } from "@/lib/utils";
 import { Check, Save, Shield, Heart, Target } from "lucide-react";
 import { apiRequest } from "@/lib/queryClient";
 import CharacterPdfButton from "@/components/CharacterPdfButton";
-import { parsePrerequisite, getMissingPrereqs } from "@/utils/requirementValidator";
+import { parsePrerequisite, getMissingPrereqs, formatPrerequisite } from "@/utils/requirementValidator";
 
 export default function Step10_Summary() {
   const { character, updateCharacterField, saveCharacter } = useCharacter();
@@ -571,14 +571,7 @@ export default function Step10_Summary() {
                   const parsed = prereqList.flatMap((p: any) =>
                     typeof p === "string" ? parsePrerequisite(p) : [p]
                   );
-                  const formatReq = (req: any) =>
-                    typeof req === "object"
-                      ? req.type === "ability"
-                        ? `${req.name} ${req.value}`
-                        : req.type === "feat"
-                        ? `Feat: ${req.name}`
-                        : req.name
-                      : String(req);
+                  const formatReq = (req: any) => formatPrerequisite(req);
                   const missing = getMissingPrereqs(feat, prereqCharacterData).map(formatReq);
                   return (
                     <div key={index} className="border border-gray-700 rounded-lg p-2">

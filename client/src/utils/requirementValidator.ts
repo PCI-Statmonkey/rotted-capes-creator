@@ -163,6 +163,34 @@ export const parsePrerequisite = (prereqString: string) => {
   return requirements;
 };
 
+export function formatPrerequisite(req: any): string {
+  if (typeof req !== "object") return String(req);
+
+  switch (req.type) {
+    case "ability":
+      return `${req.name} ${req.value}`;
+    case "feat":
+      return `Feat: ${req.name}`;
+    case "skill":
+    case "startingSkill":
+      return req.name;
+    case "skillFocus":
+      return `${req.name} skill focus${req.count && req.count > 1 ? ` ×${req.count}` : ""}`;
+    case "compound":
+      return req.requirements
+        .map((r: any) => formatPrerequisite(r))
+        .join(` ${req.operator} `);
+    case "maneuverPrereq":
+    case "approval":
+    case "cannot_have":
+    case "usage":
+    case "power":
+      return req.name;
+    default:
+      return req.name ?? "";
+  }
+}
+
 export const meetsPrerequisites = (feat: any, character: any) => {
   if (!feat) return true;
 
