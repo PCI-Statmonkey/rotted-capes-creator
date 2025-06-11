@@ -427,6 +427,7 @@ const Step5_Feats = () => {
 
             const allFeats = feats ?? [];
 
+            // Use index as a fallback when feat.id is absent
             return allFeats.map((feat, index) => {
               const count = workingSelectedFeats.filter((f) => f.name === feat.name).length;
               const missing = getMissingPrereqs(feat, characterData);
