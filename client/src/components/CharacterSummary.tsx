@@ -17,6 +17,23 @@ export default function CharacterSummary() {
   const { character } = useCharacter();
   const [isSheetOpen, setIsSheetOpen] = useState(false);
 
+  const formatOriginName = (origin: string | undefined): string => {
+    if (!origin) return "Not Selected";
+    if (!origin.includes("(")) return origin;
+    return origin
+      .replace(/\(([^)]*)\)/, (_, inner: string) => {
+        if (/^\s*Bonuses/i.test(inner)) return "";
+        const part = inner.split(":" )[0].trim();
+        return part ? `(${part})` : "";
+      })
+      .trim();
+  };
+
+  const formatArchetypeName = (archetype: string | undefined): string => {
+    if (!archetype) return "Not Selected";
+    return archetype.split("(")[0].trim();
+  };
+
   const handleDownloadPDF = async () => {
     const sheetElement = document.getElementById('character-sheet');
     if (!sheetElement) return;
@@ -68,11 +85,11 @@ export default function CharacterSummary() {
         <div className="border-2 border-gray-700 rounded-lg p-3 bg-gray-800 mb-4 space-y-2">
           <div className="flex items-center justify-between">
             <span className="text-gray-400">Origin:</span>
-            <span>{character.origin || "Not Selected"}</span>
+            <span>{formatOriginName(character.origin)}</span>
           </div>
           <div className="flex items-center justify-between">
             <span className="text-gray-400">Archetype:</span>
-            <span>{character.archetype || "Not Selected"}</span>
+            <span>{formatArchetypeName(character.archetype)}</span>
           </div>
         </div>
 
