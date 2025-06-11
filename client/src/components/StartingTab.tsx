@@ -80,7 +80,8 @@ const StartingTab = ({
       >
         <option value="">-- Select --</option>
         {feats.map((f) => {
-          const disabled = !meetsPrerequisites(f);
+          const missing = getMissingPrereqs(f);
+          const disabled = missing.length > 0;
           return (
             <option
               key={f.name}
@@ -88,7 +89,7 @@ const StartingTab = ({
               disabled={disabled}
               title={
                 disabled
-                  ? `Missing: ${getMissingPrereqs(f)
+                  ? `Missing: ${missing
                       .map((p) => p.name)
                       .join(", ")}`
                   : ""
@@ -125,7 +126,8 @@ const StartingTab = ({
       >
         <option value="">-- Select --</option>
         {maneuvers.map((m) => {
-          const disabled = !meetsPrerequisites(m);
+          const missing = getMissingPrereqs(m);
+          const disabled = missing.length > 0;
           return (
             <option
               key={m.name}
@@ -133,7 +135,7 @@ const StartingTab = ({
               disabled={disabled}
               title={
                 disabled
-                  ? `Missing: ${getMissingPrereqs(m)
+                  ? `Missing: ${missing
                       .map((p) => p.name)
                       .join(", ")}`
                   : ""
