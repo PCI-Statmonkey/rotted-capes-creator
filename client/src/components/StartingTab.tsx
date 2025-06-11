@@ -84,7 +84,7 @@ const StartingTab = ({
           const disabled = missing.length > 0;
           return (
             <option
-              key={f.name}
+              key={f.id ?? f.name}
               value={f.name}
               disabled={disabled}
               title={

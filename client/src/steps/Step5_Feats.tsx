@@ -435,7 +435,7 @@ const Step5_Feats = () => {
 
           return (
             <div
-              key={feat.name}
+              key={feat.id ?? feat.name}
               className={`mb-4 ${isDisabled ? 'opacity-50 pointer-events-none' : ''}`}
             >
               <FeatCard
