@@ -30,7 +30,7 @@ export default function Home() {
         transition={{ duration: 0.5 }}
         className="text-center mb-12 mt-8"
       >
-        <h1 className="font-comic text-4xl md:text-5xl lg:text-6xl text-accent tracking-wide mb-4">
+        <h1 className="font-display text-4xl md:text-5xl lg:text-6xl text-accent tracking-wide mb-4">
           Rotted Capes 2.0
         </h1>
         <p className="text-xl max-w-2xl mx-auto opacity-90">
@@ -48,7 +48,7 @@ export default function Home() {
             <CardContent className="p-6">
               <div className="flex flex-col items-center text-center h-full">
                 <FileEdit className="h-12 w-12 text-accent mb-4" />
-                <h2 className="font-comic text-2xl mb-3">Character Creator</h2>
+                <h2 className="font-display text-2xl mb-3">Character Creator</h2>
                 <p className="mb-6 text-muted-foreground flex-grow">
                   Use our step-by-step wizard to create your super hero with custom abilities, powers, and more.
                 </p>
@@ -71,7 +71,7 @@ export default function Home() {
             <CardContent className="p-6">
               <div className="flex flex-col items-center text-center h-full">
                 <User className="h-12 w-12 text-accent mb-4" />
-                <h2 className="font-comic text-2xl mb-3">My Characters</h2>
+                <h2 className="font-display text-2xl mb-3">My Characters</h2>
                 <p className="mb-6 text-muted-foreground flex-grow">
                   Save characters to your account and access them anywhere. Export to PDF for game sessions.
                 </p>
@@ -120,7 +120,7 @@ export default function Home() {
             <CardContent className="p-6">
               <div className="flex flex-col items-center text-center h-full">
                 <Info className="h-12 w-12 text-accent mb-4" />
-                <h2 className="font-comic text-2xl mb-3">Game Resources</h2>
+                <h2 className="font-display text-2xl mb-3">Game Resources</h2>
                 <p className="mb-6 text-muted-foreground flex-grow">
                   Quick references, rule summaries, and helpful guides for Rotted Capes 2.0 players.
                 </p>
@@ -140,7 +140,7 @@ export default function Home() {
         className="max-w-3xl mx-auto text-center p-6 bg-panel rounded-2xl comic-border"
       >
         <Shield className="h-10 w-10 text-accent mx-auto mb-4" />
-        <h2 className="font-comic text-2xl mb-4">About Rotted Capes</h2>
+        <h2 className="font-display text-2xl mb-4">About Rotted Capes</h2>
         <p className="text-muted-foreground">
           Rotted Capes is a post-apocalyptic superhero role-playing game where players take on the roles of the remaining heroes (or villains) in a world devastated by a zombie plague that affects everyone, including those with superpowers.
         </p>
