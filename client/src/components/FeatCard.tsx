@@ -76,7 +76,7 @@ const FeatCard: React.FC<FeatCardProps> = ({
         </div>
       </Label>
       {parsedPrereqs.length > 0 && (
-        <div className="text-xs mt-1 ml-6">
+        <div className="text-xs mt-1 ml-6 font-comic-light">
           <span className="font-semibold text-white">Prerequisites:</span>
           <ul className="list-disc pl-5 mt-1">
             {parsedPrereqs.map((req, idx) => {
