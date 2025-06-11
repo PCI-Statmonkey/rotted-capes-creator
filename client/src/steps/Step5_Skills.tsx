@@ -90,7 +90,13 @@ const Step5_Skills = () => {
 
   useEffect(() => {
     setSkillsTab(currentTab);
-  }, [currentTab]);
+  }, [currentTab, setSkillsTab]);
+
+  useEffect(() => {
+    if (skillsTab !== currentTab) {
+      setCurrentTab(skillsTab || "starting");
+    }
+  }, [skillsTab]);
 
   // Destructure character builder setters to persist selections
   const {
