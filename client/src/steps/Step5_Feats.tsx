@@ -3,6 +3,8 @@ import { useEffect, useState, useMemo } from "react";
 import { motion } from "framer-motion";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Label } from "@/components/ui/label";
 import {
   Tabs,
   TabsContent,
@@ -57,6 +59,22 @@ const Step5_Feats = () => {
     });
     return Array.from(map.values());
   }, [feats]);
+
+  const featTypes = useMemo(
+    () => Array.from(new Set((feats ?? []).map((f: any) => f.type))).sort(),
+    [feats]
+  );
+  const [typeFilter, setTypeFilter] = useState<Record<string, boolean>>({});
+
+  useEffect(() => {
+    if (featTypes.length && Object.keys(typeFilter).length === 0) {
+      const initial: Record<string, boolean> = {};
+      featTypes.forEach((t) => {
+        initial[t] = true;
+      });
+      setTypeFilter(initial);
+    }
+  }, [featTypes, typeFilter]);
 
   const skillsFromSets = useMemo(() => {
     return workingSelectedSkillSets.flatMap((setName) => {
@@ -424,6 +442,22 @@ const Step5_Feats = () => {
           <p className="text-white text-sm mb-2">
             Your hero gets 1 free feat. The first feat chosen costs zero points.
           </p>
+          <div className="flex gap-4 mb-4">
+            {featTypes.map((type) => (
+              <div key={type} className="flex items-center space-x-2">
+                <Checkbox
+                  id={`filter-${type}`}
+                  checked={typeFilter[type]}
+                  onCheckedChange={(checked) =>
+                    setTypeFilter((prev) => ({ ...prev, [type]: !!checked }))
+                  }
+                />
+                <Label htmlFor={`filter-${type}`} className="capitalize">
+                  {type}
+                </Label>
+              </div>
+            ))}
+          </div>
           {(() => {
             const characterData = {
               abilityScores,
@@ -434,7 +468,9 @@ const Step5_Feats = () => {
               skillSets,
             };
 
-            const allFeats = uniqueFeats;
+            const allFeats = uniqueFeats.filter(
+              (f) => !typeFilter || typeFilter[f.type]
+            );
 
             return allFeats.map((feat, index) => {
               const count = workingSelectedFeats.filter((f) => f.name === feat.name).length;
