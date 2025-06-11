@@ -108,7 +108,7 @@ export default function Step3_Archetype() {
       transition={{ duration: 0.3 }}
     >
       <div className="mb-6 border-b-2 border-gray-700 pb-4">
-        <h2 className="font-comic text-3xl text-accent tracking-wide">Step 3: Character Archetype</h2>
+        <h2 className="font-display text-3xl text-red-500 tracking-wide">Step 3: Character Archetype</h2>
         <p className="text-gray-300 mt-2">Choose an archetype that defines your hero's role and fighting style.</p>
       </div>
 
