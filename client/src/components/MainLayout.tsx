@@ -122,7 +122,7 @@ export default function MainLayout({ children }: MainLayoutProps) {
               <svg className="w-7 h-7 text-accent" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M14 19l3 3 5-5m-7-4h-5l-3 3-3-3H3v-3l3-3-3-3V4h5l3 3 3-3h4l-3 3 3 3-3 3z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
               </svg>
-              <h1 className="font-comic text-2xl md:text-3xl tracking-wide">Rotted Capes 2.0</h1>
+              <h1 className="font-display text-2xl md:text-3xl tracking-wide">Rotted Capes 2.0</h1>
             </div>
           </Link>
           <div className="flex items-center space-x-4">

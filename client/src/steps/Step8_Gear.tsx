@@ -383,7 +383,7 @@ export default function Step8_Gear() {
 
   return (
     <div className="container mx-auto px-4 py-6">
-      <h1 className="text-3xl font-bold mb-6">Gear & Equipment</h1>
+      <h1 className="text-3xl font-display font-bold text-red-500 mb-6">Step 8: Gear & Equipment</h1>
       
       <div className="mb-6 p-4 bg-gray-800 rounded-lg">
         <div className="flex justify-between items-center mb-2">

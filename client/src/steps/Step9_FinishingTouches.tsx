@@ -91,7 +91,7 @@ export default function Step9_FinishingTouches() {
 
   return (
     <div className="container mx-auto px-4 py-6">
-      <h1 className="text-3xl font-bold mb-6">Finishing Touches</h1>
+      <h1 className="text-3xl font-display font-bold text-red-500 mb-6">Step 9: Finishing Touches</h1>
       
       <Card className="mb-6">
         <CardHeader>

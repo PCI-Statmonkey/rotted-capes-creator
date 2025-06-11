@@ -184,7 +184,7 @@ export default function Step10_Summary() {
   return (
     <div className="container mx-auto px-4 py-6" ref={summaryRef}>
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold">Character Sheet</h1>
+        <h1 className="text-3xl font-display font-bold text-red-500">Step 10: Character Sheet</h1>
         <div className="flex gap-2">
           <Button 
             onClick={handleSaveCharacter} 

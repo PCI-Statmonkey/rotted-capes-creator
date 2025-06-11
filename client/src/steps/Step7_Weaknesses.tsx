@@ -281,7 +281,7 @@ export default function Step7_Weaknesses() {
       className="w-full"
     >
       <div className="bg-gray-900 bg-opacity-60 p-6 rounded-xl shadow-xl">
-        <h2 className="text-3xl font-bold text-white mb-6 font-comic">Character Weaknesses</h2>
+        <h2 className="text-3xl font-display font-bold text-red-500 mb-6">Step 7: Character Weaknesses</h2>
         
         <div className="text-gray-300 mb-6">
           <p className="mb-2">

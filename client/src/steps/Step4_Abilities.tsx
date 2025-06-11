@@ -346,7 +346,7 @@ const handleContinue = () => {
       transition={{ duration: 0.3 }}
     >
       <div className="mb-6 border-b-2 border-gray-700 pb-4">
-        <h2 className="font-comic text-3xl text-accent tracking-wide">Step 4: Ability Scores</h2>
+        <h2 className="font-display text-3xl text-red-500 tracking-wide">Step 4: Ability Scores</h2>
         <p className="text-gray-300 mt-2">
           Assign your character's ability scores and see bonuses from your Origin and Archetype.
         </p>
