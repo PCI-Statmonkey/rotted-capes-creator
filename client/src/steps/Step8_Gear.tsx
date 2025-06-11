@@ -107,6 +107,7 @@ export default function Step8_Gear() {
 
   const [currentTab, setCurrentTab] = useState("starting");
   const [selectedGoBag, setSelectedGoBag] = useState<GoBagType | "">("");
+  const [hoveredGoBag, setHoveredGoBag] = useState<GoBagType | "">("");
   const [startingWeapons, setStartingWeapons] = useState<string[]>([]);
   const [purchased, setPurchased] = useState<Record<string, number>>({});
 
@@ -126,17 +127,39 @@ export default function Step8_Gear() {
   const toggleGoBag = (type: GoBagType) => {
     if (selectedGoBag === type) {
       // remove existing go-bag items
-      const itemsToRemove = character.gear.filter((g) => g.starting && g.name.includes(goBags[type].name));
-      itemsToRemove.forEach((_, idx) => removeGearItem(idx));
+      const indices: number[] = [];
+      character.gear.forEach((g, idx) => {
+        if (
+          g.starting &&
+          (g.name === `Go-Bag: ${goBags[type].name}` || g.description.includes(goBags[type].name))
+        ) {
+          indices.push(idx);
+        }
+      });
+      indices
+        .sort((a, b) => b - a)
+        .forEach((i) => removeGearItem(i));
       setSelectedGoBag("");
     } else {
-      // clear previous
+      // clear previous bag and its items
+      const indices: number[] = [];
       character.gear.forEach((item, idx) => {
-        if (item.starting && item.name.includes("Go-Bag:")) removeGearItem(idx);
+        if (item.starting && item.name.startsWith("Go-Bag:")) indices.push(idx);
+        if (item.starting && item.description.includes("Go-Bag")) indices.push(idx);
       });
+      Array.from(new Set(indices))
+        .sort((a, b) => b - a)
+        .forEach((i) => removeGearItem(i));
+
       // add new bag
-      addGearItem({ name: `Go-Bag: ${goBags[type].name}`, description: goBags[type].description, starting: true });
-      goBags[type].items.forEach((it) => addGearItem({ name: it, description: `Part of the ${goBags[type].name}`, starting: true }));
+      addGearItem({
+        name: `Go-Bag: ${goBags[type].name}`,
+        description: goBags[type].description,
+        starting: true,
+      });
+      goBags[type].items.forEach((it) =>
+        addGearItem({ name: it, description: `Part of the ${goBags[type].name}`, starting: true })
+      );
       setSelectedGoBag(type);
     }
   };
@@ -210,23 +233,41 @@ export default function Step8_Gear() {
 
         {/* Starting Gear */}
         <TabsContent value="starting">
-          <h3 className="text-white text-md mb-2">Go-Bags</h3>
-          {Object.entries(goBags).map(([key, bag]) => (
-            <label key={key} className="flex items-start space-x-2 text-white">
-              <input
-                type="checkbox"
-                checked={selectedGoBag === key}
-                onChange={() => toggleGoBag(key as GoBagType)}
-              />
-              <span>{bag.name}</span>
-            </label>
-          ))}
-          {selectedGoBag && (
-            <div className="mt-2 bg-gray-700 p-3 rounded text-sm text-white">
-              <p className="mb-1 font-semibold">{goBags[selectedGoBag].name}</p>
-              <p>{goBags[selectedGoBag].description}</p>
+          <div className="flex gap-4">
+            <div className="w-1/2 space-y-2">
+              <h3 className="text-white text-md mb-2">Go-Bags</h3>
+              {Object.entries(goBags).map(([key, bag]) => (
+                <label
+                  key={key}
+                  className="flex items-start space-x-2 text-white"
+                  onMouseEnter={() => setHoveredGoBag(key as GoBagType)}
+                  onMouseLeave={() => setHoveredGoBag("")}
+                >
+                  <input
+                    type="checkbox"
+                    checked={selectedGoBag === key}
+                    onChange={() => toggleGoBag(key as GoBagType)}
+                  />
+                  <span>{bag.name}</span>
+                </label>
+              ))}
             </div>
-          )}
+            <div className="w-1/2">
+              {hoveredGoBag && (
+                <div className="bg-gray-700 p-3 rounded text-sm text-white">
+                  <p className="mb-1 font-semibold">{goBags[hoveredGoBag].name}</p>
+                  <p className="font-comic-light text-gray-300 mb-2">
+                    {goBags[hoveredGoBag].description}
+                  </p>
+                  <ul className="list-disc pl-4 text-gray-300 font-comic-light">
+                    {goBags[hoveredGoBag].items.map((it) => (
+                      <li key={it}>{it}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </div>
+          </div>
 
           <h3 className="text-white text-md mt-4 mb-2">Starting Weapons</h3>
           {weapons.map((w) => (
