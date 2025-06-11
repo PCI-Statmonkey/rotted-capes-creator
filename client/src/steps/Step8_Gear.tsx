@@ -388,7 +388,7 @@ export default function Step8_Gear() {
       <div className="mb-6 p-4 bg-gray-800 rounded-lg">
         <div className="flex justify-between items-center mb-2">
           <h2 className="text-xl font-semibold">Acquisition Points</h2>
-          <Badge variant="outline" className="text-lg px-3 py-1">
+          <Badge variant="outline" className="text-lg px-3 py-1 font-comic-light">
             {acquisitionPoints} AP Remaining
           </Badge>
         </div>
@@ -434,7 +434,7 @@ export default function Step8_Gear() {
             className="mb-6"
           >
             <AccordionItem value="go-bag">
-              <AccordionTrigger className="text-lg font-semibold">
+              <AccordionTrigger className="text-lg font-semibold text-gray-300">
                 Select a Go-Bag
               </AccordionTrigger>
               <AccordionContent>
@@ -445,22 +445,22 @@ export default function Step8_Gear() {
                   </p>
                   
                   <Select value={selectedGoBag} onValueChange={handleGoBagSelect}>
-                    <SelectTrigger className="w-full">
+                    <SelectTrigger className="w-full bg-black text-red-500 border border-red-500">
                       <SelectValue placeholder="Select a Go-Bag type" />
                     </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="survivalist">Survivalist Go-Bag</SelectItem>
-                      <SelectItem value="infiltrator">Infiltrator Go-Bag</SelectItem>
-                      <SelectItem value="technician">Technician Go-Bag</SelectItem>
-                      <SelectItem value="medic">Medic Go-Bag</SelectItem>
-                      <SelectItem value="bystander">Bystander Go-Bag</SelectItem>
+                    <SelectContent className="bg-black text-red-500 border border-red-500">
+                      <SelectItem className="text-red-500" value="survivalist">Survivalist Go-Bag</SelectItem>
+                      <SelectItem className="text-red-500" value="infiltrator">Infiltrator Go-Bag</SelectItem>
+                      <SelectItem className="text-red-500" value="technician">Technician Go-Bag</SelectItem>
+                      <SelectItem className="text-red-500" value="medic">Medic Go-Bag</SelectItem>
+                      <SelectItem className="text-red-500" value="bystander">Bystander Go-Bag</SelectItem>
                     </SelectContent>
                   </Select>
                   
                   {selectedGoBag && (
                     <div className="bg-gray-700 p-3 rounded-md mt-3">
                       <h3 className="font-medium mb-2">{goBags[selectedGoBag].name}</h3>
-                      <p className="text-gray-300 text-sm mb-2">{goBags[selectedGoBag].description}</p>
+                      <p className="text-gray-300 text-sm mb-2 font-comic-light">{goBags[selectedGoBag].description}</p>
                       <h4 className="text-sm font-medium mb-1">Contents:</h4>
                       <ul className="list-disc pl-5 text-sm text-gray-300 space-y-1">
                         {goBags[selectedGoBag].items.map((item, index) => (
@@ -474,7 +474,7 @@ export default function Step8_Gear() {
             </AccordionItem>
             
             <AccordionItem value="weapons">
-              <AccordionTrigger className="text-lg font-semibold">
+              <AccordionTrigger className="text-lg font-semibold text-gray-300">
                 Weapons
               </AccordionTrigger>
               <AccordionContent>
@@ -519,7 +519,7 @@ export default function Step8_Gear() {
             </AccordionItem>
             
             <AccordionItem value="equipment">
-              <AccordionTrigger className="text-lg font-semibold">
+              <AccordionTrigger className="text-lg font-semibold text-gray-300">
                 Equipment
               </AccordionTrigger>
               <AccordionContent>
@@ -559,7 +559,7 @@ export default function Step8_Gear() {
             </AccordionItem>
             
             <AccordionItem value="custom">
-              <AccordionTrigger className="text-lg font-semibold">
+              <AccordionTrigger className="text-lg font-semibold text-gray-300">
                 Custom Gear
               </AccordionTrigger>
               <AccordionContent>
@@ -610,7 +610,7 @@ export default function Step8_Gear() {
           <div className="bg-gray-800 rounded-lg p-4">
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-xl font-semibold">Your Inventory</h2>
-              <Badge variant="secondary">
+              <Badge variant="secondary" className="font-comic-light">
                 {character.gear.length} Items
               </Badge>
             </div>
