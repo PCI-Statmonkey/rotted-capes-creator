@@ -28,6 +28,8 @@ interface FeatCardProps {
   maneuvers?: Maneuver[];
   selectedManeuver?: string;
   onSelectManeuver?: (maneuverName: string) => void;
+  source?: string;
+  locked?: boolean;
 }
 
 const FeatCard: React.FC<FeatCardProps> = ({
@@ -41,6 +43,8 @@ const FeatCard: React.FC<FeatCardProps> = ({
   maneuvers,
   selectedManeuver,
   onSelectManeuver,
+  source,
+  locked,
 }) => {
   const prereqList = Array.isArray(feat.prerequisites)
     ? feat.prerequisites
@@ -66,7 +70,7 @@ const FeatCard: React.FC<FeatCardProps> = ({
         className="flex items-start gap-2"
       >
         <Checkbox
-          disabled={isDisabled}
+          disabled={isDisabled || locked}
           checked={isSelected}
           onCheckedChange={(checked) => onToggle(!!checked)}
           className="mt-1"
@@ -79,6 +83,9 @@ const FeatCard: React.FC<FeatCardProps> = ({
             )}
           </div>
           <div className="text-white text-sm">{feat.description}</div>
+          {source && (
+            <div className="text-xs text-accent mt-1">Free from {source}</div>
+          )}
         </div>
       </Label>
       {parsedPrereqs.length > 0 && (
