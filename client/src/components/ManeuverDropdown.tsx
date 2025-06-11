@@ -27,7 +27,8 @@ const ManeuverDropdown: React.FC<ManeuverDropdownProps> = ({
       >
         <option value="">-- Select Maneuver --</option>
         {maneuvers.map((m) => {
-          const disabled = !meetsPrerequisites(m);
+          const reqObj = { prerequisites: m.requirements };
+          const disabled = !meetsPrerequisites(reqObj);
           return (
             <option
               key={m.name}
@@ -35,7 +36,7 @@ const ManeuverDropdown: React.FC<ManeuverDropdownProps> = ({
               disabled={disabled}
               title={
                 disabled
-                  ? `Missing: ${getMissingPrereqs(m)
+                  ? `Missing: ${getMissingPrereqs(reqObj)
                       .map((p) => p.name)
                       .join(", ")}`
                   : ""

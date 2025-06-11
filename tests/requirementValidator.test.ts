@@ -74,4 +74,27 @@ assert(!meetsPrerequisites({ prerequisites: 'Flight power' }, powerChar));
 const powerCharOk = { ...character, powers: [{ name: 'Flight' }] };
 assert(meetsPrerequisites({ prerequisites: 'Flight power' }, powerCharOk));
 
+// Maneuver prerequisite uses selected maneuver requirements
+assert(
+  meetsPrerequisites(
+    { prerequisites: 'As per maneuver' },
+    { ...character, maneuverRequirements: ['Strength 13'] }
+  )
+);
+
+assert(
+  !meetsPrerequisites(
+    { prerequisites: 'As per maneuver' },
+    { ...character, maneuverRequirements: ['Dexterity 15'] }
+  )
+);
+
+const missingManeuver = getMissingPrereqs(
+  { prerequisites: 'As per maneuver' },
+  { ...character, maneuverRequirements: ['Dexterity 15'] }
+);
+assert(
+  missingManeuver.some((r) => r.type === 'maneuverPrereq')
+);
+
 console.log('All tests passed');
