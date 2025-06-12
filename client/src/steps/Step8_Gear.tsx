@@ -34,41 +34,76 @@ const goBags: Record<GoBagType, GoBag> = {
       "High Capacity Water Resistant Backpack",
       "Banged up Shake Flashlight",
       "Patched up bivouac Sack",
+      "3 Liter Hand Powered UV Water Purifier (8,000 water treatments)",
+      "EMT Medical Field First Aid kit (4 uses left)",
+      "Compass OR GPS",
+      "Mess Kit Ration (7 days worth)",
+      "Flare gun and 4 flares",
+      "Collapsible Fishing Rod",
     ],
   },
   infiltrator: {
     name: "Infiltrator Go-Bag",
-    description: "Tactical gear focused on stealth and observation.",
+    description:
+      "Tactical gear focused on stealth, observation, and combat operations.",
     items: [
       "Water-resistant Tactical Ergo Pack",
-      "Night Vision Binoculars",
-      "Tactical Holster Vest",
+      "Night scope and scope mount OR Laser sight and mount OR Pocket Lock Pick Set",
+      "Water Resistant Night Vision Binoculars",
+      "Tactical Holster Vest OR Tactical Sheath Utility Belt",
+      "1 clip/magazine of ammo OR 2 Hand Grenades",
+      "Climbing Kit",
+      "Gas Mask",
+      "2- Throat communicators with 1- 2-way radio/walkie-talkie",
+      "Well-worn leather Tactical gloves",
     ],
   },
   technician: {
     name: "Technician Go-Bag",
-    description: "Essential tools for repairs and maintenance.",
+    description:
+      "Essential tools for repairs, electrical work, and mechanical maintenance.",
     items: [
       "Utility Belt",
+      "Banged up Shake Flashlight",
+      "2-way radio/walkie-talkie",
       "Solar Powered Jump Starter",
+      "100-Piece Mechanics Tool Kit missing 25 pieces OR 100-Piece Home Essential Tool Kit missing 25 pieces",
+      "Workman Gloves",
       "Multi-Tool",
+      "Tool Belt",
+      "Small solar power charger with battery",
+      "Old phone with 32GB of movies, music and apps",
     ],
   },
   medic: {
     name: "Medic Go-Bag",
-    description: "Medical supplies and emergency response equipment.",
+    description:
+      "Medical supplies and emergency response equipment for treating injuries.",
     items: [
+      "Water-resistant High Capacity Duffle",
       "Medical Pack - Tactical Response Pack",
       "Fast fold Litter",
+      "Flare gun and 5 flares",
+      "3- Emergency Survival Food Ration Packs",
+      "1 Liter Hand Powered UV Water Purifier (8,000 water treatments)",
+      "Climbers Kit",
+      "4- 12-hour Light sticks",
       "Utility Folding knife",
     ],
   },
   bystander: {
     name: "Bystander Go-Bag",
-    description: "Basic survival essentials for someone caught unprepared.",
+    description:
+      "Basic survival essentials for someone caught unprepared.",
     items: [
       "Water-resistant Backpack",
+      "7- Emergency Survival Food Ration Packs",
+      "3 Liter Hand Powered UV Water Purifier (8,000 water treatments)",
+      "Compass OR GPS",
       "Standard First Aid Kit",
+      "Bivouac Sack",
+      "2- 12-hour Light sticks",
+      "Climbers Kit",
       "Multi-Tool",
     ],
   },
@@ -216,7 +251,7 @@ export default function Step8_Gear() {
   };
 
   return (
-    <div className="bg-panel p-6 rounded-2xl comic-border halftone-bg">
+    <div className="bg-panel p-6 rounded-2xl comic-border halftone-bg font-comic-light">
       <h2 className="text-2xl font-display text-red-500 mb-4">Step 8: Gear</h2>
       <div className="text-sm text-white mb-2">
         Points Remaining: <span className="text-accent font-bold">{remainingAp}</span>
