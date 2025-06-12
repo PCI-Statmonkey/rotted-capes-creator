@@ -130,11 +130,12 @@ const gear: Item[] = [
   { name: "Rope", description: "50ft nylon rope", ap: 1 },
 ];
 
-// Bonus AP from feats
+// Bonus AP from feats based on the TTRPG rules
 const bonusApFeats = [
-  { name: "Scavenger", apBonus: 2 },
-  { name: "Lucky Find", apBonus: 1 },
-  { name: "Well Equipped", apBonus: 3 },
+  // Start each issue with 6 AP worth of gear
+  { name: "Exceptional Scavenger", apBonus: 6 },
+  // Start each issue with 4 AP worth of equipment
+  { name: "I've Done Alright for Myself", apBonus: 4 },
 ];
 
 export default function Step8_Gear() {
@@ -153,7 +154,20 @@ export default function Step8_Gear() {
     }, 0);
   };
 
-  const baseAp = 5;
+  // Determine starting AP based on trained skills
+  const calculateBaseAp = () => {
+    const hasScavenge = character.skills.some(
+      (s) => s.name.toLowerCase() === "scavenge" && (s.trained || s.ranks > 0)
+    );
+    const hasUrban = character.skills.some(
+      (s) => s.name.toLowerCase() === "urban survival" && (s.trained || s.ranks > 0)
+    );
+    if (hasScavenge && hasUrban) return 6;
+    if (hasScavenge || hasUrban) return 3;
+    return 0;
+  };
+
+  const baseAp = calculateBaseAp();
   const bonusAp = calculateBonusAp();
   const spentAp = Object.values(purchased).reduce((a, b) => a + b, 0);
   const remainingAp = baseAp + bonusAp - spentAp;
