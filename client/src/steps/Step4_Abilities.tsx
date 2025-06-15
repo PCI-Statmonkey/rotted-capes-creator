@@ -65,13 +65,13 @@ export default function Step4_Abilities() {
       charisma: null
     });
     setSelectedStandardScore(null);
-    // Reset abilities to default values (10)
+    // Reset abilities to default values (8)
     const defaultAbilities = { ...character.abilities };
     Object.keys(defaultAbilities).forEach(key => {
       const abilityKey = key as keyof typeof defaultAbilities;
       defaultAbilities[abilityKey] = {
-        value: 10,
-        modifier: calculateModifier(10)
+        value: 8,
+        modifier: calculateModifier(8)
       };
     });
     setLocalAbilities(defaultAbilities);
@@ -253,8 +253,8 @@ export default function Step4_Abilities() {
     Object.keys(defaultAbilities).forEach(key => {
       const abilityKey = key as keyof typeof defaultAbilities;
       defaultAbilities[abilityKey] = {
-        value: 10,
-        modifier: calculateModifier(10)
+        value: 8,
+        modifier: calculateModifier(8)
       };
     });
     setLocalAbilities(defaultAbilities);
