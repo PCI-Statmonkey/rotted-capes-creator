@@ -103,13 +103,14 @@ export interface Character {
   updatedAt: string;
 }
 
+// Characters begin with ability scores of 8 so that point buy starts at 0
 export const defaultAbilities: Abilities = {
-  strength: { value: 10, modifier: 0 },
-  dexterity: { value: 10, modifier: 0 },
-  constitution: { value: 10, modifier: 0 },
-  intelligence: { value: 10, modifier: 0 },
-  wisdom: { value: 10, modifier: 0 },
-  charisma: { value: 10, modifier: 0 },
+  strength: { value: 8, modifier: calculateModifier(8) },
+  dexterity: { value: 8, modifier: calculateModifier(8) },
+  constitution: { value: 8, modifier: calculateModifier(8) },
+  intelligence: { value: 8, modifier: calculateModifier(8) },
+  wisdom: { value: 8, modifier: calculateModifier(8) },
+  charisma: { value: 8, modifier: calculateModifier(8) },
 };
 
 export const createEmptyCharacter = (): Character => ({
