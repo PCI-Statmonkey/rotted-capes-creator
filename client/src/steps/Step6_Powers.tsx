@@ -1359,6 +1359,71 @@ export default function Step6_Powers() {
                             </div>
                           )}
                         </div>
+
+                        {/* Add power modification dropdowns */}
+                        <div className="mt-3 pt-3 border-t border-gray-600 grid grid-cols-2 gap-3">
+                          <div>
+                            <Label className="text-xs mb-1 block">Add Flaw</Label>
+                            <Select
+                              value=""
+                              onValueChange={(value) => {
+                                if (value) {
+                                  const flaw = POWER_FLAWS.find(f => f.name === value);
+                                  if (flaw && !power.flaws.some(f => f.name === flaw.name)) {
+                                    togglePowerModifier(index, "flaws", flaw.name);
+                                  }
+                                }
+                              }}
+                            >
+                              <SelectTrigger className="bg-gray-800">
+                                <SelectValue placeholder="Add a flaw" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                {POWER_FLAWS.map(flaw => (
+                                  <SelectItem
+                                    key={`pb-flaw-option-${flaw.name}`}
+                                    value={flaw.name}
+                                    disabled={power.flaws.some(f => f.name === flaw.name)}
+                                  >
+                                    {flaw.name} (+{flaw.bonus})
+                                  </SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
+                          </div>
+
+                          <div>
+                            <Label className="text-xs mb-1 block">Add Perk</Label>
+                            <Select
+                              value=""
+                              onValueChange={(value) => {
+                                if (value) {
+                                  const perk = POWER_PERKS.find(p => p.name === value);
+                                  if (perk && !power.perks.some(p => p.name === perk.name)) {
+                                    togglePowerModifier(index, "perks", perk.name);
+                                  }
+                                }
+                              }}
+                            >
+                              <SelectTrigger className="bg-gray-800">
+                                <SelectValue placeholder="Add a perk" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                {POWER_PERKS.filter(perk =>
+                                  perk.name !== "All Skill" || ALL_SKILL_COMPATIBLE.includes(power.name)
+                                ).map(perk => (
+                                  <SelectItem
+                                    key={`pb-perk-option-${perk.name}`}
+                                    value={perk.name}
+                                    disabled={power.perks.some(p => p.name === perk.name)}
+                                  >
+                                    {perk.name} ({perk.bonus})
+                                  </SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
+                          </div>
+                        </div>
                         
                         {/* Display final score if it differs */}
                         {power.finalScore !== power.score && (
