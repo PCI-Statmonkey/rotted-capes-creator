@@ -416,7 +416,7 @@ const Step5_Skills = () => {
   return (
     <motion.div className="bg-panel rounded-2xl p-6 comic-border overflow-hidden halftone-bg">
       <h2 className="text-2xl font-display text-red-500 mb-4">Step 5: Skills</h2>
-      <div className="text-sm text-white mb-2">
+      <div className="text-sm text-white mb-2 text-[1.05rem]">
         Points Available: <span className="text-accent font-bold">{availablePoints}</span>
       </div>
 
