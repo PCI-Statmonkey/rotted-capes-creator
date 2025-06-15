@@ -8,6 +8,7 @@ import {
 } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { getGameContent } from "@/lib/api";
 
 // Types
 type GoBagType = "survivalist" | "infiltrator" | "technician" | "medic" | "bystander";
@@ -109,26 +110,14 @@ const goBags: Record<GoBagType, GoBag> = {
   },
 };
 
-// Weapons
-const weapons: Item[] = [
-  { name: "Revolver", description: "6-round revolver", ap: 1 },
-  { name: "Bolt-Action Rifle", description: "5-round rifle", ap: 1 },
-  { name: "Baseball Bat", description: "Improvised club", ap: 0 },
+// Loaded gear lists
+const weaponCategories = [
+  "meleeWeapons",
+  "archaicWeapons",
+  "firearms",
+  "otherModernWeapons",
 ];
 
-// Armor
-const armors: Item[] = [
-  { name: "Tactical Body Armor", description: "Modern ballistic armor", ap: 2 },
-  { name: "Reinforced Clothing", description: "Light protective clothing", ap: 1 },
-  { name: "Ballistic Vest", description: "Kevlar vest", ap: 1 },
-];
-
-// Misc gear
-const gear: Item[] = [
-  { name: "First Aid Kit", description: "Basic medical supplies", ap: 1 },
-  { name: "Flashlight", description: "Durable flashlight", ap: 1 },
-  { name: "Rope", description: "50ft nylon rope", ap: 1 },
-];
 
 // Bonus AP from feats based on the TTRPG rules
 const bonusApFeats = [
@@ -141,11 +130,32 @@ const bonusApFeats = [
 export default function Step8_Gear() {
   const { character, addGearItem, removeGearItem } = useCharacter();
 
-  const [currentTab, setCurrentTab] = useState("starting");
+  const [currentTab, setCurrentTab] = useState("goBag");
   const [selectedGoBag, setSelectedGoBag] = useState<GoBagType | "">("");
   const [hoveredGoBag, setHoveredGoBag] = useState<GoBagType | "">("");
-  const [startingWeapons, setStartingWeapons] = useState<string[]>([]);
+  const [weapons, setWeapons] = useState<Item[]>([]);
+  const [armors, setArmors] = useState<Item[]>([]);
+  const [gearItems, setGearItems] = useState<Item[]>([]);
   const [purchased, setPurchased] = useState<Record<string, number>>({});
+
+  useEffect(() => {
+    async function loadGear() {
+      try {
+        const all = await getGameContent('gear');
+        const mapItem = (it: any): Item => ({
+          name: it.name,
+          description: it.description ?? '',
+          ap: it.ap ?? 0,
+        });
+        setWeapons(all.filter((g: any) => weaponCategories.includes(g.category)).map(mapItem));
+        setArmors(all.filter((g: any) => g.category === 'armor').map(mapItem));
+        setGearItems(all.filter((g: any) => g.category === 'equipment').map(mapItem));
+      } catch (e) {
+        console.error('Failed to load gear', e);
+      }
+    }
+    loadGear();
+  }, []);
 
   const calculateBonusAp = () => {
     return character.feats.reduce((acc, feat) => {
@@ -213,20 +223,7 @@ export default function Step8_Gear() {
     }
   };
 
-  const toggleStartingWeapon = (name: string) => {
-    const exists = startingWeapons.includes(name);
-    if (exists) {
-      const index = character.gear.findIndex((g) => g.starting && g.name === name);
-      if (index !== -1) removeGearItem(index);
-      setStartingWeapons(startingWeapons.filter((w) => w !== name));
-    } else {
-      const weapon = weapons.find((w) => w.name === name);
-      if (weapon) {
-        addGearItem({ name: weapon.name, description: weapon.description, starting: true });
-        setStartingWeapons([...startingWeapons, name]);
-      }
-    }
-  };
+
 
   // -------- Purchase Handling --------
   const togglePurchase = (collection: Item[], name: string) => {
@@ -255,12 +252,8 @@ export default function Step8_Gear() {
       delete newP[item.name];
       setPurchased(newP);
     }
-    if (item && item.starting) {
-      if (item.name.startsWith("Go-Bag:")) {
-        setSelectedGoBag("");
-      } else {
-        setStartingWeapons((prev) => prev.filter((w) => w !== item.name));
-      }
+    if (item && item.starting && item.name.startsWith("Go-Bag:")) {
+      setSelectedGoBag("");
     }
   };
 
@@ -273,15 +266,15 @@ export default function Step8_Gear() {
 
       <Tabs value={currentTab} onValueChange={setCurrentTab} className="w-full">
         <TabsList className="mb-4">
-          <TabsTrigger value="starting">Starting Gear</TabsTrigger>
+          <TabsTrigger value="goBag">Go-Bag</TabsTrigger>
           <TabsTrigger value="weapons">Weapons</TabsTrigger>
           <TabsTrigger value="armor">Armor</TabsTrigger>
           <TabsTrigger value="gear">Gear</TabsTrigger>
           <TabsTrigger value="inventory">Inventory</TabsTrigger>
         </TabsList>
 
-        {/* Starting Gear */}
-        <TabsContent value="starting">
+        {/* Go-Bag */}
+        <TabsContent value="goBag">
           <div className="flex gap-4">
             <div className="w-1/2 space-y-2">
               <h3 className="text-white text-md mb-2">Go-Bags</h3>
@@ -297,7 +290,7 @@ export default function Step8_Gear() {
                     checked={selectedGoBag === key}
                     onChange={() => toggleGoBag(key as GoBagType)}
                   />
-                  <span>{bag.name}</span>
+                  <span className="text-lg font-semibold">{bag.name}</span>
                 </label>
               ))}
             </div>
@@ -318,19 +311,6 @@ export default function Step8_Gear() {
             </div>
           </div>
 
-          <h3 className="text-white text-md mt-4 mb-2">Starting Weapons</h3>
-          {weapons.map((w) => (
-            <label key={w.name} className="flex items-start space-x-2 text-white">
-              <input
-                type="checkbox"
-                checked={startingWeapons.includes(w.name)}
-                onChange={() => toggleStartingWeapon(w.name)}
-              />
-              <span>
-                {w.name} <span className="text-gray-400">- {w.description}</span>
-              </span>
-            </label>
-          ))}
         </TabsContent>
 
         {/* Weapons */}
@@ -370,12 +350,12 @@ export default function Step8_Gear() {
         {/* Gear */}
         <TabsContent value="gear">
           <h3 className="text-white text-md mb-2">Gear</h3>
-          {gear.map((g) => (
+          {gearItems.map((g) => (
             <label key={g.name} className="flex items-start space-x-2 text-white">
               <input
                 type="checkbox"
                 checked={!!purchased[g.name]}
-                onChange={() => togglePurchase(gear, g.name)}
+                onChange={() => togglePurchase(gearItems, g.name)}
               />
               <span>
                 {g.name} ({g.ap} AP) <span className="text-gray-400">- {g.description}</span>
