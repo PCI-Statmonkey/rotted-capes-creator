@@ -58,7 +58,7 @@
         "Heavy Fire Axe",
         "Large Maul"
       ]
-    },
+    }
   ],
   "archaicWeapons": [
     {
@@ -359,7 +359,7 @@
       "examples": [
         "AA-12"
       ]
-    },
+    }
   ],
   "armor": [
     {
