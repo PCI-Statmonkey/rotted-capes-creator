@@ -225,14 +225,18 @@ export default function Step8_Gear() {
 
   // Determine starting AP based on trained skills
   const calculateBaseAp = () => {
-    const hasScavenge = character.skills.some(
-      (s) => s.name.toLowerCase() === "scavenge" && (s.trained || s.ranks > 0)
+    const scavenge = character.skills.find(
+      (s) => s.name.toLowerCase() === "scavenge" && s.trained
     );
-    const hasUrban = character.skills.some(
-      (s) => s.name.toLowerCase() === "urban survival" && (s.trained || s.ranks > 0)
+    const urban = character.skills.find(
+      (s) => s.name.toLowerCase() === "urban survival" && s.trained
     );
-    if (hasScavenge && hasUrban) return 6;
-    if (hasScavenge || hasUrban) return 3;
+
+    const scavengeExpert = scavenge && scavenge.ranks >= 6;
+    const urbanExpert = urban && urban.ranks >= 6;
+
+    if ((scavenge && urban) || scavengeExpert || urbanExpert) return 6;
+    if (scavenge || urban) return 3;
     return 0;
   };
 
