@@ -118,6 +118,13 @@ const weaponCategories = [
   "otherModernWeapons",
 ];
 
+const equipmentCategories = [
+  "equipment",
+  "optics",
+  "tacticalAccessory",
+  "tacticalSight",
+];
+
 
 // Bonus AP from feats based on the TTRPG rules
 const bonusApFeats = [
@@ -145,11 +152,15 @@ export default function Step8_Gear() {
         const mapItem = (it: any): Item => ({
           name: it.name,
           description: it.description ?? '',
-          ap: it.ap ?? 0,
+          ap: it.ap ?? it.costAP ?? 0,
         });
         setWeapons(all.filter((g: any) => weaponCategories.includes(g.category)).map(mapItem));
         setArmors(all.filter((g: any) => g.category === 'armor').map(mapItem));
-        setGearItems(all.filter((g: any) => g.category === 'equipment').map(mapItem));
+        setGearItems(
+          all
+            .filter((g: any) => equipmentCategories.includes(g.category))
+            .map(mapItem)
+        );
       } catch (e) {
         console.error('Failed to load gear', e);
       }
