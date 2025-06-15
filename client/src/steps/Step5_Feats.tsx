@@ -34,6 +34,7 @@ const Step5_Feats = () => {
   const { character, setCurrentStep, setCurrentSubStep } = useCharacter();
   const archetype = character.archetype;
   const currentOrigin = character.origin?.split('(')[0].trim();
+  const baseSkillPoints = currentOrigin === "Highly Trained" ? 30 : 20;
 
   // --- Local state for working selections ---
   const [workingStartingSkills, setWorkingStartingSkills] = useState<string[]>([]);
@@ -100,7 +101,7 @@ const Step5_Feats = () => {
     return counts;
   }, [workingStartingSkills, workingSelectedSkillSets, skillSets]);
 
-  const [availablePoints, setAvailablePoints] = useState(20); // Initial points
+  const [availablePoints, setAvailablePoints] = useState(baseSkillPoints); // Initial points
 
   // Destructure character builder setters to persist selections
   const {
@@ -202,7 +203,7 @@ const Step5_Feats = () => {
     const featCost = Math.max(0, paidFeatCount - 1) * 5; // first paid feat is free
     const pointsUsed =
       workingSelectedSkills.length + focusPoints + featCost + skillSetPoints;
-    setAvailablePoints(20 - pointsUsed); // Update available points
+    setAvailablePoints(baseSkillPoints - pointsUsed); // Update available points
   }, [
     workingSelectedSkills,
     workingSelectedFeats,
@@ -459,7 +460,7 @@ const Step5_Feats = () => {
       !workingStartingManeuver // A starting maneuver must be selected
     ) {
       alert(
-        "You must spend all 20 points, select 2 starting skills, and pick a starting maneuver before continuing."
+        `You must spend all ${baseSkillPoints} points, select 2 starting skills, and pick a starting maneuver before continuing.`
       );
       return;
     }
