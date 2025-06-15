@@ -2,6 +2,8 @@ import { createContext, useContext, useState, useEffect, ReactNode } from "react
 import { STORAGE_KEY, saveToLocalStorage, loadFromLocalStorage, calculateModifier } from "@/lib/utils";
 import { trackCharacterEvent, trackEvent } from "@/lib/analytics";
 
+const RANK_BONUS = 1; // Starting rank bonus used for derived stats
+
 export interface Ability {
   value: number;
   modifier: number;
@@ -579,11 +581,11 @@ export const CharacterProvider = ({ children }: { children: ReactNode }) => {
     // Use effective abilities for derived stats
     setCharacter((prev) => ({
       ...prev,
-      defense: 10 + effectiveAbilities.dexterity.modifier,
+      defense: 10 + Math.max(effectiveAbilities.dexterity.modifier, effectiveAbilities.intelligence.modifier) + RANK_BONUS,
       toughness: effectiveAbilities.constitution.modifier,
-      fortitude: effectiveAbilities.constitution.modifier,
+      fortitude: 10 + Math.max(effectiveAbilities.strength.modifier, effectiveAbilities.constitution.modifier) + RANK_BONUS,
       reflex: effectiveAbilities.dexterity.modifier,
-      willpower: effectiveAbilities.wisdom.modifier,
+      willpower: 10 + Math.max(effectiveAbilities.charisma.modifier, effectiveAbilities.wisdom.modifier) + RANK_BONUS,
       initiative: effectiveAbilities.dexterity.modifier,
       updatedAt: new Date().toISOString(),
     }));

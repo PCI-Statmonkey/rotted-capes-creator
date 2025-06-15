@@ -17,6 +17,8 @@ export default function Step10_Summary() {
   const { character, updateCharacterField, saveCharacter } = useCharacter();
   const summaryRef = useRef<HTMLDivElement>(null);
 
+  const RANK_BONUS = 1; // Starting characters begin with a +1 rank bonus
+
   // Calculate derived stats
   const calculateDerivedStats = () => {
     const strMod = calculateModifier(character.abilities.strength.value);
@@ -26,26 +28,26 @@ export default function Step10_Summary() {
     const wisMod = calculateModifier(character.abilities.wisdom.value);
     const chaMod = calculateModifier(character.abilities.charisma.value);
     
-    // Defense calculation - in Rotted Capes 2.0 this is called "Avoidance"
-    let avoidance = 10 + dexMod;
-    
-    // Fortitude calculation
-    let fortitude = 10 + (strMod > conMod ? strMod : conMod);
-    
-    // Willpower calculation
-    let willpower = 10 + (wisMod > chaMod ? wisMod : chaMod);
+    // Avoidance uses the better of Dexterity or Intelligence plus rank bonus
+    const avoidance = 10 + Math.max(dexMod, intMod) + RANK_BONUS;
+
+    // Fortitude uses the better of Strength or Constitution plus rank bonus
+    const fortitude = 10 + Math.max(strMod, conMod) + RANK_BONUS;
+
+    // Willpower uses the better of Charisma or Wisdom plus rank bonus
+    const willpower = 10 + Math.max(chaMod, wisMod) + RANK_BONUS;
     
     // Stamina calculation
-    let stamina = avoidance + fortitude + willpower;
+    const stamina = avoidance + fortitude + willpower;
     
     // Wounds calculation
-    let wounds = Math.max(3, Math.floor(conMod / 2));
+    const wounds = Math.max(3, Math.ceil(conMod / 2));
     
     // Initiative calculation
-    let initiative = dexMod;
+    const initiative = dexMod;
     
-    // Running pace
-    let runningPace = 30 + (strMod * 5);
+    // Running pace is based on Dexterity modifier (min 1, max 5)
+    const runningPace = Math.min(Math.max(dexMod, 1), 5);
     
     return {
       avoidance,
@@ -252,7 +254,7 @@ export default function Step10_Summary() {
               
               <div>
                 <Label className="text-sm text-gray-400">Running Pace</Label>
-                <p className="font-semibold">{derivedStats.runningPace} feet</p>
+                <p className="font-semibold">{derivedStats.runningPace} areas</p>
               </div>
             </div>
           </div>
