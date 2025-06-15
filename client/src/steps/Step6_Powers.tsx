@@ -963,7 +963,7 @@ export default function Step6_Powers() {
                             <span className="text-xs text-gray-400 font-comic-light">Applied Flaws:</span>
                             <div className="flex flex-wrap gap-1 mt-1">
                               {power.flaws.map(flaw => (
-                                <div key={flaw.name} className="bg-gray-800 text-red-400 px-2 py-0.5 rounded-full text-xs">
+                                <div key={flaw.name} className="bg-gray-800 text-red-400 px-2 py-0.5 rounded-full text-xs font-comic-light">
                                   {flaw.name} (+{flaw.bonus})
                                 </div>
                               ))}
@@ -976,7 +976,7 @@ export default function Step6_Powers() {
                             <span className="text-xs text-gray-400 font-comic-light">Applied Perks:</span>
                             <div className="flex flex-wrap gap-1 mt-1">
                               {power.perks.map(perk => (
-                                <div key={perk.name} className="bg-gray-800 text-green-400 px-2 py-0.5 rounded-full text-xs">
+                                <div key={perk.name} className="bg-gray-800 text-green-400 px-2 py-0.5 rounded-full text-xs font-comic-light">
                                   {perk.name} ({perk.bonus})
                                 </div>
                               ))}
@@ -1199,7 +1199,7 @@ export default function Step6_Powers() {
                                   <span className="text-xs text-gray-400 font-comic-light">Applied Flaws:</span>
                                   <div className="flex flex-wrap gap-1 mt-1">
                                     {power.flaws.map(flaw => (
-                                      <div key={flaw.name} className="bg-gray-800 text-red-400 px-2 py-0.5 rounded-full text-xs flex items-center">
+                                      <div key={flaw.name} className="bg-gray-800 text-red-400 px-2 py-0.5 rounded-full text-xs flex items-center font-comic-light">
                                         {flaw.name} (+{flaw.bonus})
                                         <Button
                                           variant="ghost"
@@ -1220,7 +1220,7 @@ export default function Step6_Powers() {
                                   <span className="text-xs text-gray-400 font-comic-light">Applied Perks:</span>
                                   <div className="flex flex-wrap gap-1 mt-1">
                                     {power.perks.map(perk => (
-                                      <div key={perk.name} className="bg-gray-800 text-green-400 px-2 py-0.5 rounded-full text-xs flex items-center">
+                                      <div key={perk.name} className="bg-gray-800 text-green-400 px-2 py-0.5 rounded-full text-xs flex items-center font-comic-light">
                                         {perk.name} ({perk.bonus})
                                         <Button
                                           variant="ghost"
@@ -1375,7 +1375,7 @@ export default function Step6_Powers() {
                                 <span className="text-xs text-gray-400">Flaws:</span>
                                 <div className="flex flex-wrap gap-1 mt-1">
                                   {power.flaws.map(flaw => (
-                                    <div key={flaw.name} className="bg-gray-800 text-red-400 px-2 py-0.5 rounded-full text-xs flex items-center">
+                                    <div key={flaw.name} className="bg-gray-800 text-red-400 px-2 py-0.5 rounded-full text-xs flex items-center font-comic-light">
                                       {flaw.name} (+{flaw.bonus})
                                       <Button
                                         variant="ghost"
@@ -1396,7 +1396,7 @@ export default function Step6_Powers() {
                                 <span className="text-xs text-gray-400">Perks:</span>
                                 <div className="flex flex-wrap gap-1 mt-1">
                                   {power.perks.map(perk => (
-                                    <div key={perk.name} className="bg-gray-800 text-green-400 px-2 py-0.5 rounded-full text-xs flex items-center">
+                                    <div key={perk.name} className="bg-gray-800 text-green-400 px-2 py-0.5 rounded-full text-xs flex items-center font-comic-light">
                                       {perk.name} ({perk.bonus})
                                       <Button
                                         variant="ghost"
