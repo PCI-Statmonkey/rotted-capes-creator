@@ -804,9 +804,8 @@ export default function Step6_Powers() {
 
         {/* Powers Tab Interface */}
         <Tabs defaultValue="powers" value={activeTab} onValueChange={setActiveTab}>
-          <TabsList className="w-full grid grid-cols-2">
+          <TabsList className="w-full grid grid-cols-1">
             <TabsTrigger value="powers">Powers</TabsTrigger>
-            <TabsTrigger value="modifiers">Flaws & Perks</TabsTrigger>
           </TabsList>
           
           {/* Powers Tab */}
@@ -1046,9 +1045,11 @@ export default function Step6_Powers() {
                                   <SelectValue placeholder="Add a perk" />
                                 </SelectTrigger>
                                 <SelectContent>
-                                  {POWER_PERKS.map(perk => (
-                                    <SelectItem 
-                                      key={`perk-option-${perk.name}`} 
+                                  {POWER_PERKS.filter(perk =>
+                                    perk.name !== "All Skill" || ALL_SKILL_COMPATIBLE.includes(power.name)
+                                  ).map(perk => (
+                                    <SelectItem
+                                      key={`perk-option-${perk.name}`}
                                       value={perk.name}
                                       disabled={power.perks.some(p => p.name === perk.name)}
                                     >
@@ -1271,98 +1272,6 @@ export default function Step6_Powers() {
             )}
           </TabsContent>
           
-          {/* Modifiers Tab */}
-          <TabsContent value="modifiers" className="space-y-4 mt-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {/* Flaws section */}
-              <div className="p-4 bg-gray-700 rounded-lg border border-gray-600">
-                <h3 className="font-medium text-lg mb-3">Flaws (boost power scores)</h3>
-                <p className="text-sm text-gray-400 mb-3">
-                  Flaws add limitations to powers but increase their effectiveness.
-                </p>
-                
-                <div className="space-y-2">
-                  {POWER_FLAWS.map(flaw => (
-                    <div 
-                      key={flaw.name}
-                      className="p-2 bg-gray-800 rounded-lg border border-gray-700"
-                    >
-                      <div className="flex justify-between">
-                        <div>
-                          <h4 className="font-medium">{flaw.name}</h4>
-                          <p className="text-gray-400 text-sm font-comic-light">{flaw.description}</p>
-                        </div>
-                        <div className="text-red-400 font-medium">+{flaw.bonus}</div>
-                      </div>
-                      
-                      {selectedPowers.length > 0 && (
-                        <div className="mt-2 pt-2 border-t border-gray-700">
-                          <Label className="text-xs mb-1 block">Apply to Power:</Label>
-                          <div className="flex flex-wrap gap-1">
-                            {selectedPowers.map((power, idx) => (
-                              <Button
-                                key={idx}
-                                variant={power.flaws.some(f => f.name === flaw.name) ? "default" : "outline"}
-                                size="sm"
-                                className="text-xs p-1 h-auto"
-                                onClick={() => togglePowerModifier(idx, "flaws", flaw.name)}
-                              >
-                                {power.name || `Power ${idx+1}`}
-                              </Button>
-                            ))}
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                  ))}
-                </div>
-              </div>
-              
-              {/* Perks section */}
-              <div className="p-4 bg-gray-700 rounded-lg border border-gray-600">
-                <h3 className="font-medium text-lg mb-3">Perks (lower power scores)</h3>
-                <p className="text-sm text-gray-400 mb-3">
-                  Perks give additional capabilities but decrease the power score.
-                </p>
-                
-                <div className="space-y-2">
-                  {POWER_PERKS.map(perk => (
-                    <div 
-                      key={perk.name}
-                      className="p-2 bg-gray-800 rounded-lg border border-gray-700"
-                    >
-                      <div className="flex justify-between">
-                        <div>
-                          <h4 className="font-medium">{perk.name}</h4>
-                          <p className="text-gray-400 text-sm font-comic-light">{perk.description}</p>
-                        </div>
-                        <div className="text-green-400 font-medium">{perk.bonus}</div>
-                      </div>
-                      
-                      {selectedPowers.length > 0 && (
-                        <div className="mt-2 pt-2 border-t border-gray-700">
-                          <Label className="text-xs mb-1 block">Apply to Power:</Label>
-                          <div className="flex flex-wrap gap-1">
-                            {selectedPowers.map((power, idx) => (
-                              <Button
-                                key={idx}
-                                variant={power.perks.some(p => p.name === perk.name) ? "default" : "outline"}
-                                size="sm"
-                                className="text-xs p-1 h-auto"
-                                onClick={() => togglePowerModifier(idx, "perks", perk.name)}
-                              >
-                                {power.name || `Power ${idx+1}`}
-                              </Button>
-                            ))}
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </TabsContent>
         </Tabs>
 
         <div className="flex justify-between mt-8 pt-4 border-t-2 border-gray-700">
