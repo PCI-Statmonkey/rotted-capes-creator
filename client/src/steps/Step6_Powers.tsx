@@ -340,6 +340,14 @@ export default function Step6_Powers() {
     return array ? array.scores : [];
   };
 
+  // Count how many times each score has been assigned in array mode
+  const assignedScoreCounts: Record<number, number> = {};
+  selectedPowers.forEach(p => {
+    if (p.score) {
+      assignedScoreCounts[p.score] = (assignedScoreCounts[p.score] || 0) + 1;
+    }
+  });
+
   // Get cost for a specific power score
   const getCostForScore = (score: number): number => {
     const costEntry = POWER_COST_TABLE.find(entry => entry.score === score);
@@ -889,20 +897,24 @@ export default function Step6_Powers() {
                 <div className="p-4 bg-gray-700 rounded-lg border border-gray-600">
                   <h3 className="font-medium mb-2">Selected Array: {selectedPowerArray}</h3>
                   <div className="flex flex-wrap gap-2 mb-4">
-                    {getSelectedPowerArrayData().map((score, idx) => (
-                      <div 
-                        key={`array-score-display-${selectedPowerArray}-${score}-${idx}`}
-                        className={`
-                          p-2 rounded-md text-center min-w-[40px]
-                          ${selectedPowers.some(p => p.score === score) 
-                            ? 'bg-gray-600 text-gray-400' 
-                            : 'bg-accent text-white'
-                          }
-                        `}
-                      >
-                        {score}
-                      </div>
-                    ))}
+                    {(() => {
+                      const usageTracker: Record<number, number> = {};
+                      return getSelectedPowerArrayData().map((score, idx) => {
+                        usageTracker[score] = (usageTracker[score] || 0) + 1;
+                        const used = usageTracker[score] <= (assignedScoreCounts[score] || 0);
+                        return (
+                          <div
+                            key={`array-score-display-${selectedPowerArray}-${score}-${idx}`}
+                            className={`
+                              p-2 rounded-md text-center min-w-[40px]
+                              ${used ? 'bg-gray-600 text-gray-400' : 'bg-accent text-white'}
+                            `}
+                          >
+                            {score}
+                          </div>
+                        );
+                      });
+                    })()}
                   </div>
                   
                   <div className="flex justify-between items-center mb-2">
