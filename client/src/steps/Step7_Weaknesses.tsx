@@ -283,7 +283,7 @@ export default function Step7_Weaknesses() {
       <div className="bg-gray-900 bg-opacity-60 p-6 rounded-xl shadow-xl">
         <h2 className="text-3xl font-display font-bold text-red-500 mb-6">Step 7: Character Weaknesses</h2>
         
-        <div className="text-gray-300 mb-6">
+        <div className="text-gray-300 mb-6 font-comic-light">
           <p className="mb-2">
             Many heroes possess unique flaws, which in many ways define them as a hero. 
             Maybe your hero is violently allergic to rare metal, maybe you are particularly 
