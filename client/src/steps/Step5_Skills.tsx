@@ -43,6 +43,8 @@ const Step5_Skills = () => {
   } = useCharacterBuilder();
   const { character, setCurrentStep, setCurrentSubStep } = useCharacter();
   const archetype = character.archetype;
+  const currentOrigin = character.origin?.split("(")[0].trim();
+  const baseSkillPoints = currentOrigin === "Highly Trained" ? 30 : 20;
 
   // --- Local state for working selections ---
   const [workingStartingSkills, setWorkingStartingSkills] = useState<string[]>([]);
@@ -85,7 +87,7 @@ const Step5_Skills = () => {
     return counts;
   }, [workingStartingSkills, workingSelectedSkillSets, skillSets]);
 
-  const [availablePoints, setAvailablePoints] = useState(20); // Initial points
+  const [availablePoints, setAvailablePoints] = useState(baseSkillPoints); // Initial points
   const [currentTab, setCurrentTab] = useState(skillsTab || "starting"); // Current active tab
 
   useEffect(() => {
@@ -151,7 +153,7 @@ const Step5_Skills = () => {
     const featCost = Math.max(0, workingSelectedFeats.length - 1) * 5; // first feat is free
     const pointsUsed =
       workingSelectedSkills.length + focusPoints + featCost + skillSetPoints;
-    setAvailablePoints(20 - pointsUsed); // Update available points
+    setAvailablePoints(baseSkillPoints - pointsUsed); // Update available points
   }, [
     workingSelectedSkills,
     workingSelectedFeats,
