@@ -490,18 +490,20 @@ export default function Step6_Powers() {
   // Assign a score from the array to a power
   const assignScoreToPower = (powerIndex: number, score: number) => {
     if (powerCreationMethod !== "array") return;
-    
-    // Check if this score is already assigned
-    const isScoreAssigned = selectedPowers.some(p => p.score === score && selectedPowers.indexOf(p) !== powerIndex);
-    if (isScoreAssigned) return;
-    
+
+    const arrayScores = getSelectedPowerArrayData();
+    const allowedCount = arrayScores.filter(s => s === score).length;
+    const alreadyAssigned = selectedPowers.filter((p, idx) => idx !== powerIndex && p.score === score).length;
+
+    if (alreadyAssigned >= allowedCount) return;
+
     const newPowers = [...selectedPowers];
-    newPowers[powerIndex] = { 
+    newPowers[powerIndex] = {
       ...newPowers[powerIndex],
-      score: score,
+      score,
       finalScore: calculateFinalScore({ ...newPowers[powerIndex], score })
     };
-    
+
     setSelectedPowers(newPowers);
   };
 
@@ -954,7 +956,7 @@ export default function Step6_Powers() {
                             <div className="flex-1">
                               <Label className="text-xs mb-1 block">Power Score</Label>
                               <Select
-                                value={String(power.score || 0)}
+                                value={power.score ? `${power.score}-${index}` : ""}
                                 onValueChange={(value) => assignScoreToPower(index, parseInt(value))}
                               >
                                 <SelectTrigger className="bg-gray-800">
@@ -962,10 +964,13 @@ export default function Step6_Powers() {
                                 </SelectTrigger>
                                 <SelectContent>
                                   {getSelectedPowerArrayData().map((score, idx) => (
-                                    <SelectItem 
+                                    <SelectItem
                                       key={`array-score-${score}-${idx}-${index}`}
-                                      value={String(score)}
-                                      disabled={selectedPowers.some(p => p.score === score && selectedPowers.indexOf(p) !== index)}
+                                      value={`${score}-${idx}`}
+                                      disabled={
+                                        selectedPowers.filter((p, i) => i !== index && p.score === score).length >=
+                                        getSelectedPowerArrayData().filter(s => s === score).length
+                                      }
                                     >
                                       {score}
                                     </SelectItem>
