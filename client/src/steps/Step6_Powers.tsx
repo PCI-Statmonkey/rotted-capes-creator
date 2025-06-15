@@ -28,6 +28,7 @@ interface PowerSet {
 interface Power {
   name: string;
   score: number;
+  arrayIndex?: number;
   description?: string;
   damageType?: string;
   target?: string;
@@ -340,6 +341,12 @@ export default function Step6_Powers() {
     return array ? array.scores : [];
   };
 
+  // Get the selected power array with unique indexes
+  const getSelectedPowerArrayDataWithIds = (): { score: number; id: number }[] => {
+    const array = POWER_ARRAYS.find(arr => arr.name === selectedPowerArray);
+    return array ? array.scores.map((score, idx) => ({ score, id: idx })) : [];
+  };
+
   // Count how many times each score has been assigned in array mode
   const assignedScoreCounts: Record<number, number> = {};
   selectedPowers.forEach(p => {
@@ -349,23 +356,23 @@ export default function Step6_Powers() {
   });
 
   // Get the remaining available scores for a power in array mode
-  const getAvailableScoresForPower = (powerIndex: number): number[] => {
-    const arrayScores = [...getSelectedPowerArrayData()];
+  const getAvailableScoresForPower = (powerIndex: number): { score: number; id: number }[] => {
+    const arrayScores = [...getSelectedPowerArrayDataWithIds()];
 
-    // Remove scores that are already assigned to other powers
+    // Remove scores that are already assigned to other powers based on their id
     selectedPowers.forEach((p, idx) => {
-      if (idx !== powerIndex && p.score) {
-        const removeIdx = arrayScores.indexOf(p.score);
+      if (idx !== powerIndex && p.arrayIndex !== undefined) {
+        const removeIdx = arrayScores.findIndex(s => s.id === p.arrayIndex);
         if (removeIdx !== -1) {
           arrayScores.splice(removeIdx, 1);
         }
       }
     });
 
-    // Ensure the current power's assigned score is still selectable
-    const currentScore = selectedPowers[powerIndex]?.score;
-    if (currentScore && !arrayScores.includes(currentScore)) {
-      arrayScores.push(currentScore);
+    const currentIndex = selectedPowers[powerIndex]?.arrayIndex;
+    if (currentIndex !== undefined && !arrayScores.some(s => s.id === currentIndex)) {
+      const original = getSelectedPowerArrayDataWithIds().find(s => s.id === currentIndex);
+      if (original) arrayScores.push(original);
     }
 
     return arrayScores;
@@ -389,6 +396,7 @@ export default function Step6_Powers() {
     const newPower: Power = {
       name: ALL_POWERS[0], // Default to the first power in the list
       score: 10,
+      arrayIndex: undefined,
       flaws: [],
       perks: [],
       finalScore: 10
@@ -485,6 +493,7 @@ export default function Step6_Powers() {
     const powers = powerSet.powers.map(power => ({
       name: power.name,
       score: power.score,
+      arrayIndex: undefined,
       flaws: [],
       perks: [],
       finalScore: power.score,
@@ -510,6 +519,7 @@ export default function Step6_Powers() {
     const newPower: Power = {
       name: ALL_POWERS[0], // Default to the first power in the list
       score: 0, // This will be assigned from the array later
+      arrayIndex: undefined,
       flaws: [],
       perks: [],
       finalScore: 0
@@ -519,20 +529,23 @@ export default function Step6_Powers() {
   };
 
   // Assign a score from the array to a power
-  const assignScoreToPower = (powerIndex: number, score: number) => {
+  const assignScoreToPower = (powerIndex: number, arrayId: number) => {
     if (powerCreationMethod !== "array") return;
 
-    const arrayScores = getSelectedPowerArrayData();
-    const allowedCount = arrayScores.filter(s => s === score).length;
-    const alreadyAssigned = selectedPowers.filter((p, idx) => idx !== powerIndex && p.score === score).length;
+    const arrayScores = getSelectedPowerArrayDataWithIds();
+    const scoreItem = arrayScores.find(s => s.id === arrayId);
+    if (!scoreItem) return;
 
-    if (alreadyAssigned >= allowedCount) return;
+    // Ensure this specific score entry isn't already used by another power
+    const alreadyUsed = selectedPowers.some((p, idx) => idx !== powerIndex && p.arrayIndex === arrayId);
+    if (alreadyUsed) return;
 
     const newPowers = [...selectedPowers];
     newPowers[powerIndex] = {
       ...newPowers[powerIndex],
-      score,
-      finalScore: calculateFinalScore({ ...newPowers[powerIndex], score })
+      score: scoreItem.score,
+      arrayIndex: arrayId,
+      finalScore: calculateFinalScore({ ...newPowers[powerIndex], score: scoreItem.score })
     };
 
     setSelectedPowers(newPowers);
@@ -612,14 +625,16 @@ export default function Step6_Powers() {
     
     // In array mode, all powers must have scores assigned
     if (powerCreationMethod === "array") {
-      const arrayScores = getSelectedPowerArrayData();
-      // Check if we have the right number of powers for this array
+      const arrayScores = getSelectedPowerArrayDataWithIds();
+
       if (selectedPowers.length !== arrayScores.length) return false;
-      
-      // Check if all scores from the array are assigned
-      const usedScores = selectedPowers.map(p => p.score);
-      const allScoresAssigned = arrayScores.every(score => usedScores.includes(score));
-      if (!allScoresAssigned) return false;
+
+      // Ensure every score id is used exactly once
+      const usedIds = selectedPowers.map(p => p.arrayIndex);
+      if (usedIds.some(id => id === undefined)) return false;
+
+      const allUsed = arrayScores.every(score => usedIds.includes(score.id));
+      if (!allUsed) return false;
     }
     
     // In point buy mode, must be within point budget
@@ -991,17 +1006,17 @@ export default function Step6_Powers() {
                             <div className="flex-1">
                               <Label className="text-xs mb-1 block">Power Score</Label>
                               <Select
-                                value={power.score ? `${power.score}-${index}` : ""}
+                                value={power.arrayIndex !== undefined ? `${power.arrayIndex}` : ""}
                                 onValueChange={(value) => assignScoreToPower(index, parseInt(value))}
                               >
                                 <SelectTrigger className="bg-gray-800">
                                   <SelectValue placeholder="Select score" />
                                 </SelectTrigger>
                                 <SelectContent>
-                                  {getAvailableScoresForPower(index).map((score, idx) => (
+                                  {getAvailableScoresForPower(index).map(({ score, id }) => (
                                     <SelectItem
-                                      key={`array-score-${score}-${idx}-${index}`}
-                                      value={`${score}-${idx}`}
+                                      key={`array-score-${id}`}
+                                      value={`${id}`}
                                     >
                                       {score}
                                     </SelectItem>
