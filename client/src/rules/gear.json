@@ -1,185 +1,1076 @@
+{
+  "meleeWeapons": [
+    {
+      "name": "1d4 melee weapon",
+      "description": "Examples: Pocket Knife, Broken Bottle, Brass Knuckles",
+      "damage": "1d4",
+      "ap": 1,
+      "examples": [
+        "Pocket Knife",
+        "Broken Bottle",
+        "Brass Knuckles"
+      ]
+    },
+    {
+      "name": "1d6 melee weapon",
+      "description": "Examples: Lead Pipe, Hammer, Hatchet, Ka-Bar, WW2 Trench Knife, Replica Katana",
+      "damage": "1d6",
+      "ap": 1,
+      "examples": [
+        "Lead Pipe",
+        "Hammer",
+        "Hatchet",
+        "Ka-Bar",
+        "WW2 Trench Knife",
+        "Replica Katana"
+      ]
+    },
+    {
+      "name": "1d8 melee weapon",
+      "description": "Examples: Machete, Fire Axe, Crowbar, Combat Baton",
+      "damage": "1d8",
+      "ap": 1,
+      "examples": [
+        "Machete",
+        "Fire Axe",
+        "Crowbar",
+        "Combat Baton"
+      ]
+    },
+    {
+      "name": "1d10 melee weapon (two-handed)",
+      "description": "Examples: Baseball Bat, Wood Axe, Sledgehammer",
+      "damage": "1d10",
+      "ap": 2,
+      "examples": [
+        "Baseball Bat",
+        "Wood Axe",
+        "Sledgehammer"
+      ]
+    },
+    {
+      "name": "1d12 melee weapon (two-handed)",
+      "description": "Examples: Claymore, Heavy Fire Axe, Large Maul",
+      "damage": "1d12",
+      "ap": 2,
+      "examples": [
+        "Claymore",
+        "Heavy Fire Axe",
+        "Large Maul"
+      ]
+    },
+  ],
+  "archaicWeapons": [
+    {
+      "name": "Bow",
+      "damage": "1d6 piercing",
+      "range": "6 areas",
+      "ap": 1
+    },
+    {
+      "name": "Composite Bow",
+      "damage": "1d8 piercing",
+      "range": "7 areas",
+      "ap": 1
+    },
+    {
+      "name": "Crossbow",
+      "damage": "1d10 piercing",
+      "range": "8 areas",
+      "ap": 1
+    },
+    {
+      "name": "Sling",
+      "damage": "1d4 bludgeoning",
+      "range": "4 areas",
+      "ap": 1
+    },
+    {
+      "name": "Reserve Bow",
+      "ap": 1,
+      "description": "Energy Blast (Piercing): 10 (1d6/6), reload after each shot."
+    },
+    {
+      "name": "Bear Legion Composite Bow",
+      "ap": 1,
+      "description": "Energy Blast (Piercing): 14 (1d8/8)."
+    },
+    {
+      "name": "PSE Copperhead Crossbow",
+      "ap": 1,
+      "description": "Energy Blast (Piercing): 20 (1d10/11)."
+    },
+    {
+      "name": "Common Sling",
+      "ap": 1,
+      "description": "Energy Blast (Bludgeoning): 13 (1d8/16)."
+    }
+  ],
+  "firearms": [
+    {
+      "name": "Revolver",
+      "type": "firearm",
+      "ap": 1,
+      "ammo_type": [
+        "L",
+        "M",
+        "H"
+      ],
+      "qualities": [],
+      "damage": "varies by ammo",
+      "examples": [
+        "357 Magnum",
+        "Colt Python"
+      ]
+    },
+    {
+      "name": "Semi-Auto Handgun",
+      "type": "firearm",
+      "ap": 1,
+      "ammo_type": [
+        "L",
+        "M"
+      ],
+      "qualities": [],
+      "damage": "varies by ammo",
+      "examples": [
+        "Glock",
+        "Desert Eagle"
+      ]
+    },
+    {
+      "name": "Auto-Pistol",
+      "type": "firearm",
+      "ap": 2,
+      "ammo_type": [
+        "L",
+        "M"
+      ],
+      "qualities": [
+        "Spray",
+        "Burst"
+      ],
+      "damage": "varies by ammo",
+      "examples": [
+        "Glock 298",
+        "MP5K",
+        "UZI"
+      ]
+    },
+    {
+      "name": "Bolt-Action Rifle",
+      "type": "firearm",
+      "ap": 1,
+      "ammo_type": [
+        "L",
+        "M",
+        "A",
+        "H"
+      ],
+      "qualities": [
+        "Extended Range"
+      ],
+      "damage": "varies by ammo",
+      "examples": [
+        "Savage 340",
+        "Remington 788"
+      ]
+    },
+    {
+      "name": "Double Barrel Rifle",
+      "type": "firearm",
+      "ap": 1,
+      "ammo_type": [
+        "H",
+        "SH"
+      ],
+      "qualities": [],
+      "damage": "varies by ammo",
+      "examples": [
+        "H&H Double Role Side-by-Side"
+      ]
+    },
+    {
+      "name": "Hunting Rifle",
+      "type": "firearm",
+      "ap": 1,
+      "ammo_type": [
+        "L",
+        "M",
+        "A",
+        "H"
+      ],
+      "qualities": [
+        "Extended Range"
+      ],
+      "damage": "varies by ammo",
+      "examples": [
+        "K1-V-BBZ",
+        "Marlin 336XLR"
+      ]
+    },
+    {
+      "name": "Sniper Rifle",
+      "type": "firearm",
+      "ap": 2,
+      "ammo_type": [
+        "A",
+        "H",
+        "SH"
+      ],
+      "qualities": [
+        "Extended Range"
+      ],
+      "damage": "varies by ammo",
+      "examples": [
+        "Dragunov",
+        "M82",
+        "M110"
+      ]
+    },
+    {
+      "name": "Tactical Assault Rifle",
+      "type": "firearm",
+      "ap": 2,
+      "ammo_type": [
+        "M",
+        "A"
+      ],
+      "qualities": [
+        "Spray",
+        "Burst"
+      ],
+      "damage": "varies by ammo",
+      "examples": [
+        "FAMAS",
+        "P90",
+        "TAR-21"
+      ]
+    },
+    {
+      "name": "Standard Issue Assault Rifle",
+      "type": "firearm",
+      "ap": 2,
+      "ammo_type": [
+        "A"
+      ],
+      "qualities": [
+        "Spray",
+        "Burst"
+      ],
+      "damage": "varies by ammo",
+      "examples": [
+        "ACR",
+        "DR-15",
+        "AR-15",
+        "AK-47"
+      ]
+    },
+    {
+      "name": "Small Machine Gun",
+      "type": "firearm",
+      "ap": 3,
+      "ammo_type": [
+        "A",
+        "H"
+      ],
+      "qualities": [
+        "Spray",
+        "Burst"
+      ],
+      "damage": "varies by ammo",
+      "examples": [
+        "M240",
+        "MG4"
+      ]
+    },
+    {
+      "name": "Large Machine Gun",
+      "type": "firearm",
+      "ap": 4,
+      "ammo_type": [
+        "H",
+        "SH"
+      ],
+      "qualities": [
+        "Spray",
+        "Burst"
+      ],
+      "damage": "varies by ammo",
+      "examples": [
+        "XM370",
+        "Minigun"
+      ]
+    },
+    {
+      "name": "Double Barrel Shotgun",
+      "type": "firearm",
+      "ap": 1,
+      "ammo_type": [
+        "varies"
+      ],
+      "qualities": [
+        "Double Barrel"
+      ],
+      "damage": "varies by ammo",
+      "examples": [
+        "Winchester Model 24"
+      ]
+    },
+    {
+      "name": "Hunting Shotgun",
+      "type": "firearm",
+      "ap": 1,
+      "ammo_type": [
+        "varies"
+      ],
+      "qualities": [],
+      "damage": "varies by ammo",
+      "examples": [
+        "Benelli Nova"
+      ]
+    },
+    {
+      "name": "Tactical Shotgun",
+      "type": "firearm",
+      "ap": 2,
+      "ammo_type": [
+        "varies"
+      ],
+      "qualities": [],
+      "damage": "varies by ammo",
+      "examples": [
+        "AT-14",
+        "Bullpup Saiga-12"
+      ]
+    },
+    {
+      "name": "Assault Shotgun",
+      "type": "firearm",
+      "ap": 3,
+      "ammo_type": [
+        "varies"
+      ],
+      "qualities": [
+        "Spray",
+        "Burst"
+      ],
+      "damage": "varies by ammo",
+      "examples": [
+        "AA-12"
+      ]
+    },
+  ],
+  "armor": [
+    {
+      "name": "Leather Jacket",
+      "description": "Provides light protection, DR 1 vs melee only.",
+      "ap": 1
+    },
+    {
+      "name": "Kevlar Vest",
+      "description": "Provides DR 2 vs ballistic damage.",
+      "ap": 2
+    },
+    {
+      "name": "Riot Gear",
+      "description": "Provides DR 3 vs all physical damage, but imposes disadvantage on Dexterity checks.",
+      "ap": 3
+    },
+    {
+      "name": "Tactical Body Armor",
+      "description": "Tactical Body Armor (DR vs. Physical 3/Energy 2/Ballistic 6, Bulk: 1). Commonly used by the military and specialized law enforcement, consisting of ballistic vests and reinforced clothing, including knee and elbow pads.",
+      "ap": 3
+    },
+    {
+      "name": "Reinforced Clothing",
+      "description": "Reinforced Clothing (DR vs. Physical 2/Energy 2, Bulk: 0). Made of Newtonian fibers, granting balanced protection against many attack forms.",
+      "ap": 1
+    },
+    {
+      "name": "Ballistic Vest",
+      "description": "Ballistic Vest (DR vs. Physical 1/ Ballistic 6, Bulk: 0). Standard Kevlar vest, effective against ballistic attacks.",
+      "ap": 1
+    },
+    {
+      "name": "Boiled Leather Armor",
+      "description": "Boiled Leather Armor (DR vs. Physical 3/Energy 0, Bulk: 1). Molded cow leather; grants additional Bulk if not custom-fitted.",
+      "ap": 2
+    },
+    {
+      "name": "Chain Mail",
+      "description": "Chain Mail (DR vs. Physical 4/Energy 1, Bulk: 2). Armor made from linked steel rings or coiled leather, soldered together.",
+      "ap": 3
+    },
+    {
+      "name": "Heavy Clothing",
+      "description": "Heavy Clothing (DR vs. Physical 2/Energy 0, Bulk: 0). Includes heavy coats or sports padding. Can be worn with a ballistic vest, but adds 1 Bulk.",
+      "ap": 1
+    },
+    {
+      "name": "Riot Shield",
+      "description": "Riot Shield: +1 Avoidance, MS: 12, Hits: 2. Made of transparent reinforced Plexiglas.",
+      "ap": 2
+    },
+    {
+      "name": "Shield",
+      "description": "Shield: +1 Avoidance, MS: 20, Hits: 6. Made of reinforced wood or steel.",
+      "ap": 1
+    },
+    {
+      "name": "Tactical Body Armor",
+      "ap": 3,
+      "description": "DR: 3 Phys / 2 Energy / 6 Ballistic; Bulk: 1"
+    },
+    {
+      "name": "Reinforced Clothing",
+      "ap": 1,
+      "description": "DR: 2 Phys / 2 Energy; Bulk: 0"
+    },
+    {
+      "name": "Ballistic Vest",
+      "ap": 1,
+      "description": "DR: 1 Phys / 6 Ballistic; Bulk: 0"
+    },
+    {
+      "name": "Chain Mail",
+      "ap": 3,
+      "description": "DR: 4 Phys / 1 Energy; Bulk: 2"
+    },
+    {
+      "name": "Boiled Leather Armor",
+      "ap": 2,
+      "description": "DR: 3 Phys; Bulk: 1 (extra Bulk if not custom-fit)"
+    },
+    {
+      "name": "Heavy Clothing",
+      "ap": 1,
+      "description": "DR: 2 Phys; Bulk: 0"
+    },
+    {
+      "name": "Riot Shield",
+      "ap": 2,
+      "description": "+1 Avoidance; MS: 12, Hits: 2"
+    },
+    {
+      "name": "Shield",
+      "ap": 1,
+      "description": "+1 Avoidance; MS: 20, Hits: 6"
+    }
+  ],
+  "equipment": [
+    {
+      "name": "Standard First Aid Kit",
+      "description": "These are the standard first aid kits found in most homes and the trunks of high-end cars and occasional jeep. While this kit does not grant a bonus to a Hero\u2019s Medicine Skill Checks, it is considered to be the right tool for the right job and, as such, negates any relevant penalties. ",
+      "ap": 1
+    },
+    {
+      "name": "EMT Medical Field Kit",
+      "description": "A larger kit, commonly carried in a modified tool/tackle box, these kits come with a large variety of bandages, pain relievers, antibiotic packages, instant ice packs, and some basic surgical tools. Any Hero utilizing this kit gains a +2 bonus to all Medicine Skill Checks. If a Hero is being treated for a disease or attempting to recover Wounds while being treated with this kit, they gain a +1 bonus to their Constitution Ability Checks. ",
+      "ap": 2
+    },
+    {
+      "name": "Tactical Response Pack",
+      "description": "Standard military backpack. These kits are highly sought after, packed with everything found in the EMT Medical Field Kit (just more of it) as well as Ammonia inhalants, liquid bandages, trauma dressings, and emergency surgical tools. Any Hero utilizing this kit gains a +3 bonus to all Medicine Skill Checks. If a Hero is being treated for a disease or attempting to recover Wounds while being treated with this kit, they gain a +2 bonus to their Constitution Ability Checks",
+      "ap": 3
+    },
+    {
+      "name": "Full Medical Response Pack",
+      "description": "Also known as a portable hospital, these packs are extremely rare, limited to military, police, emergency response units, and the occasional survival nut. These packs come with everything found in both the Tactical Response Pack and EMT Medical Field kits (just more of it), as well as CPR Masks, blood pressure kits, cervical collars, blood clotting spray, burn spray, and so on. Mere rumors of small stockpiles of these packs have led more than one Hero to their deaths. Any Hero utilizing this kit gains a +5 bonus to all Medicine Skill Checks. If a Hero is being treated for disease or attempting to recover Wounds while being treated with this kit they gain a +3 bonus to their Constitution Ability Checks.",
+      "ap": 4
+    },
+    {
+      "name": "Multi-tool",
+      "description": "Portable tool kit for basic mechanical and electrical work.",
+      "ap": 1
+    },
+    {
+      "name": "Flashlight",
+      "description": "These LED flashlights provide about 60 hours of continuous life on a set of new batteries. They provide 2 areas of directional bright light and 2 area of shadowy light beyond that.",
+      "ap": 1
+    },
+    {
+      "name": "Rope (50ft)",
+      "description": "Durable nylon rope. Useful for climbing, traps, or securing.",
+      "ap": 1
+    },
+    {
+      "name": "Water Filter",
+      "description": "Removes bacteria and viruses from untreated water sources.",
+      "ap": 2
+    },
+    {
+      "name": "Gas Mask",
+      "description": "Gas Masks provide the wearer with Life Support: 20 (+5), but only against gas attacks. These masks have filters which need to be cleaned out after every use.",
+      "ap": 2
+    },
+    {
+      "name": "Backpack",
+      "description": "Coming in various sizes and styles backpacks can commonly hold about 10 items of regular gear comfortably, while a tactical backpack with a molle system can store 14 items.",
+      "ap": 1
+    },
+    {
+      "name": "Batteryless \u201cshake\u201d Flashlight",
+      "description": "These provide light for 3 rounds, requiring an action to charge it. These flashlights provide 2 areas of directional bright light and 2 areas of shadowy light beyond that.",
+      "ap": 2
+    },
+    {
+      "name": "Binoculars",
+      "description": "Binoculars grant the user the equivalent of Super Sense (Telescopic Vision): 26 (+8) and require both hands to use properly.",
+      "ap": 1
+    },
+    {
+      "name": "Binoculars (Night Vision)",
+      "description": "This works just like standard Binoculars, but they also grant the user Super Sense (Night Vision): 26 (+8) as well. Night vision requires 6 AA batteries lasting for 6 hours of continuous use.",
+      "ap": 2
+    },
+    {
+      "name": "Bivouac Sack (1 man tent)",
+      "description": "See gear rules for details.",
+      "ap": 1
+    },
+    {
+      "name": "Canteen",
+      "description": "See gear rules for details.",
+      "ap": 1
+    },
+    {
+      "name": "Climbing Kit",
+      "description": "These kits consist of hammer, pitons, and hooks, granting the user a +2 bonus to all Athletics: (Climbing) checks.",
+      "ap": 1
+    },
+    {
+      "name": "Compass",
+      "description": "See gear rules for details.",
+      "ap": 1
+    },
+    {
+      "name": "Duct Tape",
+      "description": "Perhaps the most useful piece of equipment, new, sealed rolls of Duct tape are highly sought after. Duct Tape possesses an effective Strength: 14 (+2) when used to tape things up.",
+      "ap": 1
+    },
+    {
+      "name": "Field Kit",
+      "description": "See gear rules for details.",
+      "ap": 1
+    },
+    {
+      "name": "Fire Extinguisher",
+      "description": "Fire Extinguishers require two consecutive Demanding actions to use, snuffing out fire in a single area. After emptied, an Extinguisher is worthless, except possibly as a club.",
+      "ap": 1
+    },
+    {
+      "name": "Firearm Maintenance Kit",
+      "description": "This kit grants a Hero a +2 bonus on all Engineering/Firearms Skill Checks when attempting to repair a jammed firearm.",
+      "ap": 1
+    },
+    {
+      "name": "Flint and striker",
+      "description": "See gear rules for details.",
+      "ap": 1
+    },
+    {
+      "name": "Grappling hook",
+      "description": "See gear rules for details.",
+      "ap": 1
+    },
+    {
+      "name": "Hand held GPS, Civilian",
+      "description": "A common GPS can assist someone within 10 areas of their intended location. GPS satellites may drift off orbit.",
+      "ap": 2
+    },
+    {
+      "name": "Hand held GPS, Military",
+      "description": "Military grade GPS\u2019s are still very accurate. They may be used to navigate to within 1 area of any location on the planet.",
+      "ap": 3
+    },
+    {
+      "name": "Handsets, 2-Way Radio, Walkie-Talkie",
+      "description": "Possessing a battery life of 5 hours and an effective range of 1 mile, these radios are effective though battery-dependent.",
+      "ap": 1
+    },
+    {
+      "name": "Lantern \u2013 Solar, Battery, Gas",
+      "description": "Solar and battery lanterns require a Simple action to turn on, while Gas lanterns require two Demanding actions and a fire source. Lanterns provide bright light to the area and shadowy light to 2 adjacent areas.",
+      "ap": 1
+    },
+    {
+      "name": "Lock Picks",
+      "description": "These picks grant the user a +2 bonus on all Larceny Skill Checks to open mechanical locks.",
+      "ap": 1
+    },
+    {
+      "name": "Maps",
+      "description": "Detailed maps and a compass help navigate to any location on the map, sometimes granting bonuses on Survival or Local Knowledge rolls.",
+      "ap": 1
+    },
+    {
+      "name": "Rope (Hemp) 30\u2019",
+      "description": "Standard rope has an effective Strength of 16(+3).",
+      "ap": 1
+    },
+    {
+      "name": "Rope (Kevlar) 30\u2019",
+      "description": "Kevlar rope has an effective Strength of 22 (+6).",
+      "ap": 2
+    },
+    {
+      "name": "Rope (Nylon) 30\u2019",
+      "description": "Nylon rope has an effective strength of 20 (+4).",
+      "ap": 3
+    },
+    {
+      "name": "Rucksack",
+      "description": "See gear rules for details.",
+      "ap": 1
+    },
+    {
+      "name": "Sleeping Bag",
+      "description": "See gear rules for details.",
+      "ap": 1
+    },
+    {
+      "name": "Solar/Crank radio",
+      "description": "These radios have a range of 10 miles but rarely pick up any signals.",
+      "ap": 2
+    },
+    {
+      "name": "Tent",
+      "description": "See gear rules for details.",
+      "ap": 1
+    },
+    {
+      "name": "Tool Kit, Partial",
+      "description": "Grants a +1 bonus on all Skill Checks when performing repairs.",
+      "ap": 1
+    },
+    {
+      "name": "Tool Kit, Complete",
+      "description": "Grants a +2 bonus on all Skill Checks when performing repairs.",
+      "ap": 2
+    },
+    {
+      "name": "Water Filtration Kit",
+      "description": "Removes bacteria and viruses from untreated water sources.",
+      "ap": 1
+    },
+    {
+      "name": "EMT Medical Field Kit",
+      "ap": 2,
+      "description": "Grants +2 to Medicine checks and +1 to Constitution checks for healing."
+    },
+    {
+      "name": "Tactical Response Pack",
+      "ap": 3,
+      "description": "Grants +3 to Medicine checks and +2 to Constitution checks for healing."
+    },
+    {
+      "name": "Full Medical Response Pack",
+      "ap": 4,
+      "description": "Grants +5 to Medicine checks and +3 to Constitution checks for healing."
+    },
+    {
+      "name": "Batteryless Shake Flashlight",
+      "ap": 2,
+      "description": "Provides 2 areas of light for 3 rounds; must be recharged with an action."
+    },
+    {
+      "name": "Binoculars (Night Vision)",
+      "ap": 2,
+      "description": "Grants Super Sense (Night Vision): 26 (+8); 6-hour battery life."
+    },
+    {
+      "name": "Firearm Maintenance Kit",
+      "ap": 1,
+      "description": "Grants +2 to Engineering: Firearms checks to fix jams."
+    },
+    {
+      "name": "Flint and Striker",
+      "ap": 1,
+      "description": "Reliable fire starting tool in any weather."
+    },
+    {
+      "name": "Gas Mask",
+      "ap": 2,
+      "description": "Grants Life Support: 20 (+5) vs gas attacks. Requires filter cleanup after use."
+    },
+    {
+      "name": "Hand Held GPS (Civilian)",
+      "ap": 2,
+      "description": "Accurate within 10 areas of target location."
+    },
+    {
+      "name": "Hand Held GPS (Military)",
+      "ap": 3,
+      "description": "Accurate within 1 area of target location."
+    },
+    {
+      "name": "Lantern \u2013 Solar, Battery, or Gas",
+      "ap": 1,
+      "description": "Illuminates 1 area brightly and 2 adjacent areas dimly."
+    },
+    {
+      "name": "Solar/Crank Radio",
+      "ap": 2,
+      "description": "10-mile range; crank or solar powered; rarely picks up signal."
+    },
+    {
+      "name": "Tool Kit, Partial",
+      "ap": 1,
+      "description": "Grants +1 to repair-related skill checks."
+    },
+    {
+      "name": "Tool Kit, Complete",
+      "ap": 2,
+      "description": "Grants +2 to repair-related skill checks."
+    },
+    {
+      "name": "Water Filtration Kit",
+      "ap": 1,
+      "description": "Purifies contaminated water; vital for survival."
+    }
+  ],
+  "goBags": [
+    {
+      "name": "Survivalist Go-Bag",
+      "description": "Focused on long-term survival with water purification and navigation tools.",
+      "items": [
+        "High Capacity Water Resistant Backpack",
+        "Banged up Shake Flashlight",
+        "Patched up bivouac Sack",
+        "3 Liter Hand Powered UV Water Purifier (8,000 water treatments)",
+        "EMT Medical Field First Aid kit (4 uses left)",
+        "Compass OR GPS",
+        "Mess Kit Ration (7 days worth)",
+        "Flare gun and 4 flares",
+        "Collapsible Fishing Rod"
+      ]
+    },
+    {
+      "name": "Infiltrator Go-Bag",
+      "description": "Tactical gear focused on stealth, observation, and combat operations.",
+      "items": [
+        "Water-resistant Tactical Ergo Pack",
+        "Night scope and scope mount OR Laser sight and mount OR Pocket Lock Pick Set",
+        "Water Resistant Night Vision Binoculars",
+        "Tactical Holster Vest OR Tactical Sheath Utility Belt",
+        "1 clip/magazine of ammo OR 2 Hand Grenades",
+        "Climbing Kit",
+        "Gas Mask",
+        "2- Throat communicators with 1- 2-way radio/walkie-talkie",
+        "Well-worn leather Tactical gloves"
+      ]
+    },
+    {
+      "name": "Technician Go-Bag",
+      "description": "Essential tools for repairs, electrical work, and mechanical maintenance.",
+      "items": [
+        "Utility Belt",
+        "Banged up Shake Flashlight",
+        "2-way radio/walkie-talkie",
+        "Solar Powered Jump Starter",
+        "100-Piece Mechanics Tool Kit missing 25 pieces OR 100-Piece Home Essential Tool Kit missing 25 pieces",
+        "Workman Gloves",
+        "Multi-Tool",
+        "Tool Belt",
+        "Small solar power charger with battery",
+        "Old phone with 32GB of movies, music and apps"
+      ]
+    },
+    {
+      "name": "Medic Go-Bag",
+      "description": "Medical supplies and emergency response equipment for treating injuries.",
+      "items": [
+        "Water-resistant High Capacity Duffle",
+        "Medical Pack - Tactical Response Pack",
+        "Fast fold Litter",
+        "Flare gun and 5 flares",
+        "3- Emergency Survival Food Ration Packs",
+        "1 Liter Hand Powered UV Water Purifier (8,000 water treatments)",
+        "Climbers Kit",
+        "4- 12-hour Light sticks",
+        "Utility Folding knife"
+      ]
+    },
+    {
+      "name": "Bystander Go-Bag",
+      "description": "Basic survival essentials for someone caught unprepared.",
+      "items": [
+        "Water-resistant Backpack",
+        "7- Emergency Survival Food Ration Packs",
+        "3 Liter Hand Powered UV Water Purifier (8,000 water treatments)",
+        "Compass OR GPS",
+        "Standard First Aid Kit",
+        "Bivouac Sack",
+        "2- 12-hour Light sticks",
+        "Climbers Kit",
+        "Multi-Tool"
+      ]
+    },
+    {
+      "name": "Survivalist Go-Bag",
+      "ap": 0,
+      "description": "Includes: Water-resistant backpack, shake flashlight, bivouac sack, UV water purifier (3L), EMT first aid kit, compass or GPS, 7-day ration, flare gun, fishing rod."
+    },
+    {
+      "name": "Infiltrator Go-Bag",
+      "ap": 0,
+      "description": "Includes: Tactical pack, scope or laser sight or lockpick set, NV binoculars, holster or utility belt, ammo or 2 grenades, climbing kit, gas mask, throat communicators, radio, gloves."
+    },
+    {
+      "name": "Technician Go-Bag",
+      "ap": 0,
+      "description": "Includes: Utility belt, shake flashlight, 2-way radio, jump starter, partial mechanics or tool kit, gloves, multi-tool, solar charger, old phone with media."
+    },
+    {
+      "name": "Medic Go-Bag",
+      "ap": 0,
+      "description": "Includes: High-capacity duffle, tactical response pack, litter, flare gun, 3 ration packs, UV water purifier (1L), climber\u2019s kit, light sticks, folding knife."
+    },
+    {
+      "name": "Bystander Go-Bag",
+      "ap": 0,
+      "description": "Includes: Water-resistant backpack, 7 ration packs, UV water purifier (3L), compass or GPS, standard first aid kit, bivouac sack, light sticks, climber\u2019s kit, multi-tool."
+    }
+  ],
+  "tacticalAccessory": [
+    {
+      "name": "Tactical Rail System",
+      "type": "tacticalAccessory",
+      "costAP": 1,
+      "description": "Allows mounting of flashlight, laser sight, or scope on firearms. Frees up one hand."
+    },
+    {
+      "name": "Tactical Flashlight",
+      "type": "tacticalAccessory",
+      "costAP": 1,
+      "description": "Mountable flashlight providing bright light up to 2 areas and shadowy light beyond. 40 hours battery life."
+    },
+    {
+      "name": "Tactical Laser Point Sight",
+      "type": "tacticalAccessory",
+      "costAP": 1,
+      "description": "+1 to hit within 3 areas. Trigger pad activated. Battery lasts ~2 months with sparing use."
+    },
+    {
+      "name": "Silencer",
+      "type": "tacticalAccessory",
+      "costAP": 2,
+      "description": "Usable on light/medium/assault firearms. Reduces noise; DC 20 Perception (Hearing) to detect."
+    }
+  ],
+  "tacticalSight": [
+    {
+      "name": "Tactical Dot Sight",
+      "type": "tacticalSight",
+      "costAP": 1,
+      "description": "+1 to hit within 2 areas. Mountable with rail system."
+    },
+    {
+      "name": "Standard Hunting Scope",
+      "type": "tacticalSight",
+      "costAP": 1,
+      "description": "Extends range up to 10 areas. Mountable on rifles, does not require rail."
+    },
+    {
+      "name": "Tactical Sniper Scope",
+      "type": "tacticalSight",
+      "costAP": 2,
+      "description": "Extends range up to 20 areas. Requires tactical rail."
+    },
+    {
+      "name": "Night Vision Sight",
+      "type": "tacticalSight",
+      "costAP": 2,
+      "description": "Extends range to 10 areas. Grants Super Sense (Night Vision): 20 (+5) for 3 hours."
+    }
+  ],
+  "optics": [
+    {
+      "name": "Simple Night Vision Goggles",
+      "type": "optics",
+      "costAP": 1,
+      "description": "Grants Super Sense (Night Vision): 14 (+2) for 8 hours continuous use."
+    },
+    {
+      "name": "Tactical Night Vision Goggles",
+      "type": "optics",
+      "costAP": 2,
+      "description": "Grants Super Sense (Night Vision): 20 (+5) for 12 hours continuous use."
+    },
+    {
+      "name": "Tactical Dot Sight",
+      "ap": 1,
+      "description": "Provides +1 to hit within 2 areas; requires rail system."
+    },
+    {
+      "name": "Standard Hunting Scope",
+      "ap": 1,
+      "description": "Grants Extended Range up to 10 areas."
+    },
+    {
+      "name": "Tactical Sniper Scope",
+      "ap": 2,
+      "description": "Grants Extended Range up to 20 areas; requires rail system."
+    },
+    {
+      "name": "Night Vision Sight",
+      "ap": 2,
+      "description": "Grants Extended Range (10) and Super Sense (Night Vision): 20 (+5) for 3 hours."
+    },
+    {
+      "name": "Simple Night Vision Goggles",
+      "ap": 1,
+      "description": "Grants Super Sense (Night Vision): 14 (+2) for 8 hours."
+    },
+    {
+      "name": "Tactical Night Vision Goggles",
+      "ap": 2,
+      "description": "Grants Super Sense (Night Vision): 20 (+5) for 12 hours."
+    }
+  ],
+  "otherModernWeapons": [
+    {
+      "name": "Grenade Launcher",
+      "ap": 4,
+      "description": "Shoulder-fired weapon launching grenades (Concussion, Fragmentation, etc.) up to 10 areas. Requires appropriate grenade rounds to fire."
+    },
+    {
+      "name": "Flare Gun",
+      "ap": 1,
+      "description": "Energy Blast (Fire) 14, 1d8 fire damage, 7 area range, bright/dim light for 10/10 areas. DC 15 Dex save or target is engulfed in flames."
+    },
+    {
+      "name": "Flamethrower",
+      "ap": 4,
+      "description": "Energy Blast (Fire) 24, 1d12 fire damage, 6 area range. DC 15 Dex save or engulfed in flames. 5 shots per load. Reduced range/damage with standard fuel."
+    },
+    {
+      "name": "Stun Gun/Taser",
+      "ap": 1,
+      "description": "Energy Blast (Electrical) 24, 1d12 electric damage, 1 area. DC 15 Con save or target falls prone and is stunned until end of next turn."
+    },
+    {
+      "name": "Fragmentation Grenade",
+      "ap": 1,
+      "description": "Energy Explosion (Kinetic/Piercing): 30. 1d6 Kinetic + 1d6 Piercing damage in area."
+    },
+    {
+      "name": "Flashbang Grenade",
+      "ap": 1,
+      "description": "DC 20 Con save or stunned until end of next turn. No effect on zombies. Attracts zombies."
+    },
+    {
+      "name": "Concussion Grenade",
+      "ap": 1,
+      "description": "Energy Explosion (Kinetic): 20. 1d10 Kinetic damage. DC 15 Con save or knocked prone and stunned."
+    },
+    {
+      "name": "Corrosive Grenade",
+      "ap": 1,
+      "description": "Energy Explosion (Acid): 24. 1d12 Acid damage and target is engulfed in acid."
+    },
+    {
+      "name": "Incendiary Grenade",
+      "ap": 1,
+      "description": "Energy Explosion (Fire): 24. 1d12 Fire damage. Targets are engulfed in flames."
+    },
+    {
+      "name": "Tear-Gas Grenade",
+      "ap": 1,
+      "description": "DC 20 Con save or become blinded and stunned. No effect on zombies."
+    },
+    {
+      "name": "Knock-Out Gas Grenade",
+      "ap": 1,
+      "description": "DC 15 Con save or fall unconscious. Repeat saves each turn. No effect on zombies."
+    },
+    {
+      "name": "Poison Gas Grenade",
+      "ap": 1,
+      "description": "Poison 20. DC 20 Con save or become poisoned. Repeat saves each turn. No effect on zombies."
+    },
+    {
+      "name": "Smoke Grenade",
+      "ap": 1,
+      "description": "Creates Darkness 20 in affected area, severely limiting visibility."
+    },
+    {
+      "name": "Molotov",
+      "ap": 1,
+      "description": "Energy Explosion (Fire): 20. 1d10 Fire damage. DC 15 Dex save or engulfed in flames."
+    },
+    {
+      "name": "Grenade Launcher",
+      "ap": 4,
+      "description": "Fires grenades over 10 areas; requires grenade ammo."
+    },
+    {
+      "name": "Flare Gun",
+      "ap": 1,
+      "description": "1d8 fire damage; lights up areas; may ignite targets."
+    },
+    {
+      "name": "Flamethrower",
+      "ap": 4,
+      "description": "1d12 fire damage, 6-area range, 5 shots; ignites targets."
+    },
+    {
+      "name": "Stun Gun/Taser",
+      "ap": 1,
+      "description": "1d12 electric; may stun or knock prone."
+    },
+    {
+      "name": "Fragmentation Grenade",
+      "ap": 1,
+      "description": "1d6 kinetic + 1d6 piercing to all in area."
+    },
+    {
+      "name": "Flashbang Grenade",
+      "ap": 1,
+      "description": "Stuns all in area unless DC 20 Constitution save."
+    },
+    {
+      "name": "Concussion Grenade",
+      "ap": 1,
+      "description": "1d10 kinetic + DC 15 Con save or stunned + prone."
+    },
+    {
+      "name": "Corrosive Grenade",
+      "ap": 1,
+      "description": "1d12 acid damage; may engulf targets in acid."
+    },
+    {
+      "name": "Incendiary Grenade",
+      "ap": 1,
+      "description": "1d12 fire damage; ignites targets."
+    },
+    {
+      "name": "Tear-Gas Grenade",
+      "ap": 1,
+      "description": "Blinds and stuns unless DC 20 Constitution save."
+    },
+    {
+      "name": "Knock-Out Gas Grenade",
+      "ap": 1,
+      "description": "Unconscious unless DC 15 Constitution save."
+    },
+    {
+      "name": "Poison Gas Grenade",
+      "ap": 1,
+      "description": "Poisoned unless DC 20 Constitution save."
+    },
+    {
+      "name": "Smoke Grenade",
+      "ap": 1,
+      "description": "Creates Darkness: 20 in target area."
+    },
+    {
+      "name": "Molotov Cocktail",
+      "ap": 1,
+      "description": "1d10 fire; DC 15 Dex save or ignite target."
+    }
+  ]
+}
 
-
-
-Skip navigation
-Search
-
-
-
-Create
-
-6
-
-Avatar image
-Magical Soulful House Mix at Lightning in a Bottle | Tinzo
-
-Book Club Radio
-585K subscribers
-
-Subscribed
-
-4.2K
-
-
-Share
-
-Clip
-
-Save
-
-Download
-
-89K views  2 days ago  LIGHTNING IN A BOTTLE
-Book Club Meetup #4  Book Club Radio popped up at Lightning in a Bottle with a no-phones dance floor—and Tinzo brought the heat. In this hour-long DJ set, Tinzo blends deep house, soulful grooves, and warm rhythms, perfect for daytime dancing and sunset vibes. Recorded live in the Crossroads tent, the energy was high, the tent was packed, and the music was flowing.
- …
-    
-
-
-Checking first is smart
-Sponsored
-purchase.allstate.com
-Get quote
-
-
-All
-
-From Book Club Radio
-
-Live-sets
-
-Techno
-
-Download the Phishing for Dummies eBook
-Download Our Phishing for Dummies Ebook and Learn How to Defend Against Phishing Attacks
-Sponsored
-Cisco Secure Access
-
-Visit site
-Shorts
-
-John Wick kills The Elder || John Wick 4 ||
-1.7M views
-
-
-Backpacking Warhammer 40K: Visiting @legendarywargame  Bangkok #warhammer40k #warhammer #travel
-3.6M views
-
-
-sim0ne at Boiler Room: Melbourne
-368K views
-
-No thoughts, just disco. #Electrolitpartner
-32K views
-
-Jeff Mills aka The Wizard
-298K views
-
-Does RUNNING THE RABBIT work in #doorkickers2 #cqb
-932K views
-
-
-
-2:09:51
-Now playing
-Chillout Jazz House Music Mix - Cozy Pancakes Brunch Playlist | Smooth Living Room Lounge Bar Songs
-Flavour Trip
-524K views 2 weeks ago
-
-
-1:32:35
-Now playing
-Makoto | Full drum & bass set @ Liquicity Festival 2022 🚀
-Liquicity Events
-132K views 2 years ago
-
-
-1:33:32
-Now playing
-Rainy Neon Cafe 🌌 Lofi Beats for Study & Relax | Cozy Japanese Night #studybeats #lofi
-Neon Static
-9 views 6 hours ago
-New
-
-
-Now playing
-Drum & Bass 24/7 Radio - Non-Stop Liquid
-Hospital Records
-91 watching
-LIVE
-
-
-
-58:53
-Now playing
-DARK TECHNO MIX | Andrea Botez BERLIN [4K]
-Andrea Botez
-338K views 1 month ago
-
-
-1:29:59
-Now playing
-Feel Good Groovy Disco Mix in New York | Tinzo
-Book Club Radio
-287K views 3 weeks ago
-
-
-3:22:33
-Now playing
-Hikari Presents: Makoto (Best Of Makoto Mix)
-Hikari Sakai
-43K views 2 years ago
-
-🔥 Drum & Bass Mix – May 2025 | Grafix, Kanine, Lexurus, Sub Focus, Culture Shock, Metrik & more...🔥
-DJP
-25K views 2 weeks ago
-
-Happy House Mix | Summer DJ Set | Lake Day With Friends
-Bath Toiz
-657K views 9 months ago
-
-Groovy House | Jazz House | Chill House set in a Cafe by Main.Kid
-MAIN KID
-553K views 3 months ago
-
-Black Coffee Experience • Live Set at Pirenópolis-GO
-EXPERIENCES PRODUCE
-131K views 9 days ago
-
-Jazzy House Mix at a Cocktail Lounge | Tinzo
-Book Club Radio
-5.4M views 1 year ago
-
-Liquid Drum & Bass DJ Mix, April'25
-OffbeatDooter
-121K views 1 month ago
-
-Sunrise Beach House Music Mix - Chill Morning Breakfast Playlist | Flavour Trip DJ Set
-Flavour Trip
-1.2M views 3 months ago
-
-A.M.C (Extended Set) | Let It Roll 2024
-Let It Roll festival
-214K views 4 months ago
-
-Classic House Grooves & Good Vibes | Chill & Dance Beats | From Malarkey to Sugar Hill & New Order
-Ivana Stjepanovic
-2.9M views 7 months ago
-
-Shogun Sessions - Makoto & MC Conrad
-Shogun Audio
-89K views 1 year ago
-
-YURIKO / House & Deep House mix at Anov Pizza
-Tortuga Room
-851K views 6 months ago
-
-Dark Techno Mix | Andrea Botez [4K]
-Andrea Botez
-315K views 3 months ago
-
-Kaskade at Historic Virginia Key Beach for We Belong Here: Miami 2025
-We Belong Here
-187K views 1 month ago
-
-    
 
