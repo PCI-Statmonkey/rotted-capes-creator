@@ -50,7 +50,7 @@ const Step5_Skills = () => {
   const [workingStartingSkills, setWorkingStartingSkills] = useState<string[]>([]);
   const [workingSelectedSkills, setWorkingSelectedSkills] = useState<{ name: string; focuses: string[] }[]>([]);
   // Store selected feats with an optional input for feats like 'Skill Focus' or 'Learn Maneuver'
-  const [workingSelectedFeats, setWorkingSelectedFeats] = useState<{ name: string; input?: string }[]>([]);
+  const [workingSelectedFeats, setWorkingSelectedFeats] = useState<{ name: string; input?: string; free?: boolean }[]>([]);
   const [workingSelectedSkillSets, setWorkingSelectedSkillSets] = useState<string[]>([]);
   // Maneuvers are stored separately, indexed to correspond with 'Learn Maneuver' feats
   const [workingSelectedManeuvers, setWorkingSelectedManeuvers] = useState<string[]>([]);
@@ -150,7 +150,8 @@ const Step5_Skills = () => {
       const freeFocuses = Math.max(0, (skillCounts[s.name] || 0) - 1);
       return acc + Math.max(0, totalFocuses - freeFocuses);
     }, 0);
-    const featCost = Math.max(0, workingSelectedFeats.length - 1) * 5; // first feat is free
+    const paidFeatCount = workingSelectedFeats.filter(f => !f.free).length;
+    const featCost = Math.max(0, paidFeatCount - 1) * 5; // first paid feat is free
     const pointsUsed =
       workingSelectedSkills.length + focusPoints + featCost + skillSetPoints;
     setAvailablePoints(baseSkillPoints - pointsUsed); // Update available points
