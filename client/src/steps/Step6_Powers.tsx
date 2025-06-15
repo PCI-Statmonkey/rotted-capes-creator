@@ -577,8 +577,8 @@ export default function Step6_Powers() {
     const flawBonus = power.flaws.reduce((total, flaw) => total + flaw.bonus, 0);
     const perkPenalty = power.perks.reduce((total, perk) => total + perk.bonus, 0);
     
-    // Cap at 20 for B-Lister rank
-    const finalScore = Math.min(power.score + flawBonus + perkPenalty, 20);
+    // Cap at 25 to account for bonuses from flaws at character creation
+    const finalScore = Math.min(power.score + flawBonus + perkPenalty, 25);
     
     // Ensure score doesn't go below 10
     return Math.max(finalScore, 10);
