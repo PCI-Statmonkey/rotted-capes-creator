@@ -154,22 +154,38 @@ const Step5_Feats = () => {
         return true;
       });
 
-      const existing = updated.map((f) => f.name);
+      const countMap: Record<string, number> = {};
+      updated.forEach((f) => {
+        if (f.free && f.source) {
+          const key = `${f.source}|${f.name}`;
+          countMap[key] = (countMap[key] || 0) + 1;
+        }
+      });
 
       workingSelectedSkillSets.forEach((setName) => {
         const set = skillSets.find((s) => s.name === setName);
-        set?.feats?.forEach((name: string) => {
-          if (!existing.includes(name)) {
-            existing.push(name);
+        if (!set) return;
+
+        const counts: Record<string, number> = {};
+        set.feats?.forEach((name: string) => {
+          counts[name] = (counts[name] || 0) + 1;
+        });
+
+        Object.entries(counts).forEach(([name, count]) => {
+          const key = `Skill Set: ${setName}|${name}`;
+          const existingCount = countMap[key] || 0;
+          for (let i = existingCount; i < count; i++) {
             updated.push({ name, input: "", source: `Skill Set: ${setName}`, free: true });
           }
+          countMap[key] = count;
         });
       });
 
       (archetypeFreeMap[archetype] || []).forEach((name) => {
-        if (!existing.includes(name)) {
-          existing.push(name);
+        const key = `Archetype: ${archetype}|${name}`;
+        if (!countMap[key]) {
           updated.push({ name, input: "", source: `Archetype: ${archetype}`, free: true });
+          countMap[key] = 1;
         }
       });
 
@@ -631,7 +647,7 @@ const Step5_Feats = () => {
                                 </option>
                               ))}
                           </select>
-                        ) : feat.input_label && (
+                        ) : feat.input_label && feat.name !== 'Learn Maneuver' && (
                           <input
                             type="text"
                             placeholder={feat.input_label}
@@ -678,6 +694,16 @@ const Step5_Feats = () => {
                         )}
                       </div>
                     ))}
+                  {feat.repeatable && (
+                    <Button
+                      size="sm"
+                      variant="secondary"
+                      onClick={() => addFeat(feat.name)}
+                      disabled={isDisabled}
+                    >
+                      Add Another
+                    </Button>
+                  )}
                 </div>
               )}
             </div>
