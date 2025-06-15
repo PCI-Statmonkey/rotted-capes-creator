@@ -32,6 +32,7 @@ interface Power {
   description?: string;
   damageType?: string;
   target?: string;
+  ability?: string;
   flaws: PowerModifier[];
   perks: PowerModifier[];
   finalScore: number;
@@ -59,6 +60,26 @@ const DAMAGE_TYPE_POWERS = [
 // Helper function to check if a power uses damage type
 const powerUsesDamageType = (powerName: string): boolean => {
   return DAMAGE_TYPE_POWERS.includes(powerName);
+};
+
+const ABILITIES = [
+  "Strength",
+  "Dexterity",
+  "Constitution",
+  "Intelligence",
+  "Wisdom",
+  "Charisma",
+];
+
+const getAbilityOptions = (powerName: string): string[] => {
+  const match = powerName.match(/Enhanced Ability Score(?: \(([^)]+)\))?/i);
+  if (!match) return [];
+  const options = match[1];
+  if (!options) return ABILITIES;
+  return options
+    .split(/,|or/)
+    .map((o) => o.trim())
+    .filter((o) => ABILITIES.some((a) => a.toLowerCase() === o.toLowerCase()));
 };
 
 // Define the available power sets based on the rulebook
@@ -307,7 +328,7 @@ const DAMAGE_TYPES = [
 ];
 
 export default function Step6_Powers() {
-  const { character, updateCharacterField, setCurrentStep, setCurrentSubStep } = useCharacter();
+  const { character, updateCharacterField, setCurrentStep, setCurrentSubStep, updateDerivedStats } = useCharacter();
   const [powerCreationMethod, setPowerCreationMethod] = useState<"powerSet" | "array" | "pointBuy">("powerSet");
   const [selectedPowerSet, setSelectedPowerSet] = useState<string>("");
   const [selectedPowerArray, setSelectedPowerArray] = useState<string>("");
@@ -397,6 +418,7 @@ export default function Step6_Powers() {
       name: ALL_POWERS[0], // Default to the first power in the list
       score: 10,
       arrayIndex: undefined,
+      ability: getAbilityOptions(ALL_POWERS[0])[0],
       flaws: [],
       perks: [],
       finalScore: 10
@@ -426,6 +448,13 @@ export default function Step6_Powers() {
       // If the power doesn't use damage type, clear any existing damage type
       else if (!powerUsesDamageType(value)) {
         newPowers[index].damageType = undefined;
+      }
+
+      const abilityOpts = getAbilityOptions(value);
+      if (abilityOpts.length > 0) {
+        newPowers[index].ability = abilityOpts[0];
+      } else {
+        newPowers[index].ability = undefined;
       }
     }
     
@@ -470,6 +499,11 @@ export default function Step6_Powers() {
       // Remove the modifier
       modifiers.splice(modifierIndex, 1);
     } else {
+      const baseName = modifierName.replace(/\s*\(.*\)/, '').trim();
+      const existingIdx = modifiers.findIndex(m => m.name !== modifierName && m.name.replace(/\s*\(.*\)/, '').trim() === baseName);
+      if (existingIdx >= 0) {
+        modifiers.splice(existingIdx, 1);
+      }
       // Add the modifier
       modifiers.push(modifierData);
     }
@@ -494,6 +528,7 @@ export default function Step6_Powers() {
       name: power.name,
       score: power.score,
       arrayIndex: undefined,
+      ability: getAbilityOptions(power.name)[0],
       flaws: [],
       perks: [],
       finalScore: power.score,
@@ -520,6 +555,7 @@ export default function Step6_Powers() {
       name: ALL_POWERS[0], // Default to the first power in the list
       score: 0, // This will be assigned from the array later
       arrayIndex: undefined,
+      ability: getAbilityOptions(ALL_POWERS[0])[0],
       flaws: [],
       perks: [],
       finalScore: 0
@@ -581,6 +617,9 @@ export default function Step6_Powers() {
 
   // Format power name for display
   const formatPowerName = (name: string): string => {
+    if (ALL_SKILL_COMPATIBLE.includes(name)) {
+      return `${name} (all skill capable)`;
+    }
     return name;
   };
 
@@ -597,6 +636,7 @@ export default function Step6_Powers() {
       name: power.name,
       description: power.description || "",
       damageType: power.damageType,
+      ability: power.ability,
       score: power.score,
       finalScore: power.finalScore,
       flaws: power.flaws.map(f => f.name),
@@ -605,6 +645,7 @@ export default function Step6_Powers() {
     
     // Update character field with selections
     updateCharacterField('powers', finalPowers);
+    updateDerivedStats();
     
     // Track event in analytics
     trackEvent('powers_selected', 'character', 
@@ -894,13 +935,32 @@ export default function Step6_Powers() {
                         </Select>
                       </div>
                     )}
+
+                    {getAbilityOptions(power.name).length > 0 && (
+                      <div className="mt-2">
+                        <Label className="text-sm">Ability</Label>
+                        <Select
+                          value={power.ability}
+                          onValueChange={(value) => updatePower(index, 'ability', value)}
+                        >
+                          <SelectTrigger className="bg-gray-800">
+                            <SelectValue placeholder="Select ability" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {getAbilityOptions(power.name).map(opt => (
+                              <SelectItem key={opt} value={opt}>{opt}</SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </div>
+                    )}
                     
                     {/* Display applied modifiers */}
                     {(power.flaws.length > 0 || power.perks.length > 0) && (
                       <div className="mt-3 pt-3 border-t border-gray-600">
                         {power.flaws.length > 0 && (
                           <div className="mb-2">
-                            <span className="text-xs text-gray-400">Flaws:</span>
+                            <span className="text-xs text-gray-400 font-comic-light">Applied Flaws:</span>
                             <div className="flex flex-wrap gap-1 mt-1">
                               {power.flaws.map(flaw => (
                                 <div key={flaw.name} className="bg-gray-800 text-red-400 px-2 py-0.5 rounded-full text-xs">
@@ -913,7 +973,7 @@ export default function Step6_Powers() {
                         
                         {power.perks.length > 0 && (
                           <div>
-                            <span className="text-xs text-gray-400">Perks:</span>
+                            <span className="text-xs text-gray-400 font-comic-light">Applied Perks:</span>
                             <div className="flex flex-wrap gap-1 mt-1">
                               {power.perks.map(perk => (
                                 <div key={perk.name} className="bg-gray-800 text-green-400 px-2 py-0.5 rounded-full text-xs">
@@ -986,7 +1046,7 @@ export default function Step6_Powers() {
                                 <SelectContent className="max-h-[300px]">
                                   {ALL_POWERS.map(powerName => (
                                     <SelectItem key={powerName} value={powerName}>
-                                      <span className="text-red-500">{powerName}</span>{ALL_SKILL_COMPATIBLE.includes(powerName) && " *"}
+                                      <span className="text-red-500">{powerName}</span>{ALL_SKILL_COMPATIBLE.includes(powerName) && " (all skill capable)"}
                                     </SelectItem>
                                   ))}
                                 </SelectContent>
@@ -1024,6 +1084,25 @@ export default function Step6_Powers() {
                                 </SelectContent>
                               </Select>
                             </div>
+
+                            {getAbilityOptions(power.name).length > 0 && (
+                              <div className="flex-1">
+                                <Label className="text-xs mb-1 block">Ability</Label>
+                                <Select
+                                  value={power.ability}
+                                  onValueChange={(value) => updatePower(index, 'ability', value)}
+                                >
+                                  <SelectTrigger className="bg-gray-800">
+                                    <SelectValue placeholder="Select ability" />
+                                  </SelectTrigger>
+                                  <SelectContent>
+                                    {getAbilityOptions(power.name).map(opt => (
+                                      <SelectItem key={`ability-${opt}`} value={opt}>{opt}</SelectItem>
+                                    ))}
+                                  </SelectContent>
+                                </Select>
+                              </div>
+                            )}
                             
                             {/* Only show damage type selector for powers that need it */}
                             {powerUsesDamageType(power.name) && (
@@ -1117,7 +1196,7 @@ export default function Step6_Powers() {
                             <div className="mt-3">
                               {power.flaws.length > 0 && (
                                 <div className="mb-2">
-                                  <span className="text-xs text-gray-400">Applied Flaws:</span>
+                                  <span className="text-xs text-gray-400 font-comic-light">Applied Flaws:</span>
                                   <div className="flex flex-wrap gap-1 mt-1">
                                     {power.flaws.map(flaw => (
                                       <div key={flaw.name} className="bg-gray-800 text-red-400 px-2 py-0.5 rounded-full text-xs flex items-center">
@@ -1138,7 +1217,7 @@ export default function Step6_Powers() {
                               
                               {power.perks.length > 0 && (
                                 <div>
-                                  <span className="text-xs text-gray-400">Applied Perks:</span>
+                                  <span className="text-xs text-gray-400 font-comic-light">Applied Perks:</span>
                                   <div className="flex flex-wrap gap-1 mt-1">
                                     {power.perks.map(perk => (
                                       <div key={perk.name} className="bg-gray-800 text-green-400 px-2 py-0.5 rounded-full text-xs flex items-center">
@@ -1161,7 +1240,7 @@ export default function Step6_Powers() {
 
                           {/* Display final score if it differs */}
                           {power.finalScore !== power.score && (
-                            <div className="text-sm text-green-400 mt-3">
+                            <div className="text-base text-green-400 mt-3 font-comic-light">
                               Final Score: {power.finalScore} (after modifiers)
                             </div>
                           )}
@@ -1193,7 +1272,7 @@ export default function Step6_Powers() {
                             <SelectContent className="max-h-[300px]">
                               {ALL_POWERS.map(powerName => (
                                 <SelectItem key={powerName} value={powerName}>
-                                  <span className="text-red-500">{powerName}</span>{ALL_SKILL_COMPATIBLE.includes(powerName) && " *"}
+                                  <span className="text-red-500">{powerName}</span>{ALL_SKILL_COMPATIBLE.includes(powerName) && " (all skill capable)"}
                                 </SelectItem>
                               ))}
                             </SelectContent>
@@ -1229,7 +1308,7 @@ export default function Step6_Powers() {
                                 </span>
                               </div>
                               
-                              <Button 
+                              <Button
                                 variant="outline"
                                 size="sm"
                                 className="h-8 w-8 p-0"
@@ -1240,6 +1319,25 @@ export default function Step6_Powers() {
                               </Button>
                             </div>
                           </div>
+
+                          {getAbilityOptions(power.name).length > 0 && (
+                            <div className="flex-1">
+                              <Label className="text-xs mb-1 block">Ability</Label>
+                              <Select
+                                value={power.ability}
+                                onValueChange={(value) => updatePower(index, 'ability', value)}
+                              >
+                                <SelectTrigger className="bg-gray-800">
+                                  <SelectValue placeholder="Select ability" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  {getAbilityOptions(power.name).map(opt => (
+                                    <SelectItem key={`pb-ability-${opt}`} value={opt}>{opt}</SelectItem>
+                                  ))}
+                                </SelectContent>
+                              </Select>
+                            </div>
+                          )}
                           
                           {powerUsesDamageType(power.name) && (
                             <div className="flex-1">
@@ -1264,7 +1362,7 @@ export default function Step6_Powers() {
                         
                         {/* Display final score if it differs */}
                         {power.finalScore !== power.score && (
-                          <div className="text-sm text-green-400 mt-2">
+                          <div className="text-base text-green-400 mt-2 font-comic-light">
                             Final Score: {power.finalScore} (after modifiers)
                           </div>
                         )}

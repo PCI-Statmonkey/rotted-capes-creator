@@ -32,6 +32,7 @@ export interface Power {
   score?: number; // New field for power score
   finalScore?: number; // New field for final power score after modifiers
   damageType?: string; // Optional damage type
+  ability?: string;
   perks: string[];
   flaws: string[];
 }
@@ -521,9 +522,23 @@ export const CharacterProvider = ({ children }: { children: ReactNode }) => {
       return 0;
     };
     
-    // Calculate total bonuses including origin and archetype
+    const getPowerBonus = (ability: string): number => {
+      return character.powers.reduce((total, p) => {
+        if (p.name.startsWith('Enhanced Ability Score')) {
+          const target = p.ability || p.name.match(/\(([^)]+)\)/)?.[1];
+          if (target && target.toLowerCase().includes(ability.toLowerCase())) {
+            const score = p.finalScore ?? p.score ?? 10;
+            const mod = Math.max(1, calculateModifier(score));
+            return total + mod;
+          }
+        }
+        return total;
+      }, 0);
+    };
+
+    // Calculate total bonuses including origin, archetype and powers
     const getTotalBonus = (ability: string): number => {
-      return getOriginBonus(ability) + getArchetypeBonus(ability);
+      return getOriginBonus(ability) + getArchetypeBonus(ability) + getPowerBonus(ability);
     };
     
     // Calculate effective ability scores with bonuses
