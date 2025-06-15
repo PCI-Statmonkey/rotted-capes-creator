@@ -114,19 +114,48 @@ const Step5_Skills = () => {
   // --- Data Fetching & Initialization ---
   // Data is fetched and cached via useCachedGameContent hook
   useEffect(() => {
-    if (startingSkills) setWorkingStartingSkills(startingSkills);
-    if (selectedSkills)
-      setWorkingSelectedSkills(
-        selectedSkills.map((s: any) => ({
-          name: s.name,
-          focuses: s.focuses || (s.focus ? [s.focus] : []),
-        }))
-      );
-    if (selectedFeats) setWorkingSelectedFeats(selectedFeats as any);
-    if (selectedSkillSets) setWorkingSelectedSkillSets(selectedSkillSets);
-    if (selectedManeuvers) setWorkingSelectedManeuvers(selectedManeuvers);
-    if (startingManeuver) setWorkingStartingManeuver(startingManeuver);
-  }, []);
+    const mappedSkills = (selectedSkills || []).map((s: any) => ({
+      name: s.name,
+      focuses: s.focuses || (s.focus ? [s.focus] : []),
+    }));
+
+    if (JSON.stringify(startingSkills) !== JSON.stringify(workingStartingSkills)) {
+      setWorkingStartingSkills(startingSkills || []);
+    }
+
+    if (JSON.stringify(mappedSkills) !== JSON.stringify(workingSelectedSkills)) {
+      setWorkingSelectedSkills(mappedSkills);
+    }
+
+    if (JSON.stringify(selectedFeats) !== JSON.stringify(workingSelectedFeats)) {
+      setWorkingSelectedFeats(selectedFeats || []);
+    }
+
+    if (
+      JSON.stringify(selectedSkillSets) !==
+      JSON.stringify(workingSelectedSkillSets)
+    ) {
+      setWorkingSelectedSkillSets(selectedSkillSets || []);
+    }
+
+    if (
+      JSON.stringify(selectedManeuvers) !==
+      JSON.stringify(workingSelectedManeuvers)
+    ) {
+      setWorkingSelectedManeuvers(selectedManeuvers || []);
+    }
+
+    if (startingManeuver !== workingStartingManeuver) {
+      setWorkingStartingManeuver(startingManeuver || "");
+    }
+  }, [
+    startingSkills,
+    selectedSkills,
+    selectedFeats,
+    selectedSkillSets,
+    selectedManeuvers,
+    startingManeuver,
+  ]);
 
 
   // --- Point Calculation Logic ---
