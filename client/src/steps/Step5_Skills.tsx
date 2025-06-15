@@ -18,6 +18,17 @@ import { meetsPrerequisites, getMissingPrereqs } from "@/utils/requirementValida
 import useCachedGameContent from "@/hooks/useCachedGameContent";
 import { useCharacter } from "@/context/CharacterContext";
 
+const focusFeats: Record<string, { skill: string; count: number }> = {
+  Ace: { skill: "Pilot", count: 2 },
+  "Eclectic Knowledge": { skill: "Academics", count: 2 },
+  "Engineering Prodigy": { skill: "Engineering", count: 2 },
+  "Healing Hands": { skill: "Medicine", count: 2 },
+  Hunter: { skill: "Outdoorsman", count: 2 },
+  "Scientific Mind": { skill: "Science", count: 2 },
+  "Technological Savant": { skill: "Technology", count: 2 },
+  Wheelman: { skill: "Drive", count: 2 },
+};
+
 // Basic starting skills list
 const basicStartingSkills = [
   "Athletics",
@@ -50,7 +61,7 @@ const Step5_Skills = () => {
   const [workingStartingSkills, setWorkingStartingSkills] = useState<string[]>([]);
   const [workingSelectedSkills, setWorkingSelectedSkills] = useState<{ name: string; focuses: string[] }[]>([]);
   // Store selected feats with an optional input for feats like 'Skill Focus' or 'Learn Maneuver'
-  const [workingSelectedFeats, setWorkingSelectedFeats] = useState<{ name: string; input?: string; free?: boolean }[]>([]);
+  const [workingSelectedFeats, setWorkingSelectedFeats] = useState<{ name: string; input?: string | string[]; free?: boolean }[]>([]);
   const [workingSelectedSkillSets, setWorkingSelectedSkillSets] = useState<string[]>([]);
   // Maneuvers are stored separately, indexed to correspond with 'Learn Maneuver' feats
   const [workingSelectedManeuvers, setWorkingSelectedManeuvers] = useState<string[]>([]);
@@ -360,8 +371,9 @@ const Step5_Skills = () => {
         return;
     }
 
-    // Add the feat with an empty input field, ready for user selection if needed
-    setWorkingSelectedFeats((prev) => [...prev, { name: featName, input: "" }]);
+    const focusInfo = focusFeats[featName];
+    const input = focusInfo ? Array(focusInfo.count).fill("") : "";
+    setWorkingSelectedFeats((prev) => [...prev, { name: featName, input }]);
   };
 
   // Remove a feat by its index in the workingSelectedFeats array
