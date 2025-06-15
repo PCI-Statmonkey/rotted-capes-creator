@@ -348,6 +348,29 @@ export default function Step6_Powers() {
     }
   });
 
+  // Get the remaining available scores for a power in array mode
+  const getAvailableScoresForPower = (powerIndex: number): number[] => {
+    const arrayScores = [...getSelectedPowerArrayData()];
+
+    // Remove scores that are already assigned to other powers
+    selectedPowers.forEach((p, idx) => {
+      if (idx !== powerIndex && p.score) {
+        const removeIdx = arrayScores.indexOf(p.score);
+        if (removeIdx !== -1) {
+          arrayScores.splice(removeIdx, 1);
+        }
+      }
+    });
+
+    // Ensure the current power's assigned score is still selectable
+    const currentScore = selectedPowers[powerIndex]?.score;
+    if (currentScore && !arrayScores.includes(currentScore)) {
+      arrayScores.push(currentScore);
+    }
+
+    return arrayScores;
+  };
+
   // Get cost for a specific power score
   const getCostForScore = (score: number): number => {
     const costEntry = POWER_COST_TABLE.find(entry => entry.score === score);
@@ -975,14 +998,10 @@ export default function Step6_Powers() {
                                   <SelectValue placeholder="Select score" />
                                 </SelectTrigger>
                                 <SelectContent>
-                                  {getSelectedPowerArrayData().map((score, idx) => (
+                                  {getAvailableScoresForPower(index).map((score, idx) => (
                                     <SelectItem
                                       key={`array-score-${score}-${idx}-${index}`}
                                       value={`${score}-${idx}`}
-                                      disabled={
-                                        selectedPowers.filter((p, i) => i !== index && p.score === score).length >=
-                                        getSelectedPowerArrayData().filter(s => s === score).length
-                                      }
                                     >
                                       {score}
                                     </SelectItem>
