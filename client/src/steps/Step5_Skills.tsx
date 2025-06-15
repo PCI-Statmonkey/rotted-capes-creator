@@ -141,19 +141,21 @@ const Step5_Skills = () => {
     // The 'maxSkillSets' variable can be used for UI validation or display if needed.
     const maxSkillSets = archetype === "Highly Trained" ? 3 : 2;
 
-    // Calculate total points used: 1 point per skill, 5 points per feat, and points from skill sets
+    // Calculate total points used: 1 point per purchased skill, 5 points per feat, and points from skill sets
+    const acquiredSkills = new Set<string>([...workingStartingSkills, ...skillsFromSets]);
+    const skillCost = workingSelectedSkills.reduce((acc, s) => {
+      return acc + (acquiredSkills.has(s.name) ? 0 : 1);
+    }, 0);
     const focusPoints = workingSelectedSkills.reduce((acc, s) => {
       const totalFocuses = s.focuses.filter(
         (f) => f.trim() !== "" && f !== "__custom__"
       ).length;
-      // Determine how many free focuses are granted for this skill
       const freeFocuses = Math.max(0, (skillCounts[s.name] || 0) - 1);
       return acc + Math.max(0, totalFocuses - freeFocuses);
     }, 0);
-    const paidFeatCount = workingSelectedFeats.filter(f => !f.free).length;
+    const paidFeatCount = workingSelectedFeats.filter((f) => !f.free).length;
     const featCost = Math.max(0, paidFeatCount - 1) * 5; // first paid feat is free
-    const pointsUsed =
-      workingSelectedSkills.length + focusPoints + featCost + skillSetPoints;
+    const pointsUsed = skillCost + focusPoints + featCost + skillSetPoints;
     setAvailablePoints(baseSkillPoints - pointsUsed); // Update available points
   }, [
     workingSelectedSkills,
