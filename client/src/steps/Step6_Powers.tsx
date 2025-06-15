@@ -7,6 +7,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Switch } from "@/components/ui/switch";
 import { useCharacter } from "@/context/CharacterContext";
 import { trackEvent } from "@/lib/analytics";
@@ -33,6 +34,7 @@ interface Power {
   damageType?: string;
   target?: string;
   ability?: string;
+  linkedPowers?: string[];
   flaws: PowerModifier[];
   perks: PowerModifier[];
   finalScore: number;
@@ -335,6 +337,26 @@ export default function Step6_Powers() {
   const [availablePoints, setAvailablePoints] = useState<number>(32);
   const [selectedPowers, setSelectedPowers] = useState<Power[]>([]);
   const [activeTab, setActiveTab] = useState<string>("powers");
+
+  // Load powers from character when component mounts
+  useEffect(() => {
+    if (character.powers && character.powers.length > 0) {
+      const loaded = character.powers.map(p => ({
+        name: p.name,
+        score: p.score || 10,
+        arrayIndex: undefined,
+        description: p.description,
+        damageType: p.damageType,
+        ability: p.ability,
+        linkedPowers: (p as any).linkedPowers || [],
+        flaws: p.flaws.map(f => POWER_FLAWS.find(ff => ff.name === f)).filter(Boolean) as PowerModifier[],
+        perks: p.perks.map(perk => POWER_PERKS.find(pp => pp.name === perk)).filter(Boolean) as PowerModifier[],
+        finalScore: p.finalScore || p.score || 10,
+        target: undefined
+      }));
+      setSelectedPowers(loaded);
+    }
+  }, []);
   
   // Find eligible power sets based on character's archetype
   const eligiblePowerSets = POWER_SETS.filter(set => 
@@ -419,6 +441,7 @@ export default function Step6_Powers() {
       score: 10,
       arrayIndex: undefined,
       ability: getAbilityOptions(ALL_POWERS[0])[0],
+      linkedPowers: [],
       flaws: [],
       perks: [],
       finalScore: 10
@@ -430,13 +453,19 @@ export default function Step6_Powers() {
   // Remove a power
   const removePower = (index: number) => {
     const newPowers = [...selectedPowers];
-    newPowers.splice(index, 1);
+    const removed = newPowers.splice(index, 1)[0];
+    newPowers.forEach(p => {
+      if (p.linkedPowers) {
+        p.linkedPowers = p.linkedPowers.filter(lp => lp !== removed.name);
+      }
+    });
     setSelectedPowers(newPowers);
   };
 
   // Update a power's property
   const updatePower = (index: number, field: keyof Power, value: any) => {
     const newPowers = [...selectedPowers];
+    const oldName = newPowers[index].name;
     newPowers[index] = { ...newPowers[index], [field]: value };
     
     // Handle changes to power name to determine if damage type should be available
@@ -456,6 +485,13 @@ export default function Step6_Powers() {
       } else {
         newPowers[index].ability = undefined;
       }
+
+      // Update linked references in other powers
+      newPowers.forEach((p, idx) => {
+        if (idx !== index && p.linkedPowers) {
+          p.linkedPowers = p.linkedPowers.map(lp => (lp === oldName ? value : lp));
+        }
+      });
     }
     
     // Recalculate final score if needed
@@ -498,6 +534,9 @@ export default function Step6_Powers() {
     if (modifierIndex >= 0) {
       // Remove the modifier
       modifiers.splice(modifierIndex, 1);
+      if (modifierName === 'Linked') {
+        power.linkedPowers = [];
+      }
     } else {
       const baseName = modifierName.replace(/\s*\(.*\)/, '').trim();
       const existingIdx = modifiers.findIndex(m => m.name !== modifierName && m.name.replace(/\s*\(.*\)/, '').trim() === baseName);
@@ -506,11 +545,27 @@ export default function Step6_Powers() {
       }
       // Add the modifier
       modifiers.push(modifierData);
+      if (modifierName === 'Linked' && !power.linkedPowers) {
+        power.linkedPowers = [];
+      }
     }
     
     // Recalculate final score
     power.finalScore = calculateFinalScore(power);
-    
+
+    setSelectedPowers(newPowers);
+  };
+
+  const toggleLinkedPower = (powerIndex: number, linkedName: string, checked: boolean) => {
+    const newPowers = [...selectedPowers];
+    const links = newPowers[powerIndex].linkedPowers || [];
+    if (checked) {
+      if (!links.includes(linkedName)) links.push(linkedName);
+    } else {
+      const idx = links.indexOf(linkedName);
+      if (idx >= 0) links.splice(idx, 1);
+    }
+    newPowers[powerIndex].linkedPowers = links;
     setSelectedPowers(newPowers);
   };
 
@@ -529,6 +584,7 @@ export default function Step6_Powers() {
       score: power.score,
       arrayIndex: undefined,
       ability: getAbilityOptions(power.name)[0],
+      linkedPowers: [],
       flaws: [],
       perks: [],
       finalScore: power.score,
@@ -556,6 +612,7 @@ export default function Step6_Powers() {
       score: 0, // This will be assigned from the array later
       arrayIndex: undefined,
       ability: getAbilityOptions(ALL_POWERS[0])[0],
+      linkedPowers: [],
       flaws: [],
       perks: [],
       finalScore: 0
@@ -640,7 +697,8 @@ export default function Step6_Powers() {
       score: power.score,
       finalScore: power.finalScore,
       flaws: power.flaws.map(f => f.name),
-      perks: power.perks.map(p => p.name)
+      perks: power.perks.map(p => p.name),
+      linkedPowers: power.linkedPowers || []
     }));
     
     // Update character field with selections
@@ -983,6 +1041,24 @@ export default function Step6_Powers() {
                             </div>
                           </div>
                         )}
+
+                        {power.flaws.some(f => f.name === 'Linked') && selectedPowers.length > 1 && (
+                          <div className="mt-2 space-y-1">
+                            <Label className="text-xs">Linked To</Label>
+                            {selectedPowers.map((p, idx) => (
+                              index !== idx && (
+                                <div key={`linked-${index}-${idx}`} className="flex items-center space-x-2">
+                                  <Checkbox
+                                    id={`linked-${index}-${idx}`}
+                                    checked={power.linkedPowers?.includes(p.name) || false}
+                                    onCheckedChange={(checked) => toggleLinkedPower(index, p.name, !!checked)}
+                                  />
+                                  <Label htmlFor={`linked-${index}-${idx}`} className="text-xs">{p.name}</Label>
+                                </div>
+                              )
+                            ))}
+                          </div>
+                        )}
                       </div>
                     )}
                   </div>
@@ -1219,26 +1295,44 @@ export default function Step6_Powers() {
                                 <div>
                                   <span className="text-xs text-gray-400 font-comic-light">Applied Perks:</span>
                                   <div className="flex flex-wrap gap-1 mt-1">
-                                    {power.perks.map(perk => (
-                                      <div key={perk.name} className="bg-gray-800 text-green-400 px-2 py-0.5 rounded-full text-xs flex items-center font-comic-light">
-                                        {perk.name} ({perk.bonus})
-                                        <Button
-                                          variant="ghost"
-                                          size="icon"
-                                          className="h-4 w-4 p-0 ml-1"
-                                          onClick={() => togglePowerModifier(index, "perks", perk.name)}
-                                        >
-                                          <X className="h-3 w-3" />
-                                        </Button>
-                                      </div>
-                                    ))}
-                                  </div>
+                              {power.perks.map(perk => (
+                                <div key={perk.name} className="bg-gray-800 text-green-400 px-2 py-0.5 rounded-full text-xs flex items-center font-comic-light">
+                                  {perk.name} ({perk.bonus})
+                                  <Button
+                                    variant="ghost"
+                                    size="icon"
+                                    className="h-4 w-4 p-0 ml-1"
+                                    onClick={() => togglePowerModifier(index, "perks", perk.name)}
+                                  >
+                                    <X className="h-3 w-3" />
+                                  </Button>
                                 </div>
-                              )}
+                              ))}
                             </div>
-                          )}
+                          </div>
+                        )}
 
-                          {/* Display final score if it differs */}
+                        {power.flaws.some(f => f.name === 'Linked') && selectedPowers.length > 1 && (
+                          <div className="mt-2 space-y-1">
+                            <Label className="text-xs">Linked To</Label>
+                            {selectedPowers.map((p, idx) => (
+                              index !== idx && (
+                                <div key={`linked-array-${index}-${idx}`} className="flex items-center space-x-2">
+                                  <Checkbox
+                                    id={`linked-array-${index}-${idx}`}
+                                    checked={power.linkedPowers?.includes(p.name) || false}
+                                    onCheckedChange={(checked) => toggleLinkedPower(index, p.name, !!checked)}
+                                  />
+                                  <Label htmlFor={`linked-array-${index}-${idx}`} className="text-xs">{p.name}</Label>
+                                </div>
+                              )
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    )}
+
+                        {/* Display final score if it differs */}
                           {power.finalScore !== power.score && (
                             <div className="text-base text-green-400 mt-3 font-comic-light">
                               Final Score: {power.finalScore} (after modifiers)
@@ -1461,23 +1555,41 @@ export default function Step6_Powers() {
                                 <span className="text-xs text-gray-400">Perks:</span>
                                 <div className="flex flex-wrap gap-1 mt-1">
                                   {power.perks.map(perk => (
-                                    <div key={perk.name} className="bg-gray-800 text-green-400 px-2 py-0.5 rounded-full text-xs flex items-center font-comic-light">
-                                      {perk.name} ({perk.bonus})
-                                      <Button
-                                        variant="ghost"
-                                        size="icon"
-                                        className="h-4 w-4 p-0 ml-1"
-                                        onClick={() => togglePowerModifier(index, "perks", perk.name)}
-                                      >
-                                        <X className="h-3 w-3" />
-                                      </Button>
-                                    </div>
-                                  ))}
-                                </div>
+                                  <div key={perk.name} className="bg-gray-800 text-green-400 px-2 py-0.5 rounded-full text-xs flex items-center font-comic-light">
+                                    {perk.name} ({perk.bonus})
+                                    <Button
+                                      variant="ghost"
+                                      size="icon"
+                                      className="h-4 w-4 p-0 ml-1"
+                                      onClick={() => togglePowerModifier(index, "perks", perk.name)}
+                                    >
+                                      <X className="h-3 w-3" />
+                                    </Button>
+                                  </div>
+                                ))}
                               </div>
-                            )}
-                          </div>
-                        )}
+                            </div>
+                          )}
+
+                          {power.flaws.some(f => f.name === 'Linked') && selectedPowers.length > 1 && (
+                            <div className="mt-2 space-y-1">
+                              <Label className="text-xs">Linked To</Label>
+                              {selectedPowers.map((p, idx) => (
+                                index !== idx && (
+                                  <div key={`linked-pb-${index}-${idx}`} className="flex items-center space-x-2">
+                                    <Checkbox
+                                      id={`linked-pb-${index}-${idx}`}
+                                      checked={power.linkedPowers?.includes(p.name) || false}
+                                      onCheckedChange={(checked) => toggleLinkedPower(index, p.name, !!checked)}
+                                    />
+                                    <Label htmlFor={`linked-pb-${index}-${idx}`} className="text-xs">{p.name}</Label>
+                                  </div>
+                                )
+                              ))}
+                            </div>
+                          )}
+                        </div>
+                      )}
                       </div>
                     </div>
                   </div>
