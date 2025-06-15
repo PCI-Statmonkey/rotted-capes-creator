@@ -144,6 +144,8 @@ async function runSeed() {
   }
 
   console.log("🌱 Seeding gear...");
+  // Clear existing gear to avoid stale or partial data
+  await db.delete(gear);
   for (const [category, items] of Object.entries(gearData as any)) {
     if (!Array.isArray(items)) continue;
     for (const item of items as any[]) {
@@ -151,7 +153,7 @@ async function runSeed() {
         name: item.name,
         description: item.description || item.damage || "",
         category,
-        ap: item.ap || 0,
+        ap: item.ap ?? item.costAP ?? 0,
         tags: item.qualities || item.tags || item.ammo_type || [],
       }).onConflictDoNothing();
     }
