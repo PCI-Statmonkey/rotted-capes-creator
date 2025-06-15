@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { ArrowLeft, ArrowRight, Plus, X, Info } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -25,6 +25,8 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import skillsData from "@/rules/skills.json";
+import featsData from "@/rules/feats.json";
 
 // Define weakness types
 type WeaknessType = 
@@ -64,8 +66,17 @@ const SAMPLE_DEPENDENTS = [
   { name: "Beloved Pet", description: "When you've lost everything, then you might seek solace in an animal companion." }
 ];
 
+const ABILITIES = [
+  "Strength",
+  "Dexterity",
+  "Constitution",
+  "Intelligence",
+  "Wisdom",
+  "Charisma",
+];
+
 export default function Step7_Weaknesses() {
-  const { character, updateCharacterField, setCurrentStep, saveCharacter } = useCharacter();
+  const { character, updateCharacterField, updateAbilityScore, setCurrentStep, saveCharacter } = useCharacter();
   const [selectedWeaknessType, setSelectedWeaknessType] = useState<WeaknessType | "">("");
   const [newWeakness, setNewWeakness] = useState<Weakness>({
     type: "Custom",
@@ -77,10 +88,18 @@ export default function Step7_Weaknesses() {
   const [totalWeaknessPoints, setTotalWeaknessPoints] = useState<number>(0);
   const [remainingWeaknessPoints, setRemainingWeaknessPoints] = useState<number>(0);
   const [allocations, setAllocations] = useState<Array<{
-    type: string; 
+    type: string;
     target: string;
     amount: number;
   }>>([]);
+
+  const [fivePointSkill, setFivePointSkill] = useState("");
+  const [fivePointAbility, setFivePointAbility] = useState("");
+  const [tenPointMode, setTenPointMode] = useState<"feat" | "ability">("feat");
+  const [tenPointFeat, setTenPointFeat] = useState("");
+  const [tenPointAbility1, setTenPointAbility1] = useState("");
+  const [tenPointAbility2, setTenPointAbility2] = useState("");
+  const [fifteenPointAbility, setFifteenPointAbility] = useState("");
 
   // Calculate total weakness points
   const calculatePoints = () => {
@@ -90,6 +109,10 @@ export default function Step7_Weaknesses() {
     setTotalWeaknessPoints(points);
     setRemainingWeaknessPoints(points - allocations.reduce((total, alloc) => total + alloc.amount, 0));
   };
+
+  useEffect(() => {
+    calculatePoints();
+  }, [character.complications, allocations]);
 
   // Handle going to previous step
   const handlePrevious = () => {
@@ -244,6 +267,60 @@ export default function Step7_Weaknesses() {
     });
   };
 
+  const applyAbilityOrPower = (target: string, bonus: number) => {
+    if (ABILITIES.map(a => a.toLowerCase()).includes(target.toLowerCase())) {
+      const key = target.toLowerCase() as keyof typeof character.abilities;
+      const current = character.abilities[key].value;
+      updateAbilityScore(key, Math.min(25, current + bonus));
+    } else {
+      const updated = character.powers.map(p => {
+        if (p.name === target) {
+          const score = p.finalScore ?? p.score ?? 10;
+          return { ...p, finalScore: Math.min(25, score + bonus) };
+        }
+        return p;
+      });
+      updateCharacterField('powers', updated);
+    }
+  };
+
+  const handleAllocate5 = () => {
+    if (remainingWeaknessPoints < 5 || !fivePointSkill || !fivePointAbility) return;
+    if (!character.skills.some(s => s.name === fivePointSkill)) {
+      updateCharacterField('skills', [...character.skills, { name: fivePointSkill, ability: '', ranks: 0, trained: true }]);
+    }
+    applyAbilityOrPower(fivePointAbility, 1);
+    setAllocations([...allocations, { type: '5', target: `${fivePointSkill} + ${fivePointAbility}`, amount: 5 }]);
+    setFivePointSkill('');
+    setFivePointAbility('');
+  };
+
+  const handleAllocate10 = () => {
+    if (remainingWeaknessPoints < 10) return;
+    if (tenPointMode === 'feat') {
+      if (!tenPointFeat) return;
+      if (!character.feats.some(f => f.name === tenPointFeat)) {
+        updateCharacterField('feats', [...character.feats, { name: tenPointFeat }]);
+      }
+      setAllocations([...allocations, { type: '10-feat', target: tenPointFeat, amount: 10 }]);
+      setTenPointFeat('');
+    } else {
+      if (!tenPointAbility1 || !tenPointAbility2) return;
+      applyAbilityOrPower(tenPointAbility1, 1);
+      applyAbilityOrPower(tenPointAbility2, 1);
+      setAllocations([...allocations, { type: '10-ability', target: `${tenPointAbility1} & ${tenPointAbility2}`, amount: 10 }]);
+      setTenPointAbility1('');
+      setTenPointAbility2('');
+    }
+  };
+
+  const handleAllocate15 = () => {
+    if (remainingWeaknessPoints < 15 || !fifteenPointAbility) return;
+    applyAbilityOrPower(fifteenPointAbility, 2);
+    setAllocations([...allocations, { type: '15-ability', target: fifteenPointAbility, amount: 15 }]);
+    setFifteenPointAbility('');
+  };
+
   // Check if we can add the current weakness
   const canAddWeakness = () => {
     if (!selectedWeaknessType) return false;
@@ -306,12 +383,12 @@ export default function Step7_Weaknesses() {
           <h3 className="text-xl font-comic mb-3">Weakness Points</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <p className="text-sm text-gray-300">Total Points: <span className="text-accent">{totalWeaknessPoints}</span>/20</p>
-              <p className="text-sm text-gray-300">Remaining Points: <span className="text-accent">{remainingWeaknessPoints}</span></p>
+              <p className="text-sm text-gray-300 font-comic-light">Total Points: <span className="text-accent">{totalWeaknessPoints}</span>/20</p>
+              <p className="text-sm text-gray-300 font-comic-light">Remaining Points: <span className="text-accent">{remainingWeaknessPoints}</span></p>
             </div>
             <div>
-              <h4 className="text-sm font-medium mb-1">Point Usage Options:</h4>
-              <ul className="text-xs text-gray-400 list-disc pl-4">
+              <h4 className="text-sm font-medium mb-1 font-comic-light">Point Usage Options:</h4>
+              <ul className="text-xs text-gray-400 list-disc pl-4 font-comic-light">
                 <li>5 points: Gain training in a skill and +1 to any ability/power score (max 25)</li>
                 <li>10 points: Gain a feat or +1 to any two ability/power scores (max 25)</li>
                 <li>15 points: Gain +2 to any ability/power score (max 25)</li>
@@ -337,12 +414,12 @@ export default function Step7_Weaknesses() {
                 >
                   <div>
                     <div className="flex items-center">
-                      <h4 className="font-medium text-accent">{weakness.name}</h4>
-                      <span className="ml-2 px-2 py-0.5 bg-gray-700 rounded-full text-xs">
+                      <h4 className="font-medium text-accent font-comic-light">{weakness.name}</h4>
+                      <span className="ml-2 px-2 py-0.5 bg-gray-700 rounded-full text-xs font-comic-light">
                         {weakness.points} points
                       </span>
                     </div>
-                    <p className="text-sm text-gray-300 mt-1">{weakness.description}</p>
+                    <p className="text-sm text-gray-300 mt-1 font-comic-light">{weakness.description}</p>
                   </div>
                   <Button 
                     variant="ghost" 
@@ -713,6 +790,16 @@ export default function Step7_Weaknesses() {
             <p className="text-sm text-gray-400 mb-4">
               You have <span className="text-accent">{remainingWeaknessPoints}</span> points remaining to allocate.
             </p>
+            {allocations.length > 0 && (
+              <div className="mb-4">
+                <h4 className="text-sm font-comic-light mb-1">Spent Points</h4>
+                <ul className="list-disc pl-4 text-sm text-gray-300 font-comic-light">
+                  {allocations.map((a, idx) => (
+                    <li key={idx}>{a.amount} pts - {a.target}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
             
             <Accordion type="single" collapsible className="w-full">
               <AccordionItem value="item-1">
@@ -721,38 +808,142 @@ export default function Step7_Weaknesses() {
                 </AccordionTrigger>
                 <AccordionContent>
                   <div className="space-y-3 p-2">
-                    <p className="text-sm text-gray-300">
-                      Coming soon: Ability to allocate 5 points to gain training in a skill and 
-                      receive a +1 bonus to any ability or power score (up to a maximum of 25).
-                    </p>
+                    <div>
+                      <label className="block text-sm mb-1">Skill</label>
+                      <Select value={fivePointSkill} onValueChange={setFivePointSkill}>
+                        <SelectTrigger className="bg-gray-700">
+                          <SelectValue placeholder="Select skill" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {skillsData.map((s) => (
+                            <SelectItem key={s.name} value={s.name}>{s.name}</SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div>
+                      <label className="block text-sm mb-1">Ability or Power</label>
+                      <Select value={fivePointAbility} onValueChange={setFivePointAbility}>
+                        <SelectTrigger className="bg-gray-700">
+                          <SelectValue placeholder="Select target" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {ABILITIES.map((a) => (
+                            <SelectItem key={a} value={a}>{a}</SelectItem>
+                          ))}
+                          {character.powers.map((p) => (
+                            <SelectItem key={p.name} value={p.name}>{p.name}</SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <Button onClick={handleAllocate5} disabled={!fivePointSkill || !fivePointAbility || remainingWeaknessPoints < 5} className="w-full">
+                      Spend 5 Points
+                    </Button>
                   </div>
                 </AccordionContent>
               </AccordionItem>
-              
+
               <AccordionItem value="item-2">
                 <AccordionTrigger className="text-accent">
                   10 Points: Gain a feat or +1 to any two ability/power scores
                 </AccordionTrigger>
                 <AccordionContent>
                   <div className="space-y-3 p-2">
-                    <p className="text-sm text-gray-300">
-                      Coming soon: Ability to allocate 10 points to gain a feat or 
-                      +1 to any two ability or power scores (up to a maximum of 25).
-                    </p>
+                    <div>
+                      <label className="block text-sm mb-1">Allocation Type</label>
+                      <Select value={tenPointMode} onValueChange={(v) => setTenPointMode(v as "feat" | "ability") }>
+                        <SelectTrigger className="bg-gray-700">
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="feat">Feat</SelectItem>
+                          <SelectItem value="ability">Abilities/Powers</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    {tenPointMode === 'feat' ? (
+                      <div>
+                        <label className="block text-sm mb-1">Feat</label>
+                        <Select value={tenPointFeat} onValueChange={setTenPointFeat}>
+                          <SelectTrigger className="bg-gray-700">
+                            <SelectValue placeholder="Select feat" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {featsData.map((f) => (
+                              <SelectItem key={f.name} value={f.name}>{f.name}</SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </div>
+                    ) : (
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                        <div>
+                          <label className="block text-sm mb-1">Ability/Power 1</label>
+                          <Select value={tenPointAbility1} onValueChange={setTenPointAbility1}>
+                            <SelectTrigger className="bg-gray-700">
+                              <SelectValue placeholder="Select target" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              {ABILITIES.map((a) => (
+                                <SelectItem key={a} value={a}>{a}</SelectItem>
+                              ))}
+                              {character.powers.map((p) => (
+                                <SelectItem key={p.name} value={p.name}>{p.name}</SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                        </div>
+                        <div>
+                          <label className="block text-sm mb-1">Ability/Power 2</label>
+                          <Select value={tenPointAbility2} onValueChange={setTenPointAbility2}>
+                            <SelectTrigger className="bg-gray-700">
+                              <SelectValue placeholder="Select target" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              {ABILITIES.map((a) => (
+                                <SelectItem key={a} value={a}>{a}</SelectItem>
+                              ))}
+                              {character.powers.map((p) => (
+                                <SelectItem key={p.name} value={p.name}>{p.name}</SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                        </div>
+                      </div>
+                    )}
+                    <Button onClick={handleAllocate10} disabled={tenPointMode === 'feat' ? !tenPointFeat || remainingWeaknessPoints < 10 : !tenPointAbility1 || !tenPointAbility2 || remainingWeaknessPoints < 10} className="w-full">
+                      Spend 10 Points
+                    </Button>
                   </div>
                 </AccordionContent>
               </AccordionItem>
-              
+
               <AccordionItem value="item-3">
                 <AccordionTrigger className="text-accent">
                   15 Points: Gain +2 to any ability/power score
                 </AccordionTrigger>
                 <AccordionContent>
                   <div className="space-y-3 p-2">
-                    <p className="text-sm text-gray-300">
-                      Coming soon: Ability to allocate 15 points to gain a +2 bonus 
-                      to any ability or power score (up to a maximum score of 25).
-                    </p>
+                    <div>
+                      <label className="block text-sm mb-1">Ability or Power</label>
+                      <Select value={fifteenPointAbility} onValueChange={setFifteenPointAbility}>
+                        <SelectTrigger className="bg-gray-700">
+                          <SelectValue placeholder="Select target" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {ABILITIES.map((a) => (
+                            <SelectItem key={a} value={a}>{a}</SelectItem>
+                          ))}
+                          {character.powers.map((p) => (
+                            <SelectItem key={p.name} value={p.name}>{p.name}</SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <Button onClick={handleAllocate15} disabled={!fifteenPointAbility || remainingWeaknessPoints < 15} className="w-full">
+                      Spend 15 Points
+                    </Button>
                   </div>
                 </AccordionContent>
               </AccordionItem>
