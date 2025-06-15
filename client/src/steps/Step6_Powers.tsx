@@ -341,10 +341,10 @@ export default function Step6_Powers() {
   // Load powers from character when component mounts
   useEffect(() => {
     if (character.powers && character.powers.length > 0) {
-      const loaded = character.powers.map(p => ({
+      let loaded: Power[] = character.powers.map(p => ({
         name: p.name,
         score: p.score || 10,
-        arrayIndex: undefined,
+        arrayIndex: undefined as number | undefined,
         description: p.description,
         damageType: p.damageType,
         ability: p.ability,
@@ -354,7 +354,77 @@ export default function Step6_Powers() {
         finalScore: p.finalScore || p.score || 10,
         target: undefined
       }));
+
+      // Determine which creation method was likely used
+      const powerNames = loaded.map(p => p.name).sort();
+      let detectedMethod: "powerSet" | "array" | "pointBuy" = "pointBuy";
+      let detectedSet = "";
+      let detectedArray = "";
+
+      // Check power sets
+      for (const set of POWER_SETS) {
+        const setNames = set.powers.map(sp => sp.name).sort();
+        const namesMatch =
+          setNames.length === powerNames.length &&
+          setNames.every((n, i) => n === powerNames[i]);
+        if (!namesMatch) continue;
+
+        const scoresMatch = set.powers.every(sp => {
+          const found = loaded.find(lp => lp.name === sp.name);
+          return found && found.score === sp.score;
+        });
+
+        if (scoresMatch) {
+          detectedMethod = "powerSet";
+          detectedSet = set.name;
+          break;
+        }
+      }
+
+      // Check power arrays if no set detected
+      if (detectedMethod === "pointBuy") {
+        for (const arr of POWER_ARRAYS) {
+          if (loaded.length !== arr.scores.length) continue;
+
+          const arrCounts: Record<number, number> = {};
+          arr.scores.forEach(s => { arrCounts[s] = (arrCounts[s] || 0) + 1; });
+
+          const powerCounts: Record<number, number> = {};
+          loaded.forEach(p => { powerCounts[p.score] = (powerCounts[p.score] || 0) + 1; });
+
+          const scoresMatch = Object.keys(arrCounts).every(score => arrCounts[Number(score)] === powerCounts[Number(score)]);
+
+          if (scoresMatch) {
+            detectedMethod = "array";
+            detectedArray = arr.name;
+
+            // Assign array indexes based on the array ordering
+            const remaining = arr.scores.map((score, idx) => ({ score, id: idx }));
+            loaded = loaded.map(p => {
+              const matchIdx = remaining.findIndex(r => r.score === p.score);
+              if (matchIdx >= 0) {
+                const id = remaining[matchIdx].id;
+                remaining.splice(matchIdx, 1);
+                return { ...p, arrayIndex: id };
+              }
+              return p;
+            });
+            break;
+          }
+        }
+      }
+
+      if (detectedMethod === "pointBuy") {
+        // Calculate remaining points based on loaded powers
+        const spent = loaded.reduce((t, pw) => t + getCostForScore(pw.score), 0);
+        setAvailablePoints(32 - spent);
+      }
+
       setSelectedPowers(loaded);
+      setPowerCreationMethod(detectedMethod);
+      if (detectedSet) setSelectedPowerSet(detectedSet);
+      if (detectedArray) setSelectedPowerArray(detectedArray);
+      setActiveTab("powers");
     }
   }, []);
   
