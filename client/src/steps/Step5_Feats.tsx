@@ -31,7 +31,7 @@ const Step5_Feats = () => {
     skillsTab,
     setSkillsTab,
   } = useCharacterBuilder();
-  const { character, setCurrentStep, setCurrentSubStep } = useCharacter();
+  const { character, updateCharacterField, setCurrentStep, setCurrentSubStep } = useCharacter();
   const archetype = character.archetype;
   const currentOrigin = character.origin?.split('(')[0].trim();
   const baseSkillPoints = currentOrigin === "Highly Trained" ? 30 : 20;
@@ -70,6 +70,11 @@ const Step5_Feats = () => {
     });
     return Array.from(map.values());
   }, [origins]);
+
+  const scavengeFocusOptions = useMemo(() => {
+    const scavenge = skills.find((s) => s.name === 'Scavenge');
+    return scavenge?.focusOptions ?? [];
+  }, [skills]);
 
   const [typeFilter, setTypeFilter] = useState<{ power: boolean; others: boolean }>({
     power: true,
@@ -526,6 +531,47 @@ const Step5_Feats = () => {
     setSelectedSkillSets(workingSelectedSkillSets);
     setSelectedManeuvers(workingSelectedManeuvers);
     setStartingManeuver(workingStartingManeuver);
+
+    // Build final skills list for character context
+    const allSkillNames = new Set<string>([
+      ...workingStartingSkills,
+      ...skillsFromSets,
+      ...workingSelectedSkills.map((s) => s.name),
+    ]);
+    const finalSkills = Array.from(allSkillNames).map((name) => {
+      const ability = skills.find((sk) => sk.name === name)?.ability || 'N/A';
+      return { name, ability, ranks: 0, trained: true } as any;
+    });
+    workingSelectedSkills.forEach((s) => {
+      const ability = skills.find((sk) => sk.name === s.name)?.ability || 'N/A';
+      s.focuses
+        .filter((f) => f && f !== '__custom__')
+        .forEach((f) => {
+          finalSkills.push({
+            name: s.name,
+            ability,
+            ranks: 0,
+            trained: true,
+            specialization: f,
+          } as any);
+        });
+    });
+
+    const finalFeats = workingSelectedFeats.map((f) => ({
+      name: f.name,
+      source: f.source,
+      skillSetName: f.input && f.name === 'Skill Focus' ? f.input : undefined,
+    }));
+
+    const finalManeuvers = [
+      ...(workingStartingManeuver ? [{ name: workingStartingManeuver }] : []),
+      ...workingSelectedManeuvers.filter(Boolean).map((m) => ({ name: m })),
+    ];
+
+    updateCharacterField('skills', finalSkills as any);
+    updateCharacterField('feats', finalFeats as any);
+    updateCharacterField('maneuvers', finalManeuvers as any);
+
     setCurrentStep(6); // Proceed to next main step
     setCurrentSubStep(0);
   };
@@ -677,6 +723,23 @@ const Step5_Feats = () => {
                                   {o.name}
                                 </option>
                               ))}
+                          </select>
+                        ) : feat.name === 'Exceptional Scavenger' ? (
+                          <select
+                            value={workingSelectedFeats[f.originalIndex]?.input || ''}
+                            onChange={(e) => {
+                              const updated = [...workingSelectedFeats];
+                              updated[f.originalIndex].input = e.target.value;
+                              setWorkingSelectedFeats(updated);
+                            }}
+                            className="border rounded p-1 text-black"
+                          >
+                            <option value="">Select a field</option>
+                            {scavengeFocusOptions.map((opt: string) => (
+                              <option key={opt} value={opt}>
+                                {opt}
+                              </option>
+                            ))}
                           </select>
                         ) : feat.input_label && feat.name !== 'Learn Maneuver' && (
                           <input
