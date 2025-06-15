@@ -31,6 +31,7 @@ interface Item {
   description: string;
   ap: number;
   examples?: string[];
+  ammoType?: string[];
 }
 
 // Go-Bags
@@ -143,14 +144,17 @@ export default function Step8_Gear() {
   const [selectedGoBag, setSelectedGoBag] = useState<GoBagType | "">("");
   const [hoveredGoBag, setHoveredGoBag] = useState<GoBagType | "">("");
   const [rangedWeapons, setRangedWeapons] = useState<Item[]>([]);
+  const [firearms, setFirearms] = useState<Item[]>([]);
+  const [archaicWeapons, setArchaicWeapons] = useState<Item[]>([]);
   const [meleeWeapons, setMeleeWeapons] = useState<Item[]>([]);
   const [otherWeapons, setOtherWeapons] = useState<Item[]>([]);
   const [armors, setArmors] = useState<Item[]>([]);
-  const [gearItems, setGearItems] = useState<Item[]>([]);
+  const [gearItems, setGearItems] = useState<Record<string, Item[]>>({});
   const [purchased, setPurchased] = useState<Record<string, number>>({});
   const [freeRangedWeapon, setFreeRangedWeapon] = useState<string>("");
   const [freeMeleeWeapon, setFreeMeleeWeapon] = useState<string>("");
   const [selectedMeleeExamples, setSelectedMeleeExamples] = useState<Record<string, string>>({});
+  const [selectedAmmoTypes, setSelectedAmmoTypes] = useState<Record<string, string>>({});
 
   useEffect(() => {
     async function loadGear() {
@@ -162,10 +166,17 @@ export default function Step8_Gear() {
           ap: it.ap ?? it.costAP ?? 0,
           examples: it.examples ?? [],
         });
-        const ranged = all
-          .filter((g: any) => ['firearms', 'archaicWeapons'].includes(g.category))
+        const firearmsList = all
+          .filter((g: any) => g.category === 'firearms')
+          .map((it: any) => ({ ...mapItem(it), ammoType: it.ammo_type ?? [] }));
+        setFirearms(firearmsList);
+
+        const archaic = all
+          .filter((g: any) => g.category === 'archaicWeapons')
           .map(mapItem);
-        setRangedWeapons(ranged);
+        setArchaicWeapons(archaic);
+
+        setRangedWeapons([...firearmsList, ...archaic]);
 
         const melee = all
           .filter((g: any) => g.category === 'meleeWeapons')
@@ -178,16 +189,26 @@ export default function Step8_Gear() {
           }, {})
         );
 
+        setSelectedAmmoTypes(
+          firearmsList.reduce<Record<string, string>>((acc, f) => {
+            acc[f.name] = f.ammoType && f.ammoType.length > 0 ? f.ammoType[0] : 'varies';
+            return acc;
+          }, {})
+        );
+
         setOtherWeapons(
           all.filter((g: any) => g.category === 'otherModernWeapons').map(mapItem)
         );
 
         setArmors(all.filter((g: any) => g.category === 'armor').map(mapItem));
-        setGearItems(
-          all
-            .filter((g: any) => equipmentCategories.includes(g.category))
-            .map(mapItem)
-        );
+
+        const gearMap: Record<string, Item[]> = {};
+        equipmentCategories.forEach((cat) => {
+          gearMap[cat] = all
+            .filter((g: any) => g.category === cat)
+            .map(mapItem);
+        });
+        setGearItems(gearMap);
       } catch (e) {
         console.error('Failed to load gear', e);
       }
@@ -280,9 +301,14 @@ export default function Step8_Gear() {
     }
   };
 
-  const toggleRanged = (name: string) => {
-    const item = rangedWeapons.find((i) => i.name === name);
+  const toggleRanged = (name: string, isFirearm = false) => {
+    const collection = isFirearm ? firearms : archaicWeapons;
+    const item = collection.find((i) => i.name === name);
     if (!item) return;
+
+    const displayName = isFirearm
+      ? `${name} (${selectedAmmoTypes[name] || 'varies'})`
+      : name;
 
     if (freeRangedWeapon === name) {
       const idx = character.gear.findIndex((g) => g.description === name && g.starting);
@@ -295,12 +321,16 @@ export default function Step8_Gear() {
       delete newP[name];
       setPurchased(newP);
     } else if (!freeRangedWeapon) {
-      addGearItem({ name: name, description: name, starting: true });
+      addGearItem({ name: displayName, description: name, starting: true });
       setFreeRangedWeapon(name);
     } else if (remainingAp >= item.ap) {
-      addGearItem({ name: name, description: name, ap: item.ap });
+      addGearItem({ name: displayName, description: name, ap: item.ap });
       setPurchased({ ...purchased, [name]: item.ap });
     }
+  };
+
+  const handleAmmoChange = (name: string, ammo: string) => {
+    setSelectedAmmoTypes((prev) => ({ ...prev, [name]: ammo }));
   };
 
   const toggleMelee = (name: string) => {
@@ -421,8 +451,39 @@ export default function Step8_Gear() {
 
         {/* Ranged Weapons */}
         <TabsContent value="ranged">
-          <h3 className="text-white text-md mb-2">Ranged Weapons</h3>
-          {rangedWeapons.map((w) => (
+          <h3 className="text-white text-md mb-2">Firearms</h3>
+          {firearms.map((w) => (
+            <div key={w.name} className="flex items-center space-x-2 text-white mb-1">
+              <input
+                type="checkbox"
+                checked={freeRangedWeapon === w.name || !!purchased[w.name]}
+                onChange={() => toggleRanged(w.name, true)}
+              />
+              <span>
+                {w.name} ({w.ap} AP)
+              </span>
+              {(freeRangedWeapon === w.name || !!purchased[w.name]) && w.ammoType && w.ammoType.length > 0 && (
+                <Select
+                  value={selectedAmmoTypes[w.name]}
+                  onValueChange={(val) => handleAmmoChange(w.name, val)}
+                >
+                  <SelectTrigger className="bg-gray-700 w-24">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {w.ammoType.map((t) => (
+                      <SelectItem key={t} value={t}>
+                        {t}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              )}
+            </div>
+          ))}
+
+          <h3 className="text-white text-md mt-4 mb-2">Archaic Weapons</h3>
+          {archaicWeapons.map((w) => (
             <label key={w.name} className="flex items-start space-x-2 text-white">
               <input
                 type="checkbox"
@@ -449,7 +510,7 @@ export default function Step8_Gear() {
               <span>
                 {m.name} ({m.ap} AP)
               </span>
-              {m.examples && m.examples.length > 0 && (
+              {(freeMeleeWeapon === m.name || !!purchased[m.name]) && m.examples && m.examples.length > 0 && (
                 <Select
                   value={selectedMeleeExamples[m.name]}
                   onValueChange={(val) =>
@@ -509,17 +570,24 @@ export default function Step8_Gear() {
         {/* Gear */}
         <TabsContent value="gear">
           <h3 className="text-white text-md mb-2">Gear</h3>
-          {gearItems.map((g) => (
-            <label key={g.name} className="flex items-start space-x-2 text-white">
-              <input
-                type="checkbox"
-                checked={!!purchased[g.name]}
-                onChange={() => togglePurchase(gearItems, g.name)}
-              />
-              <span>
-                {g.name} ({g.ap} AP)
-              </span>
-            </label>
+          {equipmentCategories.map((cat) => (
+            <div key={cat} className="mb-4">
+              <h4 className="text-white text-sm font-semibold capitalize mb-1">
+                {cat.replace(/([A-Z])/g, ' $1')}
+              </h4>
+              {gearItems[cat]?.map((g) => (
+                <label key={g.name} className="flex items-start space-x-2 text-white">
+                  <input
+                    type="checkbox"
+                    checked={!!purchased[g.name]}
+                    onChange={() => togglePurchase(gearItems[cat], g.name)}
+                  />
+                  <span>
+                    {g.name} ({g.ap} AP)
+                  </span>
+                </label>
+              ))}
+            </div>
           ))}
         </TabsContent>
 
