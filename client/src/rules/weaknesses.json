@@ -1,0 +1,37 @@
+[
+  {
+    "id": "Addiction",
+    "name": "Addiction",
+    "description": "You crave a substance or activity and suffer penalties when deprived."
+  },
+  {
+    "id": "DarkSecret",
+    "name": "Dark Secret",
+    "description": "A terrible secret from your past could ruin you if revealed."
+  },
+  {
+    "id": "Dependence",
+    "name": "Dependence",
+    "description": "You require regular exposure to a substance or condition to function normally."
+  },
+  {
+    "id": "Dependent",
+    "name": "Dependent",
+    "description": "Someone relies on you for protection and support."
+  },
+  {
+    "id": "DiminishedVitality",
+    "name": "Diminished Vitality",
+    "description": "Reduced stamina leaves you vulnerable to fatigue and injury."
+  },
+  {
+    "id": "Enemy",
+    "name": "Enemy",
+    "description": "A specific foe actively works against you."
+  },
+  {
+    "id": "Taboo",
+    "name": "Taboo",
+    "description": "Breaking a personal or cultural taboo has dire consequences for you."
+  }
+]

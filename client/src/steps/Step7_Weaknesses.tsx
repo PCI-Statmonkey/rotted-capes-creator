@@ -27,6 +27,7 @@ import {
 } from "@/components/ui/accordion";
 import skillsData from "@/rules/skills.json";
 import featsData from "@/rules/feats.json";
+import weaknessesData from "@/rules/weaknesses.json";
 
 // Define weakness types
 type WeaknessType = 
@@ -450,13 +451,9 @@ export default function Step7_Weaknesses() {
                 <SelectValue placeholder="Select a weakness type" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="Addiction">Addiction</SelectItem>
-                <SelectItem value="DarkSecret">Dark Secret</SelectItem>
-                <SelectItem value="Dependence">Dependence</SelectItem>
-                <SelectItem value="Dependent">Dependent</SelectItem>
-                <SelectItem value="DiminishedVitality">Diminished Vitality</SelectItem>
-                <SelectItem value="Enemy">Enemy</SelectItem>
-                <SelectItem value="Taboo">Taboo</SelectItem>
+                {weaknessesData.map((w) => (
+                  <SelectItem key={w.id} value={w.id}>{w.name}</SelectItem>
+                ))}
                 <SelectItem value="Custom">Custom Weakness</SelectItem>
               </SelectContent>
             </Select>

@@ -117,6 +117,15 @@ export const powerModifiers = pgTable("power_modifiers", {
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
 
+export const weaknesses = pgTable("weaknesses", {
+  id: serial("id").primaryKey(),
+  name: text("name").notNull().unique(),
+  description: text("description").notNull(),
+  baseCost: integer("base_cost").default(0).notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
 // Insert schemas
 export const insertUserSchema = createInsertSchema(users).pick({
   username: true,
@@ -192,6 +201,12 @@ export const insertPowerModifierSchema = createInsertSchema(powerModifiers).pick
   type: true,
 });
 
+export const insertWeaknessSchema = createInsertSchema(weaknesses).pick({
+  name: true,
+  description: true,
+  baseCost: true,
+});
+
 // Types
 export type InsertUser = z.infer<typeof insertUserSchema>;
 export type User = typeof users.$inferSelect;
@@ -225,6 +240,9 @@ export type PowerSet = typeof powerSets.$inferSelect;
 
 export type InsertPowerModifier = z.infer<typeof insertPowerModifierSchema>;
 export type PowerModifier = typeof powerModifiers.$inferSelect;
+
+export type InsertWeakness = z.infer<typeof insertWeaknessSchema>;
+export type Weakness = typeof weaknesses.$inferSelect;
 
 // Character data structure
 export const characterDataSchema = z.object({
