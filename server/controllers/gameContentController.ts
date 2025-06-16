@@ -6,8 +6,11 @@ import { storage } from "../storage";
 import {
   insertOriginSchema, insertArchetypeSchema, insertSkillSchema,
   insertFeatSchema, insertSkillSetSchema, insertPowerSchema,
-  insertPowerSetSchema, insertPowerModifierSchema,
-  insertOriginFeatureSchema, insertGearSchema
+  insertPowerSetSchema,
+  insertPowerModifierSchema,
+  insertWeaknessSchema,
+  insertOriginFeatureSchema,
+  insertGearSchema
 } from "@shared/schema";
 import { z } from "zod";
 import { maneuvers } from "@shared/schema";
@@ -173,6 +176,15 @@ export const {
   update: updatePowerModifier,
   remove: deletePowerModifier
 } = makeCrudHandlers("PowerModifier", insertPowerModifierSchema);
+
+// Weakness
+export const {
+  getAll: getAllWeaknesses,
+  getOne: getWeaknessById,
+  create: createWeakness,
+  update: updateWeakness,
+  remove: deleteWeakness,
+} = makeCrudHandlers("Weakness", insertWeaknessSchema);
 
 // OriginFeature
 export const {

@@ -45,6 +45,11 @@ import {
   createPowerModifier,
   updatePowerModifier,
   deletePowerModifier,
+  getAllWeaknesses,
+  getWeaknessById,
+  createWeakness,
+  updateWeakness,
+  deleteWeakness,
   getAllOriginFeatures,
   getOriginFeatureById,
   createOriginFeature,
@@ -107,6 +112,10 @@ router.get("/power-sets/:id", getPowerSetById);
 router.get("/power-modifiers", getAllPowerModifiers);
 router.get("/power-modifiers/:id", getPowerModifierById);
 
+// Weaknesses
+router.get("/weaknesses", getAllWeaknesses);
+router.get("/weaknesses/:id", getWeaknessById);
+
 // Origin Features
 router.get("/origin-features", getAllOriginFeatures);
 router.get("/origin-features/:id", getOriginFeatureById);
@@ -160,6 +169,11 @@ router.delete("/power-sets/:id", ensureAdmin, deletePowerSet);
 router.post("/power-modifiers", ensureAdmin, createPowerModifier);
 router.patch("/power-modifiers/:id", ensureAdmin, updatePowerModifier);
 router.delete("/power-modifiers/:id", ensureAdmin, deletePowerModifier);
+
+// Weaknesses
+router.post("/weaknesses", ensureAdmin, createWeakness);
+router.patch("/weaknesses/:id", ensureAdmin, updateWeakness);
+router.delete("/weaknesses/:id", ensureAdmin, deleteWeakness);
 
 // Origin Features
 router.post("/origin-features", ensureAdmin, createOriginFeature);

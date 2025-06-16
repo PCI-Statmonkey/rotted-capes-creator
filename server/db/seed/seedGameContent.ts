@@ -7,6 +7,7 @@ import {
   powers,
   powerSets,
   powerModifiers,
+  weaknesses,
   feats,
   skills,
   skillSets,
@@ -25,6 +26,7 @@ import powerModifiersData from "../../../client/src/rules/powerMods.json" assert
 import originFeaturesData from "../../../client/src/rules/origin_features.json" assert { type: "json" };
 import maneuversData from "../../../client/src/rules/maneuvers.json" assert { type: "json" };
 import gearData from "../../../client/src/rules/gear.json" assert { type: "json" };
+import weaknessesData from "../../../client/src/rules/weaknesses.json" assert { type: "json" };
 
 async function runSeed() {
   console.log("🌱 Seeding skills...");
@@ -124,6 +126,15 @@ async function runSeed() {
       description: mod.effect || "",
       bonus: mod.value || 0,
       type: mod.type || "perk",
+    }).onConflictDoNothing();
+  }
+
+  console.log("🌱 Seeding weaknesses...");
+  for (const wk of weaknessesData as any[]) {
+    await db.insert(weaknesses).values({
+      name: wk.name,
+      description: wk.description || "",
+      baseCost: wk.baseCost ?? 0,
     }).onConflictDoNothing();
   }
 

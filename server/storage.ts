@@ -1,8 +1,18 @@
 import { db } from "./db";
 import {
-  origins, archetypes, skills, feats, skillSets, powers,
-  powerSets, powerModifiers, originFeatures, maneuvers, gear,
-  characters
+  origins,
+  archetypes,
+  skills,
+  feats,
+  skillSets,
+  powers,
+  powerSets,
+  powerModifiers,
+  weaknesses,
+  originFeatures,
+  maneuvers,
+  gear,
+  characters,
 } from "@shared/schema";
 import { eq } from "drizzle-orm";
 
@@ -74,6 +84,13 @@ export const storage = {
   createPowerModifier: (data: any) => db.insert(powerModifiers).values(data).returning().then(r => r[0]),
   updatePowerModifier: (id: number, data: any) => db.update(powerModifiers).set(data).where(eq(powerModifiers.id, id)).returning().then(r => r[0]),
   deletePowerModifier: (id: number) => db.delete(powerModifiers).where(eq(powerModifiers.id, id)),
+
+  // WEAKNESS
+  getAllWeakness: () => db.select().from(weaknesses),
+  getWeaknessById: (id: number) => db.query.weaknesses.findFirst({ where: eq(weaknesses.id, id) }),
+  createWeakness: (data: any) => db.insert(weaknesses).values(data).returning().then(r => r[0]),
+  updateWeakness: (id: number, data: any) => db.update(weaknesses).set(data).where(eq(weaknesses.id, id)).returning().then(r => r[0]),
+  deleteWeakness: (id: number) => db.delete(weaknesses).where(eq(weaknesses.id, id)),
 
   // ORIGIN FEATURES
   getAllOriginFeature: () => db.select().from(originFeatures),
