@@ -180,7 +180,7 @@ const Step5_Feats = () => {
     startingManeuver,
   ]);
 
-  // Auto select feats granted by skill sets or archetype
+  // Auto select feats granted by skill sets, archetype, or origin
   useEffect(() => {
     if (!skillSets || !feats) return;
 
@@ -188,6 +188,10 @@ const Step5_Feats = () => {
       Infiltrator: ["Stealthy"],
       Heavy: ["Toughness"],
       Brawler: ["Martial Arts"],
+    };
+
+    const originFreeMap: Record<string, string[]> = {
+      Demigod: ["Power Surge"],
     };
 
     setWorkingSelectedFeats((prev) => {
@@ -199,6 +203,10 @@ const Step5_Feats = () => {
         if (f.free && f.source?.startsWith("Archetype: ")) {
           const arch = f.source.replace("Archetype: ", "");
           return arch === archetype;
+        }
+        if (f.free && f.source?.startsWith("Origin: ")) {
+          const org = f.source.replace("Origin: ", "");
+          return org === currentOrigin;
         }
         return true;
       });
@@ -242,9 +250,19 @@ const Step5_Feats = () => {
         }
       });
 
+      (originFreeMap[currentOrigin] || []).forEach((name) => {
+        const key = `Origin: ${currentOrigin}|${name}`;
+        if (!countMap[key]) {
+          const focusInfo = focusFeats[name];
+          const input = focusInfo ? Array(focusInfo.count).fill("") : "";
+          updated.push({ name, input, source: `Origin: ${currentOrigin}`, free: true });
+          countMap[key] = 1;
+        }
+      });
+
       return updated;
     });
-  }, [workingSelectedSkillSets, archetype, skillSets, feats]);
+  }, [workingSelectedSkillSets, archetype, currentOrigin, skillSets, feats]);
 
 
   // --- Point Calculation Logic ---
