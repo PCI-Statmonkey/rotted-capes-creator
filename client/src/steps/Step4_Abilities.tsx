@@ -110,6 +110,17 @@ export default function Step4_Abilities() {
       }
       return 0;
     }
+    if ((originName === "Cosmic" || originName === "Demigod") && character.origin.includes("(")) {
+      const matches = Array.from(character.origin.matchAll(/\+(\d+) ([A-Za-z]+)/g));
+      for (const m of matches) {
+        const value = parseInt(m[1], 10);
+        const abil = m[2].toLowerCase();
+        if (abilityLower === abil) return value;
+      }
+      // Fallback for Cosmic default constitution bonus
+      if (originName === "Cosmic" && abilityLower === "constitution") return 1;
+      return 0;
+    }
     switch(originName) {
       case "Alien":
         if (abilityLower === "strength") return 2;

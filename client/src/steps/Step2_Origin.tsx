@@ -41,13 +41,17 @@ interface OriginData {
 export default function Step2_Origin() {
   const { character, updateCharacterField, setCurrentStep } = useCharacter();
   const [selectedOrigin, setSelectedOrigin] = useState<string>(character.origin || "");
-  
+
   // For Highly Trained origin (ability score selection)
   const [selectedAbilities, setSelectedAbilities] = useState<{[key: number]: string}>({
     0: "Strength",
     1: "Dexterity",
     2: "Constitution"
   });
+
+  // For Cosmic and Demigod ability selection
+  const [cosmicAbility, setCosmicAbility] = useState<string>("Strength");
+  const [demigodAbility, setDemigodAbility] = useState<string>("Strength");
   
   // For Mystic origin (subtype selection)
   const [selectedMysticType, setSelectedMysticType] = useState<string>("Practitioner");
@@ -76,6 +80,22 @@ export default function Step2_Origin() {
       return;
     }
 
+    // Handle Cosmic ability selection
+    if (character.origin.startsWith("Cosmic")) {
+      setSelectedOrigin("Cosmic");
+      const match = character.origin.match(/\+1 [^,]+, \+1 ([^)]+)/);
+      if (match) setCosmicAbility(match[1].trim());
+      return;
+    }
+
+    // Handle Demigod ability selection
+    if (character.origin.startsWith("Demigod")) {
+      setSelectedOrigin("Demigod");
+      const match = character.origin.match(/\+2 ([^)]+)/);
+      if (match) setDemigodAbility(match[1].trim());
+      return;
+    }
+
     // Default case: just set the origin name
     setSelectedOrigin(character.origin);
   }, []);
@@ -99,6 +119,16 @@ export default function Step2_Origin() {
           .join(", ");
           
         const originDetail = `Mystic (${selectedMysticType}: ${bonusText})`;
+        updateCharacterField('origin', originDetail);
+      }
+      // Cosmic with selectable ability
+      else if (selectedOrigin === "Cosmic") {
+        const originDetail = `Cosmic (+1 Constitution, +1 ${cosmicAbility})`;
+        updateCharacterField('origin', originDetail);
+      }
+      // Demigod with selectable ability
+      else if (selectedOrigin === "Demigod") {
+        const originDetail = `Demigod (+2 ${demigodAbility})`;
         updateCharacterField('origin', originDetail);
       }
       // For all other origins, just store the name
@@ -141,7 +171,7 @@ export default function Step2_Origin() {
       description: "You can tap into and channel the energies that permeate the universe. How you gained these powers is up to you, but you might possess an alien artifact that draws upon such energies.",
       abilityBonuses: [
         { ability: "Constitution", bonus: 1 },
-        { ability: "Any", bonus: 1 }
+        { ability: "Any", bonus: 1, selectable: true }
       ],
       uniqueAdvantage: "Limitless Cosmic Power: The energies that permeate the universe are nigh inexhaustible. You receive the Increased Burnout Power Feat.",
       uniqueDisadvantage: "Power Limits: While you have access to unending cosmic energy, you don't have an unending suite of powers to call upon.",
@@ -151,7 +181,7 @@ export default function Step2_Origin() {
       name: "Demigod",
       description: "You are a 'divine' being. It is possible you're the result of the union between a god and a mortal, or you may be the avatar of such a being, sent to Earth to work its will.",
       abilityBonuses: [
-        { ability: "Any", bonus: 2 }
+        { ability: "Any", bonus: 2, selectable: true }
       ],
       uniqueAdvantage: "Divine Blood, Divine Power: As a demigod, you possess a mystical and physical connection to the essence of your divine lineage. You receive the Power Surge Power Feat.",
       uniqueDisadvantage: "Divine Limitations: Your divine heritage comes with certain restrictions or taboos that you must observe or risk losing access to your powers.",
@@ -350,6 +380,50 @@ export default function Step2_Origin() {
                                 </Select>
                               </div>
                             ))}
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Cosmic ability score selection */}
+                      {selectedOrigin === origin.name && origin.name === "Cosmic" && (
+                        <div className="mt-4 space-y-2 p-3 bg-gray-800 rounded-md">
+                          <h5 className="text-sm font-medium text-blue-400">Select +1 Bonus:</h5>
+                          <div className="space-y-1">
+                            <Select value={cosmicAbility} onValueChange={setCosmicAbility}>
+                              <SelectTrigger className="w-full">
+                                <SelectValue placeholder="Select ability" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="Strength">Strength</SelectItem>
+                                <SelectItem value="Dexterity">Dexterity</SelectItem>
+                                <SelectItem value="Constitution">Constitution</SelectItem>
+                                <SelectItem value="Intelligence">Intelligence</SelectItem>
+                                <SelectItem value="Wisdom">Wisdom</SelectItem>
+                                <SelectItem value="Charisma">Charisma</SelectItem>
+                              </SelectContent>
+                            </Select>
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Demigod ability score selection */}
+                      {selectedOrigin === origin.name && origin.name === "Demigod" && (
+                        <div className="mt-4 space-y-2 p-3 bg-gray-800 rounded-md">
+                          <h5 className="text-sm font-medium text-pink-400">Select +2 Bonus:</h5>
+                          <div className="space-y-1">
+                            <Select value={demigodAbility} onValueChange={setDemigodAbility}>
+                              <SelectTrigger className="w-full">
+                                <SelectValue placeholder="Select ability" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="Strength">Strength</SelectItem>
+                                <SelectItem value="Dexterity">Dexterity</SelectItem>
+                                <SelectItem value="Constitution">Constitution</SelectItem>
+                                <SelectItem value="Intelligence">Intelligence</SelectItem>
+                                <SelectItem value="Wisdom">Wisdom</SelectItem>
+                                <SelectItem value="Charisma">Charisma</SelectItem>
+                              </SelectContent>
+                            </Select>
                           </div>
                         </div>
                       )}
