@@ -115,3 +115,7 @@ attached_assets/ - misc static assets
 ```
 
 The `client/` folder is the Vite root, while the compiled assets are served from the Express server in development and production.
+
+### Character Sheet PDF
+
+The inline character sheet now mirrors the layout of `attached_assets/Character Sheet_All New Design_2.0.pdf`. A two-column grid is rendered with Tailwind classes and exported PDFs use the same layout via `pdfGenerator`.

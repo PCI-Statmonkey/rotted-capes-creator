@@ -46,7 +46,7 @@ export const generateCharacterPDF = async (character: Character): Promise<string
   // Basic info section
   doc.setFontSize(headingSize);
   doc.setFont('helvetica', 'bold');
-  doc.text('Character Information', margin, yPos);
+  doc.text('Profile', margin, yPos);
   yPos += lineHeight;
   
   doc.setFontSize(normalSize);
@@ -71,7 +71,7 @@ export const generateCharacterPDF = async (character: Character): Promise<string
   // Attributes section
   doc.setFontSize(headingSize);
   doc.setFont('helvetica', 'bold');
-  doc.text('Abilities', margin, yPos);
+  doc.text('Ability Scores', margin, yPos);
   yPos += lineHeight;
   
   // Set up columns for abilities
@@ -96,7 +96,7 @@ export const generateCharacterPDF = async (character: Character): Promise<string
   // Combat stats
   doc.setFontSize(headingSize);
   doc.setFont('helvetica', 'bold');
-  doc.text('Combat Statistics', margin, yPos);
+  doc.text('Defenses', margin, yPos);
   yPos += lineHeight;
   
   doc.setFontSize(normalSize);
@@ -203,17 +203,17 @@ export const generateCharacterPDF = async (character: Character): Promise<string
     });
   }
   
-  // Complications section
+  // Weaknesses section
   doc.setFontSize(headingSize);
   doc.setFont('helvetica', 'bold');
-  doc.text('Complications', margin, yPos);
+  doc.text('Weaknesses', margin, yPos);
   yPos += lineHeight;
   
   doc.setFontSize(normalSize);
   doc.setFont('helvetica', 'normal');
   
   if (character.complications.length === 0) {
-    doc.text('No complications.', margin, yPos);
+    doc.text('No weaknesses.', margin, yPos);
     yPos += lineHeight;
   } else {
     character.complications.forEach(complication => {

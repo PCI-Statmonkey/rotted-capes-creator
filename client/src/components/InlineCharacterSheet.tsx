@@ -5,9 +5,12 @@ export default function InlineCharacterSheet() {
   const { character } = useCharacter();
   
   return (
-    <div id="character-sheet" className="bg-white text-black p-6">
-      {/* Character Sheet Content - Mimicking the PDF layout */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <div
+      id="character-sheet"
+      className="bg-white text-black p-6 w-[210mm] mx-auto"
+    >
+      {/* Two column grid matching the reference PDF */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {/* Left Column */}
         <div className="space-y-4">
           <div className="text-center pb-4 border-b-2 border-gray-300">
@@ -18,7 +21,9 @@ export default function InlineCharacterSheet() {
           </div>
           
           <div className="border-2 border-gray-800 rounded-lg p-4">
-            <h3 className="font-comic text-xl mb-2 text-center border-b border-gray-400 pb-1">Character Details</h3>
+            <h3 className="font-comic text-xl mb-2 text-center border-b border-gray-400 pb-1 uppercase">
+              Profile
+            </h3>
             <div className="grid grid-cols-2 gap-2">
               <div>
                 <span className="font-bold">Origin:</span> 
@@ -48,7 +53,9 @@ export default function InlineCharacterSheet() {
           </div>
           
           <div className="border-2 border-gray-800 rounded-lg p-4">
-            <h3 className="font-comic text-xl mb-2 text-center border-b border-gray-400 pb-1">Ability Scores</h3>
+            <h3 className="font-comic text-xl mb-2 text-center border-b border-gray-400 pb-1 uppercase">
+              Ability Scores
+            </h3>
             <div className="grid grid-cols-3 gap-4">
               <div className="text-center">
                 <div className="font-bold">STR</div>
@@ -96,7 +103,9 @@ export default function InlineCharacterSheet() {
           </div>
           
           <div className="border-2 border-gray-800 rounded-lg p-4">
-            <h3 className="font-comic text-xl mb-2 text-center border-b border-gray-400 pb-1">Derived Statistics</h3>
+            <h3 className="font-comic text-xl mb-2 text-center border-b border-gray-400 pb-1 uppercase">
+              Defenses
+            </h3>
             <div className="grid grid-cols-2 gap-3">
               <div className="border border-gray-300 rounded p-2 text-center">
                 <div className="font-bold">Initiative</div>
@@ -131,7 +140,9 @@ export default function InlineCharacterSheet() {
         {/* Right Column */}
         <div className="space-y-4">
           <div className="border-2 border-gray-800 rounded-lg p-4">
-            <h3 className="font-comic text-xl mb-2 text-center border-b border-gray-400 pb-1">Skills</h3>
+            <h3 className="font-comic text-xl mb-2 text-center border-b border-gray-400 pb-1 uppercase">
+              Skills
+            </h3>
             <div className="space-y-1 max-h-60 overflow-y-auto">
               {character.skills && character.skills.length > 0 ? (
                 <ul className="divide-y divide-gray-200">
@@ -154,7 +165,9 @@ export default function InlineCharacterSheet() {
           </div>
           
           <div className="border-2 border-gray-800 rounded-lg p-4">
-            <h3 className="font-comic text-xl mb-2 text-center border-b border-gray-400 pb-1">Powers</h3>
+            <h3 className="font-comic text-xl mb-2 text-center border-b border-gray-400 pb-1 uppercase">
+              Powers
+            </h3>
             <div className="space-y-2">
               {character.powers && character.powers.length > 0 ? (
                 <ul className="divide-y divide-gray-200">
@@ -185,7 +198,9 @@ export default function InlineCharacterSheet() {
           </div>
           
           <div className="border-2 border-gray-800 rounded-lg p-4">
-            <h3 className="font-comic text-xl mb-2 text-center border-b border-gray-400 pb-1">Complications & Weaknesses</h3>
+            <h3 className="font-comic text-xl mb-2 text-center border-b border-gray-400 pb-1 uppercase">
+              Weaknesses
+            </h3>
             <div className="space-y-2">
               {character.complications && character.complications.length > 0 ? (
                 <ul className="divide-y divide-gray-200">
@@ -203,7 +218,9 @@ export default function InlineCharacterSheet() {
           </div>
           
           <div className="border-2 border-gray-800 rounded-lg p-4">
-            <h3 className="font-comic text-xl mb-2 text-center border-b border-gray-400 pb-1">Gear</h3>
+            <h3 className="font-comic text-xl mb-2 text-center border-b border-gray-400 pb-1 uppercase">
+              Gear
+            </h3>
             <div className="space-y-2">
               {character.gear && character.gear.length > 0 ? (
                 <ul className="divide-y divide-gray-200">
