@@ -35,7 +35,7 @@ export default function Layout({ children }: LayoutProps) {
   return (
     <div className="flex flex-col min-h-screen dark:bg-[#121212] halftone-bg bg-fixed">
       {/* Header */}
-      <header className="bg-panel shadow-md fixed w-full z-10">
+      <header className="bg-panel shadow-md fixed w-full z-20 border-b-4 border-accent">
         <div className="container mx-auto py-3 px-4 flex justify-between items-center">
           <Link href="/">
             <div className="flex items-center space-x-2 cursor-pointer">
