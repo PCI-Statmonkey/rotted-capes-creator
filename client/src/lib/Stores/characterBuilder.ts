@@ -25,6 +25,7 @@ export type Character = {
   startingManeuver: string;
   skillsTab: string;
   currentStep: number;
+  archetypeSkill?: string | null;
 };
 
 export const useCharacterBuilder = () => {
@@ -38,6 +39,7 @@ export const useCharacterBuilder = () => {
   const [startingManeuver, setStartingManeuver] = useState<string>(saved?.startingManeuver || "");
   const [skillsTab, setSkillsTab] = useState<string>(saved?.skillsTab || "starting");
   const [currentStep, setCurrentStep] = useState<number>(saved?.currentStep || 1);
+  const [archetypeSkill, setArchetypeSkill] = useState<string | null>(saved?.archetypeSkill || null);
   const [abilityScores, setAbilityScores] = useState(saved?.abilityScores || {
     STR: 10,
     DEX: 10,
@@ -56,6 +58,7 @@ export const useCharacterBuilder = () => {
     setSelectedManeuvers([]);
     setStartingManeuver("");
     setSkillsTab("starting");
+    setArchetypeSkill(null);
     setAbilityScores({
       STR: 10,
       DEX: 10,
@@ -78,8 +81,9 @@ export const useCharacterBuilder = () => {
       startingManeuver,
       skillsTab,
       currentStep,
+      archetypeSkill,
     });
-  }, [abilityScores, startingSkills, selectedSkills, selectedFeats, selectedSkillSets, selectedManeuvers, startingManeuver, skillsTab, currentStep]);
+  }, [abilityScores, startingSkills, selectedSkills, selectedFeats, selectedSkillSets, selectedManeuvers, startingManeuver, skillsTab, currentStep, archetypeSkill]);
 
   return {
     abilityScores,
@@ -100,6 +104,8 @@ export const useCharacterBuilder = () => {
     setSkillsTab,
     currentStep,
     setCurrentStep,
+    archetypeSkill,
+    setArchetypeSkill,
     resetBuilder,
   };
 };

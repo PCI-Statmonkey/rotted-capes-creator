@@ -41,6 +41,7 @@ const Step5_Feats = () => {
     startingManeuver,
     skillsTab,
     setSkillsTab,
+    archetypeSkill,
   } = useCharacterBuilder();
   const { character, updateCharacterField, setCurrentStep, setCurrentSubStep } = useCharacter();
   const archetype = character.archetype;
@@ -108,6 +109,9 @@ const Step5_Feats = () => {
   // Count how many times each skill is granted for free via starting skills or skill sets
   const skillCounts = useMemo(() => {
     const counts: Record<string, number> = {};
+    if (archetypeSkill) {
+      counts[archetypeSkill] = (counts[archetypeSkill] || 0) + 1;
+    }
     workingStartingSkills.forEach((s) => {
       counts[s] = (counts[s] || 0) + 1;
     });
@@ -119,7 +123,7 @@ const Step5_Feats = () => {
       });
     });
     return counts;
-  }, [workingStartingSkills, workingSelectedSkillSets, skillSets]);
+  }, [workingStartingSkills, workingSelectedSkillSets, skillSets, archetypeSkill]);
 
   const [availablePoints, setAvailablePoints] = useState(baseSkillPoints); // Initial points
 
@@ -260,9 +264,32 @@ const Step5_Feats = () => {
         }
       });
 
+      if (archetypeSkill) {
+        const sfKey = `Archetype Skill: ${archetypeSkill}|Skill Focus`;
+        const hasFeat = updated.some(
+          (f) => f.name === "Skill Focus" && f.source === sfKey
+        );
+        if (skillCounts[archetypeSkill] >= 2) {
+          if (!hasFeat) {
+            updated.push({
+              name: "Skill Focus",
+              input: archetypeSkill,
+              source: sfKey,
+              free: true,
+            });
+          }
+        } else {
+          if (hasFeat) {
+            updated = updated.filter(
+              (f) => !(f.name === "Skill Focus" && f.source === sfKey)
+            );
+          }
+        }
+      }
+
       return updated;
     });
-  }, [workingSelectedSkillSets, archetype, currentOrigin, skillSets, feats]);
+  }, [workingSelectedSkillSets, archetype, currentOrigin, skillSets, feats, archetypeSkill, skillCounts]);
 
 
   // --- Point Calculation Logic ---
@@ -278,7 +305,11 @@ const Step5_Feats = () => {
     const maxSkillSets = archetype === "Highly Trained" ? 3 : 2;
 
     // Calculate total points used: 1 point per purchased skill, 5 points per feat, and points from skill sets
-    const acquiredSkills = new Set<string>([...workingStartingSkills, ...skillsFromSets]);
+    const acquiredSkills = new Set<string>([
+      ...workingStartingSkills,
+      ...skillsFromSets,
+      ...(archetypeSkill ? [archetypeSkill] : []),
+    ]);
     const skillCost = workingSelectedSkills.reduce((acc, s) => {
       return acc + (acquiredSkills.has(s.name) ? 0 : 1);
     }, 0);
@@ -300,6 +331,7 @@ const Step5_Feats = () => {
     workingStartingSkills,
     skillSets,
     archetype,
+    archetypeSkill,
   ]);
 
   // Persist selections whenever any working state changes
@@ -318,7 +350,12 @@ const Step5_Feats = () => {
       let changed = false;
       let updated = [...prev];
 
-      const allSkillNames = new Set<string>([...prev.map((s) => s.name), ...workingStartingSkills, ...skillsFromSets]);
+      const allSkillNames = new Set<string>([
+        ...prev.map((s) => s.name),
+        ...workingStartingSkills,
+        ...skillsFromSets,
+        ...(archetypeSkill ? [archetypeSkill] : []),
+      ]);
 
       allSkillNames.forEach((skillName) => {
         const freeCount = Math.max(0, (skillCounts[skillName] || 0) - 1);
@@ -338,7 +375,7 @@ const Step5_Feats = () => {
 
       return changed ? updated : prev;
     });
-  }, [skillCounts, workingStartingSkills, skillsFromSets]);
+  }, [skillCounts, workingStartingSkills, skillsFromSets, archetypeSkill]);
 
   // --- Handlers for Toggling Selections ---
 
@@ -576,6 +613,7 @@ const Step5_Feats = () => {
       ...workingStartingSkills,
       ...skillsFromSets,
       ...workingSelectedSkills.map((s) => s.name),
+      ...(archetypeSkill ? [archetypeSkill] : []),
     ]);
     const finalSkills = Array.from(allSkillNames).map((name) => {
       const ability = skills.find((sk) => sk.name === name)?.ability || 'N/A';
