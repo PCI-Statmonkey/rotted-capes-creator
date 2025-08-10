@@ -1,0 +1,682 @@
+[
+    {
+        "name": "Ace",
+        "type": "normal",
+        "description": "You gain skill focus with any two Pilot’s fields of study.",
+        "prerequisites": ["Dexterity 12+, Pilot trained"],
+        "repeatable": true,
+        "tags": [],
+        "notes": "",
+        "input_label": "Choose 2 Pilot fields"
+    },
+    {
+        "name": "Acrobatic",
+        "type": "normal",
+        "description": "Skill focus in Acrobatics field of study, plus Kick Up, Up the Wall, Free Running abilities.",
+        "prerequisites": ["Acrobatics trained"],
+        "repeatable": false,
+         "tags": [],
+        "notes": "",
+        "input_label": null
+    },
+    {
+        "name": "Additional Origin",
+        "type": "normal",
+        "description": "You gain an additional origin (restrictions and advancement only). Editor-in-Chief approval required.",
+        "prerequisites": [],
+        "repeatable": false,
+         "tags": [],
+        "notes": "",
+        "input_label": null
+    },
+    {
+        "name": "Animal Affinity",
+        "type": "normal",
+        "description": "Skill focus in Animal Handling (Training), advantage on Empathy checks with animals, and can calm/scare them.",
+        "prerequisites": ["Empathy, Animal Handling/Training trained"],
+        "repeatable": false,
+        "tags": [],
+        "notes": "",
+        "input_label": null
+    },
+    {
+        "name": "Attack Focus",
+        "type": "normal",
+        "description": "+1 attack, +2 damage with a chosen attack. Can be taken multiple times for different attacks.",
+        "prerequisites":[ "Capable of performing chosen attack"],
+        "repeatable": true,
+        "tags": [],
+        "notes": "",
+        "input_label": null
+    },
+    {
+        "name": "Blind-Fighting",
+        "type": "normal",
+        "description": "No disadvantage or enemy advantage when blind and can retaliate if missed by a concealed attacker.",
+        "prerequisites": ["Wisdom 13+, Perception trained"],
+        "repeatable": false,
+        "tags": [],
+        "notes": "",
+        "input_label": null
+    },
+    {
+        "name": "Burglar",
+        "type": "normal",
+        "description": "Skill focus in Larceny, +1 to bypass electronic security. +2 if focused in Technology (security systems).",
+        "prerequisites": ["Larceny, Basic Technology trained"],
+        "repeatable": false,
+        "tags": [],
+        "notes": "",
+        "input_label": "Choose a Larceny field"
+    },
+    {
+        "name": "Captivating Performer",
+        "type": "normal",
+        "description": "Skill focus in Performance field and gain Inspiring Performance maneuver.",
+        "prerequisites": ["Performance trained"],
+        "repeatable": false,
+        "tags": [],
+        "notes": "",
+        "input_label": "Choose a Performance field"
+    },
+    {
+        "name": "Combat Intuition",
+        "type": "normal",
+        "description": "Immune to outnumbering penalties.",
+        "prerequisites": ["Wisdom or Dexterity 13+, Empathy trained"],
+        "repeatable": false,
+        "tags": [],
+        "notes": "",
+        "input_label": null
+    },
+    {
+        "name": "Critical Precision",
+        "type": "normal",
+        "description": "Chosen attack crits on 19–20. Can be taken multiple times for different attacks.",
+        "prerequisites": ["Capable of chosen attack"],
+        "repeatable": true,
+        "tags": [],
+        "notes": "",
+        "input_label": null
+    },
+    {
+        "name": "Daredevil",
+        "type": "normal",
+        "description": "+5 bonus when failing a check causes physical harm; may gain advantage for heroic actions.",
+        "prerequisites": [],
+        "repeatable": false,
+        "tags": [],
+        "notes": "",
+        "input_label": null
+    },
+    {
+        "name": "Disciplined",
+        "type": "normal",
+        "description": "+1 Willpower defense, advantage vs. mental control and psychosis (if used).",
+        "prerequisites": ["Wisdom 12+"],
+        "repeatable": false,
+        "tags": [],
+        "notes": "",
+        "input_label": null
+    },
+    {
+        "name": "Diehard",
+        "type": "normal",
+        "description": "Recover Stamina once per rest with Con roll + 2×Rank.",
+        "prerequisites": [],
+        "repeatable": false,
+        "tags": [],
+        "notes": "",
+        "input_label": null
+    },
+    {
+        "name": "Eclectic Knowledge",
+        "type": "normal",
+        "description": "Skill focus in two Academic fields.",
+        "prerequisites": ["Academic trained"],
+        "repeatable": true,
+        "tags": [],
+        "notes": "",
+        "input_label": "Choose 2 Academic fields"
+    },
+    {
+        "name": "Engineering Prodigy",
+        "type": "normal",
+        "description": "Skill focus in two Engineering fields.",
+        "prerequisites": ["Intelligence 12+, Engineering trained"],
+        "repeatable": true,
+        "tags": [],
+        "notes": "",
+        "input_label": "Choose 2 Engineering fields"
+    },
+    {
+        "name": "Empathic Intuition",
+        "type": "normal",
+        "description": "Skill focus in Empathy; calm agitated targets via skill check.",
+        "prerequisites": ["Empathy trained"],
+        "repeatable": false,
+        "tags": [],
+        "notes": "",
+        "input_label": null
+    },
+    {
+        "name": "Escape Artist Extraordinaire",
+        "type": "normal",
+        "description": "Skill focus in Escape Artist; escape normal restraints 1/rest without check.",
+        "prerequisites": ["Escape Artist trained"],
+        "repeatable": false,
+        "tags": [],
+        "notes": "",
+        "input_label": null
+    },
+    {
+        "name": "Exceptional Scavenger",
+        "type": "normal",
+        "description": "Skill focus in Scavenge field; start each issue with 6 APs of gear.",
+        "prerequisites": ["Scavenge trained"],
+        "repeatable": false,
+        "tags": [],
+        "notes": "",
+        "input_label": "Choose a Scavenge field"
+    },
+    {
+        "name": "Gearhead",
+        "type": "normal",
+        "description": "Skill focus in Engineering (Auto Repair), +2 to Drive checks.",
+        "prerequisites": ["Engineering, Drive trained"],
+        "repeatable": true,
+        "tags": [],
+        "notes": "",
+        "input_label": null
+    },
+    {
+        "name": "Hacker",
+        "type": "normal",
+        "description": "Skill focus in Technology (Computer Hacking), half-time hacking, +2 to hacking checks.",
+        "prerequisites": ["Technology trained"],
+        "repeatable": false,
+        "tags": [],
+        "notes": "",
+        "input_label": null
+    },
+    {
+        "name": "Hawkeye",
+        "type": "normal",
+        "description": "No range penalties within Wisdom areas; ranged attacks ignore partial cover.",
+        "prerequisites": ["Dexterity 12+"],
+        "repeatable": false,
+        "tags": [],
+        "notes": "",
+        "input_label": null
+    },
+    {
+        "name": "Healing Hands",
+        "type": "normal",
+        "description": "Skill focus in two Medicine fields; revive an ally from 0 stamina 1/scene.",
+        "prerequisites": ["Medicine trained"],
+        "repeatable": false,
+        "tags": [],
+        "notes": "",
+        "input_label": "Choose 2 Medicine fields"
+    },
+    {
+        "name": "Hidden Stash",
+        "type": "normal",
+        "description": "Find hidden stash 1/rest. Stashes have gear/AP. Plot point expands uses.",
+        "prerequisites": ["I've Done Alright for Myself"],
+        "repeatable": false,
+        "tags": [],
+        "notes": "",
+        "input_label": null
+    },
+    {
+        "name": "Honeyed Tongue",
+        "type": "normal",
+        "description": "Skill focus in Influence field; +2 to detect lies or persuade.",
+        "prerequisites": ["Influence trained"],
+        "repeatable": false,
+        "tags": [],
+        "notes": "",
+        "input_label": "Choose an Influence field"
+    },
+    {
+        "name": "Horse Whisperer",
+        "type": "normal",
+        "description": "Skill focus in Animal Handling (Riding); +2 to ride/care/train horses.",
+        "prerequisites": ["Animal Handling trained"],
+        "repeatable": false,
+        "tags": [],
+        "notes": "",
+        "input_label": null
+    },
+    {
+        "name": "Hunter",
+        "type": "normal",
+        "description": "Skill focus in two Outdoorsman fields.",
+        "prerequisites": ["Outdoorsman trained"],
+        "repeatable": true,
+        "tags": [],
+        "notes": "",
+        "input_label": "choose 2 Outdoorsman fields"
+    },
+    {
+        "name": "I've Done Alright for Myself",
+        "type": "normal",
+        "description": "Skill focus in Urban Survival field; gain a vehicle or horse and start each issue with 4 APs.",
+        "prerequisites": ["Urban Survival trained"],
+        "repeatable": false,
+        "tags": [],
+        "notes": "",
+        "input_label": "Choose Urban Survival field"
+    },
+    {
+        "name": "Jury Rigging",
+        "type": "normal",
+        "description": "Skill focus in Basic Engineering; ignore penalties for DC ≤ 20.",
+        "prerequisites": ["Basic Engineering trained"],
+        "repeatable": false,
+        "tags": [],
+        "notes": "",
+        "input_label": null
+    },
+    {
+        "name": "Learn Maneuver",
+        "type": "normal",
+        "description": "Learn a maneuver you qualify for.",
+        "prerequisites": ["As per maneuver"],
+        "repeatable": true,
+        "tags": [],
+        "notes": "",
+        "input_label": "Choose a maneuver you qualify for"
+    },
+    {
+        "name": "Martial Artist",
+        "type": "normal",
+        "description": "Choose a stance each turn (Precision, Powerful, Quick) for unarmed combat.",
+        "prerequisites": [],
+        "repeatable": false,
+        "tags": [],
+        "notes": "",
+        "input_label": null
+    },
+    {
+        "name": "Mind Over Body",
+        "type": "normal",
+        "description": "Use Willpower defense once/scene in place of Avoidance/Fortitude.",
+        "prerequisites": ["Wisdom 13+"],
+        "repeatable": false,
+        "tags": [],
+        "notes": "",
+        "input_label": null
+    },
+    {
+        "name": "Natural Born Leader",
+        "type": "normal",
+        "description": "Learn two leadership maneuvers, ignoring prerequisites.",
+        "prerequisites": ["Charisma 17+"],
+        "repeatable": false,
+        "tags": [],
+        "notes": "",
+        "input_label": "Choose 2 leadership maneuvers"
+    },
+    {
+        "name": "Night Owl",
+        "type": "normal",
+        "description": "Need only 4 hours of sleep in 1hr chunks. +5 to passive Perception while asleep.",
+        "prerequisites": ["Wisdom 13+, Constitution 13+"],
+        "repeatable": false,
+        "tags": [],
+        "notes": "",
+        "input_label": null
+    },
+    {
+        "name": "Occult Scholar",
+        "type": "normal",
+        "description": "Skill focus in Occult field; +2 to identify arcane symbols and magic.",
+        "prerequisites": ["Occult trained"],
+        "repeatable": false,
+        "tags": [],
+        "notes": "",
+        "input_label": "Choose an Occult field" 
+    },
+    {
+        "name": "Owl Eyed",
+        "type": "normal",
+        "description": "Skill focus in Perception; +5 passive Perception.",
+        "prerequisites": ["Perception trained"],
+        "repeatable": false,
+        "tags": [],
+        "notes": "",
+        "input_label": null
+    },
+    {
+        "name": "Perfect Aim",
+        "type": "normal",
+        "description": "+1 to hit with ranged attacks; once/scene gain Advantage on a ranged attack.",
+        "prerequisites": ["Hawkeye"],
+        "repeatable": false,
+        "tags": [],
+        "notes": "",
+        "input_label": null
+    },
+    {
+        "name": "Political Maneuvering",
+        "type": "normal",
+        "description": "Replace ally’s failed check with Influence (Charisma) once/scene.",
+        "prerequisites": ["Honeyed Tongue"],
+        "repeatable": false,
+        "tags": [],
+        "notes": "",
+        "input_label": null
+    },
+    {
+        "name": "Polyglot",
+        "type": "normal",
+        "description": "Skill focus in Linguistics; learn 3 additional languages.",
+        "prerequisites": ["Linguistics trained"],
+        "repeatable": true,
+        "tags": [],
+        "notes": "",
+        "input_label": "Choose 3 languages"
+    },
+    {
+        "name": "Quick",
+        "type": "normal",
+        "description": "+1 Avoidance and +1 walking pace.",
+        "prerequisites": ["Dexterity 12+"],
+        "repeatable": false,
+        "tags": [],
+        "notes": "",
+        "input_label": null
+    },
+    {
+        "name": "Seasoned Survivor",
+        "type": "normal",
+        "description": "Skill focus in Local Knowledge field, +2 to Urban Survival in known city.",
+        "prerequisites": ["Local Knowledge, Urban Survival trained"],
+        "repeatable": true,
+        "tags": [],
+        "notes": "",
+        "input_label": "Choose 1 Local Knowledge field"
+    },
+    {
+        "name": "Sidekick",
+        "type": "normal",
+        "description": "Choose a bystander and upgrade them to an Upstart character.",
+        "prerequisites": [],
+        "repeatable": true,
+        "tags": [],
+        "notes": "",
+        "input_label": null
+    },
+    {
+        "name": "Sharp Eyes",
+        "type": "normal",
+        "description": "+2 to Perception to detect traps/ambushes.",
+        "prerequisites": ["Outdoorsman, Perception trained"],
+        "repeatable": false,
+        "tags": [],
+        "notes": "",
+        "input_label": null
+    },
+    {
+        "name": "Skill Focus",
+        "type": "normal",
+        "description": "Gain skill focus in any trained skill’s field or the whole skill.",
+        "prerequisites": ["Training in selected skill"],
+        "repeatable": true,
+        "tags": [],
+        "notes": "",
+        "input_label": "Choose a skill or field in a skill you are trained in"
+    },
+    {
+        "name": "Shield Expert",
+        "type": "normal",
+        "description": "+1 Avoidance with shield; can throw shield and return; bonus shove action.",
+        "prerequisites": ["Dexterity 12+"],
+        "repeatable": false,
+        "tags": [],
+        "notes": "",
+        "input_label": null
+    },
+    {
+        "name": "Stealthy",
+        "type": "normal",
+        "description": "Skill focus in Stealth; move at full speed while hiding.",
+        "prerequisites": ["Dexterity 12+, Stealth trained"],
+        "repeatable": false,
+        "tags": [],
+        "notes": "",
+        "input_label": null
+    },
+    {
+        "name": "Street Magic",
+        "type": "normal",
+        "description": "Skill focus in Prestidigitation field; +2 to tricks or subtle object manipulation.",
+        "prerequisites": ["Prestidigitation trained"],
+        "repeatable": false,
+        "tags": [],
+        "notes": "",
+        "input_label": "Choose a Prestidigitation field"
+    },
+    {
+        "name": "Scientific Mind",
+        "type": "normal",
+        "description": "Skill focus in two Science fields.",
+        "prerequisites": ["Intelligence 15+, Skill focus in Science"],
+        "repeatable": true,
+        "tags": [],
+        "notes": "",
+        "input_label": "Choose 2 Science fields"
+    },
+    {
+        "name": "Supporting Characters",
+        "type": "normal",
+        "description": "Both bystanders are upgraded to supporting characters.",
+        "prerequisites": [],
+        "repeatable": false,
+        "tags": [],
+        "notes": "",
+        "input_label": null
+    },
+    {
+        "name": "Technological Savant",
+        "type": "normal",
+        "description": "Skill focus in two Technology fields.",
+        "prerequisites": ["Intelligence 12+, Technology trained"],
+        "repeatable": true,
+        "tags": [],
+        "notes": "",
+        "input_label": "Choose 2 Technology fields"
+    },
+    {
+        "name": "Technophile",
+        "type": "normal",
+        "description": "Skill focus in Basic Technology; no penalties for DC ≤ 20.",
+        "prerequisites": ["Basic Technology trained"],
+        "repeatable": false,
+        "tags": [],
+        "notes": "",
+        "input_label": null
+    },
+    {
+        "name": "Third Eye",
+        "type": "normal",
+        "description": "+2 to detect invisible or hidden powers.",
+        "prerequisites": ["Wisdom 16+ or Occult trained"],
+        "repeatable": false,
+        "tags": [],
+        "notes": "",
+        "input_label": null
+    },
+    {
+        "name": "Toughness",
+        "type": "normal",
+        "description": "+1 Fortitude and +10 Max Stamina. May take twice for 1 wound.",
+        "prerequisites": ["Cannot have Diminished Vitality"],
+        "repeatable": true,
+        "tags": [],
+        "notes": "",
+        "input_label": null
+    },
+    {
+        "name": "Uncanny Reaction",
+        "type": "normal",
+        "description": "Take two reactions per round.",
+        "prerequisites": ["Dexterity 18+"],
+        "repeatable": false,
+        "tags": [],
+        "notes": "",
+        "input_label": null
+    },
+    {
+        "name": "Unique Device",
+        "type": "normal",
+        "description": "Gain a custom item with power-level bonuses. May tie to Removable power.",
+        "prerequisites": ["Editor-in-Chief approval"],
+        "repeatable": false,
+        "tags": [],
+        "notes": "",
+        "input_label": "Name of item"
+    },
+    {
+        "name": "Visionary",
+        "type": "normal",
+        "description": "Skill focus in 3 Engineering fields. Can repair removable-powered gear.",
+        "prerequisites": ["Intelligence 15+, Basic Engineering, Engineering skill focus ×3"],
+        "repeatable": false,
+        "tags": [],
+        "notes": "",
+        "input_label": "Choose 3 Engineering fields"
+    },
+    {
+        "name": "Wary",
+        "type": "normal",
+        "description": "+2 initiative; Advantage 1/rest on initiative.",
+        "prerequisites": ["Wisdom 14+, Perception skill focus"],
+        "repeatable": false,
+        "tags": [],
+        "notes": "",
+        "input_label": null
+    },
+    {
+        "name": "Waylay",
+        "type": "normal",
+        "description": "Deal bonus damage from surprise.",
+        "prerequisites": [],
+        "repeatable": false,
+        "tags": [],
+        "notes": "",
+        "input_label": null
+    },
+    {
+        "name": "Weapon Master",
+        "type": "normal",
+        "description": "+1 to hit, +2 damage with one weapon type. Can be taken multiple times.",
+        "prerequisites": [],
+        "repeatable": true,
+        "tags": [],
+        "notes": "",
+        "input_label": "Choose a weapon type"
+    },
+    {
+        "name": "Wheelman",
+        "type": "normal",
+        "description": "Skill focus in two Drive fields; +2 to Drive checks in combat.",
+        "prerequisites": ["Dexterity 12+, Drive trained"],
+        "repeatable": true,
+        "tags": [],
+        "notes": "",
+        "input_label": "choose 2 Drive fields"
+    },
+    {
+        "name": "Acquire New Power",
+        "type": "power",
+        "description": "Gain a new power at a score of 12; starting score may be higher with Editor approval. May apply power modifications.",
+        "prerequisites": ["None (Editor approval required after character creation)"],
+        "repeatable": true,
+        "tags": [],
+        "notes": "",
+        "input_label": "choose a power"
+    },
+    {
+        "name": "Energy Affinity",
+        "type": "power",
+        "description": "Choose an energy type. Gain +1 to attack and damage rolls when using powers of that energy type.",
+        "prerequisites": [],
+        "repeatable": true,
+        "tags": [],
+        "notes": "",
+        "input_label": "Choose an energy type"
+    },
+    {
+        "name": "Increase Burnout Threshold",
+        "type": "power",
+        "description": "Increase your burnout threshold by 5. Not applicable to external power sources.",
+        "prerequisites": [],
+        "repeatable": true,
+        "tags": [],
+        "notes": "",
+        "input_label": null
+    },
+    {
+        "name": "Improved Range",
+        "type": "power",
+        "description": "Choose a power with range > 1. Increase that power’s range by 50%.",
+        "prerequisites": [],
+        "repeatable": true,
+        "tags": [],
+        "notes": "",
+        "input_label": "Choose a power you possess"
+    },
+    {
+        "name": "Master Emulated Power",
+        "type": "power",
+        "description": "Choose one emulated power you've used 10 times. Increase its score by 2 and make it an independent power.",
+        "prerequisites": ["Used the emulated power 10 times"],
+        "repeatable": true,
+        "tags": [],
+        "notes": "",
+        "input_label": "Choose emulated power"
+    },
+    {
+        "name": "Master Power Trick",
+        "type": "power",
+        "description": "Choose a power trick you've successfully used 10 times. You no longer need to make power checks for that trick.",
+        "prerequisites": ["Used the power trick 10 times"],
+        "repeatable": true,
+        "tags": [],
+        "notes": "",
+        "input_label": "Name of power trick"
+    },
+    {
+        "name": "Overcharge",
+        "type": "power",
+        "description": "Spend additional burnout to deal +1 damage per point spent (max burnout = rank × 5). Only for attack powers with burnout cost.",
+        "prerequisites": ["Attack power with burnout cost"],
+        "repeatable": true,
+        "tags": [],
+        "notes": "",
+        "input_label": null
+    },
+    {
+        "name": "Power Mastery",
+        "type": "power",
+        "description": "Choose a power that requires an attack roll or power check. Gain +1 to all power checks and rolls with it and its emulated versions.",
+        "prerequisites": [],
+        "repeatable": true,
+        "tags": [],
+        "notes": "",
+        "input_label": "Choose a power you possess"
+    },
+    {
+        "name": "Power Efficiency",
+        "type": "power",
+        "description": "Manipulate your power to reduce its burnout cost.",
+        "prerequisites": [],
+        "repeatable": true,
+        "tags": [],
+        "notes": "",
+        "input_label": null
+    }
+]
