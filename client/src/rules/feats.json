@@ -422,12 +422,14 @@
     {
         "name": "Skill Focus",
         "type": "normal",
-        "description": "Gain skill focus in any trained skill’s field or the whole skill.",
+        "description": "Choose a skill set and define an edge that represents a cinematic focus within that set.",
         "prerequisites": ["Training in selected skill"],
         "repeatable": true,
         "tags": [],
         "notes": "",
-        "input_label": "Choose a skill or field in a skill you are trained in"
+        "input_label": null,
+        "grantsSkillSet": true,
+        "grantsEdge": true
     },
     {
         "name": "Shield Expert",

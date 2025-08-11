@@ -31,6 +31,7 @@ interface FeatCardProps {
   source?: string;
   locked?: boolean;
   autoSelected?: boolean;
+  children?: React.ReactNode;
 }
 
 const FeatCard: React.FC<FeatCardProps> = ({
@@ -47,6 +48,7 @@ const FeatCard: React.FC<FeatCardProps> = ({
   source,
   locked,
   autoSelected = false,
+  children,
 }) => {
   const prereqList = Array.isArray(feat.prerequisites)
     ? feat.prerequisites
@@ -124,6 +126,7 @@ const FeatCard: React.FC<FeatCardProps> = ({
           </select>
         </div>
       )}
+      {isSelected && children}
     </div>
   );
 };

@@ -234,7 +234,8 @@ export default function Step8_Gear() {
       return true;
     }
 
-    const setSkills = selectedSkillSets.flatMap((setName) => {
+    const setSkills = selectedSkillSets.flatMap((setEntry) => {
+      const setName = typeof setEntry === 'string' ? setEntry : setEntry.name;
       const found = skillSets.find((s) => s.name === setName);
       return (
         found?.skills?.map((sk: any) => (typeof sk === 'string' ? sk : sk.name)) || []

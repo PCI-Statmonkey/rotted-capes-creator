@@ -76,6 +76,14 @@ export function parsePrerequisiteString(str: string) {
     return { type: "feat", name: str.split(":")[1].trim() };
   }
 
+  if (lower.startsWith("skill set:")) {
+    return { type: "skillSet", name: str.split(":")[1].trim() };
+  }
+
+  if (lower.startsWith("edge:")) {
+    return { type: "edge", name: str.split(":")[1].trim() };
+  }
+
   return { type: "unknown", value: str };
 }
 
@@ -174,6 +182,10 @@ export function formatPrerequisite(req: any): string {
     case "skill":
     case "startingSkill":
       return req.name;
+    case "skillSet":
+      return `Skill Set: ${req.name}`;
+    case "edge":
+      return `Edge: ${req.name}`;
     case "skillFocus":
       return `${req.name} skill focus${req.count && req.count > 1 ? ` ×${req.count}` : ""}`;
     case "compound":
@@ -213,9 +225,21 @@ export const meetsPrerequisites = (feat: any, character: any) => {
   } = character;
 
   // Combine all skill names from starting, selected, and skill sets
+  const selectedSetNames = Array.from(
+    new Set(
+      (selectedSkillSets || []).map((s: any) =>
+        typeof s === 'string' ? s : s.name
+      )
+    )
+  );
+
   const skillsFromSets = skillSets
-    .filter((set: any) => selectedSkillSets.includes(set.name))
+    .filter((set: any) => selectedSetNames.includes(set.name))
     .flatMap((set: any) => set.skills);
+
+  const edgesFromSets = (selectedSkillSets || [])
+    .map((s: any) => (typeof s === 'object' ? normalizeName(s.edge) : null))
+    .filter(Boolean);
 
   const normalizeSkill = (s: any) =>
     typeof s === 'string' ? normalizeName(s) : normalizeName(s?.name);
@@ -271,6 +295,14 @@ export const meetsPrerequisites = (feat: any, character: any) => {
 
       case 'feat':
         return ownedFeats.includes(req.name);
+
+      case 'skillSet':
+        return selectedSetNames
+          .map((n) => normalizeName(n))
+          .includes(normalizeName(req.name));
+
+      case 'edge':
+        return edgesFromSets.includes(normalizeName(req.name));
 
       case 'skillFocus':
         return allSkills.has(req.name.toLowerCase());
@@ -341,9 +373,21 @@ export const getMissingPrereqs = (feat: any, character: any) => {
     maneuverRequirements = []
   } = character;
 
+  const selectedSetNames = Array.from(
+    new Set(
+      (selectedSkillSets || []).map((s: any) =>
+        typeof s === 'string' ? s : s.name
+      )
+    )
+  );
+
   const skillsFromSets = skillSets
-    .filter((set: any) => selectedSkillSets.includes(set.name))
+    .filter((set: any) => selectedSetNames.includes(set.name))
     .flatMap((set: any) => set.skills);
+
+  const edgesFromSets = (selectedSkillSets || [])
+    .map((s: any) => (typeof s === 'object' ? normalizeName(s.edge) : null))
+    .filter(Boolean);
 
   const normalizeSkill = (s: any) =>
     typeof s === 'string' ? normalizeName(s) : normalizeName(s?.name);
@@ -409,6 +453,14 @@ export const getMissingPrereqs = (feat: any, character: any) => {
 
       case 'feat':
         return ownedFeats.includes(req.name);
+
+      case 'skillSet':
+        return selectedSetNames
+          .map((n) => normalizeName(n))
+          .includes(normalizeName(req.name));
+
+      case 'edge':
+        return edgesFromSets.includes(normalizeName(req.name));
 
       case 'skillFocus':
         return allSkills.has(req.name.toLowerCase());

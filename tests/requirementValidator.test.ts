@@ -97,4 +97,18 @@ assert(
   missingManeuver.some((r) => r.type === 'maneuverPrereq')
 );
 
+// Skill set and edge prerequisites
+const charWithSet = {
+  ...character,
+  selectedSkillSets: [{ name: 'Occultist', edge: 'Arcane', source: 'Skill Focus' }],
+  skillSets: [{ name: 'Occultist', skills: [] }],
+};
+assert(meetsPrerequisites({ prerequisites: 'Skill Set: Occultist' }, charWithSet));
+assert(meetsPrerequisites({ prerequisites: 'Edge: Arcane' }, charWithSet));
+const missingEdge = getMissingPrereqs(
+  { prerequisites: 'Edge: Stealthy' },
+  charWithSet
+);
+assert(missingEdge.some((r) => r.type === 'edge'));
+
 console.log('All tests passed');

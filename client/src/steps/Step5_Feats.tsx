@@ -17,17 +17,6 @@ import { meetsPrerequisites, getMissingPrereqs } from "@/utils/requirementValida
 import useCachedGameContent from "@/hooks/useCachedGameContent";
 import { useCharacter } from "@/context/CharacterContext";
 
-const focusFeats: Record<string, { skill: string; count: number }> = {
-  Ace: { skill: "Pilot", count: 2 },
-  "Eclectic Knowledge": { skill: "Academics", count: 2 },
-  "Engineering Prodigy": { skill: "Engineering", count: 2 },
-  "Healing Hands": { skill: "Medicine", count: 2 },
-  Hunter: { skill: "Outdoorsman", count: 2 },
-  "Scientific Mind": { skill: "Science", count: 2 },
-  "Technological Savant": { skill: "Technology", count: 2 },
-  Wheelman: { skill: "Drive", count: 2 },
-};
-
 // Basic starting skills list
 const Step5_Feats = () => {
   // Destructure character builder state
@@ -48,11 +37,16 @@ const Step5_Feats = () => {
   const currentOrigin = character.origin?.split('(')[0].trim();
   const baseSkillPoints = currentOrigin === "Highly Trained" ? 30 : 20;
 
+  const selectedSkillSetNames = useMemo(
+    () => (selectedSkillSets || []).map((s: any) => (typeof s === 'string' ? s : s.name)),
+    [selectedSkillSets]
+  );
+
   // --- Local state for working selections ---
   const [workingStartingSkills, setWorkingStartingSkills] = useState<string[]>([]);
   const [workingSelectedSkills, setWorkingSelectedSkills] = useState<{ name: string; focuses: string[] }[]>([]);
   // Store selected feats with an optional input for feats like 'Skill Focus' or 'Learn Maneuver'
-  const [workingSelectedFeats, setWorkingSelectedFeats] = useState<{ name: string; input?: string | string[]; source?: string; free?: boolean }[]>([]);
+  const [workingSelectedFeats, setWorkingSelectedFeats] = useState<{ name: string; input?: string; source?: string; free?: boolean; skillSet?: string; edge?: string }[]>([]);
   const [workingSelectedSkillSets, setWorkingSelectedSkillSets] = useState<string[]>([]);
   // Maneuvers are stored separately, indexed to correspond with 'Learn Maneuver' feats
   const [workingSelectedManeuvers, setWorkingSelectedManeuvers] = useState<string[]>([]);
@@ -83,28 +77,41 @@ const Step5_Feats = () => {
     return Array.from(map.values());
   }, [origins]);
 
-  const scavengeFocusOptions = useMemo(() => {
-    const scavenge = skills.find((s) => s.name === 'Scavenge');
-    return scavenge?.focusOptions ?? [];
-  }, [skills]);
-
-  const getFocusOptions = (skillName: string) => {
-    return skills.find((s) => s.name === skillName)?.focusOptions ?? [];
-  };
 
   const [typeFilter, setTypeFilter] = useState<{ power: boolean; others: boolean }>({
     power: true,
     others: true,
   });
 
+  const featGrantedSkillSets = useMemo(
+    () =>
+      workingSelectedFeats
+        .filter((f) => f.skillSet)
+        .map((f) => ({ name: f.skillSet as string, edge: f.edge, source: f.name })),
+    [workingSelectedFeats]
+  );
+
+  const allSkillSetObjs = useMemo(
+    () => [
+      ...workingSelectedSkillSets.map((name) => ({ name })),
+      ...featGrantedSkillSets,
+    ],
+    [workingSelectedSkillSets, featGrantedSkillSets]
+  );
+
+  const allSkillSetNames = useMemo(
+    () => Array.from(new Set(allSkillSetObjs.map((s) => s.name))),
+    [allSkillSetObjs]
+  );
+
   const skillsFromSets = useMemo(() => {
-    return workingSelectedSkillSets.flatMap((setName) => {
+    return allSkillSetNames.flatMap((setName) => {
       const found = skillSets.find((s) => s.name === setName);
       return (
         found?.skills?.map((s: any) => (typeof s === "string" ? s : s.name)) || []
       );
     });
-  }, [workingSelectedSkillSets, skillSets]);
+  }, [allSkillSetNames, skillSets]);
 
   // Count how many times each skill is granted for free via starting skills or skill sets
   const skillCounts = useMemo(() => {
@@ -115,7 +122,7 @@ const Step5_Feats = () => {
     workingStartingSkills.forEach((s) => {
       counts[s] = (counts[s] || 0) + 1;
     });
-    workingSelectedSkillSets.forEach((setName) => {
+    allSkillSetNames.forEach((setName) => {
       const found = skillSets.find((s) => s.name === setName);
       found?.skills?.forEach((sk: any) => {
         const name = typeof sk === "string" ? sk : sk.name;
@@ -123,7 +130,7 @@ const Step5_Feats = () => {
       });
     });
     return counts;
-  }, [workingStartingSkills, workingSelectedSkillSets, skillSets, archetypeSkill]);
+  }, [workingStartingSkills, allSkillSetNames, skillSets, archetypeSkill]);
 
   const [availablePoints, setAvailablePoints] = useState(baseSkillPoints); // Initial points
 
@@ -159,10 +166,10 @@ const Step5_Feats = () => {
     }
 
     if (
-      JSON.stringify(selectedSkillSets) !==
+      JSON.stringify(selectedSkillSetNames) !==
       JSON.stringify(workingSelectedSkillSets)
     ) {
-      setWorkingSelectedSkillSets(selectedSkillSets || []);
+      setWorkingSelectedSkillSets(selectedSkillSetNames || []);
     }
 
     if (
@@ -202,7 +209,7 @@ const Step5_Feats = () => {
       let updated = prev.filter((f) => {
         if (f.free && f.source?.startsWith("Skill Set: ")) {
           const setName = f.source.replace("Skill Set: ", "");
-          return workingSelectedSkillSets.includes(setName);
+          return allSkillSetNames.includes(setName);
         }
         if (f.free && f.source?.startsWith("Archetype: ")) {
           const arch = f.source.replace("Archetype: ", "");
@@ -223,7 +230,7 @@ const Step5_Feats = () => {
         }
       });
 
-      workingSelectedSkillSets.forEach((setName) => {
+      allSkillSetNames.forEach((setName) => {
         const set = skillSets.find((s) => s.name === setName);
         if (!set) return;
 
@@ -236,9 +243,7 @@ const Step5_Feats = () => {
           const key = `Skill Set: ${setName}|${name}`;
           const existingCount = countMap[key] || 0;
           for (let i = existingCount; i < count; i++) {
-            const focusInfo = focusFeats[name];
-            const input = focusInfo ? Array(focusInfo.count).fill("") : "";
-            updated.push({ name, input, source: `Skill Set: ${setName}`, free: true });
+            updated.push({ name, input: "", source: `Skill Set: ${setName}`, free: true });
           }
           countMap[key] = count;
         });
@@ -247,9 +252,7 @@ const Step5_Feats = () => {
       (archetypeFreeMap[archetype] || []).forEach((name) => {
         const key = `Archetype: ${archetype}|${name}`;
         if (!countMap[key]) {
-          const focusInfo = focusFeats[name];
-          const input = focusInfo ? Array(focusInfo.count).fill("") : "";
-          updated.push({ name, input, source: `Archetype: ${archetype}`, free: true });
+          updated.push({ name, input: "", source: `Archetype: ${archetype}`, free: true });
           countMap[key] = 1;
         }
       });
@@ -257,39 +260,14 @@ const Step5_Feats = () => {
       (originFreeMap[currentOrigin] || []).forEach((name) => {
         const key = `Origin: ${currentOrigin}|${name}`;
         if (!countMap[key]) {
-          const focusInfo = focusFeats[name];
-          const input = focusInfo ? Array(focusInfo.count).fill("") : "";
-          updated.push({ name, input, source: `Origin: ${currentOrigin}`, free: true });
+          updated.push({ name, input: "", source: `Origin: ${currentOrigin}`, free: true });
           countMap[key] = 1;
         }
       });
 
-      if (archetypeSkill) {
-        const sfKey = `Archetype Skill: ${archetypeSkill}|Skill Focus`;
-        const hasFeat = updated.some(
-          (f) => f.name === "Skill Focus" && f.source === sfKey
-        );
-        if (skillCounts[archetypeSkill] >= 2) {
-          if (!hasFeat) {
-            updated.push({
-              name: "Skill Focus",
-              input: archetypeSkill,
-              source: sfKey,
-              free: true,
-            });
-          }
-        } else {
-          if (hasFeat) {
-            updated = updated.filter(
-              (f) => !(f.name === "Skill Focus" && f.source === sfKey)
-            );
-          }
-        }
-      }
-
       return updated;
     });
-  }, [workingSelectedSkillSets, archetype, currentOrigin, skillSets, feats, archetypeSkill, skillCounts]);
+  }, [allSkillSetNames, archetype, currentOrigin, skillSets, feats, archetypeSkill, skillCounts]);
 
 
   // --- Point Calculation Logic ---
@@ -339,10 +317,10 @@ const Step5_Feats = () => {
     setStartingSkills(workingStartingSkills);
     setSelectedSkills(workingSelectedSkills);
     setSelectedFeats(workingSelectedFeats);
-    setSelectedSkillSets(workingSelectedSkillSets);
+    setSelectedSkillSets(allSkillSetObjs as any);
     setSelectedManeuvers(workingSelectedManeuvers);
     setStartingManeuver(workingStartingManeuver);
-  }, [workingStartingSkills, workingSelectedSkills, workingSelectedFeats, workingSelectedSkillSets, workingSelectedManeuvers, workingStartingManeuver]);
+  }, [workingStartingSkills, workingSelectedSkills, workingSelectedFeats, workingSelectedSkillSets, workingSelectedManeuvers, workingStartingManeuver, allSkillSetObjs]);
 
   // Ensure skills with free focuses have placeholders for those focuses
   useEffect(() => {
@@ -471,7 +449,7 @@ const Step5_Feats = () => {
       selectedSkills: workingSelectedSkills,
       startingSkills: workingStartingSkills,
       selectedFeats: workingSelectedFeats, // Include current feats for chained prereqs
-      selectedSkillSets: workingSelectedSkillSets,
+      selectedSkillSets: allSkillSetObjs,
       skillSets,
     };
 
@@ -509,9 +487,12 @@ const Step5_Feats = () => {
     }
 
     // Add the feat with default input structure
-    const focusInfo = focusFeats[featName];
-    const input = focusInfo ? Array(focusInfo.count).fill("") : "";
-    setWorkingSelectedFeats((prev) => [...prev, { name: featName, input, free: false }]);
+    const skillSet = featToAdd.grantsSkillSet ? "" : undefined;
+    const edge = featToAdd.grantsEdge ? "" : undefined;
+    setWorkingSelectedFeats((prev) => [
+      ...prev,
+      { name: featName, input: "", free: false, skillSet, edge },
+    ]);
   };
 
   // Remove a feat by its index in the workingSelectedFeats array
@@ -565,7 +546,7 @@ const Step5_Feats = () => {
       selectedSkills: workingSelectedSkills,
       startingSkills: workingStartingSkills,
       selectedFeats: workingSelectedFeats,
-      selectedSkillSets: workingSelectedSkillSets,
+      selectedSkillSets: allSkillSetObjs,
       skillSets,
     };
 
@@ -604,7 +585,7 @@ const Step5_Feats = () => {
     setStartingSkills(workingStartingSkills);
     setSelectedSkills(workingSelectedSkills);
     setSelectedFeats(workingSelectedFeats);
-    setSelectedSkillSets(workingSelectedSkillSets);
+    setSelectedSkillSets(allSkillSetObjs as any);
     setSelectedManeuvers(workingSelectedManeuvers);
     setStartingManeuver(workingStartingManeuver);
 
@@ -634,29 +615,9 @@ const Step5_Feats = () => {
         });
     });
 
-    // Add focuses granted by feats
-    workingSelectedFeats.forEach((f) => {
-      const info = focusFeats[f.name];
-      if (!info || !Array.isArray(f.input)) return;
-      const ability =
-        skills.find((sk) => sk.name === info.skill)?.ability || 'N/A';
-      f.input
-        .filter((x) => x && x !== '__custom__')
-        .forEach((focus) => {
-          finalSkills.push({
-            name: info.skill,
-            ability,
-            ranks: 0,
-            trained: true,
-            specialization: focus,
-          } as any);
-        });
-    });
-
     const finalFeats = workingSelectedFeats.map((f) => ({
       name: f.name,
       source: f.source,
-      skillSetName: f.input && f.name === 'Skill Focus' ? f.input : undefined,
     }));
 
     const finalManeuvers = [
@@ -728,7 +689,7 @@ const Step5_Feats = () => {
               selectedSkills: workingSelectedSkills,
               startingSkills: workingStartingSkills,
               selectedFeats: workingSelectedFeats,
-              selectedSkillSets: workingSelectedSkillSets,
+              selectedSkillSets: allSkillSetObjs,
               skillSets,
             };
 
@@ -766,8 +727,7 @@ const Step5_Feats = () => {
                 source={source}
                 locked={locked}
                 autoSelected={autoSelected}
-              />
-
+              >
               {count > 0 && (
                 <div className="ml-4 mt-2 space-y-2">
                   {workingSelectedFeats
@@ -784,24 +744,36 @@ const Step5_Feats = () => {
                         >
                           Remove
                         </Button>
-                        {feat.name === 'Skill Focus' ? (
+                        {feat.grantsSkillSet && (
                           <select
-                            value={workingSelectedFeats[f.originalIndex]?.input || ''}
+                            value={workingSelectedFeats[f.originalIndex]?.skillSet || ''}
                             onChange={(e) => {
                               const updated = [...workingSelectedFeats];
-                              updated[f.originalIndex].input = e.target.value;
+                              updated[f.originalIndex].skillSet = e.target.value;
                               setWorkingSelectedFeats(updated);
                             }}
                             className="border rounded p-1 text-black"
                           >
-                            <option value="">Select a skill</option>
-                            {skills.map((s) => (
-                              <option key={s.name} value={s.name}>
-                                {s.name}
-                              </option>
+                            <option value="">Select a skill set</option>
+                            {(feat.grantsEdge ? allSkillSetNames : skillSets.map((s:any)=>s.name)).map((name: string) => (
+                              <option key={name} value={name}>{name}</option>
                             ))}
                           </select>
-                        ) : feat.name === 'Additional Origin' ? (
+                        )}
+                        {feat.grantsEdge && (
+                          <input
+                            type="text"
+                            placeholder="Enter edge"
+                            value={workingSelectedFeats[f.originalIndex]?.edge || ''}
+                            onChange={(e) => {
+                              const updated = [...workingSelectedFeats];
+                              updated[f.originalIndex].edge = e.target.value;
+                              setWorkingSelectedFeats(updated);
+                            }}
+                            className="border rounded p-1 text-black"
+                          />
+                        )}
+                        {feat.name === 'Additional Origin' ? (
                           <select
                             value={workingSelectedFeats[f.originalIndex]?.input || ''}
                             onChange={(e) => {
@@ -820,53 +792,6 @@ const Step5_Feats = () => {
                                 </option>
                               ))}
                           </select>
-                        ) : feat.name === 'Exceptional Scavenger' ? (
-                          <select
-                            value={workingSelectedFeats[f.originalIndex]?.input || ''}
-                            onChange={(e) => {
-                              const updated = [...workingSelectedFeats];
-                              updated[f.originalIndex].input = e.target.value;
-                              setWorkingSelectedFeats(updated);
-                            }}
-                            className="border rounded p-1 text-black"
-                          >
-                            <option value="">Select a field</option>
-                            {scavengeFocusOptions.map((opt: string) => (
-                              <option key={opt} value={opt}>
-                                {opt}
-                              </option>
-                            ))}
-                          </select>
-                        ) : focusFeats[feat.name] ? (
-                          <div className="flex flex-col gap-1">
-                            {Array.from({ length: focusFeats[feat.name].count }).map((_, j) => (
-                              <select
-                                key={j}
-                                value={
-                                  Array.isArray(workingSelectedFeats[f.originalIndex]?.input)
-                                    ? (workingSelectedFeats[f.originalIndex].input as string[])[j] || ''
-                                    : ''
-                                }
-                                onChange={(e) => {
-                                  const updated = [...workingSelectedFeats];
-                                  const arr = Array.isArray(updated[f.originalIndex].input)
-                                    ? [...(updated[f.originalIndex].input as string[])]
-                                    : [];
-                                  arr[j] = e.target.value;
-                                  updated[f.originalIndex].input = arr;
-                                  setWorkingSelectedFeats(updated);
-                                }}
-                                className="border rounded p-1 text-black"
-                              >
-                                <option value="">Select a focus</option>
-                                {getFocusOptions(focusFeats[feat.name].skill).map((opt: string) => (
-                                  <option key={opt} value={opt}>
-                                    {opt}
-                                  </option>
-                                ))}
-                              </select>
-                            ))}
-                          </div>
                         ) : feat.input_label && feat.name !== 'Learn Maneuver' && (
                           <input
                             type="text"
@@ -926,6 +851,7 @@ const Step5_Feats = () => {
                   )}
                 </div>
               )}
+              </FeatCard>
             </div>
           );
             });

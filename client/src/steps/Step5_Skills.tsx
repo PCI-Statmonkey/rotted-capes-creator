@@ -13,21 +13,9 @@ import { useCharacterBuilder } from "@/lib/Stores/characterBuilder";
 import ManeuverDropdown from "@/components/ManeuverDropdown";
 import SkillSetCard from "@/components/SkillSetCard";
 import SkillCard from "@/components/SkillCard";
-import FeatCard from "@/components/FeatCard";
 import { meetsPrerequisites, getMissingPrereqs } from "@/utils/requirementValidator";
 import useCachedGameContent from "@/hooks/useCachedGameContent";
 import { useCharacter } from "@/context/CharacterContext";
-
-const focusFeats: Record<string, { skill: string; count: number }> = {
-  Ace: { skill: "Pilot", count: 2 },
-  "Eclectic Knowledge": { skill: "Academics", count: 2 },
-  "Engineering Prodigy": { skill: "Engineering", count: 2 },
-  "Healing Hands": { skill: "Medicine", count: 2 },
-  Hunter: { skill: "Outdoorsman", count: 2 },
-  "Scientific Mind": { skill: "Science", count: 2 },
-  "Technological Savant": { skill: "Technology", count: 2 },
-  Wheelman: { skill: "Drive", count: 2 },
-};
 
 // Basic starting skills list
 const basicStartingSkills = [
@@ -58,11 +46,16 @@ const Step5_Skills = () => {
   const currentOrigin = character.origin?.split("(")[0].trim();
   const baseSkillPoints = currentOrigin === "Highly Trained" ? 30 : 20;
 
+  const selectedSkillSetNames = useMemo(
+    () => (selectedSkillSets || []).map((s: any) => (typeof s === 'string' ? s : s.name)),
+    [selectedSkillSets]
+  );
+
   // --- Local state for working selections ---
   const [workingStartingSkills, setWorkingStartingSkills] = useState<string[]>([]);
   const [workingSelectedSkills, setWorkingSelectedSkills] = useState<{ name: string; focuses: string[] }[]>([]);
   // Store selected feats with an optional input for feats like 'Skill Focus' or 'Learn Maneuver'
-  const [workingSelectedFeats, setWorkingSelectedFeats] = useState<{ name: string; input?: string | string[]; free?: boolean }[]>([]);
+  const [workingSelectedFeats, setWorkingSelectedFeats] = useState<{ name: string; input?: string; free?: boolean }[]>([]);
   const [workingSelectedSkillSets, setWorkingSelectedSkillSets] = useState<string[]>([]);
   // Maneuvers are stored separately, indexed to correspond with 'Learn Maneuver' feats
   const [workingSelectedManeuvers, setWorkingSelectedManeuvers] = useState<string[]>([]);
@@ -147,10 +140,10 @@ const Step5_Skills = () => {
     }
 
     if (
-      JSON.stringify(selectedSkillSets) !==
+      JSON.stringify(selectedSkillSetNames) !==
       JSON.stringify(workingSelectedSkillSets)
     ) {
-      setWorkingSelectedSkillSets(selectedSkillSets || []);
+      setWorkingSelectedSkillSets(selectedSkillSetNames || []);
     }
 
     if (
@@ -220,7 +213,7 @@ const Step5_Skills = () => {
     setStartingSkills(workingStartingSkills);
     setSelectedSkills(workingSelectedSkills);
     setSelectedFeats(workingSelectedFeats);
-    setSelectedSkillSets(workingSelectedSkillSets);
+    setSelectedSkillSets(workingSelectedSkillSets.map((n) => ({ name: n })) as any);
     setSelectedManeuvers(workingSelectedManeuvers);
     setStartingManeuver(workingStartingManeuver);
   }, [workingStartingSkills, workingSelectedSkills, workingSelectedFeats, workingSelectedSkillSets, workingSelectedManeuvers, workingStartingManeuver]);
@@ -360,7 +353,7 @@ const Step5_Skills = () => {
       selectedSkills: workingSelectedSkills,
       startingSkills: workingStartingSkills,
       selectedFeats: workingSelectedFeats, // Include current feats for chained prereqs
-      selectedSkillSets: workingSelectedSkillSets,
+      selectedSkillSets: workingSelectedSkillSets.map((n) => ({ name: n })),
       skillSets,
     };
 
@@ -385,9 +378,7 @@ const Step5_Skills = () => {
         return;
     }
 
-    const focusInfo = focusFeats[featName];
-    const input = focusInfo ? Array(focusInfo.count).fill("") : "";
-    setWorkingSelectedFeats((prev) => [...prev, { name: featName, input }]);
+    setWorkingSelectedFeats((prev) => [...prev, { name: featName, input: "" }]);
   };
 
   // Remove a feat by its index in the workingSelectedFeats array
@@ -431,7 +422,7 @@ const Step5_Skills = () => {
       selectedSkills: workingSelectedSkills,
       startingSkills: workingStartingSkills,
       selectedFeats: workingSelectedFeats,
-      selectedSkillSets: workingSelectedSkillSets,
+      selectedSkillSets: workingSelectedSkillSets.map((n) => ({ name: n })),
       skillSets,
     };
 
@@ -464,7 +455,7 @@ const Step5_Skills = () => {
     setStartingSkills(workingStartingSkills);
     setSelectedSkills(workingSelectedSkills);
     setSelectedFeats(workingSelectedFeats);
-    setSelectedSkillSets(workingSelectedSkillSets);
+    setSelectedSkillSets(workingSelectedSkillSets.map((n) => ({ name: n })) as any);
     setSelectedManeuvers(workingSelectedManeuvers);
     setStartingManeuver(workingStartingManeuver);
     setSkillsTab("feats");
@@ -529,7 +520,7 @@ const Step5_Skills = () => {
                     selectedSkills: workingSelectedSkills,
                     startingSkills: workingStartingSkills,
                     selectedFeats: workingSelectedFeats,
-                    selectedSkillSets: workingSelectedSkillSets,
+                    selectedSkillSets: workingSelectedSkillSets.map((n) => ({ name: n })),
                     skillSets,
                   }
                 )
