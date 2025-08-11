@@ -1,10 +1,10 @@
-# \<h1\>The Archive
+# The Archive
 
 What would a zombie game… wait… a zombie game with superpowers, magic, and weird science be without super zombies, abominations, wild animals, and one of the most dangerous threats…other survivors who want to take what’s yours. Below, we will delve into the various types of threats you can throw at your heroes.  
   
 You may notice that many of the threats found in the following pages have a budget that is either more or less than their build budget. That’s fine; if you are creating your threats, don’t feel straitjacketed by your build budget, but don’t go overboard. It's all a balancing act.
 
-## \<h2\>Types of Threats post Z’day 
+## Types of Threats post Z’day 
 
 **Animals:**
 
@@ -37,7 +37,7 @@ Dead heads, Z’s, you all know what these are, the ravenous dead right out of N
 
 The epitome of horror, super zombies combine the relentless hunger of their lesser brethren with heightened intelligence and superpowers. These are THE apex predators. Luckily, they are also VERY territorial and almost never work together. Facing a Super Z should never be taken lightly. Only those with inborn powers can become Super Z’s, but that’s not to say that these horrific adversaries are not capable of using technology, they most certainly are.
 
-## \<h2\>Animals 
+## Animals 
 
 Here are a few animal stats blocks. This is in no way an exhaustive list; feel free to modify these stat blocks to create or create your own animals.
 
@@ -1182,11 +1182,11 @@ Here are a few animal stats blocks. This is in no way an exhaustive list; feel f
 </tbody>
 </table>
 
-## \<h2\>Survivors: Allies & Adversaries 
+## Survivors: Allies & Adversaries 
 
 One of the greatest threats to an enclave often comes in the form of other survivors. Below, we provide some general threat blocks that you can tweak as needed, changing skills and equipment on the fly as you see fit.
 
-### \<h3\>Bystanders 
+### Bystanders 
 
 These are your regular, run-of-the-mill survivors. Alone, they are not much of a threat, but they can be dangerous in large groups. Bystanders commonly possess a range of skill sets, with some individuals having specialized skill sets, such as a professional engineer or doctor.
 
@@ -1373,7 +1373,7 @@ Here are some examples of common skill sets among common survivors:
 </tbody>
 </table>
 
-### \<h3\>Hardened Survivors
+### Hardened Survivors
 
 Especially capable bystanders, hardened threats could be capable military personnel or raiders who travel from enclave to enclave, taking what they want and killing others. A rugged survivalist who goes it alone, spreading news from enclave to enclave, sometimes acting as a loose group of letter carriers. Or a survivor with an especially useful and sought-after skill set.
 
@@ -1852,7 +1852,7 @@ Especially capable bystanders, hardened threats could be capable military person
 </tbody>
 </table>
 
-## \<h2\>Abominations 
+## Abominations 
 
 ### Silver Kong
 
@@ -2348,7 +2348,7 @@ You don’t see the Maw coming. You hear the earth split… and pray it isn’t 
 </tbody>
 </table>
 
-### \<h3\>Zombie: Common “Deadhead”
+### Zombie: Common “Deadhead”
 
 *Now this is the common zombie… You know the type, just lumbering around looking for something to eat, or lying there waiting for some poor sod to walk by looking like lunch.  *
   
@@ -2512,7 +2512,7 @@ Deadheads are the most common and least remarkable of the infected; that is, as 
 </tbody>
 </table>
 
-### \<h3\>Zombie: Cleaver
+### Zombie: Cleaver
 
 *"You can hear them before you see them… bone scraping concrete. Then they’re on you, hacking and hacking, like they’ll never stop."*
 
@@ -2677,7 +2677,7 @@ Cleavers are what happens when the virus decides sharp is better than blunt. The
 </tbody>
 </table>
 
-### \<h3\>Zombie: Ninja’Z
+### Zombie: Ninja’Z
 
 *No you noob! Ninja’z are not like black pajama warring zombies with swords! Ugh, it’s called a metaphor! Now, as I was saying, some zombies are sneaky, VERY sneaky, and way smarter than they have any business being.*
 
@@ -2841,7 +2841,7 @@ Among the most feared of the strange infected, Ninja’Z are proof that some par
 </tbody>
 </table>
 
-### \<h3\>Zombie: Phasers 
+### Zombie: Phasers 
 
 *"Barricades don’t matter to them. Doors. Walls. Steel. None of it matters. They’re already inside."*
 
@@ -3013,7 +3013,7 @@ Various eggheads believe they are the result of some failed attempt by a Super-B
 </tbody>
 </table>
 
-### \<h3\>Zombie: Twitchers
+### Zombie: Twitchers
 
 *"Don’t watch them too long. You’ll lose track of where the next one’s coming from."*
 
@@ -3183,11 +3183,11 @@ Twitchers are what happens when the virus burns through a body faster than it ca
 </tbody>
 </table>
 
-## \<h3\>Super Z’s
+## Super Z’s
 
-**\<H1\>The Anatomy of a Super-Zombie**
+# The Anatomy of a Super-Zombie
 
-\<h2\>**Personal Log of Milos Gojkovic; 203rd Year of Life:**
+## Personal Log of Milos Gojkovic; 203rd Year of Life:
 
 *It appears that despite protestations to the contrary by these so-called “Super-Heroes”, it was indeed providence that granted me the knowledge to extend my life beyond the norm. For the riddle of why those imbued with abilities far beyond those of mortal men are able to retain a semblance of their intellect, while normal men are raised from the dead with little more than the cognitive ability to recognize a food source and feed upon it, is one which only someone of my soaring intellect could possibly answer.*
 
@@ -3197,13 +3197,13 @@ Twitchers are what happens when the virus burns through a body faster than it ca
 
 *While the danger is high, the chance to finally uncover the mystery behind the ruination of humanity and perhaps discover a way to reverse it is well worth any risks.*
 
-\<h2\>**The Psychology of a Super Zombie**
+## The Psychology of a Super Zombie
 
 While most of the Risen Dead have the cognitive ability of a lower-class animal species, able to identify food and devour it, those who manifested some “super-power” or ability prior to being infected and reanimated manage to retain a high level of intellect, albeit without the capacity to tell between right and wrong or even empathize with their victims.
 
 The reason for this remains unknown at this time and may never be revealed. What is known is that the Super-Zombie, regardless of the retention of a measure of their intellect, is known to behave in certain patterns that may save the life of the Living if they are aware and able to act upon this information.
 
-\<h3\>**Cunning and Resourcefulness**
+### Cunning and Resourcefulness
 
 *“Torch?” said Stonehenge into his mike, “I have a pack of Z’s shambling up to the west gate. Engaging to disperse.”*
 
@@ -3235,7 +3235,7 @@ To be clear, a Super Zombie will never be found contemplating its existence in a
 
 Sitting at the top of the world’s new food chain, the Super-Zombies are the ultimate predators with mankind (Homo sapiens and superior alike) having been knocked from the top perch and finding themselves the hunted.
 
-\<h3\>**Appealing to their Better Angels**
+### Appealing to their Better Angels
 
 *The Grit lamp pole tightened across her chest with every breath becoming harder to make. She looked into the eyes of the man that she had idolized for so many years and finally married just months before Z-Day.*
 
@@ -3258,7 +3258,7 @@ Some of the brightest medical scientists left theorized that the virus reanimati
 
 Imagine a serial killer with powers and abilities beyond the ken of mortal man; truly a nightmarish scenario!
 
-\<h2\>**The Ultra Z’d and its Territorial Nature**
+## The Ultra Z’d and its Territorial Nature
 
 \<\<INSERT ART – Z’d Titan vs Z’d Judgment\>\>
 
@@ -3314,7 +3314,7 @@ It is this overriding motivation that compels the Risen and the Z’d to act as 
 
 As to why some of the Z’d prefer to remain solitary predators rather than team up with others of their kind is something that we may never know, but should be ever grateful for.
 
-**\<h3\>Wolf Pack Social Structure**
+### Wolf Pack Social Structure
 
 *The Constrictor and Arsenal sloughed through the stagnant and fetid labyrinth that were the sewers of Paradigm City in search of a former petty super-villain whose only power was to turn herself into a two-dimensional state, earning her the sobriquet of the Paper-Thin Thief. Being one of the first Z’d supers, she was a menace that would have bordered on the comical if it weren’t for the fact that she’d devoured three members of the enclave.*
 
@@ -3352,7 +3352,7 @@ Perhaps this new form of (un)life is still evolving and mutating into another st
 
 For all our beliefs that we have advanced as a species, humans are a jealous lot and now we face a new species that is superior to the majority of the living humans left. The past doesn’t paint a very hopeful end for us.
 
-**\<h3\>Lair**
+### Lair
 
 *Gregory Austin awoke groggily and discovered that the incessant hum wasn’t just the ringing of his ears, but a cage of energy he appeared to be imprisoned within. Even gassed or drugged or whatever they did to him, a mere force field wouldn’t hold the Undying Man for long. That was when he noticed the IV attached to his left arm and the fact that he couldn’t feel his left leg. Not a surprise really, given that it seemed to have been expertly amputated.*
 
@@ -3396,7 +3396,7 @@ A group of at least eight (and possibly more) lower powered Z’d seem to have j
 
 Other Z’d Supers take over an area that makes little sense to others, but perhaps there is a personal connection or recollection associated with the place known only to them. Case in point is the Lone Tree Mall, where the vocal menace of the Z’d Sonic Boom has taken up residence. Recently discovered by a group of scavengers that broke into the mall looking for supplies that might be of assistance to their enclave, they stumbled across this malevolent creature. Luckily heroes were sent to investigate when they failed to check in and drove off the monster. Whether it has returned to the mall or found a new place to reside is unknown at this time.
 
-### \<h3\>Blackstalk 
+### Blackstalk 
 
 Simon Blackwell was a Biospeleologist, a biologist who specialized in life forms that live in caves, when during an expedition to a local cave network there was a collapse of the cave floor. Injured and buried beneath tons of rubble, his last conscious thought was of a strange violet light coming nearer. Awakening, he found himself being nursed back to health by the strange subterranean people known as the Molindur. Years passed and the strange diet and medicine given to heal him began a strange metamorphosis. He developed strange and unique powers, powers that allowed him to control plants and vines to a terrible effect.
 
@@ -3572,7 +3572,7 @@ Somehow, one of the Molindur became infected with the Z’Virus and began transf
 </tbody>
 </table>
 
-### \<h3\>Defender
+### Defender
 
 The hero known as the Defender has the unique power of being able to construct “walls” or simple
 
@@ -3757,7 +3757,7 @@ It was unfortunate that the Defender landed near the bisected body of a zombie, 
 </tbody>
 </table>
 
-### \<h3\> Dr. Wraith 
+###  Dr. Wraith 
 
 Dr. Anton Czernasky chortled quietly to himself each time he thought of the accolades Sentinel and the Mayor of Paradigm City had showered upon him. Pretending to be a crime fighter was the perfect cover for his true goal: becoming the most prolific serial killer the world had ever known. Using his pow­ers made it child’s play to carve up his victims, what the police and newspapers called “ritual killings”. Fools - they failed to see his true genius, his meticulous work in dissecting his sub­jects. He was up to 38 victims before Z-Day, and then it all became rather pointless.
 
@@ -3938,7 +3938,7 @@ Slashing Blade:</strong> When Dr. Wraith is damaged by a melee attack from a cre
 </tbody>
 </table>
 
-### \<h3\> Electrocity
+###  Electrocity
 
 The mutant hero Electrocity has been patrolling the streets of Paradigm City for almost a decade now. His remarkable ability to transform his body into an electrical current, as well as his complete mastery over electricity, has made him one of the City’s premier heroes as well as a well-respected ally of the Protectors.
 
@@ -4123,7 +4123,7 @@ Rip and Rend:</strong> +13 to hit Av, Reach: melee, one creature, hit: 2d8+9 (17
 </tbody>
 </table>
 
-### \<h3\> Flaming Fist
+###  Flaming Fist
 
 One of the last scions of the famed Denton Dynasty, the Flaming Fist’s powers manifested in her late teens. A beautiful young woman named Jennifer Denton began modeling as a way to offset the disappointment of not having manifested any powers like those of her famous parents. However, during a swimsuit shoot in frigid Norway, her body reacted to the cold by engulfing her in flames. Elated that she had finally inherited her birthright, young Jenny became the Flam­ing Fist, able to generate intense flames that she can form into fireballs or gouts of white-hot flames.
 
@@ -4313,7 +4313,7 @@ Rip and Rend:</strong> +13 to hit Av, Reach: melee, one creature, hit: 2d8+9 (17
 </tbody>
 </table>
 
-### \<h3\> Golden Ram
+###  Golden Ram
 
 Always considered a large boy, Darren Lasker was born to be a bully. From getting kids’ lunch money to eventually small-time robbery, he had a rap sheet longer than some hardened criminals by the time he was fourteen. As an adult, Lasker found that his strength and endurance bordered on the super-human, and as long as he only fought normal police officers, he was right. It was when a superhero would show up that his vaunted powers paled in comparison.
 
@@ -4493,7 +4493,7 @@ Rip and Rend:</strong> +11 to hit Av, Reach: melee, one creature, hit: 2d6+8 (14
 </tbody>
 </table>
 
-### \<h3\> Judgment
+###  Judgment
 
 Heralded as the supreme hero of the Soviet Union, the Judgment of the People basked in honor and glory showered upon him by his homeland and government. This proud man, the first of the Soviet Ultras, and arguably the most powerful, led the fight for Mother Russia from Moscow to the deserts of Afghanistan and even to the very doorstep of the capitalist dogs and their superhuman puppets.
 
@@ -4674,7 +4674,7 @@ Rip and Rend:</strong> +23 to hit Av, Reach: melee, one creature, hit: 2d6+15 (2
 </tbody>
 </table>
 
-### \<h3\> Light Master & Mirage 
+###  Light Master & Mirage 
 
 Reid Thompson and Frank Addison grew up together in the city of Manchester in the United Kingdom, becoming closer than brothers as they matured from adolescence to adulthood. When the time came, they both enlisted in the British Army and were sent to fight in the Afghan War, serving with bravery and honor. It was while exploring an ancient fort in western Afghanistan that their unit stumbled across a strange artifact. The relic resembled a small egg made of an unearthly metal with a mercurial quality to it. When one of the soldiers went to unearth it fully, the relic let off a shrill scream before exploding. Of the six men in the unit, only Reid and Frank survived.
 
@@ -4690,7 +4690,7 @@ When Z-Day arrived, Reid and Frank were reactivated and sent, along with every o
 
 Finding his old friend, Reid ambushed and infected Frank with the Z-Virus. Within hours, wracked by horrible fever and pain, Frank died, and the Z’d version of Mirage awoke. Now, the deadly duo spread death and destruction across the world on their Flesh Tasting Tour, as Reid likes to call it.
 
-### \<h3\> Light Master 
+###  Light Master 
 
 **Personality Flaw:** Bloodthirsty
 
@@ -4864,7 +4864,7 @@ Finding his old friend, Reid ambushed and infected Frank with the Z-Virus. Withi
 </tbody>
 </table>
 
-### \<h3\> Mirage
+###  Mirage
 
 **Personality Flaw:** Always a sidekick
 
