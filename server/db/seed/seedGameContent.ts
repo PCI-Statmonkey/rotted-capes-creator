@@ -62,6 +62,9 @@ async function runSeed() {
       skills: set.skills.map((s: any) => (typeof s === "string" ? { name: s } : s)),
       feats: set.feats || [],
       description: set.description || "",
+      ability: set.ability || "",
+      edges: set.edges || [],
+      deepCutTrigger: set.deepCutTrigger || "",
     }).onConflictDoNothing();
   }
 

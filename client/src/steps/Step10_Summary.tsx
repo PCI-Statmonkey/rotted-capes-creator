@@ -12,9 +12,11 @@ import { Check, Save, Shield, Heart, Target } from "lucide-react";
 import { apiRequest } from "@/lib/queryClient";
 import CharacterPdfButton from "@/components/CharacterPdfButton";
 import { parsePrerequisite, getMissingPrereqs, formatPrerequisite } from "@/utils/requirementValidator";
+import { useCharacterBuilder } from "@/lib/Stores/characterBuilder";
 
 export default function Step10_Summary() {
   const { character, updateCharacterField, saveCharacter } = useCharacter();
+  const { selectedSkillSets } = useCharacterBuilder();
   const summaryRef = useRef<HTMLDivElement>(null);
 
   const RANK_BONUS = 1; // Starting characters begin with a +1 rank bonus
@@ -608,6 +610,35 @@ export default function Step10_Summary() {
         </Card>
       </div>
       
+      {/* Skill Sets Section */}
+      <Card className="mb-6">
+        <CardHeader className="py-3">
+          <CardTitle>Skill Sets & Deep Cut Triggers</CardTitle>
+        </CardHeader>
+        <CardContent className="max-h-64 overflow-y-auto">
+          {selectedSkillSets.length > 0 ? (
+            <div className="space-y-2">
+              {selectedSkillSets.map((set, idx) => (
+                <div key={idx} className="border-b border-gray-700 pb-2 last:border-0">
+                  <div className="font-semibold">{set.name}</div>
+                  {set.ability && (
+                    <div className="text-xs text-gray-400">Ability: {set.ability}</div>
+                  )}
+                  {set.edges && set.edges.length > 0 && (
+                    <div className="text-xs text-gray-400">Edges: {set.edges.join(', ')}</div>
+                  )}
+                  {set.deepCutTrigger && (
+                    <div className="text-xs text-gray-400">Deep Cut Trigger: {set.deepCutTrigger}</div>
+                  )}
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-6 text-gray-500">No skill sets selected</div>
+          )}
+        </CardContent>
+      </Card>
+
       {/* Character Completion Checklist */}
       <Card className="mb-6">
         <CardHeader className="py-3">

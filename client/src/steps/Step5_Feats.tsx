@@ -11,7 +11,7 @@ import {
   TabsList,
   TabsTrigger,
 } from "@/components/ui/tabs";
-import { useCharacterBuilder } from "@/lib/Stores/characterBuilder";
+import { useCharacterBuilder, SelectedSkillSet } from "@/lib/Stores/characterBuilder";
 import FeatCard from "@/components/FeatCard";
 import { meetsPrerequisites, getMissingPrereqs } from "@/utils/requirementValidator";
 import useCachedGameContent from "@/hooks/useCachedGameContent";
@@ -53,7 +53,7 @@ const Step5_Feats = () => {
   const [workingSelectedSkills, setWorkingSelectedSkills] = useState<{ name: string; focuses: string[] }[]>([]);
   // Store selected feats with an optional input for feats like 'Skill Focus' or 'Learn Maneuver'
   const [workingSelectedFeats, setWorkingSelectedFeats] = useState<{ name: string; input?: string | string[]; source?: string; free?: boolean }[]>([]);
-  const [workingSelectedSkillSets, setWorkingSelectedSkillSets] = useState<string[]>([]);
+  const [workingSelectedSkillSets, setWorkingSelectedSkillSets] = useState<SelectedSkillSet[]>([]);
   // Maneuvers are stored separately, indexed to correspond with 'Learn Maneuver' feats
   const [workingSelectedManeuvers, setWorkingSelectedManeuvers] = useState<string[]>([]);
   const [workingStartingManeuver, setWorkingStartingManeuver] = useState<string>("");
@@ -98,8 +98,8 @@ const Step5_Feats = () => {
   });
 
   const skillsFromSets = useMemo(() => {
-    return workingSelectedSkillSets.flatMap((setName) => {
-      const found = skillSets.find((s) => s.name === setName);
+    return workingSelectedSkillSets.flatMap((sel) => {
+      const found = skillSets.find((s) => s.name === sel.name);
       return (
         found?.skills?.map((s: any) => (typeof s === "string" ? s : s.name)) || []
       );
@@ -115,8 +115,8 @@ const Step5_Feats = () => {
     workingStartingSkills.forEach((s) => {
       counts[s] = (counts[s] || 0) + 1;
     });
-    workingSelectedSkillSets.forEach((setName) => {
-      const found = skillSets.find((s) => s.name === setName);
+    workingSelectedSkillSets.forEach((sel) => {
+      const found = skillSets.find((s) => s.name === sel.name);
       found?.skills?.forEach((sk: any) => {
         const name = typeof sk === "string" ? sk : sk.name;
         counts[name] = (counts[name] || 0) + 1;
@@ -202,7 +202,7 @@ const Step5_Feats = () => {
       let updated = prev.filter((f) => {
         if (f.free && f.source?.startsWith("Skill Set: ")) {
           const setName = f.source.replace("Skill Set: ", "");
-          return workingSelectedSkillSets.includes(setName);
+          return workingSelectedSkillSets.some((s) => s.name === setName);
         }
         if (f.free && f.source?.startsWith("Archetype: ")) {
           const arch = f.source.replace("Archetype: ", "");
@@ -223,8 +223,8 @@ const Step5_Feats = () => {
         }
       });
 
-      workingSelectedSkillSets.forEach((setName) => {
-        const set = skillSets.find((s) => s.name === setName);
+      workingSelectedSkillSets.forEach((sel) => {
+        const set = skillSets.find((s) => s.name === sel.name);
         if (!set) return;
 
         const counts: Record<string, number> = {};
@@ -233,12 +233,12 @@ const Step5_Feats = () => {
         });
 
         Object.entries(counts).forEach(([name, count]) => {
-          const key = `Skill Set: ${setName}|${name}`;
+          const key = `Skill Set: ${sel.name}|${name}`;
           const existingCount = countMap[key] || 0;
           for (let i = existingCount; i < count; i++) {
             const focusInfo = focusFeats[name];
             const input = focusInfo ? Array(focusInfo.count).fill("") : "";
-            updated.push({ name, input, source: `Skill Set: ${setName}`, free: true });
+            updated.push({ name, input, source: `Skill Set: ${sel.name}`, free: true });
           }
           countMap[key] = count;
         });
@@ -295,8 +295,8 @@ const Step5_Feats = () => {
   // --- Point Calculation Logic ---
   // Recalculate available points whenever selections change
   useEffect(() => {
-    const skillSetPoints = workingSelectedSkillSets.reduce((acc, setName) => {
-      const found = skillSets.find((s) => s.name === setName);
+    const skillSetPoints = workingSelectedSkillSets.reduce((acc, sel) => {
+      const found = skillSets.find((s) => s.name === sel.name);
       return acc + (found?.points || 0); // Add points for each selected skill set
     }, 0);
 
@@ -436,16 +436,16 @@ const Step5_Feats = () => {
   };
 
   // Toggle selection of a skill set
-  const toggleSkillSet = (setName: string) => {
-    const exists = workingSelectedSkillSets.includes(setName);
+  const toggleSkillSet = (set: any) => {
+    const exists = workingSelectedSkillSets.some((s) => s.name === set.name);
     if (exists) {
-      // If skill set is already selected, remove it
-      setWorkingSelectedSkillSets(workingSelectedSkillSets.filter((s) => s !== setName));
+      setWorkingSelectedSkillSets(workingSelectedSkillSets.filter((s) => s.name !== set.name));
     } else {
-      const found = skillSets.find((s) => s.name === setName);
-      // Only add if skill set exists and there are enough points
-      if (!found || availablePoints < found.points) return;
-      setWorkingSelectedSkillSets([...workingSelectedSkillSets, setName]);
+      if (!set || availablePoints < set.points) return;
+      setWorkingSelectedSkillSets([
+        ...workingSelectedSkillSets,
+        { name: set.name, ability: set.ability || '', edges: set.edges || [], deepCutTrigger: set.deepCutTrigger || '' },
+      ]);
     }
   };
 

@@ -9,7 +9,7 @@ import {
   TabsList,
   TabsTrigger,
 } from "@/components/ui/tabs";
-import { useCharacterBuilder } from "@/lib/Stores/characterBuilder";
+import { useCharacterBuilder, SelectedSkillSet } from "@/lib/Stores/characterBuilder";
 import ManeuverDropdown from "@/components/ManeuverDropdown";
 import SkillSetCard from "@/components/SkillSetCard";
 import SkillCard from "@/components/SkillCard";
@@ -63,20 +63,32 @@ const Step5_Skills = () => {
   const [workingSelectedSkills, setWorkingSelectedSkills] = useState<{ name: string; focuses: string[] }[]>([]);
   // Store selected feats with an optional input for feats like 'Skill Focus' or 'Learn Maneuver'
   const [workingSelectedFeats, setWorkingSelectedFeats] = useState<{ name: string; input?: string | string[]; free?: boolean }[]>([]);
-  const [workingSelectedSkillSets, setWorkingSelectedSkillSets] = useState<string[]>([]);
+  const [workingSelectedSkillSets, setWorkingSelectedSkillSets] = useState<SelectedSkillSet[]>([]);
   // Maneuvers are stored separately, indexed to correspond with 'Learn Maneuver' feats
   const [workingSelectedManeuvers, setWorkingSelectedManeuvers] = useState<string[]>([]);
   const [workingStartingManeuver, setWorkingStartingManeuver] = useState<string>("");
+
+  const [customSkillSets, setCustomSkillSets] = useState<any[]>([]);
+  const [newSetName, setNewSetName] = useState("");
+  const [newSetDescription, setNewSetDescription] = useState("");
+  const [newSetAbility, setNewSetAbility] = useState("");
 
   // --- Data loaded from JSON and API ---
   const { data: skills } = useCachedGameContent<any>('skills');
   const { data: feats } = useCachedGameContent<any>('feats');
   const { data: skillSets } = useCachedGameContent<any>('skill-sets');
+  const edgeOptions = useMemo(() => {
+    return Array.from(
+      new Set(
+        (skillSets || []).flatMap((s: any) => s.edges || [])
+      )
+    );
+  }, [skillSets]);
   const { data: maneuvers } = useCachedGameContent<any>('maneuvers');
 
   const skillsFromSets = useMemo(() => {
-    return workingSelectedSkillSets.flatMap((setName) => {
-      const found = skillSets.find((s) => s.name === setName);
+    return workingSelectedSkillSets.flatMap((sel) => {
+      const found = skillSets.find((s) => s.name === sel.name);
       return (
         found?.skills?.map((s: any) => (typeof s === "string" ? s : s.name)) || []
       );
@@ -92,8 +104,8 @@ const Step5_Skills = () => {
     workingStartingSkills.forEach((s) => {
       counts[s] = (counts[s] || 0) + 1;
     });
-    workingSelectedSkillSets.forEach((setName) => {
-      const found = skillSets.find((s) => s.name === setName);
+    workingSelectedSkillSets.forEach((sel) => {
+      const found = skillSets.find((s) => s.name === sel.name);
       found?.skills?.forEach((sk: any) => {
         const name = typeof sk === "string" ? sk : sk.name;
         counts[name] = (counts[name] || 0) + 1;
@@ -101,6 +113,31 @@ const Step5_Skills = () => {
     });
     return counts;
   }, [workingStartingSkills, workingSelectedSkillSets, skillSets, archetypeSkill]);
+
+  useEffect(() => {
+    if (!skillSets) return;
+    const customs = workingSelectedSkillSets.filter(
+      (sel) => !skillSets.some((s: any) => s.name === sel.name)
+    );
+    if (customs.length > 0) {
+      setCustomSkillSets((prev) => {
+        const existing = prev.map((c) => c.name);
+        const additions = customs
+          .filter((c) => !existing.includes(c.name))
+          .map((c) => ({
+            name: c.name,
+            points: 0,
+            description: "",
+            ability: c.ability,
+            skills: [],
+            feats: [],
+            edges: c.edges,
+            deepCutTrigger: c.deepCutTrigger,
+          }));
+        return [...prev, ...additions];
+      });
+    }
+  }, [skillSets, workingSelectedSkillSets]);
 
   const [availablePoints, setAvailablePoints] = useState(baseSkillPoints); // Initial points
   const [currentTab, setCurrentTab] = useState(skillsTab || "starting"); // Current active tab
@@ -176,8 +213,8 @@ const Step5_Skills = () => {
   // --- Point Calculation Logic ---
   // Recalculate available points whenever selections change
   useEffect(() => {
-    const skillSetPoints = workingSelectedSkillSets.reduce((acc, setName) => {
-      const found = skillSets.find((s) => s.name === setName);
+    const skillSetPoints = workingSelectedSkillSets.reduce((acc, sel) => {
+      const found = skillSets.find((s) => s.name === sel.name);
       return acc + (found?.points || 0); // Add points for each selected skill set
     }, 0);
 
@@ -325,17 +362,53 @@ const Step5_Skills = () => {
   };
 
   // Toggle selection of a skill set
-  const toggleSkillSet = (setName: string) => {
-    const exists = workingSelectedSkillSets.includes(setName);
+  const toggleSkillSet = (set: any) => {
+    const exists = workingSelectedSkillSets.some((s) => s.name === set.name);
     if (exists) {
-      // If skill set is already selected, remove it
-      setWorkingSelectedSkillSets(workingSelectedSkillSets.filter((s) => s !== setName));
+      setWorkingSelectedSkillSets(workingSelectedSkillSets.filter((s) => s.name !== set.name));
     } else {
-      const found = skillSets.find((s) => s.name === setName);
-      // Only add if skill set exists and there are enough points
+      const found = skillSets.find((s) => s.name === set.name);
       if (!found || availablePoints < found.points) return;
-      setWorkingSelectedSkillSets([...workingSelectedSkillSets, setName]);
+      setWorkingSelectedSkillSets([
+        ...workingSelectedSkillSets,
+        { name: set.name, ability: set.ability || '', edges: set.edges || [], deepCutTrigger: set.deepCutTrigger || '' },
+      ]);
     }
+  };
+
+  const updateSkillSetEdges = (name: string, edges: string[]) => {
+    setWorkingSelectedSkillSets((prev) =>
+      prev.map((s) => (s.name === name ? { ...s, edges } : s))
+    );
+  };
+
+  const updateSkillSetDeepCut = (name: string, value: string) => {
+    setWorkingSelectedSkillSets((prev) =>
+      prev.map((s) => (s.name === name ? { ...s, deepCutTrigger: value } : s))
+    );
+  };
+
+  const addCustomSkillSet = () => {
+    const name = newSetName.trim();
+    if (!name) return;
+    const custom = {
+      name,
+      points: 0,
+      description: newSetDescription.trim(),
+      ability: newSetAbility.trim(),
+      skills: [],
+      feats: [],
+      edges: [],
+      deepCutTrigger: "",
+    };
+    setCustomSkillSets([...customSkillSets, custom]);
+    setWorkingSelectedSkillSets([
+      ...workingSelectedSkillSets,
+      { name, ability: custom.ability, edges: [], deepCutTrigger: "" },
+    ]);
+    setNewSetName("");
+    setNewSetDescription("");
+    setNewSetAbility("");
   };
 
   // Toggle selection of a basic starting skill (max 2)
@@ -544,13 +617,39 @@ const Step5_Skills = () => {
 
         <TabsContent value="skillsets">
           <h3 className="text-white text-md mb-2">Skill Sets</h3>
+          <div className="mb-4 space-y-2">
+            <input
+              className="w-full p-1 rounded bg-gray-800 border border-gray-600 text-accent"
+              placeholder="Custom Skill Set Name"
+              value={newSetName}
+              onChange={(e) => setNewSetName(e.target.value)}
+            />
+            <input
+              className="w-full p-1 rounded bg-gray-800 border border-gray-600 text-accent"
+              placeholder="Ability"
+              value={newSetAbility}
+              onChange={(e) => setNewSetAbility(e.target.value)}
+            />
+            <textarea
+              className="w-full p-1 rounded bg-gray-800 border border-gray-600 text-accent"
+              placeholder="Description"
+              value={newSetDescription}
+              onChange={(e) => setNewSetDescription(e.target.value)}
+            />
+            <Button onClick={addCustomSkillSet}>Add Custom Skill Set</Button>
+          </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {skillSets.map((set) => (
+            {[...(skillSets || []), ...customSkillSets].map((set) => (
               <SkillSetCard
                 key={set.name}
                 set={set}
-                isSelected={workingSelectedSkillSets.includes(set.name)}
-                onToggle={() => toggleSkillSet(set.name)}
+                isSelected={workingSelectedSkillSets.some((s) => s.name === set.name)}
+                selectedEdges={workingSelectedSkillSets.find((s) => s.name === set.name)?.edges || []}
+                deepCutTrigger={workingSelectedSkillSets.find((s) => s.name === set.name)?.deepCutTrigger || ""}
+                edgeOptions={edgeOptions}
+                onToggle={() => toggleSkillSet(set)}
+                onEdgesChange={(edges) => updateSkillSetEdges(set.name, edges)}
+                onDeepCutChange={(val) => updateSkillSetDeepCut(set.name, val)}
               />
             ))}
           </div>

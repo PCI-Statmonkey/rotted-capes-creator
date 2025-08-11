@@ -213,8 +213,12 @@ export const meetsPrerequisites = (feat: any, character: any) => {
   } = character;
 
   // Combine all skill names from starting, selected, and skill sets
+  const selectedSetNames = Array.isArray(selectedSkillSets)
+    ? selectedSkillSets.map((s: any) => (typeof s === 'string' ? s : s.name))
+    : [];
+
   const skillsFromSets = skillSets
-    .filter((set: any) => selectedSkillSets.includes(set.name))
+    .filter((set: any) => selectedSetNames.includes(set.name))
     .flatMap((set: any) => set.skills);
 
   const normalizeSkill = (s: any) =>
@@ -341,8 +345,11 @@ export const getMissingPrereqs = (feat: any, character: any) => {
     maneuverRequirements = []
   } = character;
 
+  const selectedSetNames = Array.isArray(selectedSkillSets)
+    ? selectedSkillSets.map((s: any) => (typeof s === 'string' ? s : s.name))
+    : [];
   const skillsFromSets = skillSets
-    .filter((set: any) => selectedSkillSets.includes(set.name))
+    .filter((set: any) => selectedSetNames.includes(set.name))
     .flatMap((set: any) => set.skills);
 
   const normalizeSkill = (s: any) =>
