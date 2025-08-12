@@ -56,7 +56,7 @@ const Step5_Skills = () => {
   const [workingStartingSkills, setWorkingStartingSkills] = useState<string[]>([]);
   const [workingSelectedSkills, setWorkingSelectedSkills] = useState<{ name: string; focuses: string[] }[]>([]);
   // Store selected feats with an optional input for feats like 'Skill Focus' or 'Learn Maneuver'
-  const [workingSelectedFeats, setWorkingSelectedFeats] = useState<{ name: string; input?: string | string[]; free?: boolean }[]>([]);
+  const [workingSelectedFeats, setWorkingSelectedFeats] = useState<{ name: string; input?: string | string[]; free?: boolean; source?: string; skillSet?: string; edge?: string; option?: string; stance?: string; usesPerScene?: number }[]>([]);
   const [workingSelectedSkillSets, setWorkingSelectedSkillSets] = useState<{ name: string; edges: string[]; deepCutNotes?: string }[]>([]);
   // Maneuvers are stored separately, indexed to correspond with 'Learn Maneuver' feats
   const [workingSelectedManeuvers, setWorkingSelectedManeuvers] = useState<string[]>([]);
@@ -411,7 +411,15 @@ const Step5_Skills = () => {
         return;
     }
 
-    setWorkingSelectedFeats((prev) => [...prev, { name: featName, input: "" }]);
+    const skillSet = featToAdd.grantsSkillSet ? "" : undefined;
+    const edge = featToAdd.grantsEdge ? "" : undefined;
+    const option = featToAdd.options ? "" : undefined;
+    const stance = featToAdd.stance ? "" : undefined;
+    const usesPerScene = featToAdd.usesPerScene;
+    setWorkingSelectedFeats((prev) => [
+      ...prev,
+      { name: featName, input: "", skillSet, edge, option, stance, usesPerScene },
+    ]);
   };
 
   // Remove a feat by its index in the workingSelectedFeats array

@@ -46,12 +46,38 @@ assert.deepStrictEqual(
   }
 );
 
+assert.deepStrictEqual(
+  parsePrerequisiteString('Wisdom and Constitution of 13+'),
+  {
+    type: 'compound',
+    operator: 'and',
+    requirements: [
+      { type: 'ability', name: 'Wisdom', value: 13 },
+      { type: 'ability', name: 'Constitution', value: 13 }
+    ]
+  }
+);
+
 assert(
   meetsPrerequisites({ prerequisites: 'Str 13 or Dex 15' }, character)
 );
 
 assert(
   !meetsPrerequisites({ prerequisites: 'Str 13 Dex 15' }, character)
+);
+
+assert(
+  meetsPrerequisites(
+    { prerequisites: 'Wisdom and Constitution of 13+' },
+    { ...character, abilityScores: { wisdom: 13, constitution: 13 } }
+  )
+);
+
+assert(
+  !meetsPrerequisites(
+    { prerequisites: 'Wisdom and Constitution of 13+' },
+    { ...character, abilityScores: { wisdom: 12, constitution: 13 } }
+  )
 );
 
 const missing = getMissingPrereqs({ prerequisites: 'Str 13 Dex 15' }, character);

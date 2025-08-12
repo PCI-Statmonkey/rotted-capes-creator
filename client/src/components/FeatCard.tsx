@@ -18,6 +18,9 @@ interface FeatCardProps {
     description: string;
     type?: string;
     prerequisites?: Prerequisite[];
+    options?: string[];
+    usesPerScene?: number;
+    stance?: boolean;
   };
   isSelected: boolean;
   isDisabled: boolean;
@@ -85,6 +88,11 @@ const FeatCard: React.FC<FeatCardProps> = ({
             {feat.type === 'power' && <span className="ml-1">(power)</span>}
           </div>
           <div className="text-white text-sm">{feat.description}</div>
+          {feat.usesPerScene !== undefined && (
+            <div className="text-xs text-white mt-1">
+              Uses per scene: {feat.usesPerScene}
+            </div>
+          )}
           {source && (
             <div className="text-xs text-accent mt-1">Free from {source}</div>
           )}
