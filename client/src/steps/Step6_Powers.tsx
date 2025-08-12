@@ -13,9 +13,9 @@ import { useCharacter } from "@/context/CharacterContext";
 import { getRankCap } from "@/utils/rank";
 import { trackEvent } from "@/lib/analytics";
 import { getScoreData, formatModifier } from "@/lib/utils";
-import powersData from "@/rules/powers.json" assert { type: "json" };
-import powerSetsData from "@/rules/powerSets.json" assert { type: "json" };
-import powerModsData from "@/rules/powerMods.json" assert { type: "json" };
+import powersData from "@/rules/powers.json" with { type: "json" };
+import powerSetsData from "@/rules/powerSets.json" with { type: "json" };
+import powerModsData from "@/rules/powerMods.json" with { type: "json" };
 
 // Define the power sets
 interface PowerSet {

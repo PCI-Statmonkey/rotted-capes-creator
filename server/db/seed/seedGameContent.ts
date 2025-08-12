@@ -15,18 +15,18 @@ import {
   originFeatures,
   gear,
 } from "../../../shared/schema";
-import featsData from "../../../client/src/rules/feats.json" assert { type: "json" };
-import skillsData from "../../../client/src/rules/skills.json" assert { type: "json" };
-import skillSetsData from "../../../client/src/rules/skillSets.json" assert { type: "json" };
-import originsData from "../../../client/src/rules/origins.json" assert { type: "json" };
-import archetypesData from "../../../client/src/rules/archetypes.json" assert { type: "json" };
-import powersData from "../../../client/src/rules/powers.json" assert { type: "json" };
-import powerSetsData from "../../../client/src/rules/powerSets.json" assert { type: "json" };
-import powerModifiersData from "../../../client/src/rules/powerMods.json" assert { type: "json" };
-import originFeaturesData from "../../../client/src/rules/origin_features.json" assert { type: "json" };
-import maneuversData from "../../../client/src/rules/maneuvers.json" assert { type: "json" };
-import gearData from "../../../client/src/rules/gear.json" assert { type: "json" };
-import weaknessesData from "../../../client/src/rules/weaknesses.json" assert { type: "json" };
+import featsData from "../../../client/src/rules/feats.json" with { type: "json" };
+import skillsData from "../../../client/src/rules/skills.json" with { type: "json" };
+import skillSetsData from "../../../client/src/rules/skillSets.json" with { type: "json" };
+import originsData from "../../../client/src/rules/origins.json" with { type: "json" };
+import archetypesData from "../../../client/src/rules/archetypes.json" with { type: "json" };
+import powersData from "../../../client/src/rules/powers.json" with { type: "json" };
+import powerSetsData from "../../../client/src/rules/powerSets.json" with { type: "json" };
+import powerModifiersData from "../../../client/src/rules/powerMods.json" with { type: "json" };
+import originFeaturesData from "../../../client/src/rules/origin_features.json" with { type: "json" };
+import maneuversData from "../../../client/src/rules/maneuvers.json" with { type: "json" };
+import gearData from "../../../client/src/rules/gear.json" with { type: "json" };
+import weaknessesData from "../../../client/src/rules/weaknesses.json" with { type: "json" };
 
 async function runSeed() {
   console.log("🌱 Seeding skills...");
