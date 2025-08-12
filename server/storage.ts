@@ -13,6 +13,7 @@ import {
   maneuvers,
   gear,
   characters,
+  InsertSkillSet,
 } from "@shared/schema";
 import { eq } from "drizzle-orm";
 
@@ -48,8 +49,8 @@ export const storage = {
   // SKILL SET
   getAllSkillSet: () => db.select().from(skillSets),
   getSkillSetById: (id: number) => db.query.skillSets.findFirst({ where: eq(skillSets.id, id) }),
-  createSkillSet: (data: any) => db.insert(skillSets).values(data).returning().then(r => r[0]),
-  updateSkillSet: (id: number, data: any) => db.update(skillSets).set(data).where(eq(skillSets.id, id)).returning().then(r => r[0]),
+  createSkillSet: (data: InsertSkillSet) => db.insert(skillSets).values(data).returning().then(r => r[0]),
+  updateSkillSet: (id: number, data: Partial<InsertSkillSet>) => db.update(skillSets).set(data).where(eq(skillSets.id, id)).returning().then(r => r[0]),
   deleteSkillSet: (id: number) => db.delete(skillSets).where(eq(skillSets.id, id)),
 
   // CHARACTER

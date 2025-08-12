@@ -46,7 +46,7 @@ const Step5_Feats = () => {
   const [workingStartingSkills, setWorkingStartingSkills] = useState<string[]>([]);
   const [workingSelectedSkills, setWorkingSelectedSkills] = useState<{ name: string; focuses: string[] }[]>([]);
   // Store selected feats with an optional input for feats like 'Skill Focus' or 'Learn Maneuver'
-  const [workingSelectedFeats, setWorkingSelectedFeats] = useState<{ name: string; input?: string; source?: string; free?: boolean; skillSet?: string; edge?: string }[]>([]);
+  const [workingSelectedFeats, setWorkingSelectedFeats] = useState<{ name: string; input?: string | string[]; source?: string; free?: boolean; skillSet?: string; edge?: string }[]>([]);
   const [workingSelectedSkillSets, setWorkingSelectedSkillSets] = useState<string[]>([]);
   // Maneuvers are stored separately, indexed to correspond with 'Learn Maneuver' feats
   const [workingSelectedManeuvers, setWorkingSelectedManeuvers] = useState<string[]>([]);
@@ -87,13 +87,13 @@ const Step5_Feats = () => {
     () =>
       workingSelectedFeats
         .filter((f) => f.skillSet)
-        .map((f) => ({ name: f.skillSet as string, edge: f.edge, source: f.name })),
+        .map((f) => ({ name: f.skillSet as string, edges: f.edge ? [f.edge] : [], source: f.name })),
     [workingSelectedFeats]
   );
 
   const allSkillSetObjs = useMemo(
     () => [
-      ...workingSelectedSkillSets.map((name) => ({ name })),
+      ...workingSelectedSkillSets.map((name) => ({ name, edges: [] })),
       ...featGrantedSkillSets,
     ],
     [workingSelectedSkillSets, featGrantedSkillSets]
