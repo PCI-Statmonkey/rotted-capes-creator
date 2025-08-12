@@ -54,6 +54,7 @@ export interface GearItem {
   description: string;
   ap?: number;
   starting?: boolean;
+  batteryPowered?: boolean;
 }
 
 export interface Feat {

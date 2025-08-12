@@ -166,6 +166,7 @@ async function runSeed() {
         category,
         ap: item.ap ?? item.costAP ?? 0,
         tags: item.qualities || item.tags || item.ammo_type || [],
+        batteryPowered: item.batteryPowered ?? false,
       }).onConflictDoNothing();
     }
   }
