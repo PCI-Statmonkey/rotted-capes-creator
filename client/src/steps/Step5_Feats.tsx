@@ -1,7 +1,7 @@
 // Step5_Feats.tsx
 import { useEffect, useState, useMemo } from "react";
 import { motion } from "framer-motion";
-import { ArrowLeft, ArrowRight } from "lucide-react";
+import { ArrowLeft, ArrowRight, Info } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
@@ -11,6 +11,12 @@ import {
   TabsList,
   TabsTrigger,
 } from "@/components/ui/tabs";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { useCharacterBuilder } from "@/lib/Stores/characterBuilder";
 import FeatCard from "@/components/FeatCard";
 import { meetsPrerequisites, getMissingPrereqs } from "@/utils/requirementValidator";
@@ -644,7 +650,32 @@ const Step5_Feats = () => {
 
   return (
     <motion.div className="bg-panel rounded-2xl p-6 comic-border overflow-hidden halftone-bg">
-      <h2 className="text-2xl font-display text-red-500 mb-4">Step 5: Feats</h2>
+      <div className="flex items-center gap-2 mb-4">
+        <h2 className="text-2xl font-display text-red-500">Step 5: Feats</h2>
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <a
+                href="/docs/2.3_Feats%205.3.md"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <Info className="h-5 w-5 text-gray-400" />
+              </a>
+            </TooltipTrigger>
+            <TooltipContent side="right" className="max-w-xs">
+              <p>
+                Feats represent the special talents and techniques gained through
+                training or experience.
+              </p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+      </div>
+      <p className="text-gray-300 mb-4">
+        These options let heroes stand toe-to-toe with Super-Zs armed only with
+        training, instinct, and knowhow.
+      </p>
       <div className="text-sm text-white mb-4 text-[1.05rem]">
         Points Available: <span className="text-accent font-bold">{availablePoints}</span>
       </div>
