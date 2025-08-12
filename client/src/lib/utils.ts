@@ -1,12 +1,13 @@
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
+import { getMasterValue } from "@shared/masterValues";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-export function calculateModifier(score: number): number {
-  return Math.floor((score - 10) / 2);
+export function getScoreData(score: number) {
+  return getMasterValue(score);
 }
 
 export function formatModifier(mod: number): string {
