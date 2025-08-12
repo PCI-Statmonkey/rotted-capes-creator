@@ -19,8 +19,6 @@ export default function Step10_Summary() {
   const { selectedSkillSets } = useCharacterBuilder();
   const summaryRef = useRef<HTMLDivElement>(null);
 
-  const RANK_BONUS = 1; // Starting characters begin with a +1 rank bonus
-
   // Calculate derived stats
   const calculateDerivedStats = () => {
     const strMod = getScoreData(character.abilities.strength.value).modifier;
@@ -31,13 +29,13 @@ export default function Step10_Summary() {
     const chaMod = getScoreData(character.abilities.charisma.value).modifier;
     
     // Avoidance uses the better of Dexterity or Intelligence plus rank bonus
-    const avoidance = 10 + Math.max(dexMod, intMod) + RANK_BONUS;
+    const avoidance = 10 + Math.max(dexMod, intMod) + character.rankBonus;
 
     // Fortitude uses the better of Strength or Constitution plus rank bonus
-    const fortitude = 10 + Math.max(strMod, conMod) + RANK_BONUS;
+    const fortitude = 10 + Math.max(strMod, conMod) + character.rankBonus;
 
     // Willpower uses the better of Charisma or Wisdom plus rank bonus
-    const willpower = 10 + Math.max(chaMod, wisMod) + RANK_BONUS;
+    const willpower = 10 + Math.max(chaMod, wisMod) + character.rankBonus;
     
     // Stamina calculation
     const stamina = avoidance + fortitude + willpower;
