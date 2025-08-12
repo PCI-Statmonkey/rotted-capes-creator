@@ -357,9 +357,32 @@ const handleContinue = () => {
       transition={{ duration: 0.3 }}
     >
       <div className="mb-6 border-b-2 border-gray-700 pb-4">
-        <h2 className="font-display text-3xl text-red-500 tracking-wide">Step 4: Ability Scores</h2>
+        <div className="flex items-center gap-2">
+          <h2 className="font-display text-3xl text-red-500 tracking-wide">Step 4: Ability Scores</h2>
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <a
+                  href="/docs/2.1_Character%20Creation%207.6.md#determine-your-ability-scores"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <Info className="h-5 w-5 text-gray-400" />
+                </a>
+              </TooltipTrigger>
+              <TooltipContent side="right" className="max-w-xs">
+                <p>
+                  Your ability scores represent your hero’s attributes, how strong,
+                  fast, quick, and wise they are.
+                </p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+        </div>
         <p className="text-gray-300 mt-2">
-          Assign your character's ability scores and see bonuses from your Origin and Archetype.
+          Allocate points across Strength, Dexterity, Constitution, Wisdom,
+          Intelligence, and Charisma, then apply bonuses from your origin and
+          archetype.
         </p>
         <div className="flex items-center gap-4 mt-3 text-xs bg-gray-800 p-2 rounded-md">
           <div className="flex items-center">
