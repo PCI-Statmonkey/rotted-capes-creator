@@ -2,9 +2,7 @@ import { createContext, useContext, useState, useEffect, ReactNode } from "react
 import { STORAGE_KEY, saveToLocalStorage, loadFromLocalStorage, getScoreData } from "@/lib/utils";
 import type { MasterValue } from "@shared/masterValues";
 import { trackCharacterEvent, trackEvent } from "@/lib/analytics";
-
-export const RANK_CAPS = [0, 20, 24, 28, 32, 36, 40, 44, 47, 50, 50];
-export const getRankCap = (rank: number) => RANK_CAPS[rank] || RANK_CAPS[RANK_CAPS.length - 1];
+import { RANK_CAPS, getRankCap } from "../utils/rank";
 const DEFAULT_RANK_BONUS = 1; // Starting rank bonus
 
 export interface Ability extends Omit<MasterValue, "min" | "max"> {

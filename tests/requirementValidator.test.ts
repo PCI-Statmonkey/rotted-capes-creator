@@ -1,14 +1,10 @@
 import assert from 'assert';
 import { parsePrerequisiteString, meetsPrerequisites, getMissingPrereqs } from '../client/src/utils/requirementValidator.ts';
-
-const character = {
-  abilityScores: { strength: 14, dexterity: 12 },
-  selectedSkills: [],
-  startingSkills: [],
-  selectedSkillSets: [],
-  skillSets: [],
-  selectedFeats: []
-};
+import {
+  baseCharacter as character,
+  customSkillSetCharacter,
+  featGrantedSkillSetCharacter
+} from './fixtures/characters.ts';
 
 assert.deepStrictEqual(
   parsePrerequisiteString('Str/Dex 13'),
@@ -123,18 +119,31 @@ assert(
   missingManeuver.some((r) => r.type === 'maneuverPrereq')
 );
 
-// Skill set and edge prerequisites
-const charWithSet = {
-  ...character,
-  selectedSkillSets: [{ name: 'Occultist', edges: ['Arcane'], source: 'Skill Focus' }],
-  skillSets: [{ name: 'Occultist', skills: [] }],
-};
-assert(meetsPrerequisites({ prerequisites: 'Skill Set: Occultist' }, charWithSet));
-assert(meetsPrerequisites({ prerequisites: 'Edge: Arcane' }, charWithSet));
+// Skill set and edge prerequisites using fixtures
+assert(
+  meetsPrerequisites(
+    { prerequisites: 'Skill Set: Occultist' },
+    customSkillSetCharacter
+  )
+);
+assert(
+  meetsPrerequisites(
+    { prerequisites: 'Edge: Arcane' },
+    customSkillSetCharacter
+  )
+);
 const missingEdge = getMissingPrereqs(
   { prerequisites: 'Edge: Stealthy' },
-  charWithSet
+  customSkillSetCharacter
 );
 assert(missingEdge.some((r) => r.type === 'edge'));
 
-console.log('All tests passed');
+// Feat-granted skill set
+assert(
+  meetsPrerequisites(
+    { prerequisites: 'Skill Set: Scout' },
+    featGrantedSkillSetCharacter
+  )
+);
+
+console.log('requirementValidator tests passed');

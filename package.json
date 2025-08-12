@@ -9,7 +9,7 @@
     "start": "cross-env NODE_ENV=production node dist/index.js",
     "precheck": "node ./scripts/precheck.js",
     "check": "tsc",
-    "test": "tsx tests/requirementValidator.test.ts",
+    "test": "tsx tests/runAllTests.ts",
     "db:push": "drizzle-kit push",
     "seed:game": "tsx server/db/seed/seedGameContent.ts"
   },
