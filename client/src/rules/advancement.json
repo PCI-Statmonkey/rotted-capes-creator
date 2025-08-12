@@ -1,0 +1,10 @@
+[
+  {
+    "name": "Optional Rule: Retcon",
+    "description": "Rotted Capes has a lot of character options, so much so that it’s very easy for a player to create a hero they are just not happy playing. For this, we have the Retcon rule: any time before the hero hits Epsilon level 9, they can change their character’s ability scores and powers by going back to those steps of hero creation and then applying any leveling features they may have gained. Don’t allow this if someone is attempting to game the system; the retcon is meant to be a safety net for new players.  **\\</side bar\\>**"
+  },
+  {
+    "name": "Optional Rule: Starting at a higher level.",
+    "description": "If you want to start your campaign at a higher rank, have your players create their heroes as usual. After which, have them add the following for each rank beyond rank 2 Epsilon.  - Increase your grit and rank bonus by 1.  - Increase your Power Ranks by **+3**  - Choose **3 Feats**.  - Choose **3 Origin Features**.  > **For example:** > If starting at Rank 5 (Beta, three Ranks above Epsilon):  - Rank Bonus and Grit increases to +5  - All Power Ranks increase by +9.  - Choosing **9 Feats**.  - Choose 9 **Origin** Features."
+  }
+]
