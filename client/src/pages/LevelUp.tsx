@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { useCharacter, getRankCap } from "@/context/CharacterContext";
+import { useCharacter } from "@/context/CharacterContext";
+import { getRankCap } from "@/utils/rank";
 import { Button } from "@/components/ui/button";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
