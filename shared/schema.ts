@@ -261,6 +261,10 @@ export const characterDataSchema = z.object({
   appearance: z.string().optional(),
   origin: z.string().optional(),
   archetype: z.string().optional(),
+  rank: z.number(),
+  level: z.number(),
+  rankBonus: z.number(),
+  grit: z.number(),
   abilities: z.object({
     strength: z.object({ value: z.number(), modifier: z.number() }),
     dexterity: z.object({ value: z.number(), modifier: z.number() }),

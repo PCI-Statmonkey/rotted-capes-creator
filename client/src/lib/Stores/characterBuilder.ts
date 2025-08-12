@@ -17,6 +17,10 @@ export type Character = {
     WIS: number;
     CHA: number;
   };
+  rank: number;
+  level: number;
+  rankBonus: number;
+  grit: number;
   startingSkills: string[];
   selectedSkills: CharacterSkill[];
   selectedFeats: { name: string; input?: string | string[]; source?: string; free?: boolean; skillSet?: string; edge?: string; option?: string; stance?: string; usesPerScene?: number }[];
@@ -53,6 +57,10 @@ export const useCharacterBuilder = () => {
     WIS: 10,
     CHA: 10,
   });
+  const [rank, setRank] = useState<number>(saved?.rank || 1);
+  const [level, setLevel] = useState<number>(saved?.level || 1);
+  const [rankBonus, setRankBonus] = useState<number>(saved?.rankBonus || 1);
+  const [grit, setGrit] = useState<number>(saved?.grit || 1);
 
   const resetBuilder = () => {
     localStorage.removeItem(BUILDER_STORAGE_KEY);
@@ -72,6 +80,10 @@ export const useCharacterBuilder = () => {
       WIS: 10,
       CHA: 10,
     });
+    setRank(1);
+    setLevel(1);
+    setRankBonus(1);
+    setGrit(1);
     setCurrentStep(1);
   };
 
@@ -87,8 +99,12 @@ export const useCharacterBuilder = () => {
       skillsTab,
       currentStep,
       archetypeSkill,
+      rank,
+      level,
+      rankBonus,
+      grit,
     });
-  }, [abilityScores, startingSkills, selectedSkills, selectedFeats, selectedSkillSets, selectedManeuvers, startingManeuver, skillsTab, currentStep, archetypeSkill]);
+  }, [abilityScores, startingSkills, selectedSkills, selectedFeats, selectedSkillSets, selectedManeuvers, startingManeuver, skillsTab, currentStep, archetypeSkill, rank, level, rankBonus, grit]);
 
   return {
     abilityScores,
@@ -111,6 +127,14 @@ export const useCharacterBuilder = () => {
     setCurrentStep,
     archetypeSkill,
     setArchetypeSkill,
+    rank,
+    setRank,
+    level,
+    setLevel,
+    rankBonus,
+    setRankBonus,
+    grit,
+    setGrit,
     resetBuilder,
   };
 };

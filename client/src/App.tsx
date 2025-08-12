@@ -4,6 +4,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import NotFound from "@/pages/not-found";
 import Home from "@/pages/Home";
 import Creator from "@/pages/Creator";
+import LevelUp from "@/pages/LevelUp";
 import { lazy, Suspense, useEffect } from "react";
 import MainLayout from "./components/MainLayout";
 import { initGA } from "@/lib/analytics";
@@ -32,6 +33,13 @@ function AppRouter() {
           {() => (
             <CharacterProvider>
               <Creator />
+            </CharacterProvider>
+          )}
+        </Route>
+        <Route path="/level-up">
+          {() => (
+            <CharacterProvider>
+              <LevelUp />
             </CharacterProvider>
           )}
         </Route>

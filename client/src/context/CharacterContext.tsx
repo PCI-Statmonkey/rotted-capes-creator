@@ -3,7 +3,9 @@ import { STORAGE_KEY, saveToLocalStorage, loadFromLocalStorage, getScoreData } f
 import type { MasterValue } from "@shared/masterValues";
 import { trackCharacterEvent, trackEvent } from "@/lib/analytics";
 
-const RANK_BONUS = 1; // Starting rank bonus used for derived stats
+export const RANK_CAPS = [0, 20, 24, 28, 32, 36, 40, 44, 47, 50, 50];
+export const getRankCap = (rank: number) => RANK_CAPS[rank] || RANK_CAPS[RANK_CAPS.length - 1];
+const DEFAULT_RANK_BONUS = 1; // Starting rank bonus
 
 export interface Ability extends Omit<MasterValue, "min" | "max"> {
   value: number;
@@ -80,6 +82,10 @@ export interface Character {
   archetype: string;
   personalityFlaws: string[];
   tagline: string;
+  rank: number;
+  level: number;
+  rankBonus: number;
+  grit: number;
   abilities: Abilities;
   skills: Skill[];
   powers: Power[];
@@ -127,6 +133,10 @@ export const createEmptyCharacter = (): Character => ({
   archetype: "",
   personalityFlaws: [],
   tagline: "",
+  rank: 1,
+  level: 1,
+  rankBonus: DEFAULT_RANK_BONUS,
+  grit: DEFAULT_RANK_BONUS,
   abilities: { ...defaultAbilities },
   skills: [],
   powers: [] as Power[],
@@ -189,32 +199,41 @@ export const CharacterProvider = ({ children }: { children: ReactNode }) => {
 
   const updateCharacterField = <K extends keyof Character>(field: K, value: Character[K]) => {
     setCharacter((prev) => {
+      let newValue: any = value;
+      if (field === 'powers') {
+        const cap = getRankCap(prev.rank);
+        newValue = (value as Power[]).map(p => ({ ...p, rank: Math.min(p.rank ?? 0, cap) }));
+      }
       const updatedCharacter = {
         ...prev,
-        [field]: value,
+        [field]: newValue,
         updatedAt: new Date().toISOString(),
       };
-      
+
       // Auto-save to local storage whenever a field is updated
       saveToLocalStorage(STORAGE_KEY, updatedCharacter);
-      
+
       return updatedCharacter;
     });
   };
 
   const updateAbilityScore = (ability: keyof Abilities, value: number) => {
-    const data = getScoreData(value);
-    setCharacter((prev) => ({
-      ...prev,
-      abilities: {
-        ...prev.abilities,
-        [ability]: {
-          value,
-          ...data,
+    setCharacter((prev) => {
+      const cap = getRankCap(prev.rank);
+      const capped = Math.min(value, cap);
+      const data = getScoreData(capped);
+      return {
+        ...prev,
+        abilities: {
+          ...prev.abilities,
+          [ability]: {
+            value: capped,
+            ...data,
+          },
         },
-      },
-      updatedAt: new Date().toISOString(),
-    }));
+        updatedAt: new Date().toISOString(),
+      };
+    });
     updateDerivedStats();
   };
 
@@ -235,11 +254,15 @@ export const CharacterProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const addPower = (power: Power) => {
-    setCharacter((prev) => ({
-      ...prev,
-      powers: [...prev.powers, power],
-      updatedAt: new Date().toISOString(),
-    }));
+    setCharacter((prev) => {
+      const cap = getRankCap(prev.rank);
+      const newPower = { ...power, rank: Math.min(power.rank ?? 0, cap) };
+      return {
+        ...prev,
+        powers: [...prev.powers, newPower],
+        updatedAt: new Date().toISOString(),
+      };
+    });
   };
 
   const removePower = (index: number) => {
@@ -545,48 +568,30 @@ export const CharacterProvider = ({ children }: { children: ReactNode }) => {
       return getOriginBonus(ability) + getArchetypeBonus(ability) + getPowerBonus(ability);
     };
     
-    // Calculate effective ability scores with bonuses
-    const effectiveAbilities = {
-      strength: {
-        ...character.abilities.strength,
-        value: character.abilities.strength.value + getTotalBonus('strength'),
-        ...getScoreData(character.abilities.strength.value + getTotalBonus('strength')),
-      },
-      dexterity: {
-        ...character.abilities.dexterity,
-        value: character.abilities.dexterity.value + getTotalBonus('dexterity'),
-        ...getScoreData(character.abilities.dexterity.value + getTotalBonus('dexterity')),
-      },
-      constitution: {
-        ...character.abilities.constitution,
-        value: character.abilities.constitution.value + getTotalBonus('constitution'),
-        ...getScoreData(character.abilities.constitution.value + getTotalBonus('constitution')),
-      },
-      intelligence: {
-        ...character.abilities.intelligence,
-        value: character.abilities.intelligence.value + getTotalBonus('intelligence'),
-        ...getScoreData(character.abilities.intelligence.value + getTotalBonus('intelligence')),
-      },
-      wisdom: {
-        ...character.abilities.wisdom,
-        value: character.abilities.wisdom.value + getTotalBonus('wisdom'),
-        ...getScoreData(character.abilities.wisdom.value + getTotalBonus('wisdom')),
-      },
-      charisma: {
-        ...character.abilities.charisma,
-        value: character.abilities.charisma.value + getTotalBonus('charisma'),
-        ...getScoreData(character.abilities.charisma.value + getTotalBonus('charisma')),
-      }
+    // Calculate effective ability scores with bonuses capped by rank
+    const cap = getRankCap(character.rank);
+    const getEffective = (ability: keyof Abilities) => {
+      const base = character.abilities[ability].value + getTotalBonus(ability);
+      const capped = Math.min(base, cap);
+      return { ...character.abilities[ability], value: capped, ...getScoreData(capped) };
     };
-    
+    const effectiveAbilities = {
+      strength: getEffective('strength'),
+      dexterity: getEffective('dexterity'),
+      constitution: getEffective('constitution'),
+      intelligence: getEffective('intelligence'),
+      wisdom: getEffective('wisdom'),
+      charisma: getEffective('charisma'),
+    };
+
     // Use effective abilities for derived stats
     setCharacter((prev) => ({
       ...prev,
-      defense: 10 + Math.max(effectiveAbilities.dexterity.modifier, effectiveAbilities.intelligence.modifier) + RANK_BONUS,
+      defense: 10 + Math.max(effectiveAbilities.dexterity.modifier, effectiveAbilities.intelligence.modifier) + prev.rankBonus,
       toughness: effectiveAbilities.constitution.modifier,
-      fortitude: 10 + Math.max(effectiveAbilities.strength.modifier, effectiveAbilities.constitution.modifier) + RANK_BONUS,
+      fortitude: 10 + Math.max(effectiveAbilities.strength.modifier, effectiveAbilities.constitution.modifier) + prev.rankBonus,
       reflex: effectiveAbilities.dexterity.modifier,
-      willpower: 10 + Math.max(effectiveAbilities.charisma.modifier, effectiveAbilities.wisdom.modifier) + RANK_BONUS,
+      willpower: 10 + Math.max(effectiveAbilities.charisma.modifier, effectiveAbilities.wisdom.modifier) + prev.rankBonus,
       initiative: effectiveAbilities.dexterity.modifier,
       updatedAt: new Date().toISOString(),
     }));
