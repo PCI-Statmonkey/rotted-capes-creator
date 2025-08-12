@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useCharacter } from "@/context/CharacterContext";
 import { useCharacterBuilder } from "@/lib/Stores/characterBuilder";
 import useCachedGameContent from "@/hooks/useCachedGameContent";
+import { Battery } from "lucide-react";
 import {
   Tabs,
   TabsContent,
@@ -22,10 +23,15 @@ import { getGameContent } from "@/lib/api";
 // Types
 type GoBagType = "survivalist" | "infiltrator" | "technician" | "medic" | "bystander";
 
+interface GoBagItem {
+  name: string;
+  batteryPowered?: boolean;
+}
+
 interface GoBag {
   name: string;
   description: string;
-  items: string[];
+  items: GoBagItem[];
 }
 
 interface Item {
@@ -34,6 +40,7 @@ interface Item {
   ap: number;
   examples?: string[];
   ammoType?: string[];
+  batteryPowered?: boolean;
 }
 
 // Go-Bags
@@ -43,15 +50,15 @@ const goBags: Record<GoBagType, GoBag> = {
     description:
       "Focused on long-term survival with water purification and navigation tools.",
     items: [
-      "High Capacity Water Resistant Backpack",
-      "Banged up Shake Flashlight",
-      "Patched up bivouac Sack",
-      "3 Liter Hand Powered UV Water Purifier (8,000 water treatments)",
-      "EMT Medical Field First Aid kit (4 uses left)",
-      "Compass OR GPS",
-      "Mess Kit Ration (7 days worth)",
-      "Flare gun and 4 flares",
-      "Collapsible Fishing Rod",
+      { name: "High Capacity Water Resistant Backpack" },
+      { name: "Banged up Shake Flashlight" },
+      { name: "Patched up bivouac Sack" },
+      { name: "3 Liter Hand Powered UV Water Purifier (8,000 water treatments)" },
+      { name: "EMT Medical Field First Aid kit (4 uses left)" },
+      { name: "Compass OR GPS", batteryPowered: true },
+      { name: "Mess Kit Ration (7 days worth)" },
+      { name: "Flare gun and 4 flares" },
+      { name: "Collapsible Fishing Rod" },
     ],
   },
   infiltrator: {
@@ -59,15 +66,15 @@ const goBags: Record<GoBagType, GoBag> = {
     description:
       "Tactical gear focused on stealth, observation, and combat operations.",
     items: [
-      "Water-resistant Tactical Ergo Pack",
-      "Night scope and scope mount OR Laser sight and mount OR Pocket Lock Pick Set",
-      "Water Resistant Night Vision Binoculars",
-      "Tactical Holster Vest OR Tactical Sheath Utility Belt",
-      "1 clip/magazine of ammo OR 2 Hand Grenades",
-      "Climbing Kit",
-      "Gas Mask",
-      "2- Throat communicators with 1- 2-way radio/walkie-talkie",
-      "Well-worn leather Tactical gloves",
+      { name: "Water-resistant Tactical Ergo Pack" },
+      { name: "Night scope and scope mount OR Laser sight and mount OR Pocket Lock Pick Set" },
+      { name: "Water Resistant Night Vision Binoculars" },
+      { name: "Tactical Holster Vest OR Tactical Sheath Utility Belt" },
+      { name: "1 clip/magazine of ammo OR 2 Hand Grenades" },
+      { name: "Climbing Kit" },
+      { name: "Gas Mask" },
+      { name: "2- Throat communicators with 1- 2-way radio/walkie-talkie", batteryPowered: true },
+      { name: "Well-worn leather Tactical gloves" },
     ],
   },
   technician: {
@@ -75,16 +82,16 @@ const goBags: Record<GoBagType, GoBag> = {
     description:
       "Essential tools for repairs, electrical work, and mechanical maintenance.",
     items: [
-      "Utility Belt",
-      "Banged up Shake Flashlight",
-      "2-way radio/walkie-talkie",
-      "Solar Powered Jump Starter",
-      "100-Piece Mechanics Tool Kit missing 25 pieces OR 100-Piece Home Essential Tool Kit missing 25 pieces",
-      "Workman Gloves",
-      "Multi-Tool",
-      "Tool Belt",
-      "Small solar power charger with battery",
-      "Old phone with 32GB of movies, music and apps",
+      { name: "Utility Belt" },
+      { name: "Banged up Shake Flashlight" },
+      { name: "2-way radio/walkie-talkie", batteryPowered: true },
+      { name: "Solar Powered Jump Starter" },
+      { name: "100-Piece Mechanics Tool Kit missing 25 pieces OR 100-Piece Home Essential Tool Kit missing 25 pieces" },
+      { name: "Workman Gloves" },
+      { name: "Multi-Tool" },
+      { name: "Tool Belt" },
+      { name: "Small solar power charger with battery", batteryPowered: true },
+      { name: "Old phone with 32GB of movies, music and apps", batteryPowered: true },
     ],
   },
   medic: {
@@ -92,15 +99,15 @@ const goBags: Record<GoBagType, GoBag> = {
     description:
       "Medical supplies and emergency response equipment for treating injuries.",
     items: [
-      "Water-resistant High Capacity Duffle",
-      "Medical Pack - Tactical Response Pack",
-      "Fast fold Litter",
-      "Flare gun and 5 flares",
-      "3- Emergency Survival Food Ration Packs",
-      "1 Liter Hand Powered UV Water Purifier (8,000 water treatments)",
-      "Climbers Kit",
-      "4- 12-hour Light sticks",
-      "Utility Folding knife",
+      { name: "Water-resistant High Capacity Duffle" },
+      { name: "Medical Pack - Tactical Response Pack" },
+      { name: "Fast fold Litter" },
+      { name: "Flare gun and 5 flares" },
+      { name: "3- Emergency Survival Food Ration Packs" },
+      { name: "1 Liter Hand Powered UV Water Purifier (8,000 water treatments)" },
+      { name: "Climbers Kit" },
+      { name: "4- 12-hour Light sticks" },
+      { name: "Utility Folding knife" },
     ],
   },
   bystander: {
@@ -108,15 +115,15 @@ const goBags: Record<GoBagType, GoBag> = {
     description:
       "Basic survival essentials for someone caught unprepared.",
     items: [
-      "Water-resistant Backpack",
-      "7- Emergency Survival Food Ration Packs",
-      "3 Liter Hand Powered UV Water Purifier (8,000 water treatments)",
-      "Compass OR GPS",
-      "Standard First Aid Kit",
-      "Bivouac Sack",
-      "2- 12-hour Light sticks",
-      "Climbers Kit",
-      "Multi-Tool",
+      { name: "Water-resistant Backpack" },
+      { name: "7- Emergency Survival Food Ration Packs" },
+      { name: "3 Liter Hand Powered UV Water Purifier (8,000 water treatments)" },
+      { name: "Compass OR GPS", batteryPowered: true },
+      { name: "Standard First Aid Kit" },
+      { name: "Bivouac Sack" },
+      { name: "2- 12-hour Light sticks" },
+      { name: "Climbers Kit" },
+      { name: "Multi-Tool" },
     ],
   },
 };
@@ -169,6 +176,7 @@ export default function Step8_Gear() {
           description: it.description ?? '',
           ap: it.ap ?? it.costAP ?? 0,
           examples: it.examples ?? [],
+          batteryPowered: it.batteryPowered ?? false,
         });
         const firearmsList = all
           .filter((g: any) => g.category === 'firearms')
@@ -311,7 +319,12 @@ export default function Step8_Gear() {
         starting: true,
       });
       goBags[type].items.forEach((it) =>
-        addGearItem({ name: it, description: `Part of the ${goBags[type].name}`, starting: true })
+        addGearItem({
+          name: it.name,
+          description: `Part of the ${goBags[type].name}`,
+          starting: true,
+          batteryPowered: it.batteryPowered,
+        })
       );
       setSelectedGoBag(type);
     }
@@ -331,7 +344,7 @@ export default function Step8_Gear() {
       delete newP[name];
       setPurchased(newP);
     } else if (remainingAp >= item.ap) {
-      addGearItem({ name: item.name, description: item.description, ap: item.ap });
+      addGearItem({ name: item.name, description: item.description, ap: item.ap, batteryPowered: item.batteryPowered });
       setPurchased({ ...purchased, [name]: item.ap });
     }
   };
@@ -356,10 +369,10 @@ export default function Step8_Gear() {
       delete newP[name];
       setPurchased(newP);
     } else if (!freeRangedWeapon) {
-      addGearItem({ name: displayName, description: name, starting: true });
+      addGearItem({ name: displayName, description: name, starting: true, batteryPowered: item.batteryPowered });
       setFreeRangedWeapon(name);
     } else if (remainingAp >= item.ap) {
-      addGearItem({ name: displayName, description: name, ap: item.ap });
+      addGearItem({ name: displayName, description: name, ap: item.ap, batteryPowered: item.batteryPowered });
       setPurchased({ ...purchased, [name]: item.ap });
     }
   };
@@ -384,15 +397,16 @@ export default function Step8_Gear() {
       delete newP[name];
       setPurchased(newP);
     } else if (!freeMeleeWeapon) {
-      addGearItem({ name: example, description: name, starting: true });
+      addGearItem({ name: example, description: name, starting: true, batteryPowered: item.batteryPowered });
       setFreeMeleeWeapon(name);
     } else if (remainingAp >= item.ap) {
-      addGearItem({ name: example, description: name, ap: item.ap });
+      addGearItem({ name: example, description: name, ap: item.ap, batteryPowered: item.batteryPowered });
       setPurchased({ ...purchased, [name]: item.ap });
     }
   };
 
   const inventoryItems = character.gear;
+  const hasBatteryItems = inventoryItems.some((it) => it.batteryPowered);
 
   const handleRemoveInventory = (index: number) => {
     const item = inventoryItems[index];
@@ -429,6 +443,11 @@ export default function Step8_Gear() {
       <div className="text-sm text-white mb-2">
         Points Remaining: <span className="text-accent font-bold">{remainingAp}</span>
       </div>
+      {hasBatteryItems && (
+        <p className="text-xs text-yellow-400 mb-2 flex items-center">
+          <Battery className="w-4 h-4 mr-1" /> Battery-powered items may deplete.
+        </p>
+      )}
       <p className="text-xs text-gray-300 mb-4">
         You may select one ranged weapon and one melee weapon for free along with a Go-Bag.
       </p>
@@ -474,7 +493,12 @@ export default function Step8_Gear() {
                   </p>
                   <ul className="list-disc pl-4 text-gray-300 font-comic-light">
                     {goBags[hoveredGoBag].items.map((it) => (
-                      <li key={it}>{it}</li>
+                      <li key={it.name}>
+                        {it.name}
+                        {it.batteryPowered && (
+                          <Battery className="inline w-4 h-4 text-yellow-400 ml-1" />
+                        )}
+                      </li>
                     ))}
                   </ul>
                 </div>
@@ -496,6 +520,9 @@ export default function Step8_Gear() {
               />
               <span>
                 {w.name} ({w.ap} AP)
+                {w.batteryPowered && (
+                  <Battery className="inline w-4 h-4 text-yellow-400 ml-1" />
+                )}
               </span>
               {(freeRangedWeapon === w.name || !!purchased[w.name]) && w.ammoType && w.ammoType.length > 0 && (
                 <Select
@@ -527,6 +554,9 @@ export default function Step8_Gear() {
               />
               <span>
                 {w.name} ({w.ap} AP)
+                {w.batteryPowered && (
+                  <Battery className="inline w-4 h-4 text-yellow-400 ml-1" />
+                )}
               </span>
             </label>
           ))}
@@ -544,6 +574,9 @@ export default function Step8_Gear() {
               />
               <span>
                 {m.name} ({m.ap} AP)
+                {m.batteryPowered && (
+                  <Battery className="inline w-4 h-4 text-yellow-400 ml-1" />
+                )}
               </span>
               {(freeMeleeWeapon === m.name || !!purchased[m.name]) && m.examples && m.examples.length > 0 && (
                 <Select
@@ -580,6 +613,9 @@ export default function Step8_Gear() {
               />
               <span>
                 {w.name} ({w.ap} AP)
+                {w.batteryPowered && (
+                  <Battery className="inline w-4 h-4 text-yellow-400 ml-1" />
+                )}
               </span>
             </label>
           ))}
@@ -597,6 +633,9 @@ export default function Step8_Gear() {
               />
               <span>
                 {a.name} ({a.ap} AP)
+                {a.batteryPowered && (
+                  <Battery className="inline w-4 h-4 text-yellow-400 ml-1" />
+                )}
               </span>
             </label>
           ))}
@@ -619,6 +658,9 @@ export default function Step8_Gear() {
                   />
                   <span>
                     {g.name} ({g.ap} AP)
+                    {g.batteryPowered && (
+                      <Battery className="inline w-4 h-4 text-yellow-400 ml-1" />
+                    )}
                   </span>
                 </label>
               ))}
@@ -640,6 +682,9 @@ export default function Step8_Gear() {
                 >
                   <span>
                     {item.name}
+                    {item.batteryPowered && (
+                      <Battery className="inline w-4 h-4 text-yellow-400 ml-1" />
+                    )}
                     {item.ap ? (
                       <Badge variant="secondary" className="ml-2 text-xs">{item.ap} AP</Badge>
                     ) : null}

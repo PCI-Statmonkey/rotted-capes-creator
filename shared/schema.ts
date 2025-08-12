@@ -295,6 +295,9 @@ export const characterDataSchema = z.object({
   gear: z.array(z.object({
     name: z.string(),
     description: z.string(),
+    ap: z.number().optional(),
+    starting: z.boolean().optional(),
+    batteryPowered: z.boolean().optional(),
   })),
   defense: z.number(),
   toughness: z.number(),
@@ -344,6 +347,7 @@ export const gear = pgTable("gear", {
   category: text("category").notNull(),  // e.g., "Weapon", "Armor", "Equipment"
   ap: integer("ap").notNull(),           // Action Point cost
   tags: jsonb("tags").default([]),       // Optional: e.g., ["firearm", "2H"]
+  batteryPowered: boolean("battery_powered").default(false).notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
@@ -421,12 +425,13 @@ export const maneuverSchema = insertManeuverSchema.extend({
   effect: true,
 });
 
-  export const insertGearSchema = createInsertSchema(gear).pick({
+export const insertGearSchema = createInsertSchema(gear).pick({
   name: true,
   description: true,
   category: true,
   ap: true,
   tags: true,
+  batteryPowered: true,
 });
 export const insertFeatSchema = createInsertSchema(feats).pick({
   name: true,
