@@ -82,6 +82,8 @@ export const skillSets = pgTable("skill_sets", {
   points: integer("points").notNull(),
   skills: jsonb("skills").notNull(), // Array of skill objects with names and focuses
   feats: jsonb("feats").notNull(), // Array of feat names
+  edges: text("edges").array().notNull().default([]),
+  deepCutTrigger: text("deep_cut_trigger"),
   description: text("description"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
@@ -177,6 +179,8 @@ export const insertSkillSetSchema = createInsertSchema(skillSets).pick({
   points: true,
   skills: true,
   feats: true,
+  edges: true,
+  deepCutTrigger: true,
   description: true,
 });
 

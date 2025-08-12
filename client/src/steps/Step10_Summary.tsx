@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useCharacter } from "@/context/CharacterContext";
+import { useCharacterBuilder } from "@/lib/Stores/characterBuilder";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
@@ -15,6 +16,7 @@ import { parsePrerequisite, getMissingPrereqs, formatPrerequisite } from "@/util
 
 export default function Step10_Summary() {
   const { character, updateCharacterField, saveCharacter } = useCharacter();
+  const { selectedSkillSets } = useCharacterBuilder();
   const summaryRef = useRef<HTMLDivElement>(null);
 
   const RANK_BONUS = 1; // Starting characters begin with a +1 rank bonus
@@ -70,7 +72,7 @@ export default function Step10_Summary() {
     selectedSkills: character.skills,
     startingSkills: [] as any[],
     selectedFeats: character.feats,
-    selectedSkillSets: [] as any[],
+    selectedSkillSets,
     skillSets: [] as any[],
   };
   
@@ -491,9 +493,34 @@ export default function Step10_Summary() {
               ) : (
                 <div className="text-center py-6 text-gray-500">No skills defined</div>
               )}
+          </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader className="py-3">
+              <CardTitle className="flex items-center">
+                <span className="flex-1">Skill Sets</span>
+                <Badge variant="outline" className="ml-2">{selectedSkillSets.length}</Badge>
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="max-h-52 overflow-y-auto">
+              {selectedSkillSets.length > 0 ? (
+                <ul className="list-disc list-inside text-sm">
+                  {selectedSkillSets.map((s, idx) => (
+                    <li key={idx}>
+                      <span className="font-semibold">{s.name}</span>
+                      {s.edges && s.edges.length > 0 && (
+                        <span>: {s.edges.join(', ')}</span>
+                      )}
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <div className="text-center py-6 text-gray-500">No skill sets selected</div>
+              )}
             </CardContent>
           </Card>
-          
+
           {/* Gear Section */}
           <Card>
             <CardHeader className="py-3">

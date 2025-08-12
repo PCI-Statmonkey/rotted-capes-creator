@@ -100,7 +100,7 @@ assert(
 // Skill set and edge prerequisites
 const charWithSet = {
   ...character,
-  selectedSkillSets: [{ name: 'Occultist', edge: 'Arcane', source: 'Skill Focus' }],
+  selectedSkillSets: [{ name: 'Occultist', edges: ['Arcane'], source: 'Skill Focus' }],
   skillSets: [{ name: 'Occultist', skills: [] }],
 };
 assert(meetsPrerequisites({ prerequisites: 'Skill Set: Occultist' }, charWithSet));
