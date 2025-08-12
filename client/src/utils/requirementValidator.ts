@@ -49,6 +49,25 @@ export function parsePrerequisiteString(str: string) {
     };
   }
 
+  const andSameValueMatch = str.match(
+    /^([a-z]+)\s+and\s+([a-z]+)\s+of\s+(\d+)\+?$/i
+  );
+  if (
+    andSameValueMatch &&
+    isAbility(andSameValueMatch[1]) &&
+    isAbility(andSameValueMatch[2])
+  ) {
+    const value = parseInt(andSameValueMatch[3], 10);
+    return {
+      type: "compound",
+      operator: "and",
+      requirements: [
+        { type: "ability", name: cap(andSameValueMatch[1]), value },
+        { type: "ability", name: cap(andSameValueMatch[2]), value },
+      ],
+    };
+  }
+
   // General ability parsing - can include multiple abilities with values
   const abilityRegex = /(str|dex|con|int|wis|cha|strength|dexterity|constitution|intelligence|wisdom|charisma)\s*(\d+)\+?/gi;
   const abilityMatches: RegExpExecArray[] = [];

@@ -46,7 +46,7 @@ const Step5_Feats = () => {
   const [workingStartingSkills, setWorkingStartingSkills] = useState<string[]>([]);
   const [workingSelectedSkills, setWorkingSelectedSkills] = useState<{ name: string; focuses: string[] }[]>([]);
   // Store selected feats with an optional input for feats like 'Skill Focus' or 'Learn Maneuver'
-  const [workingSelectedFeats, setWorkingSelectedFeats] = useState<{ name: string; input?: string | string[]; source?: string; free?: boolean; skillSet?: string; edge?: string }[]>([]);
+  const [workingSelectedFeats, setWorkingSelectedFeats] = useState<{ name: string; input?: string | string[]; source?: string; free?: boolean; skillSet?: string; edge?: string; option?: string; stance?: string; usesPerScene?: number }[]>([]);
   const [workingSelectedSkillSets, setWorkingSelectedSkillSets] = useState<string[]>([]);
   // Maneuvers are stored separately, indexed to correspond with 'Learn Maneuver' feats
   const [workingSelectedManeuvers, setWorkingSelectedManeuvers] = useState<string[]>([]);
@@ -489,9 +489,12 @@ const Step5_Feats = () => {
     // Add the feat with default input structure
     const skillSet = featToAdd.grantsSkillSet ? "" : undefined;
     const edge = featToAdd.grantsEdge ? "" : undefined;
+    const option = featToAdd.options ? "" : undefined;
+    const stance = featToAdd.stance ? "" : undefined;
+    const usesPerScene = featToAdd.usesPerScene;
     setWorkingSelectedFeats((prev) => [
       ...prev,
-      { name: featName, input: "", free: false, skillSet, edge },
+      { name: featName, input: "", free: false, skillSet, edge, option, stance, usesPerScene },
     ]);
   };
 
@@ -618,6 +621,12 @@ const Step5_Feats = () => {
     const finalFeats = workingSelectedFeats.map((f) => ({
       name: f.name,
       source: f.source,
+      input: f.input,
+      skillSet: f.skillSet,
+      edge: f.edge,
+      option: f.option,
+      stance: f.stance,
+      usesPerScene: f.usesPerScene,
     }));
 
     const finalManeuvers = [
@@ -803,6 +812,49 @@ const Step5_Feats = () => {
                               setWorkingSelectedFeats(updated);
                             }}
                             className="border rounded p-1 text-black"
+                          />
+                        )}
+                        {feat.options && (
+                          <select
+                            value={
+                              feat.stance
+                                ? workingSelectedFeats[f.originalIndex]?.stance || ''
+                                : workingSelectedFeats[f.originalIndex]?.option || ''
+                            }
+                            onChange={(e) => {
+                              const updated = [...workingSelectedFeats];
+                              if (feat.stance) {
+                                updated[f.originalIndex].stance = e.target.value;
+                              } else {
+                                updated[f.originalIndex].option = e.target.value;
+                              }
+                              setWorkingSelectedFeats(updated);
+                            }}
+                            className="border rounded p-1 text-black"
+                          >
+                            <option value="">{feat.stance ? 'Select stance' : 'Select option'}</option>
+                            {feat.options.map((o: string) => (
+                              <option key={o} value={o}>
+                                {o}
+                              </option>
+                            ))}
+                          </select>
+                        )}
+                        {feat.usesPerScene !== undefined && (
+                          <input
+                            type="number"
+                            min={0}
+                            placeholder="Uses/scene"
+                            value={
+                              workingSelectedFeats[f.originalIndex]?.usesPerScene ??
+                              feat.usesPerScene
+                            }
+                            onChange={(e) => {
+                              const updated = [...workingSelectedFeats];
+                              updated[f.originalIndex].usesPerScene = parseInt(e.target.value, 10);
+                              setWorkingSelectedFeats(updated);
+                            }}
+                            className="border rounded p-1 w-20 text-black"
                           />
                         )}
                         {feat.name === 'Learn Maneuver' && (

@@ -227,7 +227,8 @@
     "repeatable": false,
     "tags": [],
     "notes": "",
-    "input_label": null
+    "input_label": null,
+    "usesPerScene": 1
   },
   {
     "name": "Hidden Stash",
@@ -317,7 +318,10 @@
     "repeatable": false,
     "tags": [],
     "notes": "",
-    "input_label": null
+    "input_label": null,
+    "options": ["Precision", "Powerful", "Quick"],
+    "stance": true,
+    "usesPerScene": 1
   },
   {
     "name": "Mind over Body",
@@ -327,7 +331,8 @@
     "repeatable": false,
     "tags": [],
     "notes": "",
-    "input_label": null
+    "input_label": null,
+    "usesPerScene": 1
   },
   {
     "name": "Natural Born Leader",
@@ -367,7 +372,8 @@
     "repeatable": false,
     "tags": [],
     "notes": "",
-    "input_label": null
+    "input_label": null,
+    "usesPerScene": 1
   },
   {
     "name": "Political Maneuvering",
@@ -377,7 +383,8 @@
     "repeatable": false,
     "tags": [],
     "notes": "",
-    "input_label": null
+    "input_label": null,
+    "usesPerScene": 1
   },
   {
     "name": "Polyglot",
@@ -407,7 +414,8 @@
     "repeatable": false,
     "tags": [],
     "notes": "",
-    "input_label": null
+    "input_label": null,
+    "usesPerScene": 1
   },
   {
     "name": "Sidekick",
