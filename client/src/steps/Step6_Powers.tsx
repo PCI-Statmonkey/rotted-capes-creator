@@ -9,9 +9,12 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Switch } from "@/components/ui/switch";
-import { useCharacter } from "@/context/CharacterContext";
+import { useCharacter, getRankCap } from "@/context/CharacterContext";
 import { trackEvent } from "@/lib/analytics";
 import { getScoreData, formatModifier } from "@/lib/utils";
+import powersData from "@/rules/powers.json" assert { type: "json" };
+import powerSetsData from "@/rules/powerSets.json" assert { type: "json" };
+import powerModsData from "@/rules/powerMods.json" assert { type: "json" };
 
 // Define the power sets
 interface PowerSet {
@@ -35,6 +38,8 @@ interface Power {
   damageType?: string;
   target?: string;
   ability?: string;
+  burnout?: number;
+  uses?: number;
   linkedPowers?: string[];
   flaws: PowerModifier[];
   perks: PowerModifier[];
@@ -46,6 +51,7 @@ interface PowerModifier {
   name: string;
   description: string;
   bonus: number;
+  type: string;
 }
 
 // Define which powers use damage types based on the Power chapter
@@ -86,85 +92,7 @@ const getAbilityOptions = (powerName: string): string[] => {
 };
 
 // Define the available power sets based on the rulebook
-const POWER_SETS: PowerSet[] = [
-  {
-    name: "Andromorph",
-    powers: [
-      { name: "Bestial Transformation", score: 16 },
-      { name: "Communicate with Animals", score: 12 },
-      { name: "Enhanced Attack", score: 16 },
-      { name: "Enhanced Ability Score (Strength or Dexterity)", score: 14 },
-      { name: "Enhanced Sense", score: 12 }
-    ],
-    requiredArchetypes: ["Shapeshifter"]
-  },
-  {
-    name: "Blaster",
-    powers: [
-      { name: "Energy Blast", score: 16 },
-      { name: "Energy Generation", score: 12 },
-      { name: "Energy Explosion", score: 14 },
-      { name: "Energy Sheath", score: 16 },
-      { name: "Flight", score: 12 }
-    ],
-    requiredArchetypes: ["Blaster", "Speedster"]
-  },
-  {
-    name: "Brawler",
-    powers: [
-      { name: "Enhanced Attack", score: 16 },
-      { name: "Enhanced Ability Score (Strength or Dexterity)", score: 16 },
-      { name: "Enhanced Ability Score (Constitution)", score: 12 },
-      { name: "Regeneration", score: 14 },
-      { name: "Super-Sense", score: 12 }
-    ],
-    requiredArchetypes: ["Bruiser", "Speedster"]
-  },
-  {
-    name: "Controller",
-    powers: [
-      { name: "Telepathy", score: 12 },
-      { name: "Emotion Control", score: 12 },
-      { name: "Mind Control", score: 16 },
-      { name: "Move Object", score: 16 },
-      { name: "Sympathy", score: 14 }
-    ],
-    requiredArchetypes: ["Mentalist", "Mastermind"]
-  },
-  {
-    name: "Infiltrator",
-    powers: [
-      { name: "Adoptive Muscle Memory", score: 16 },
-      { name: "Enhanced Sense", score: 14 },
-      { name: "Invisibility", score: 16 },
-      { name: "Luck", score: 12 },
-      { name: "Swinging", score: 12 }
-    ],
-    requiredArchetypes: ["Gadgeteer", "Shapeshifter"]
-  },
-  {
-    name: "Heavy",
-    powers: [
-      { name: "Armor", score: 16 },
-      { name: "Enhanced Attack", score: 12 },
-      { name: "Enhanced Ability Score (Strength)", score: 14 },
-      { name: "Enhanced Ability Score (Constitution)", score: 16 },
-      { name: "Resistance", score: 12 }
-    ],
-    requiredArchetypes: ["Bruiser", "Defender"]
-  },
-  {
-    name: "Transporter",
-    powers: [
-      { name: "Celerity", score: 16 },
-      { name: "Enhanced Ability Score (Dexterity)", score: 14 },
-      { name: "Speed", score: 16 },
-      { name: "Surge", score: 14 },
-      { name: "Temporal Fugue", score: 12 }
-    ],
-    requiredArchetypes: ["Speedster", "Transporter"]
-  }
-];
+const POWER_SETS: PowerSet[] = powerSetsData as any;
 
 // Power score arrays - from Rotted Capes 2.0 rulebook
 const POWER_ARRAYS = [
@@ -191,91 +119,9 @@ const POWER_COST_TABLE: { score: number; cost: number }[] = [
 ];
 
 // Complete list of powers
-const ALL_POWERS = [
-  "Aquatic Adaptation",
-  "Adsorb Energy",
-  "Adsorb Matter",
-  "Adoptive Muscle Memory",
-  "Animate Object",
-  "Armor",
-  "Bestial Transformation",
-  "Botanokinesis",
-  "Broadcast",
-  "Catfall",
-  "Celerity",
-  "Chameleon",
-  "Communicate with Animals",
-  "Communicate with Plants",
-  "Control Weather",
-  "Convert Matter",
-  "Damaging Form",
-  "Darkness",
-  "Defection",
-  "Density Control",
-  "Duplicate",
-  "Dynamic Power",
-  "Eidetic Memory",
-  "Elasticity",
-  "Energy Blast",
-  "Energy Explosion",
-  "Energy Generation",
-  "Energy Manipulation",
-  "Energy Sheath",
-  "Emotion Control",
-  "Endurance",
-  "Enhanced Attack",
-  "Enhanced Ability Score",
-  "Enhanced Sense",
-  "Entangle",
-  "Flight",
-  "Force Field",
-  "Force Field, Personal",
-  "Force Shield",
-  "Free Consciousness",
-  "Geospatial Shift",
-  "Gravity Control",
-  "Growth",
-  "Glide",
-  "Heal",
-  "Imbue Consciousness",
-  "Incorporeal",
-  "Inventive Gadgetry",
-  "Invisibility",
-  "Invulnerability",
-  "Life Support",
-  "Luck",
-  "Manifest Gear",
-  "Mimic",
-  "Mind Control",
-  "Move Object",
-  "Multiple Limbs",
-  "Nullify",
-  "Portal",
-  "Poison",
-  "Possession",
-  "Psychic Attack",
-  "Power Boost",
-  "Regeneration",
-  "Resistance",
-  "Shapeshift",
-  "Shrink",
-  "Sixth Sense",
-  "Speed",
-  "Summon Animal",
-  "Super-Sense",
-  "Surge",
-  "Swinging",
-  "Sympathy",
-  "Telepathy",
-  "Teleport",
-  "Temporal Fugue",
-  "Tracking",
-  "Tunnel",
-  "Weaken",
-  "Wall Crawl",
-  "Wireless",
-  "Weird Biology"
-];
+const ALL_POWERS = (powersData as any[]).map((p: any) => p.name);
+
+const powerDataMap = new Map((powersData as any[]).map((p: any) => [p.name, p]));
 
 // Powers compatible with the All Skill power modifier
 const ALL_SKILL_COMPATIBLE = [
@@ -292,37 +138,14 @@ const ALL_SKILL_COMPATIBLE = [
   "Surge"
 ];
 
-// Power Flaws from the list
-const POWER_FLAWS: PowerModifier[] = [
-  { name: "Conditional", description: "Power only works under specific conditions", bonus: 4 },
-  { name: "Cybernetic Implant", description: "Power comes from cybernetic enhancements", bonus: 2 },
-  { name: "External Power Source", description: "Power requires an external source to function", bonus: 0 },
-  { name: "Fatiguing", description: "Using the power causes fatigue", bonus: 4 },
-  { name: "Limitation (Minor)", description: "Power has a minor limitation in how it can be used", bonus: 2 },
-  { name: "Limitation (Moderate)", description: "Power has a moderate limitation in how it can be used", bonus: 3 },
-  { name: "Limitation (Major)", description: "Power has a major limitation in how it can be used", bonus: 4 },
-  { name: "Limited Uses (Few)", description: "Power can only be used a few times", bonus: 2 },
-  { name: "Limited Uses (Very Few)", description: "Power can only be used very few times", bonus: 4 },
-  { name: "Linked", description: "Power is linked to another power", bonus: 2 },
-  { name: "Power Armor", description: "Power is derived from powered armor", bonus: 4 },
-  { name: "Removable Item (Standard)", description: "Power is tied to an item that can be taken away", bonus: 2 },
-  { name: "Removable Item (Difficult)", description: "Power is tied to an item that is difficult to remove", bonus: 4 },
-  { name: "Slow (Moderately)", description: "Power takes extra time to activate", bonus: 2 },
-  { name: "Slow (Significantly)", description: "Power takes significant time to activate", bonus: 4 },
-  { name: "Trigger", description: "Power requires a specific trigger to activate", bonus: 2 },
-  { name: "Unpowered Form", description: "Requires a transformation to access your powers", bonus: 2 },
-  { name: "Unreliable", description: "Power doesn't always work as expected", bonus: 4 }
-];
-
-// Power Perks from the list
-const POWER_PERKS: PowerModifier[] = [
-  { name: "Accurate", description: "Power is exceptionally accurate", bonus: -4 },
-  { name: "All Skill", description: "Power can be used with any skill", bonus: 0 },
-  { name: "Efficient Power", description: "Power uses less energy or resources", bonus: -2 },
-  { name: "Penetrating", description: "Power can penetrate defenses more effectively", bonus: -2 },
-  { name: "Secondary Effect (Minor)", description: "Power has a minor additional effect", bonus: -2 },
-  { name: "Secondary Effect (Major)", description: "Power has a major additional effect", bonus: -4 }
-];
+// Power modifiers from rule data
+const RAW_MODIFIERS = powerModsData as any[];
+const POWER_FLAWS: PowerModifier[] = RAW_MODIFIERS
+  .filter(m => (m.type as string).toLowerCase().includes('flaw'))
+  .map(m => ({ name: m.name, description: m.effect, bonus: m.value, type: m.type }));
+const POWER_PERKS: PowerModifier[] = RAW_MODIFIERS
+  .filter(m => (m.type as string).toLowerCase().includes('perk'))
+  .map(m => ({ name: m.name, description: m.effect, bonus: m.value, type: m.type }));
 
 // Available damage types
 const DAMAGE_TYPES = [
@@ -339,6 +162,13 @@ export default function Step6_Powers() {
   const [selectedPowers, setSelectedPowers] = useState<Power[]>([]);
   const [activeTab, setActiveTab] = useState<string>("powers");
 
+  const totalBurnout = selectedPowers.reduce((sum, p) => sum + (p.burnout || 0) * (p.uses || 0), 0);
+  useEffect(() => {
+    updateCharacterField('currentBurnout', totalBurnout);
+    const checks = totalBurnout > character.burnoutThreshold ? 1 : 0;
+    updateCharacterField('burnoutChecks', checks);
+  }, [totalBurnout, updateCharacterField, character.burnoutThreshold]);
+
   // Load powers from character when component mounts
   useEffect(() => {
     if (character.powers && character.powers.length > 0) {
@@ -346,7 +176,9 @@ export default function Step6_Powers() {
         name: p.name,
         score: p.score || 10,
         arrayIndex: undefined as number | undefined,
-        description: p.description,
+        description: p.description || powerDataMap.get(p.name)?.description,
+        burnout: (p as any).burnout ?? (powerDataMap.get(p.name)?.burnout ? parseInt(powerDataMap.get(p.name)?.burnout) : undefined),
+        uses: (p as any).uses || 0,
         damageType: p.damageType,
         ability: p.ability,
         linkedPowers: (p as any).linkedPowers || [],
@@ -507,11 +339,15 @@ export default function Step6_Powers() {
 
   // Add a new power in point buy mode
   const addPower = () => {
+    const info: any = powerDataMap.get(ALL_POWERS[0]);
     const newPower: Power = {
       name: ALL_POWERS[0], // Default to the first power in the list
       score: 10,
       arrayIndex: undefined,
       ability: getAbilityOptions(ALL_POWERS[0])[0],
+      description: info?.description,
+      burnout: info?.burnout ? parseInt(info.burnout) : undefined,
+      uses: 0,
       linkedPowers: [],
       flaws: [],
       perks: [],
@@ -557,6 +393,11 @@ export default function Step6_Powers() {
         newPowers[index].ability = undefined;
       }
 
+      const info: any = powerDataMap.get(value);
+      newPowers[index].description = info?.description;
+      newPowers[index].burnout = info?.burnout ? parseInt(info.burnout) : undefined;
+      newPowers[index].uses = 0;
+
       // Update linked references in other powers
       newPowers.forEach((p, idx) => {
         if (idx !== index && p.linkedPowers) {
@@ -578,8 +419,8 @@ export default function Step6_Powers() {
     const flawBonus = power.flaws.reduce((total, flaw) => total + flaw.bonus, 0);
     const perkPenalty = power.perks.reduce((total, perk) => total + perk.bonus, 0);
     
-    // Cap at 25 to account for bonuses from flaws at character creation
-    const finalScore = Math.min(power.score + flawBonus + perkPenalty, 25);
+    const cap = getRankCap(character.rank);
+    const finalScore = Math.min(power.score + flawBonus + perkPenalty, cap);
     
     // Ensure score doesn't go below 10
     return Math.max(finalScore, 10);
@@ -640,6 +481,13 @@ export default function Step6_Powers() {
     setSelectedPowers(newPowers);
   };
 
+  const changeUses = (index: number, delta: number) => {
+    const newPowers = [...selectedPowers];
+    const p = newPowers[index];
+    p.uses = Math.max(0, (p.uses || 0) + delta);
+    setSelectedPowers(newPowers);
+  };
+
   // Handle power set selection
   const handlePowerSetSelection = (powerSetName: string) => {
     setSelectedPowerSet(powerSetName);
@@ -650,17 +498,23 @@ export default function Step6_Powers() {
     }
     
     // Convert power set to powers with initial scores
-    const powers = powerSet.powers.map(power => ({
-      name: power.name,
-      score: power.score,
-      arrayIndex: undefined,
-      ability: getAbilityOptions(power.name)[0],
-      linkedPowers: [],
-      flaws: [],
-      perks: [],
-      finalScore: power.score,
-      damageType: powerUsesDamageType(power.name) ? DAMAGE_TYPES[0] : undefined
-    }));
+    const powers = powerSet.powers.map(power => {
+      const info: any = powerDataMap.get(power.name);
+      return {
+        name: power.name,
+        score: power.score,
+        arrayIndex: undefined,
+        ability: getAbilityOptions(power.name)[0],
+        description: info?.description,
+        burnout: info?.burnout ? parseInt(info.burnout) : undefined,
+        uses: 0,
+        linkedPowers: [],
+        flaws: [],
+        perks: [],
+        finalScore: power.score,
+        damageType: powerUsesDamageType(power.name) ? DAMAGE_TYPES[0] : undefined
+      };
+    });
     
     setSelectedPowers(powers);
     
@@ -678,11 +532,15 @@ export default function Step6_Powers() {
   
   // Add a default power for array mode
   const addDefaultPower = () => {
+    const info: any = powerDataMap.get(ALL_POWERS[0]);
     const newPower: Power = {
       name: ALL_POWERS[0], // Default to the first power in the list
       score: 0, // This will be assigned from the array later
       arrayIndex: undefined,
       ability: getAbilityOptions(ALL_POWERS[0])[0],
+      description: info?.description,
+      burnout: info?.burnout ? parseInt(info.burnout) : undefined,
+      uses: 0,
       linkedPowers: [],
       flaws: [],
       perks: [],
@@ -767,6 +625,8 @@ export default function Step6_Powers() {
       ability: power.ability,
       score: power.score,
       finalScore: power.finalScore,
+      burnout: power.burnout,
+      uses: power.uses || 0,
       flaws: power.flaws.map(f => f.name),
       perks: power.perks.map(p => p.name),
       linkedPowers: power.linkedPowers || []
@@ -1029,13 +889,14 @@ export default function Step6_Powers() {
           {/* Powers Tab */}
           <TabsContent value="powers" className="space-y-4 mt-4">
             {powerCreationMethod === "powerSet" && selectedPowerSet && (
-              <div className="space-y-4">
-                {selectedPowers.map((power, index) => {
-                  const data = getScoreData(power.finalScore);
-                  return (
-                    <div
-                      key={index}
-                      className="p-4 bg-gray-700 rounded-lg border border-gray-600"
+              <>
+                <div className="space-y-4">
+                  {selectedPowers.map((power, index) => {
+                    const data = getScoreData(power.finalScore);
+                    return (
+                      <div
+                        key={index}
+                        className="p-4 bg-gray-700 rounded-lg border border-gray-600"
                     >
                       <div className="flex justify-between mb-2">
                         <div className="font-medium text-red-500">{formatPowerName(power.name)}</div>
@@ -1085,6 +946,17 @@ export default function Step6_Powers() {
                         </Select>
                       </div>
                     )}
+
+                    <div className="mt-2 flex items-center space-x-2">
+                      <span className="text-sm text-gray-400">Burnout {power.burnout ?? 0}</span>
+                      <Button variant="outline" size="sm" onClick={() => changeUses(index, -1)} disabled={(power.uses || 0) <= 0}>
+                        <Minus className="h-4 w-4" />
+                      </Button>
+                      <span>{power.uses || 0}</span>
+                      <Button variant="outline" size="sm" onClick={() => changeUses(index, 1)}>
+                        <Plus className="h-4 w-4" />
+                      </Button>
+                    </div>
                     
                     {/* Display applied modifiers */}
                     {(power.flaws.length > 0 || power.perks.length > 0) && (
@@ -1142,8 +1014,10 @@ export default function Step6_Powers() {
                       </div>
                     )}
                   </div>
-                );})}
-              </div>
+                    );})}
+                </div>
+                <div className="mt-4 text-sm">Total Burnout: {totalBurnout} / {character.burnoutThreshold}</div>
+              </>
             )}
             
             {powerCreationMethod === "array" && selectedPowerArray && (
