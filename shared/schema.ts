@@ -96,6 +96,7 @@ export const powers = pgTable("powers", {
   hasDamageType: boolean("has_damage_type").default(false).notNull(),
   hasTarget: boolean("has_target").default(false).notNull(),
   skillCompatible: boolean("skill_compatible").default(false).notNull(),
+  burnout: text("burnout"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
@@ -190,6 +191,7 @@ export const insertPowerSchema = createInsertSchema(powers).pick({
   hasDamageType: true,
   hasTarget: true,
   skillCompatible: true,
+  burnout: true,
 });
 
 export const insertPowerSetSchema = createInsertSchema(powerSets).pick({

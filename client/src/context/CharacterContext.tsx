@@ -38,6 +38,8 @@ export interface Power {
   damageType?: string; // Optional damage type
   ability?: string;
   linkedPowers?: string[];
+  burnout?: number;
+  uses?: number;
   perks: string[];
   flaws: string[];
 }
@@ -100,6 +102,9 @@ export interface Character {
   reflex: number;
   willpower: number;
   initiative: number;
+  burnoutThreshold: number;
+  currentBurnout: number;
+  burnoutChecks: number;
   pointsSpent: {
     abilities: number;
     skills: number;
@@ -151,6 +156,9 @@ export const createEmptyCharacter = (): Character => ({
   reflex: 0,
   willpower: 0,
   initiative: 0,
+  burnoutThreshold: 10,
+  currentBurnout: 0,
+  burnoutChecks: 0,
   pointsSpent: {
     abilities: 0,
     skills: 0,

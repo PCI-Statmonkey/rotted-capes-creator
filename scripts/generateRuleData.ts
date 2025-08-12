@@ -66,15 +66,103 @@ function parsePowers() {
   const file = fs.readFileSync(path.join(docsDir, '3.1_Powers Chapter 5.1.md'), 'utf8');
   const sections = parseSections(file, '## Power Descriptions');
   return sections.map((s) => {
+    const burnoutMatch = s.text.match(/\*\*Burnout:\*\*\s*([^*]+)/i);
     const obj = {
       name: s.name,
       description: s.text,
       hasDamageType: false,
       hasTarget: false,
       skillCompatible: false,
+      burnout: burnoutMatch ? burnoutMatch[1].trim() : null,
     };
     return insertPowerSchema.parse(obj);
   });
+}
+
+function parsePowerSets() {
+  const file = fs.readFileSync(path.join(docsDir, '2.1_Character Creation 7.6.md'), 'utf8');
+  const regex = /##\s+(.+?) Power Set([\s\S]*?)(?=\n##\s|\n\*\*Option|$)/g;
+  const archetypeMap: Record<string, string[]> = {
+    Andromorph: ['Shapeshifter'],
+    Blaster: ['Blaster', 'Speedster'],
+    Brawler: ['Bruiser', 'Speedster'],
+    Controller: ['Mentalist', 'Mastermind'],
+    Infiltrator: ['Gadgeteer', 'Shapeshifter'],
+    Heavy: ['Bruiser', 'Defender'],
+    Transporter: ['Speedster', 'Transporter'],
+  };
+  const sets: any[] = [];
+  let match: RegExpExecArray | null;
+  while ((match = regex.exec(file)) !== null) {
+    const name = match[1].trim();
+    const body = match[2];
+    const powers = [] as any[];
+    body.split(/\r?\n/).forEach((line) => {
+      const m = line.match(/^([^:]+):\s*(\d+)/);
+      if (m) {
+        powers.push({ name: m[1].replace(/\\\*/g, '').trim(), score: Number(m[2]) });
+      }
+    });
+    if (powers.length > 0 && !name.startsWith('Option')) {
+      sets.push({ name, powers, requiredArchetypes: archetypeMap[name] || [] });
+    }
+  }
+  return sets;
+}
+
+function parsePowerMods() {
+  const file = fs.readFileSync(path.join(docsDir, '3.1_Powers Chapter 5.1.md'), 'utf8');
+  const start = file.indexOf('# Power Modifications (Flaws and Perks)');
+  const text = start >= 0 ? file.slice(start) : file;
+  const lines = text.split(/\r?\n/);
+  const mods: any[] = [];
+  let current: any = null;
+  for (const raw of lines) {
+    const line = raw.trim();
+    const heading = line.match(/^###\s+(.*)/);
+    if (heading) {
+      if (current) mods.push(current);
+      const nameMeta = heading[1].trim();
+      const nameMatch = nameMeta.match(/^(.*?)\s*\(([^)]+)\)/);
+      let name = nameMeta;
+      let type = '';
+      let value = 0;
+      if (!nameMatch) {
+        current = null;
+        continue;
+      }
+      name = nameMatch[1].trim();
+      const meta = nameMatch[2];
+      const typeMatch = meta.match(/(Perk|Flaw)/i);
+      const valueMatch = meta.match(/([+-]\d+)/);
+      type = typeMatch ? typeMatch[1].toLowerCase() : '';
+      value = valueMatch ? parseInt(valueMatch[1]) : 0;
+      current = { name, type, value, restriction: '', effect: '' };
+      continue;
+    }
+    if (!current) continue;
+    const restrictionMatch = line.match(/^\*\*(Restriction|Requirement):\*\*\s*(.*)/i);
+    if (restrictionMatch) {
+      current.restriction = restrictionMatch[2].trim();
+      continue;
+    }
+    const effectMatch = line.match(/^\*\*Effect:\*\*\s*(.*)/i);
+    if (effectMatch) {
+      current.effect += effectMatch[1].trim();
+      continue;
+    }
+    if (current.effect && line) {
+      current.effect += ' ' + line;
+    }
+  }
+  if (current) mods.push(current);
+  return mods.map((m) => ({
+    name: m.name,
+    type: m.type || 'perk',
+    value: m.value,
+    restriction: m.restriction,
+    effect: m.effect.trim(),
+  }));
 }
 
 function parseSkills() {
@@ -139,12 +227,16 @@ function main() {
   const skills = parseSkills();
   const gear = parseGear();
   const powers = parsePowers();
+  const powerSets = parsePowerSets();
+  const powerMods = parsePowerMods();
   const advancement = parseAdvancement();
 
   writeBoth('feats.json', feats);
   writeBoth('skills.json', skills);
   writeBoth('gear.json', gear);
   writeBoth('powers.json', powers);
+  writeBoth('powerSets.json', powerSets);
+  writeBoth('powerMods.json', powerMods);
   writeBoth('advancement.json', advancement);
 
   console.log('Generated', {
@@ -152,6 +244,8 @@ function main() {
     skills: skills.length,
     gear: gear.length,
     powers: powers.length,
+    powerSets: powerSets.length,
+    powerMods: powerMods.length,
     advancement: advancement.length,
   });
 }

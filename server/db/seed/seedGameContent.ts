@@ -107,6 +107,7 @@ async function runSeed() {
       hasDamageType: power.hasDamageType || false,
       hasTarget: power.hasTarget || false,
       skillCompatible: power.skillCompatible || false,
+      burnout: power.burnout || null,
     }).onConflictDoNothing();
   }
 
