@@ -7,8 +7,7 @@ import Step1_Concept from "@/steps/Step1_Concept";
 import Step2_Origin from "@/steps/Step2_Origin";
 import Step3_Archetype from "@/steps/Step3_Archetype";
 import Step4_Abilities from "@/steps/Step4_Abilities";
-import Step5_Skills from "@/steps/Step5_Skills";
-import Step5_Feats from "@/steps/Step5_Feats";
+import Step5_SkillsAndFeats from "@/steps/Step5_SkillsAndFeats";
 import Step6_Powers from "@/steps/Step6_Powers";
 import Step7_Weaknesses from "@/steps/Step7_Weaknesses";
 import Step8_Gear from "@/steps/Step8_Gear";
@@ -18,7 +17,7 @@ import { WIZARD_STEPS } from "@/lib/utils";
 import { useLocation, useParams, useRoute } from "wouter";
 
 export default function Creator() {
-  const { currentStep, currentSubStep, setCurrentStep } = useCharacter();
+  const { currentStep, setCurrentStep } = useCharacter();
   const params = useParams();
   const [location, setLocation] = useLocation();
   
@@ -76,7 +75,7 @@ export default function Creator() {
       case 4:
         return <Step4_Abilities />;
       case 5:
-        return currentSubStep === 0 ? <Step5_Skills /> : <Step5_Feats />;
+        return <Step5_SkillsAndFeats />;
       case 6:
         return <Step6_Powers />;
       case 7:

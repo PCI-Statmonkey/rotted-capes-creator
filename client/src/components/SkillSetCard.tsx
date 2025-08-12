@@ -6,7 +6,6 @@ import { Textarea } from "@/components/ui/textarea";
 interface SkillSetCardProps {
   set: {
     name: string;
-    points: number;
     description: string;
     skills?: (string | { name: string })[];
     feats?: (string | { name: string })[];
@@ -14,6 +13,7 @@ interface SkillSetCardProps {
     deepCutTrigger?: string;
   };
   isSelected: boolean;
+  disabled?: boolean;
   onToggle: () => void;
   selectedEdges: string[];
   onEdgeToggle: (edge: string) => void;
@@ -24,6 +24,7 @@ interface SkillSetCardProps {
 const SkillSetCard: React.FC<SkillSetCardProps> = ({
   set,
   isSelected,
+  disabled,
   onToggle,
   selectedEdges,
   onEdgeToggle,
@@ -33,8 +34,8 @@ const SkillSetCard: React.FC<SkillSetCardProps> = ({
   return (
     <div className="mb-2 p-2 border border-gray-700 rounded">
       <Label className="flex items-center gap-2">
-        <Checkbox checked={isSelected} onCheckedChange={onToggle} />
-        {set.name} ({set.points} pts)
+        <Checkbox disabled={disabled} checked={isSelected} onCheckedChange={onToggle} />
+        {set.name}
       </Label>
       <div className="text-xs text-gray-400">{set.description}</div>
 
