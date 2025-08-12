@@ -1,12 +1,12 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from "react";
-import { STORAGE_KEY, saveToLocalStorage, loadFromLocalStorage, calculateModifier } from "@/lib/utils";
+import { STORAGE_KEY, saveToLocalStorage, loadFromLocalStorage, getScoreData } from "@/lib/utils";
+import type { MasterValue } from "@shared/masterValues";
 import { trackCharacterEvent, trackEvent } from "@/lib/analytics";
 
 const RANK_BONUS = 1; // Starting rank bonus used for derived stats
 
-export interface Ability {
+export interface Ability extends Omit<MasterValue, "min" | "max"> {
   value: number;
-  modifier: number;
 }
 
 export interface Abilities {
@@ -105,12 +105,12 @@ export interface Character {
 
 // Characters begin with ability scores of 8 so that point buy starts at 0
 export const defaultAbilities: Abilities = {
-  strength: { value: 8, modifier: calculateModifier(8) },
-  dexterity: { value: 8, modifier: calculateModifier(8) },
-  constitution: { value: 8, modifier: calculateModifier(8) },
-  intelligence: { value: 8, modifier: calculateModifier(8) },
-  wisdom: { value: 8, modifier: calculateModifier(8) },
-  charisma: { value: 8, modifier: calculateModifier(8) },
+  strength: { value: 8, ...getScoreData(8) },
+  dexterity: { value: 8, ...getScoreData(8) },
+  constitution: { value: 8, ...getScoreData(8) },
+  intelligence: { value: 8, ...getScoreData(8) },
+  wisdom: { value: 8, ...getScoreData(8) },
+  charisma: { value: 8, ...getScoreData(8) },
 };
 
 export const createEmptyCharacter = (): Character => ({
@@ -203,14 +203,14 @@ export const CharacterProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const updateAbilityScore = (ability: keyof Abilities, value: number) => {
-    const mod = calculateModifier(value);
+    const data = getScoreData(value);
     setCharacter((prev) => ({
       ...prev,
       abilities: {
         ...prev.abilities,
         [ability]: {
           value,
-          modifier: mod,
+          ...data,
         },
       },
       updatedAt: new Date().toISOString(),
@@ -532,7 +532,7 @@ export const CharacterProvider = ({ children }: { children: ReactNode }) => {
           const target = p.ability || p.name.match(/\(([^)]+)\)/)?.[1];
           if (target && target.toLowerCase().includes(ability.toLowerCase())) {
             const score = p.finalScore ?? p.score ?? 10;
-            const mod = Math.max(1, calculateModifier(score));
+            const mod = Math.max(1, getScoreData(score).modifier);
             return total + mod;
           }
         }
@@ -550,32 +550,32 @@ export const CharacterProvider = ({ children }: { children: ReactNode }) => {
       strength: {
         ...character.abilities.strength,
         value: character.abilities.strength.value + getTotalBonus('strength'),
-        modifier: calculateModifier(character.abilities.strength.value + getTotalBonus('strength'))
+        ...getScoreData(character.abilities.strength.value + getTotalBonus('strength')),
       },
       dexterity: {
         ...character.abilities.dexterity,
         value: character.abilities.dexterity.value + getTotalBonus('dexterity'),
-        modifier: calculateModifier(character.abilities.dexterity.value + getTotalBonus('dexterity'))
+        ...getScoreData(character.abilities.dexterity.value + getTotalBonus('dexterity')),
       },
       constitution: {
         ...character.abilities.constitution,
         value: character.abilities.constitution.value + getTotalBonus('constitution'),
-        modifier: calculateModifier(character.abilities.constitution.value + getTotalBonus('constitution'))
+        ...getScoreData(character.abilities.constitution.value + getTotalBonus('constitution')),
       },
       intelligence: {
         ...character.abilities.intelligence,
         value: character.abilities.intelligence.value + getTotalBonus('intelligence'),
-        modifier: calculateModifier(character.abilities.intelligence.value + getTotalBonus('intelligence'))
+        ...getScoreData(character.abilities.intelligence.value + getTotalBonus('intelligence')),
       },
       wisdom: {
         ...character.abilities.wisdom,
         value: character.abilities.wisdom.value + getTotalBonus('wisdom'),
-        modifier: calculateModifier(character.abilities.wisdom.value + getTotalBonus('wisdom'))
+        ...getScoreData(character.abilities.wisdom.value + getTotalBonus('wisdom')),
       },
       charisma: {
         ...character.abilities.charisma,
         value: character.abilities.charisma.value + getTotalBonus('charisma'),
-        modifier: calculateModifier(character.abilities.charisma.value + getTotalBonus('charisma'))
+        ...getScoreData(character.abilities.charisma.value + getTotalBonus('charisma')),
       }
     };
     

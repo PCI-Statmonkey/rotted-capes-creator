@@ -6,7 +6,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import { useCharacter } from "@/context/CharacterContext";
 import { trackEvent } from "@/lib/analytics";
-import { calculateModifier, formatModifier } from "@/lib/utils";
+import { getScoreData, formatModifier } from "@/lib/utils";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { useCharacterBuilder } from "@/lib/Stores/characterBuilder";
 
@@ -71,7 +71,7 @@ export default function Step4_Abilities() {
       const abilityKey = key as keyof typeof defaultAbilities;
       defaultAbilities[abilityKey] = {
         value: 8,
-        modifier: calculateModifier(8)
+        ...getScoreData(8)
       };
     });
     setLocalAbilities(defaultAbilities);
@@ -237,7 +237,7 @@ export default function Step4_Abilities() {
     const newAbilities = { ...localAbilities };
     newAbilities[ability as keyof typeof localAbilities] = {
       value: score,
-      modifier: calculateModifier(score)
+      ...getScoreData(score)
     };
     setLocalAbilities(newAbilities);
   };
@@ -265,7 +265,7 @@ export default function Step4_Abilities() {
       const abilityKey = key as keyof typeof defaultAbilities;
       defaultAbilities[abilityKey] = {
         value: 8,
-        modifier: calculateModifier(8)
+        ...getScoreData(8)
       };
     });
     setLocalAbilities(defaultAbilities);
@@ -290,7 +290,7 @@ export default function Step4_Abilities() {
         const newAbilities = { ...localAbilities };
         newAbilities[ability] = {
           value: nextScore,
-          modifier: calculateModifier(nextScore)
+          ...getScoreData(nextScore)
         };
         setLocalAbilities(newAbilities);
       }
@@ -305,7 +305,7 @@ export default function Step4_Abilities() {
       const newAbilities = { ...localAbilities };
       newAbilities[ability] = {
         value: nextScore,
-        modifier: calculateModifier(nextScore)
+        ...getScoreData(nextScore)
       };
       setLocalAbilities(newAbilities);
     }
@@ -498,6 +498,7 @@ const handleContinue = () => {
             const abilityValue = localAbilities[abilityKey].value;
             const abilityMod = localAbilities[abilityKey].modifier;
             const bonus = getTotalBonus(ability);
+            const finalData = getScoreData(abilityValue + bonus);
             
             return (
               <div 
@@ -533,11 +534,14 @@ const handleContinue = () => {
                     <span className="text-lg font-bold ml-1">{abilityValue + bonus}</span>
                     
                     {/* Modifier based on final score */}
-                    <span className="ml-2 text-gray-400">({formatModifier(calculateModifier(abilityValue + bonus))})</span>
+                    <span className="ml-2 text-gray-400">({formatModifier(finalData.modifier)})</span>
                   </div>
                 </div>
-                
-                <p className="text-xs text-gray-400 mb-3">{getAbilityDescription(ability)}</p>
+
+                <p className="text-xs text-gray-400 mb-1">{getAbilityDescription(ability)}</p>
+                {ability === 'strength' && (
+                  <p className="text-xs text-gray-400 mb-3">Max Lift: {finalData.maxLift} (Push/Drag {finalData.maxPushDrag})</p>
+                )}
                 
                 {assignmentMethod === "pointBuy" ? (
                   <div className="flex justify-between mt-auto">

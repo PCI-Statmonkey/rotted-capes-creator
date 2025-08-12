@@ -11,6 +11,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Switch } from "@/components/ui/switch";
 import { useCharacter } from "@/context/CharacterContext";
 import { trackEvent } from "@/lib/analytics";
+import { getScoreData, formatModifier } from "@/lib/utils";
 
 // Define the power sets
 interface PowerSet {
@@ -1029,21 +1030,23 @@ export default function Step6_Powers() {
           <TabsContent value="powers" className="space-y-4 mt-4">
             {powerCreationMethod === "powerSet" && selectedPowerSet && (
               <div className="space-y-4">
-                {selectedPowers.map((power, index) => (
-                  <div
-                    key={index}
-                    className="p-4 bg-gray-700 rounded-lg border border-gray-600"
-                  >
-                    <div className="flex justify-between mb-2">
-                      <div className="font-medium text-red-500">{formatPowerName(power.name)}</div>
-                      <div className="flex items-center">
-                        <span className="text-gray-400 mr-2">Score:</span>
-                        <span className="text-accent">{power.score}</span>
-                        {power.finalScore !== power.score && (
-                          <span className="text-green-400 ml-1">→ {power.finalScore}</span>
-                        )}
+                {selectedPowers.map((power, index) => {
+                  const data = getScoreData(power.finalScore);
+                  return (
+                    <div
+                      key={index}
+                      className="p-4 bg-gray-700 rounded-lg border border-gray-600"
+                    >
+                      <div className="flex justify-between mb-2">
+                        <div className="font-medium text-red-500">{formatPowerName(power.name)}</div>
+                        <div className="flex items-center">
+                          <span className="text-gray-400 mr-2">Score:</span>
+                          <span className="text-accent">{power.score}</span>
+                          {power.finalScore !== power.score && (
+                            <span className="text-green-400 ml-1">→ {power.finalScore}</span>
+                          )}
+                        </div>
                       </div>
-                    </div>
                     
                     {power.damageType !== undefined && (
                       <div className="mt-2">
@@ -1112,7 +1115,7 @@ export default function Step6_Powers() {
                           </div>
                         )}
 
-                        {power.flaws.some(f => f.name === 'Linked') && selectedPowers.length > 1 && (
+                    {power.flaws.some(f => f.name === 'Linked') && selectedPowers.length > 1 && (
                           <div className="mt-2 space-y-1">
                             <Label className="text-xs">Linked To</Label>
                             {selectedPowers.map((p, idx) => (
@@ -1131,8 +1134,15 @@ export default function Step6_Powers() {
                         )}
                       </div>
                     )}
+                    {power.finalScore !== power.score && (
+                      <div className="text-base text-green-400 mt-3 font-comic-light">
+                        Final Score: {power.finalScore} (Die: {data.baseDie || "-"} {formatModifier(data.modifier)} | Range: {data.powerRange}
+                        {data.maxLift && ` | Max Lift: ${data.maxLift}`}
+                        {data.topMPH && data.topMPH !== '-' && ` | Top MPH: ${data.topMPH}`})
+                      </div>
+                    )}
                   </div>
-                ))}
+                );})}
               </div>
             )}
             
@@ -1403,11 +1413,16 @@ export default function Step6_Powers() {
                     )}
 
                         {/* Display final score if it differs */}
-                          {power.finalScore !== power.score && (
+                        {power.finalScore !== power.score && (() => {
+                          const data = getScoreData(power.finalScore);
+                          return (
                             <div className="text-base text-green-400 mt-3 font-comic-light">
-                              Final Score: {power.finalScore} (after modifiers)
+                              Final Score: {power.finalScore} (Die: {data.baseDie || "-"} {formatModifier(data.modifier)} | Range: {data.powerRange}
+                              {data.maxLift && ` | Max Lift: ${data.maxLift}`}
+                              {data.topMPH && data.topMPH !== '-' && ` | Top MPH: ${data.topMPH}`})
                             </div>
-                          )}
+                          );
+                        })()}
                         </div>
                       </div>
                     </div>
@@ -1590,11 +1605,16 @@ export default function Step6_Powers() {
                         </div>
                         
                         {/* Display final score if it differs */}
-                        {power.finalScore !== power.score && (
-                          <div className="text-base text-green-400 mt-2 font-comic-light">
-                            Final Score: {power.finalScore} (after modifiers)
-                          </div>
-                        )}
+                        {power.finalScore !== power.score && (() => {
+                          const data = getScoreData(power.finalScore);
+                          return (
+                            <div className="text-base text-green-400 mt-2 font-comic-light">
+                              Final Score: {power.finalScore} (Die: {data.baseDie || "-"} {formatModifier(data.modifier)} | Range: {data.powerRange}
+                              {data.maxLift && ` | Max Lift: ${data.maxLift}`}
+                              {data.topMPH && data.topMPH !== '-' && ` | Top MPH: ${data.topMPH}`})
+                            </div>
+                          );
+                        })()}
                         
                         {/* Display applied modifiers */}
                         {(power.flaws.length > 0 || power.perks.length > 0) && (

@@ -8,7 +8,7 @@ import { Separator } from "@/components/ui/separator";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "@/hooks/use-toast";
-import { calculateModifier, formatModifier } from "@/lib/utils";
+import { getScoreData, formatModifier } from "@/lib/utils";
 import { Check, Save, Shield, Heart, Target } from "lucide-react";
 import { apiRequest } from "@/lib/queryClient";
 import CharacterPdfButton from "@/components/CharacterPdfButton";
@@ -23,12 +23,12 @@ export default function Step10_Summary() {
 
   // Calculate derived stats
   const calculateDerivedStats = () => {
-    const strMod = calculateModifier(character.abilities.strength.value);
-    const dexMod = calculateModifier(character.abilities.dexterity.value);
-    const conMod = calculateModifier(character.abilities.constitution.value);
-    const intMod = calculateModifier(character.abilities.intelligence.value);
-    const wisMod = calculateModifier(character.abilities.wisdom.value);
-    const chaMod = calculateModifier(character.abilities.charisma.value);
+    const strMod = getScoreData(character.abilities.strength.value).modifier;
+    const dexMod = getScoreData(character.abilities.dexterity.value).modifier;
+    const conMod = getScoreData(character.abilities.constitution.value).modifier;
+    const intMod = getScoreData(character.abilities.intelligence.value).modifier;
+    const wisMod = getScoreData(character.abilities.wisdom.value).modifier;
+    const chaMod = getScoreData(character.abilities.charisma.value).modifier;
     
     // Avoidance uses the better of Dexterity or Intelligence plus rank bonus
     const avoidance = 10 + Math.max(dexMod, intMod) + RANK_BONUS;
@@ -277,6 +277,7 @@ export default function Step10_Summary() {
                   <th className="text-left py-2">Ability</th>
                   <th className="text-center py-2">Score</th>
                   <th className="text-center py-2">Bonus</th>
+                  <th className="text-center py-2">Die</th>
                 </tr>
               </thead>
               <tbody>
@@ -284,34 +285,41 @@ export default function Step10_Summary() {
                   <td className="py-2">Strength</td>
                   <td className="text-center py-2 font-semibold">{character.abilities.strength.value}</td>
                   <td className="text-center py-2 font-semibold">{formatModifier(character.abilities.strength.modifier)}</td>
+                  <td className="text-center py-2 font-semibold">{character.abilities.strength.baseDie || '-'}</td>
                 </tr>
                 <tr className="border-b border-gray-700">
                   <td className="py-2">Dexterity</td>
                   <td className="text-center py-2 font-semibold">{character.abilities.dexterity.value}</td>
                   <td className="text-center py-2 font-semibold">{formatModifier(character.abilities.dexterity.modifier)}</td>
+                  <td className="text-center py-2 font-semibold">{character.abilities.dexterity.baseDie || '-'}</td>
                 </tr>
                 <tr className="border-b border-gray-700">
                   <td className="py-2">Constitution</td>
                   <td className="text-center py-2 font-semibold">{character.abilities.constitution.value}</td>
                   <td className="text-center py-2 font-semibold">{formatModifier(character.abilities.constitution.modifier)}</td>
+                  <td className="text-center py-2 font-semibold">{character.abilities.constitution.baseDie || '-'}</td>
                 </tr>
                 <tr className="border-b border-gray-700">
                   <td className="py-2">Intelligence</td>
                   <td className="text-center py-2 font-semibold">{character.abilities.intelligence.value}</td>
                   <td className="text-center py-2 font-semibold">{formatModifier(character.abilities.intelligence.modifier)}</td>
+                  <td className="text-center py-2 font-semibold">{character.abilities.intelligence.baseDie || '-'}</td>
                 </tr>
                 <tr className="border-b border-gray-700">
                   <td className="py-2">Wisdom</td>
                   <td className="text-center py-2 font-semibold">{character.abilities.wisdom.value}</td>
                   <td className="text-center py-2 font-semibold">{formatModifier(character.abilities.wisdom.modifier)}</td>
+                  <td className="text-center py-2 font-semibold">{character.abilities.wisdom.baseDie || '-'}</td>
                 </tr>
                 <tr>
                   <td className="py-2">Charisma</td>
                   <td className="text-center py-2 font-semibold">{character.abilities.charisma.value}</td>
                   <td className="text-center py-2 font-semibold">{formatModifier(character.abilities.charisma.modifier)}</td>
+                  <td className="text-center py-2 font-semibold">{character.abilities.charisma.baseDie || '-'}</td>
                 </tr>
               </tbody>
             </table>
+            <p className="text-xs text-gray-400 mt-2">Max Lift: {character.abilities.strength.maxLift} (Push/Drag {character.abilities.strength.maxPushDrag})</p>
           </CardContent>
         </Card>
         
@@ -403,43 +411,51 @@ export default function Step10_Summary() {
           <CardContent className="max-h-96 overflow-y-auto">
             {character.powers.length > 0 ? (
               <div className="space-y-4">
-                {character.powers.map((power, index) => (
-                  <div key={index} className="border border-gray-700 rounded-lg p-3">
-                    <div className="flex justify-between items-start">
-                      <h3 className="font-semibold">{power.name}</h3>
-                      {power.score && (
-                        <Badge variant="secondary">{power.score}</Badge>
-                      )}
-                    </div>
-                    <p className="text-sm text-gray-400 mt-1">{power.description}</p>
-                    
-                    {(power.perks.length > 0 || power.flaws.length > 0) && (
-                      <div className="grid grid-cols-2 gap-2 mt-2">
-                        {power.perks.length > 0 && (
-                          <div>
-                            <Label className="text-xs text-gray-400">Perks</Label>
-                            <ul className="text-xs ml-4 list-disc">
-                              {power.perks.map((perk, idx) => (
-                                <li key={idx}>{perk}</li>
-                              ))}
-                            </ul>
-                          </div>
-                        )}
-                        
-                        {power.flaws.length > 0 && (
-                          <div>
-                            <Label className="text-xs text-gray-400">Flaws</Label>
-                            <ul className="text-xs ml-4 list-disc">
-                              {power.flaws.map((flaw, idx) => (
-                                <li key={idx}>{flaw}</li>
-                              ))}
-                            </ul>
-                          </div>
+                {character.powers.map((power, index) => {
+                  const data = getScoreData(power.finalScore || power.score || 0);
+                  return (
+                    <div key={index} className="border border-gray-700 rounded-lg p-3">
+                      <div className="flex justify-between items-start">
+                        <h3 className="font-semibold">{power.name}</h3>
+                        {power.score && (
+                          <Badge variant="secondary">{power.score}</Badge>
                         )}
                       </div>
-                    )}
-                  </div>
-                ))}
+                      <div className="text-xs text-gray-300 mt-1">
+                        Die: {data.baseDie || "-"} {formatModifier(data.modifier)} | Range: {data.powerRange}
+                        {data.maxLift && ` | Max Lift: ${data.maxLift}`}
+                        {data.topMPH && data.topMPH !== '-' && ` | Top MPH: ${data.topMPH}`}
+                      </div>
+                      <p className="text-sm text-gray-400 mt-1">{power.description}</p>
+
+                      {(power.perks.length > 0 || power.flaws.length > 0) && (
+                        <div className="grid grid-cols-2 gap-2 mt-2">
+                          {power.perks.length > 0 && (
+                            <div>
+                              <Label className="text-xs text-gray-400">Perks</Label>
+                              <ul className="text-xs ml-4 list-disc">
+                                {power.perks.map((perk, idx) => (
+                                  <li key={idx}>{perk}</li>
+                                ))}
+                              </ul>
+                            </div>
+                          )}
+
+                          {power.flaws.length > 0 && (
+                            <div>
+                              <Label className="text-xs text-gray-400">Flaws</Label>
+                              <ul className="text-xs ml-4 list-disc">
+                                {power.flaws.map((flaw, idx) => (
+                                  <li key={idx}>{flaw}</li>
+                                ))}
+                              </ul>
+                            </div>
+                          )}
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
               </div>
             ) : (
               <div className="text-center py-6 text-gray-500">No powers defined</div>
