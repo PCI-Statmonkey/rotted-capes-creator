@@ -67,10 +67,7 @@ export const feats = pgTable("feats", {
 export const skillSets = pgTable("skill_sets", {
   id: serial("id").primaryKey(),
   name: text("name").notNull().unique(),
-  ability: text("ability").notNull(),
   description: text("description").notNull(),
-  untrained: boolean("untrained").default(true).notNull(),
-  focusOptions: text("focus_options").array(),
   edges: text("edges").array().notNull().default([]),
   deepCutTrigger: text("deep_cut_trigger"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
@@ -157,10 +154,7 @@ export const insertArchetypeSchema = createInsertSchema(archetypes).pick({
 
 export const insertSkillSetSchema = createInsertSchema(skillSets).pick({
   name: true,
-  ability: true,
   description: true,
-  untrained: true,
-  focusOptions: true,
   edges: true,
   deepCutTrigger: true,
 });

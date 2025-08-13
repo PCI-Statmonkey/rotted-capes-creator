@@ -25,7 +25,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import skillSetsData from "@/rules/skillSets.json";
+import skillSetsData from "@/rules/skills.json";
 import featsData from "@/rules/feats.json";
 import weaknessesData from "@/rules/weaknesses.json";
 

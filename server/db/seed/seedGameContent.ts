@@ -15,7 +15,7 @@ import {
   gear,
 } from "../../../shared/schema";
 import featsData from "../../../client/src/rules/feats.json" with { type: "json" };
-import skillSetsData from "../../../client/src/rules/skillSets.json" with { type: "json" };
+import skillSetsData from "../../../client/src/rules/skills.json" with { type: "json" };
 import originsData from "../../../client/src/rules/origins.json" with { type: "json" };
 import archetypesData from "../../../client/src/rules/archetypes.json" with { type: "json" };
 import powersData from "../../../client/src/rules/powers.json" with { type: "json" };
@@ -45,10 +45,7 @@ async function runSeed() {
   for (const set of skillSetsData as any[]) {
     await db.insert(skillSets).values({
       name: set.name,
-      ability: set.ability || "Intelligence",
       description: set.description || "",
-      untrained: set.untrained ?? true,
-      focusOptions: set.focusOptions ?? [],
       edges: set.edges ?? [],
       deepCutTrigger: set.deepCutTrigger ?? null,
     }).onConflictDoNothing();
