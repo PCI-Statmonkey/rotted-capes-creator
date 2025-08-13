@@ -143,31 +143,28 @@ export const sampleFeats = [
 export const sampleSkillSets = [
   {
     id: 0,
-    name: "Combat Training",
-    description: "Basic combat skills that any hero might need in a fight.",
-    points: 4,
-    skills: ["Athletics", "Intimidation"],
-    feats: ["Power Attack"],
+    name: "Former Delta Force Operative",
+    description:
+      "Elite military training adapted to the apocalypse, from close-quarters battle to survival tactics.",
+    edges: ["Breaching Specialist", "Tactical Awareness"],
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString()
   },
   {
     id: 1,
-    name: "Infiltration",
-    description: "Skills focused on stealth and bypassing security.",
-    points: 5,
-    skills: ["Stealth", "Sleight of Hand"],
-    feats: ["Quick Reflexes"],
+    name: "Corporate Power Broker",
+    description:
+      "You knew how to pull strings and move resources in the boardroom; now those skills keep enclaves alive.",
+    edges: ["Boardroom Shark", "Financial Leverage"],
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString()
   },
   {
     id: 2,
-    name: "Investigation",
-    description: "Skills for finding clues and solving mysteries.",
-    points: 4,
-    skills: ["Investigation", "Perception"],
-    feats: ["Keen Observer"],
+    name: "Urban Explorer",
+    description:
+      "Navigating rooftops, tunnels, and ruins was your hobby; now it's how you keep ahead of the dead.",
+    edges: ["Parkour Pro", "Knows Every Back Alley"],
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString()
   }
