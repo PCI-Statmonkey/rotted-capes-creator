@@ -76,14 +76,20 @@ const Step5_SkillsAndFeats = () => {
     setValue: (v: string) => void,
     customValue: string,
     setCustom: (v: string) => void,
-    disabled = false
+    disabled = false,
+    includeNone = false
   ) => (
     <div>
       <Select
         value={value}
         onValueChange={(v) => {
-          setValue(v);
-          if (v !== "custom") setCustom("");
+          if (v === "none") {
+            setValue("");
+            setCustom("");
+          } else {
+            setValue(v);
+            if (v !== "custom") setCustom("");
+          }
         }}
         disabled={disabled}
       >
@@ -91,6 +97,7 @@ const Step5_SkillsAndFeats = () => {
           <SelectValue placeholder="Select skill set" />
         </SelectTrigger>
         <SelectContent>
+          {includeNone && <SelectItem value="none">None</SelectItem>}
           {skillSetOptions.map((s) => (
             <SelectItem key={s} value={s}>
               {s}
@@ -113,13 +120,19 @@ const Step5_SkillsAndFeats = () => {
   const renderFeatSelect = (
     value: string,
     setValue: (v: string) => void,
-    disabled = false
+    disabled = false,
+    includeNone = false
   ) => (
-    <Select value={value} onValueChange={setValue} disabled={disabled}>
+    <Select
+      value={value}
+      onValueChange={(v) => setValue(v === "none" ? "" : v)}
+      disabled={disabled}
+    >
       <SelectTrigger>
         <SelectValue placeholder="Select feat" />
       </SelectTrigger>
       <SelectContent>
+        {includeNone && <SelectItem value="none">None</SelectItem>}
         {feats.map((f: any) => (
           <SelectItem key={f.name} value={f.name}>
             {f.name}
@@ -156,15 +169,21 @@ const Step5_SkillsAndFeats = () => {
             },
             row2CustomSkill,
             setRow2CustomSkill,
-            !!row2Feat
+            !!row2Feat,
+            true
           )}
-          {renderFeatSelect(row2Feat, (v) => {
-            setRow2Feat(v);
-            if (v) {
-              setRow2SkillSet("");
-              setRow2CustomSkill("");
-            }
-          }, !!row2SkillSet)}
+          {renderFeatSelect(
+            row2Feat,
+            (v) => {
+              setRow2Feat(v);
+              if (v) {
+                setRow2SkillSet("");
+                setRow2CustomSkill("");
+              }
+            },
+            !!row2SkillSet,
+            true
+          )}
         </div>
         {isSkillBased && (
           <div className="grid md:grid-cols-2 gap-4">
@@ -176,15 +195,21 @@ const Step5_SkillsAndFeats = () => {
               },
               row3CustomSkill,
               setRow3CustomSkill,
-              !!row3Feat
+              !!row3Feat,
+              true
             )}
-            {renderFeatSelect(row3Feat, (v) => {
-              setRow3Feat(v);
-              if (v) {
-                setRow3SkillSet("");
-                setRow3CustomSkill("");
-              }
-            }, !!row3SkillSet)}
+            {renderFeatSelect(
+              row3Feat,
+              (v) => {
+                setRow3Feat(v);
+                if (v) {
+                  setRow3SkillSet("");
+                  setRow3CustomSkill("");
+                }
+              },
+              !!row3SkillSet,
+              true
+            )}
           </div>
         )}
       </div>
