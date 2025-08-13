@@ -74,39 +74,6 @@ export const sampleArchetypes = [
   }
 ];
 
-// Sample Skills data
-export const sampleSkills = [
-  {
-    id: 0,
-    name: "Athletics",
-    description: "Your physical prowess allows you to perform feats of strength and endurance.",
-    ability: "Strength",
-    focusOptions: ["Climbing", "Running"],
-    untrained: true,
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString()
-  },
-  {
-    id: 1,
-    name: "Acrobatics",
-    description: "Your agility and balance allow you to perform dangerous maneuvers and avoid hazards.",
-    ability: "Dexterity",
-    focusOptions: ["Tumbling", "Parkour"],
-    untrained: true,
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString()
-  },
-  {
-    id: 2,
-    name: "Investigation",
-    description: "Your analytical mind allows you to find clues and draw conclusions from evidence.",
-    ability: "Intelligence",
-    focusOptions: ["Forensics"],
-    untrained: true,
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString()
-  }
-];
 
 // Sample Feats data
 export const sampleFeats = [
@@ -314,12 +281,11 @@ export const getSampleData = (contentType: string): any[] => {
     case 'archetypes':
       return sampleArchetypes;
     case 'skills':
-      return sampleSkills;
-    case 'feats':
-      return sampleFeats;
     case 'skillSets':
     case 'skill-sets':
       return sampleSkillSets;
+    case 'feats':
+      return sampleFeats;
     case 'powers':
       return samplePowers;
     case 'powerSets':

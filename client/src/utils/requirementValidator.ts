@@ -252,10 +252,6 @@ export const meetsPrerequisites = (feat: any, character: any) => {
     )
   );
 
-  const skillsFromSets = skillSets
-    .filter((set: any) => selectedSetNames.includes(set.name))
-    .flatMap((set: any) => set.skills);
-
   const edgesFromSets: string[] = (selectedSkillSets || [])
     .flatMap((s: any) =>
       typeof s === 'object' && Array.isArray(s.edges)
@@ -269,7 +265,7 @@ export const meetsPrerequisites = (feat: any, character: any) => {
   const allSkills = new Set([
     ...selectedSkills.map((s: any) => normalizeName(s.name)),
     ...startingSkills.map((s: any) => normalizeName(s)),
-    ...skillsFromSets.map((s: any) => normalizeSkill(s))
+    // skill sets no longer grant discrete skills
   ]);
 
   const ownedFeats = selectedFeats.map((f: any) => f.name);
@@ -403,10 +399,6 @@ export const getMissingPrereqs = (feat: any, character: any) => {
     )
   );
 
-  const skillsFromSets = skillSets
-    .filter((set: any) => selectedSetNames.includes(set.name))
-    .flatMap((set: any) => set.skills);
-
   const edgesFromSets: string[] = (selectedSkillSets || [])
     .flatMap((s: any) =>
       typeof s === 'object' && Array.isArray(s.edges)
@@ -420,7 +412,7 @@ export const getMissingPrereqs = (feat: any, character: any) => {
   const allSkills = new Set([
     ...selectedSkills.map((s: any) => normalizeName(s.name)),
     ...startingSkills.map((s: any) => normalizeName(s)),
-    ...skillsFromSets.map((s: any) => normalizeSkill(s))
+    // skill sets no longer grant discrete skills
   ]);
 
   const ownedFeats = selectedFeats.map((f: any) => f.name);

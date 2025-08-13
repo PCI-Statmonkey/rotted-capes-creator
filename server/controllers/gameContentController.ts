@@ -4,8 +4,11 @@
 import { Request, Response, NextFunction } from "express";
 import { storage } from "../storage";
 import {
-  insertOriginSchema, insertArchetypeSchema, insertSkillSchema,
-  insertFeatSchema, insertSkillSetSchema, insertPowerSchema,
+  insertOriginSchema,
+  insertArchetypeSchema,
+  insertFeatSchema,
+  insertSkillSetSchema,
+  insertPowerSchema,
   insertPowerSetSchema,
   insertPowerModifierSchema,
   insertWeaknessSchema,
@@ -122,15 +125,6 @@ export const {
   update: updateArchetype,
   remove: deleteArchetype
 } = makeCrudHandlers("Archetype", insertArchetypeSchema);
-
-// Skill
-export const {
-  getAll: getAllSkills,
-  getOne: getSkillById,
-  create: createSkill,
-  update: updateSkill,
-  remove: deleteSkill
-} = makeCrudHandlers("Skill", insertSkillSchema);
 
 // Feat
 export const {

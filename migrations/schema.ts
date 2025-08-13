@@ -1,6 +1,6 @@
 // shared/schema.ts
 
-import { pgTable, serial, text, timestamp, jsonb } from "drizzle-orm/pg-core";
+import { pgTable, serial, text, timestamp, jsonb, boolean } from "drizzle-orm/pg-core";
 
 // Origins Table
 export const origins = pgTable("origins", {
@@ -26,16 +26,6 @@ export const archetypes = pgTable("archetypes", {
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
 
-// Skills Table
-export const skills = pgTable("skills", {
-  id: serial("id").primaryKey(),
-  name: text("name").notNull(),
-  description: text("description").notNull(),
-  categories: jsonb("categories").notNull(),
-  createdAt: timestamp("created_at").defaultNow().notNull(),
-  updatedAt: timestamp("updated_at").defaultNow().notNull(),
-});
-
 // Feats Table
 export const feats = pgTable("feats", {
   id: serial("id").primaryKey(),
@@ -50,8 +40,12 @@ export const feats = pgTable("feats", {
 export const skillSets = pgTable("skill_sets", {
   id: serial("id").primaryKey(),
   name: text("name").notNull(),
+  ability: text("ability").notNull(),
   description: text("description").notNull(),
-  includedSkills: jsonb("included_skills").notNull(),
+  untrained: boolean("untrained").default(true).notNull(),
+  focusOptions: jsonb("focus_options"),
+  edges: jsonb("edges").default([]).notNull(),
+  deepCutTrigger: text("deep_cut_trigger"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });

@@ -15,11 +15,6 @@ import {
   createArchetype,
   updateArchetype,
   deleteArchetype,
-  getAllSkills,
-  getSkillById,
-  createSkill,
-  updateSkill,
-  deleteSkill,
   getAllFeats,
   getFeatById,
   createFeat,
@@ -88,10 +83,6 @@ router.get("/origins/:id", getOriginById);
 router.get("/archetypes", getAllArchetypes);
 router.get("/archetypes/:id", getArchetypeById);
 
-// Skills
-router.get("/skills", getAllSkills);
-router.get("/skills/:id", getSkillById);
-
 // Feats
 router.get("/feats", getAllFeats);
 router.get("/feats/:id", getFeatById);
@@ -139,11 +130,6 @@ router.delete("/origins/:id", ensureAdmin, deleteOrigin);
 router.post("/archetypes", ensureAdmin, createArchetype);
 router.patch("/archetypes/:id", ensureAdmin, updateArchetype);
 router.delete("/archetypes/:id", ensureAdmin, deleteArchetype);
-
-// Skills
-router.post("/skills", ensureAdmin, createSkill);
-router.patch("/skills/:id", ensureAdmin, updateSkill);
-router.delete("/skills/:id", ensureAdmin, deleteSkill);
 
 // Feats
 router.post("/feats", ensureAdmin, createFeat);

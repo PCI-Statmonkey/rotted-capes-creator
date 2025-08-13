@@ -25,7 +25,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import skillsData from "@/rules/skills.json";
+import skillSetsData from "@/rules/skillSets.json";
 import featsData from "@/rules/feats.json";
 import weaknessesData from "@/rules/weaknesses.json";
 
@@ -801,18 +801,18 @@ export default function Step7_Weaknesses() {
             <Accordion type="single" collapsible className="w-full">
               <AccordionItem value="item-1">
                 <AccordionTrigger className="text-accent">
-                  5 Points: Gain training in a skill and +1 to any ability/power score
+                  5 Points: Gain training in a skill set and +1 to any ability/power score
                 </AccordionTrigger>
                 <AccordionContent>
                   <div className="space-y-3 p-2">
                     <div>
-                      <label className="block text-sm mb-1">Skill</label>
+                      <label className="block text-sm mb-1">Skill Set</label>
                       <Select value={fivePointSkill} onValueChange={setFivePointSkill}>
                         <SelectTrigger className="bg-gray-700">
-                          <SelectValue placeholder="Select skill" />
+                          <SelectValue placeholder="Select skill set" />
                         </SelectTrigger>
                         <SelectContent>
-                          {skillsData.map((s) => (
+                          {skillSetsData.map((s) => (
                             <SelectItem key={s.name} value={s.name}>{s.name}</SelectItem>
                           ))}
                         </SelectContent>
