@@ -9,14 +9,12 @@ import {
   powerModifiers,
   weaknesses,
   feats,
-  skills,
   skillSets,
   maneuvers,
   originFeatures,
   gear,
 } from "../../../shared/schema";
 import featsData from "../../../client/src/rules/feats.json" with { type: "json" };
-import skillsData from "../../../client/src/rules/skills.json" with { type: "json" };
 import skillSetsData from "../../../client/src/rules/skillSets.json" with { type: "json" };
 import originsData from "../../../client/src/rules/origins.json" with { type: "json" };
 import archetypesData from "../../../client/src/rules/archetypes.json" with { type: "json" };
@@ -29,17 +27,6 @@ import gearData from "../../../client/src/rules/gear.json" with { type: "json" }
 import weaknessesData from "../../../client/src/rules/weaknesses.json" with { type: "json" };
 
 async function runSeed() {
-  console.log("🌱 Seeding skills...");
-  for (const skill of skillsData as any[]) {
-    await db.insert(skills).values({
-      name: skill.name,
-      ability: skill.ability || "Intelligence",
-      description: skill.description || "",
-      untrained: skill.untrained ?? true,
-      focusOptions: skill.focusOptions ?? null,
-    }).onConflictDoNothing();
-  }
-
   console.log("🌱 Seeding feats...");
   for (const feat of featsData as any[]) {
     await db.insert(feats).values({
@@ -58,10 +45,12 @@ async function runSeed() {
   for (const set of skillSetsData as any[]) {
     await db.insert(skillSets).values({
       name: set.name,
-      points: set.points || 0,
-      skills: set.skills.map((s: any) => (typeof s === "string" ? { name: s } : s)),
-      feats: set.feats || [],
+      ability: set.ability || "Intelligence",
       description: set.description || "",
+      untrained: set.untrained ?? true,
+      focusOptions: set.focusOptions ?? [],
+      edges: set.edges ?? [],
+      deepCutTrigger: set.deepCutTrigger ?? null,
     }).onConflictDoNothing();
   }
 

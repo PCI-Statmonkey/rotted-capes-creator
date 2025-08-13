@@ -1,92 +1,380 @@
 [
   {
-    "name": "Academic/Student",
-    "points": 6,
-    "skills": ["Academics", "Athletics", "Linguistics", "Science", "Technology"],
-    "feats": ["Eclectic Knowledge"]
+    "name": "Beat Cop",
+    "ability": "Intelligence",
+    "description": "You weren’t a superhero, but you wore a badge and tried to make a difference. You know how to read a crowd, take down a threat without killing them, and recognize when someone’s about to crack. The law’s dead, but your instincts aren’t.",
+    "untrained": true,
+    "focusOptions": []
   },
   {
-    "name": "Athlete, Pro/Semi-Pro",
-    "points": 5,
-    "skills": ["Academics", "Acrobatics", "Athletics", "Perception"],
-    "feats": ["Quick"]
+    "name": "Confidence Artist",
+    "ability": "Intelligence",
+    "description": "You don't lie. You tell better stories than the truth. You have a face people trust, a voice they lean into, and a bag full of tricks to keep them leaning until you've got what you want. In the new world, that makes you dangerous, and very, very valuable.",
+    "untrained": true,
+    "focusOptions": []
   },
   {
-    "name": "Automobile Mechanic",
-    "points": 9,
-    "skills": ["Athletics", "Basic Technology", "Engineering"],
-    "feats": ["Gearhead", "Technophile"]
+    "name": "Corporate Power Broker",
+    "ability": "Intelligence",
+    "description": "You’ve sat at the head of the table and closed deals that moved billions. You understand how systems work, how to leverage influence, bury scandals, or launch initiatives with a signature. You shine in negotiation, corporate manipulation, and turning resources into results.",
+    "untrained": true,
+    "focusOptions": []
   },
   {
-    "name": "Business Professional",
-    "points": 12,
-    "skills": ["Academics", "Basic Technology", "Empathy", "Influence", "Linguistics"],
-    "feats": ["Empathic Intuition", "Honeyed Tongue"]
+    "name": "Cybercriminal",
+    "ability": "Intelligence",
+    "description": "You weren’t hacking for justice; you did it for profit, sabotage, or fun. But now your fingers still know how to crack firewalls, spoof signals, and manipulate old-world systems. This Skill Set thrives in digital ruins and compromised networks.",
+    "untrained": true,
+    "focusOptions": []
   },
   {
-    "name": "Criminal",
-    "points": 6,
-    "skills": ["Basic Technology", "Empathy", "Larceny", "Perception", "Stealth"],
-    "feats": ["Burglar"]
+    "name": "Diplomatic Protocol",
+    "ability": "Intelligence",
+    "description": "You’ve been trained in political etiquette, negotiation under tension, and how to read the cues of diplomatic posturing. You know how to avoid war with a word, and when to let silence speak. Use this to navigate power structures, negotiate tense standoffs, and defuse a crisis.",
+    "untrained": true,
+    "focusOptions": []
   },
   {
-    "name": "Computer Technician",
-    "points": 8,
-    "skills": ["Engineering", "Technology"],
-    "feats": ["Technological Savant", "Engineering Prodigy"]
+    "name": "Disaster Responder",
+    "ability": "Intelligence",
+    "description": "You were there when the levees broke, the fires raged, or the buildings came down. Before Z-Day, you already knew how to work in chaos. You move fast, think faster, and carry people who can’t move at all. You were a frontline responder before it was cool. Or mandatory.",
+    "untrained": true,
+    "focusOptions": []
   },
   {
-    "name": "Detective",
-    "points": 14,
-    "skills": ["Academics", "Athletics", "Drive", "Basic Technology", "Empathy", "Investigation", "Perception", "Local Knowledge"],
-    "feats": ["Empathic Intuition", "Investigator"]
+    "name": "Entrepreneur",
+    "ability": "Intelligence",
+    "description": "You used to live in a world of pitches, pivots, and backchannel deals. Negotiating is second nature, and reading people is your bread and butter. The game’s changed now, but you still know how to hustle, schmooze, and get what your team needs with a smile and a handshake. Especially if it’s not totally legal.",
+    "untrained": true,
+    "focusOptions": []
   },
   {
-    "name": "Doctor",
-    "points": 16,
-    "skills": ["Academics", "Empathy", "Medicine", "Perception", "Science", "Technology"],
-    "feats": ["Healing Hands", "Technological Savant", "Scientific Mind"]
+    "name": "Ex-Military Operative",
+    "ability": "Intelligence",
+    "description": "You’ve served special ops, black-ops, or just a hardened grunt. You know how to clear rooms, plan ambushes, and survive when everything goes to hell. Use this set for tactics, weapon proficiency, or intimidating green survivors into shape.",
+    "untrained": true,
+    "focusOptions": []
   },
   {
-    "name": "Ex-Military",
-    "points": 12,
-    "skills": ["Athletics", "Basic Technology", "Medicine", "Perception", "Outdoorsman", "Urban Survival"],
-    "feats": ["Learn Maneuver", "Learn Maneuver"]
+    "name": "Field Engineer",
+    "ability": "Intelligence",
+    "description": "You can build, repair, and improvise under pressure. Whether fixing a collapsed tunnel or building a one-use gadget from spare parts, you make things work when they shouldn’t. You shine in battlefield repair, scavenged tech builds, and makeshift defenses.",
+    "untrained": true,
+    "focusOptions": []
   },
   {
-    "name": "Engineer",
-    "points": 11,
-    "skills": ["Academics", "Basic Engineering", "Engineering", "Science", "Technology"],
-    "feats": ["Engineering Prodigy", "Jury Rigging"]
+    "name": "Former Publicist",
+    "ability": "Intelligence",
+    "description": "Once you managed celebrity crises, now you manage scared survivors and nervous enclave leaders. You shine when smoothing tensions, shaping narratives, and getting people to follow your lead, even if they don’t want to.",
+    "untrained": true,
+    "focusOptions": []
   },
   {
-    "name": "Emergency Response",
-    "points": 7,
-    "skills": ["Academics", "Athletics", "Empathy", "Medicine", "Science", "Technology"],
-    "feats": ["Healing Hands"]
+    "name": "Forensic Analyst",
+    "ability": "Intelligence",
+    "description": "Long before Z-Day, you studied patterns, blood spatter, broken routines, missing people. Now you’re still looking at evidence, only its rot patterns, claw marks, or the subtle signs of a staged scene. You're methodical, observant, and absolutely not fooled by a tidy surface.",
+    "untrained": true,
+    "focusOptions": []
   },
   {
-    "name": "Law Enforcement",
-    "points": 6,
-    "skills": ["Academics", "Athletics", "Drive", "Perception", "Local Knowledge"],
-    "feats": ["Seasoned Survivor"]
+    "name": "Media Manipulation",
+    "ability": "Intelligence",
+    "description": "You understand public perception, spin, and the power of image. Maybe you worked in PR, journalism, or politics, but now you use that savvy to control a room, rally a crowd, or put just the right fear into someone’s heart. Useful for influence, reputation, and strategic messaging.",
+    "untrained": true,
+    "focusOptions": []
   },
   {
-    "name": "Occultist",
-    "points": 6,
-    "skills": ["Academics", "Empathy", "Investigation", "Linguistics", "Occult", "Perception"],
-    "feats": ["Occultist"]
+    "name": "Occult Hobbyist",
+    "ability": "Intelligence",
+    "description": "You weren’t born to the mystic life, but you’ve dabbled. You’ve been to the wrong forums, read the forbidden texts, and survived a few strange nights. You're not sure if it’s real, but the stuff you’ve seen? The chants that work? You don’t talk about it unless you trust someone. And you rarely trust anyone.",
+    "untrained": true,
+    "focusOptions": []
   },
   {
-    "name": "Public Relations/Con Artist",
-    "points": 9,
-    "skills": ["Empathy", "Influence", "Larceny", "Linguistics"],
-    "feats": ["Honeyed Tongue", "Polyglot"]
+    "name": "Occult Scholar",
+    "ability": "Intelligence",
+    "description": "You’ve seen the patterns in ancient books or whispered across the dark web. You know the symbols that make blood run cold and how to pronounce names that shouldn't be spoken. Others think it's nonsense, until the symbols start glowing and the dead move with purpose.",
+    "untrained": true,
+    "focusOptions": []
   },
   {
-    "name": "Scientist",
-    "points": 11,
-    "skills": ["Basic Technology", "Academics", "Investigation", "Science", "Technology", "Perception"],
-    "feats": ["Eclectic Knowledge", "Scientific Mind"]
+    "name": "Olympic Hopeful",
+    "ability": "Intelligence",
+    "description": "Before the world fell apart, you trained to be the best. Your life revolved around peak physical conditioning and competitive discipline. Now those same reflexes, bursts of strength, and team instincts are survival tools. You can vault a rooftop gap or recognize someone’s breathing pattern in a crowd—because you’ve pushed your body beyond average.",
+    "untrained": true,
+    "focusOptions": []
+  },
+  {
+    "name": "Outdoor Survivalist",
+    "ability": "Intelligence",
+    "description": "Pre-Z-Day you were a park ranger, prepper, or survivalist nut. Now? You’re the reason the group is still breathing. This skill set helps with wilderness survival, scavenging, animal threats, and guiding groups through the wilds.",
+    "untrained": true,
+    "focusOptions": []
+  },
+  {
+    "name": "Private Investigator",
+    "ability": "Intelligence",
+    "description": "You made your living in the shadows of the city, trailing cheaters, digging through lies, and asking the questions no one wanted answered. You’re skilled at reading people, noticing what’s off, and piecing together a puzzle from scraps and contradictions. You shine in investigations, tailing suspects, and uncovering hard truths, especially the ones nobody asked for.",
+    "untrained": true,
+    "focusOptions": []
+  },
+  {
+    "name": "Professional Thief",
+    "ability": "Intelligence",
+    "description": "You didn’t just steal to survive, you stole for the thrill, the money, or because you were damn good at it. You know how to get in, get out, and leave no trace. Great for infiltration, causing enclaves, or bypassing security, old or new.",
+    "untrained": true,
+    "focusOptions": []
+  },
+  {
+    "name": "Saboteur",
+    "ability": "Intelligence",
+    "description": "You're not here to win fair. You're here to make sure the other guy loses hard. You know where to plant the charge, when to cut the brake line, and how to vanish into the dust. Chaos is your signature, and you rarely need to pull the trigger twice.",
+    "untrained": true,
+    "focusOptions": []
+  },
+  {
+    "name": "Science YouTuber",
+    "ability": "Intelligence",
+    "description": "Before the fall, you were just another face on a screen explaining particle physics with puppets and pop culture. Now, you're still breaking down complicated concepts, only it's to help your team understand how to weaponize fertilizer or rig solar panels. You make science feel like magic again.",
+    "untrained": true,
+    "focusOptions": []
+  },
+  {
+    "name": "Scientific Fieldwork",
+    "ability": "Intelligence",
+    "description": "You weren’t stuck in a lab, you were out there gathering samples, running diagnostics, and solving real-world problems with limited gear. You shine in improvised analysis, problem-solving under pressure, and applying scientific principles outside sterile environments.",
+    "untrained": true,
+    "focusOptions": []
+  },
+  {
+    "name": "Strategic Command Training",
+    "ability": "Intelligence",
+    "description": "You’ve been trained in battlefield tactics, threat assessment, and team coordination, whether in the military, paramilitary, or as part of a crisis response unit, or maybe even a superhero team. You’re rarely surprised and always thinking three moves ahead. You shine when organizing groups, calling plays, or seeing angles others miss.",
+    "untrained": true,
+    "focusOptions": []
+  },
+  {
+    "name": "Street Magician",
+    "ability": "Intelligence",
+    "description": "You’ve got fast hands and a smooth tongue. Whether it’s palming a coin or distracting someone with a well-timed card trick, you live by sleight of hand and misdirection. Great for infiltration, charm, or escaping sticky situations.",
+    "untrained": true,
+    "focusOptions": []
+  },
+  {
+    "name": "Street Mechanic",
+    "ability": "Intelligence",
+    "description": "No certifications. No paperwork. Just hands-on, knuckle-busted experience. Whether under the hood or cobbling together gear from scrap, you know how machines think. You learned it in back alleys, salvage yards, and stolen moments with working tech. You make things run, sometimes better than they were built.",
+    "untrained": true,
+    "focusOptions": []
+  },
+  {
+    "name": "Street Performer",
+    "ability": "Intelligence",
+    "description": "You lived for the crowd. Sleight of hand, spoken word, or a guitar solo at dusk, you knew how to make people feel something. Now, you do the same to distract zombies, rally survivors, or disguise sleight of hand with flair. In a dead world, you're still making moments come alive.",
+    "untrained": true,
+    "focusOptions": []
+  },
+  {
+    "name": "Tactical Infiltration",
+    "ability": "Intelligence",
+    "description": "You specialize in getting in where others can’t. Locks, vents, sensors, and even zombie patrols, you know how to bypass or disable them. Whether in black ops or high-end theft, you’ve earned your skill the hard way.",
+    "untrained": true,
+    "focusOptions": []
+  },
+  {
+    "name": "Undercover Operative",
+    "ability": "Intelligence",
+    "description": "You've been trained to become someone else, how to blend, how to lie without blinking, how to wear the right mask for the job. You’re skilled in infiltration, social manipulation, and operating without backup.",
+    "untrained": true,
+    "focusOptions": []
+  },
+  {
+    "name": "Underworld Courier",
+    "ability": "Intelligence",
+    "description": "When someone needed something moved and couldn't trust the postal service or police, they called you. Now you still carry packages, data drives, medicines, or desperate notes, and you still get them through. You don’t ask what’s in the bag. You just get it there. Alive, if possible.",
+    "untrained": true,
+    "focusOptions": []
+  },
+  {
+    "name": "Urban Explorer",
+    "ability": "Intelligence",
+    "description": "You knew how to navigate the city before the fall, now those skills are vital. Whether parkouring rooftops, avoiding Z swarms via storm drains, or scrounging in forgotten bunkers, this set helps you survive the concrete jungle.",
+    "untrained": true,
+    "focusOptions": []
+  },
+  {
+    "name": "Urban Recon Training",
+    "ability": "Intelligence",
+    "description": "You’ve studied how to navigate, observe, and act within a city environment, on foot, across rooftops, through sewers, or behind a scope. Whether you were military, law enforcement, or just a skilled freelancer, you’re the eyes and ears in hostile territory.",
+    "untrained": true,
+    "focusOptions": []
+  },
+  {
+    "name": "Visionary",
+    "ability": "Intelligence",
+    "description": "Where others see scrap, you see potential. Where others see the laws of physics, you see design challenges. Maybe you’ve built tech no one else could even sketch, battle suits, AI systems, adaptive weapons, contingency networks. Your genius isn’t just raw intelligence; it’s the ability to see ten steps ahead and build the tools you’ll need before the problem exists. You shine when pushing the boundaries of engineering, repurposing impossible tech, or building miracles under pressure.",
+    "untrained": true,
+    "focusOptions": []
+  },
+  {
+    "name": "Alien Scout",
+    "ability": "Intelligence",
+    "description": "You’ve got alien tech, training in advanced systems, and maybe a different understanding of physics altogether. This is great for intuitive tech roles, deciphering Earth customs, or finding unexpected solutions via off-world knowledge.",
+    "untrained": true,
+    "focusOptions": []
+  },
+  {
+    "name": "Billionaire Playboy Philanthropist",
+    "ability": "Intelligence",
+    "description": "You were never the strongest, but you were always the smartest, the richest, or the most charming person in the room, and you weaponized that. You excel at resource coordination, high-society manipulation, press-facing spin, and turning favors into victories. Even now, the game is just played with fewer rules and sharper stakes.",
+    "untrained": true,
+    "focusOptions": []
+  },
+  {
+    "name": "Black Market Fixer",
+    "ability": "Intelligence",
+    "description": "If someone wanted it pre-Z, you could get it. Now, you still can. You know what things are worth, how to negotiate, and who trades what. This set excels in scavenging, bartering, and recognizing what’s truly valuable.",
+    "untrained": true,
+    "focusOptions": []
+  },
+  {
+    "name": "Born to Wear the Mask",
+    "ability": "Intelligence",
+    "description": "You grew up in legacy, tradition, and expectations. The costume wasn’t a calling; it was an inheritance. You were trained to inspire, to lead, and to represent something larger than yourself. You shine in public settings, with formal command, and when carrying the weight of a symbol.",
+    "untrained": true,
+    "focusOptions": []
+  },
+  {
+    "name": "Comic Book Archivist",
+    "ability": "Intelligence",
+    "description": "Pre-Z-Day, you were a mega-fan, deep in lore. And now? Well, it turns out comics got a lot right. You shine when referencing tropes, recognizing power types, or giving surprisingly good tactical advice based on superhero logic.",
+    "untrained": true,
+    "focusOptions": []
+  },
+  {
+    "name": "Conspiracy Theorist",
+    "ability": "Intelligence",
+    "description": "Sure, everyone laughed when you said the government was hiding zombies under Area 51, until Z-Day hit. Now your “crazy” theories might just be right. You shine in connecting bizarre dots, spouting fringe science, and improvising with weird, scavenged gear.",
+    "untrained": true,
+    "focusOptions": []
+  },
+  {
+    "name": "Ex-Supervillain Lackey",
+    "ability": "Intelligence",
+    "description": "You weren’t the big bad, but you were in the room. You carried gear, built death rays, and managed lairs. You know how the villain playbook works, and maybe you’re still playing it, just in a different way now.",
+    "untrained": true,
+    "focusOptions": []
+  },
+  {
+    "name": "Former Sidekick",
+    "ability": "Intelligence",
+    "description": "You were trained by a bigger name, someone famous. Maybe they’re gone, maybe they turned. Either way, you’ve inherited their habits and some of their training. You shine in action scenes and dramatic legacy moments.",
+    "untrained": true,
+    "focusOptions": []
+  },
+  {
+    "name": "Freelance Cryptid Hunter",
+    "ability": "Intelligence",
+    "description": "Before the world fell apart, you were chasing Bigfoot. Now you hunt even stranger things. This set helps in tracking, occult reasoning, and recognizing the signs of Supernatural weirdness before it kills you.",
+    "untrained": true,
+    "focusOptions": []
+  },
+  {
+    "name": "Gadgeteer Tinkerer",
+    "ability": "Intelligence",
+    "description": "You're not a full-on tech hero, but damn if duct tape and scavenged microchips don’t become something special in your hands. You shine when building gadgets under pressure or reverse-engineering enemy tech.",
+    "untrained": true,
+    "focusOptions": []
+  },
+  {
+    "name": "Hollow-Eyed Lab Tech",
+    "ability": "Intelligence",
+    "description": "You worked in a lab, maybe on superhumans, maybe on something darker. You shine in medical scenes, genetic theory, or when diagnosing just what the hell went wrong with that survivor’s blood sample.",
+    "untrained": true,
+    "focusOptions": []
+  },
+  {
+    "name": "Hunter of the In-Between",
+    "ability": "Intelligence",
+    "description": "You were trained to stalk what doesn’t want to be found. Whether beasts, criminals, or the supernatural, you know how to track, observe, and strike. You shine when patience matters more than firepower, and when others would already have lost the trail.",
+    "untrained": true,
+    "focusOptions": []
+  },
+  {
+    "name": "I’ve Seen Empires Rise and Fall",
+    "ability": "Intelligence",
+    "description": "You’ve watched the world change, slowly, brutally, beautifully. Whether you’re two hundred years old or just extremely well-read and widely traveled, your perspective gives you an edge. You shine when recognizing patterns, understanding cultures, and navigating crises with the calm of someone who’s seen worse.",
+    "untrained": true,
+    "focusOptions": []
+  },
+  {
+    "name": "Legacy Technician",
+    "ability": "Intelligence",
+    "description": "You didn’t invent the tech, but you’ve inherited it, maintained it, and quietly improved it. Whether it was alien, magical, or just genius-level engineering, you’ve kept it functional. You excel in maintenance under pressure, repurposing powerful devices, and knowing just enough to avoid disaster.",
+    "untrained": true,
+    "focusOptions": []
+  },
+  {
+    "name": "Masked Detective",
+    "ability": "Intelligence",
+    "description": "You’ve read the files, walked through the alleys, and followed the threads. You’re not just tough, you’re sharp. Ideal for investigation, intuition, and unraveling schemes before anyone else sees them.",
+    "untrained": true,
+    "focusOptions": []
+  },
+  {
+    "name": "Mystic Field Agent",
+    "ability": "Intelligence",
+    "description": "You combine cold practicality with arcane insight. You’ve trained with sigils and firearms, read both alchemy and ops manuals. You’re not just a sorcerer, you’re a problem-solver with backup plans and backup weapons. You can read an omen and a room, then make both go quiet.",
+    "untrained": true,
+    "focusOptions": []
+  },
+  {
+    "name": "Mystical Chosen",
+    "ability": "Intelligence",
+    "description": "You didn’t ask for your powers; they were bestowed. This set emphasizes intuition, fate-reading, and ritualistic traditions. You shine when interpreting omens, communicating with spirits, or invoking supernatural rules.",
+    "untrained": true,
+    "focusOptions": []
+  },
+  {
+    "name": "Parkour Courier",
+    "ability": "Intelligence",
+    "description": "When the streets were choked with traffic, checkpoints, or chaos, you ran. Rooftops, fire escapes, shattered overpasses, you turned the city into your track. You know how to move fast, fluid, and unnoticed. You shine when outrunning danger, navigating urban terrain, or slipping through tight zones without ever setting foot on the street.",
+    "untrained": true,
+    "focusOptions": []
+  },
+  {
+    "name": "Superhero Support Specialist",
+    "ability": "Intelligence",
+    "description": "You weren’t the one in the spotlight, but you were the reason they kept going. Butler, handler, medic, counselor, quartermaster, call it what you will. You brewed the coffee, stitched the wounds, maintained the gear, and talked them down after the worst nights. You understand routine, resilience, and the thousand little things that keep a hero alive and sane. You shine when managing logistics, treating trauma (physical or emotional), and delivering just the right words, or tools, at the exact moment they’re needed.",
+    "untrained": true,
+    "focusOptions": []
+  },
+  {
+    "name": "Super-Science Intern",
+    "ability": "Intelligence",
+    "description": "You were never the lead genius, but you learned from the best. You’ve swept labs, dodged exploding prototypes, and watched brilliant minds work. Now you apply that half-learned brilliance on your own, with courage and duct tape.",
+    "untrained": true,
+    "focusOptions": []
+  },
+  {
+    "name": "Trained by the Old Ways",
+    "ability": "Intelligence",
+    "description": "Your knowledge doesn’t come from labs or manuals; it comes from scrolls, whispers, and rituals passed from one hand to another. You understand discipline, honor, and forces older than the Z plague. You shine in spiritual crises, mystical interference, and when modern tech fails.",
+    "untrained": true,
+    "focusOptions": []
+  },
+  {
+    "name": "Trained Since Childhood",
+    "ability": "Intelligence",
+    "description": "While other kids played, you practiced. Your guardians, harsh, strict, or distant, saw potential and molded it into precision. Now, your instincts are calibrated for combat, strategy, and survival under pressure. You don’t flinch. Don’t hesitate. You execute.",
+    "untrained": true,
+    "focusOptions": []
+  },
+  {
+    "name": "Wheelman",
+    "ability": "Intelligence",
+    "description": "You used to be the guy behind the wheel, the one they trusted when things got hot. You know how to move a vehicle like it’s an extension of your body, how to escape a tail, and when to slam the brakes so the guy behind you eats dashboard. You shine in high-speed situations, vehicular escapes, or making an old junker dance like its factory new.",
+    "untrained": true,
+    "focusOptions": []
   }
 ]

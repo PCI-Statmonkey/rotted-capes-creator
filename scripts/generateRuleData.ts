@@ -4,7 +4,7 @@ import { fileURLToPath } from 'url';
 import { z } from 'zod';
 import {
   insertFeatSchema,
-  insertSkillSchema,
+  insertSkillSetSchema,
   insertPowerSchema,
   insertGearSchema,
 } from '../shared/schema';
@@ -47,10 +47,12 @@ function parseFeats() {
   const feats = sections
     .filter((s) => !s.name.toLowerCase().includes('top of form') && !s.name.toLowerCase().includes('bottom of form'))
     .map((s) => {
+      const reqMatch = s.text.match(/\*\*Requirements:\*\*\s*([^*]+)/i);
+      const prereqs = reqMatch ? reqMatch[1].split(/[,;]+/).map((p) => p.trim()).filter(Boolean) : [];
       const obj = {
         name: s.name,
         description: s.text,
-        prerequisites: [],
+        prerequisites: prereqs,
         type: 'normal',
         repeatable: false,
         tags: [],
@@ -165,7 +167,7 @@ function parsePowerMods() {
   }));
 }
 
-function parseSkills() {
+function parseSkillSets() {
   const file = fs.readFileSync(path.join(docsDir, '2.2_Skills 4.1.md'), 'utf8');
   const start = file.indexOf('### Grounded Skill Set');
   const text = start >= 0 ? file.slice(start) : file;
@@ -195,8 +197,10 @@ function parseSkills() {
       description: s.body.join(' ').trim(),
       untrained: true,
       focusOptions: [],
+      edges: [],
+      deepCutTrigger: null,
     };
-    return insertSkillSchema.parse(obj);
+    return insertSkillSetSchema.parse(obj);
   });
 }
 
@@ -224,7 +228,7 @@ function parseAdvancement() {
 
 function main() {
   const feats = parseFeats();
-  const skills = parseSkills();
+  const skillSets = parseSkillSets();
   const gear = parseGear();
   const powers = parsePowers();
   const powerSets = parsePowerSets();
@@ -232,7 +236,7 @@ function main() {
   const advancement = parseAdvancement();
 
   writeBoth('feats.json', feats);
-  writeBoth('skills.json', skills);
+  writeBoth('skillSets.json', skillSets);
   writeBoth('gear.json', gear);
   writeBoth('powers.json', powers);
   writeBoth('powerSets.json', powerSets);
@@ -241,7 +245,7 @@ function main() {
 
   console.log('Generated', {
     feats: feats.length,
-    skills: skills.length,
+    skillSets: skillSets.length,
     gear: gear.length,
     powers: powers.length,
     powerSets: powerSets.length,

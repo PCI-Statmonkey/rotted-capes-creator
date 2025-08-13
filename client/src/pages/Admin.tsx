@@ -104,13 +104,6 @@ export default function AdminPage() {
     action: () => navigate("/admin/archetypes")
   },
   {
-    id: "skills",
-    title: "Skills",
-    description: "Edit individual skills and their descriptions",
-    icon: <BookOpen className="h-5 w-5 text-green-500" />,
-    action: () => navigate("/admin/skills")
-  },
-  {
     id: "feats",
     title: "Feats",
     description: "Manage feats and their prerequisites",

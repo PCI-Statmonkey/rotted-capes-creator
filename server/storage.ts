@@ -2,7 +2,6 @@ import { db } from "./db";
 import {
   origins,
   archetypes,
-  skills,
   feats,
   skillSets,
   powers,
@@ -31,13 +30,6 @@ export const storage = {
   createArchetype: (data: any) => db.insert(archetypes).values(data).returning().then(r => r[0]),
   updateArchetype: (id: number, data: any) => db.update(archetypes).set(data).where(eq(archetypes.id, id)).returning().then(r => r[0]),
   deleteArchetype: (id: number) => db.delete(archetypes).where(eq(archetypes.id, id)),
-
-  // SKILL
-  getAllSkill: () => db.select().from(skills),
-  getSkillById: (id: number) => db.query.skills.findFirst({ where: eq(skills.id, id) }),
-  createSkill: (data: any) => db.insert(skills).values(data).returning().then(r => r[0]),
-  updateSkill: (id: number, data: any) => db.update(skills).set(data).where(eq(skills.id, id)).returning().then(r => r[0]),
-  deleteSkill: (id: number) => db.delete(skills).where(eq(skills.id, id)),
 
   // FEAT
   getAllFeat: () => db.select().from(feats),

@@ -51,18 +51,6 @@ export const archetypes = pgTable("archetypes", {
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
-// Skills table
-export const skills = pgTable("skills", {
-  id: serial("id").primaryKey(),
-  name: text("name").notNull().unique(),
-  ability: text("ability").notNull(), // Which ability it's tied to (e.g., "Strength")
-  description: text("description").notNull(),
-  untrained: boolean("untrained").default(true).notNull(), // Can it be used untrained?
-  focusOptions: text("focus_options").array(),
-  createdAt: timestamp("created_at").defaultNow().notNull(),
-  updatedAt: timestamp("updated_at").defaultNow().notNull(),
-});
-
 export const feats = pgTable("feats", {
   id: serial("id").primaryKey(),
   name: text("name").notNull(),
@@ -79,12 +67,12 @@ export const feats = pgTable("feats", {
 export const skillSets = pgTable("skill_sets", {
   id: serial("id").primaryKey(),
   name: text("name").notNull().unique(),
-  points: integer("points").notNull(),
-  skills: jsonb("skills").notNull(), // Array of skill objects with names and focuses
-  feats: jsonb("feats").notNull(), // Array of feat names
+  ability: text("ability").notNull(),
+  description: text("description").notNull(),
+  untrained: boolean("untrained").default(true).notNull(),
+  focusOptions: text("focus_options").array(),
   edges: text("edges").array().notNull().default([]),
   deepCutTrigger: text("deep_cut_trigger"),
-  description: text("description"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
@@ -167,22 +155,14 @@ export const insertArchetypeSchema = createInsertSchema(archetypes).pick({
   imageUrl: true,
 });
 
-export const insertSkillSchema = createInsertSchema(skills).pick({
+export const insertSkillSetSchema = createInsertSchema(skillSets).pick({
   name: true,
   ability: true,
   description: true,
   untrained: true,
   focusOptions: true,
-});
-
-export const insertSkillSetSchema = createInsertSchema(skillSets).pick({
-  name: true,
-  points: true,
-  skills: true,
-  feats: true,
   edges: true,
   deepCutTrigger: true,
-  description: true,
 });
 
 export const insertPowerSchema = createInsertSchema(powers).pick({
@@ -228,9 +208,6 @@ export type Origin = typeof origins.$inferSelect;
 
 export type InsertArchetype = z.infer<typeof insertArchetypeSchema>;
 export type Archetype = typeof archetypes.$inferSelect;
-
-export type InsertSkill = z.infer<typeof insertSkillSchema>;
-export type Skill = typeof skills.$inferSelect;
 
 export type InsertFeat = z.infer<typeof insertFeatSchema>;
 export type Feat = typeof feats.$inferSelect;
@@ -385,7 +362,6 @@ export const characterSkills = pgTable("character_skills", {
   characterId: integer("character_id")
     .references(() => characters.id, { onDelete: "cascade" })
     .notNull(),
-  skillId: integer("skill_id").references(() => skills.id),
   name: text("name").notNull(),
   ability: text("ability").notNull(),
   ranks: integer("ranks").notNull(),
@@ -467,7 +443,6 @@ export const insertCharacterPowerSchema = createInsertSchema(characterPowers).pi
 
 export const insertCharacterSkillSchema = createInsertSchema(characterSkills).pick({
   characterId: true,
-  skillId: true,
   name: true,
   ability: true,
   ranks: true,

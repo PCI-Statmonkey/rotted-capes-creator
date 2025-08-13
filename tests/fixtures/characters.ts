@@ -17,7 +17,7 @@ export const customSkillSetCharacter = {
   selectedSkillSets: [
     { name: 'Occultist', edges: ['Arcane'], source: 'custom' }
   ],
-  skillSets: [{ name: 'Occultist', skills: [] }]
+  skillSets: [{ name: 'Occultist', edges: ['Arcane'] }]
 };
 
 export const featGrantedSkillSetCharacter = {
@@ -28,7 +28,7 @@ export const featGrantedSkillSetCharacter = {
   selectedSkillSets: [
     { name: 'Scout', edges: [], source: 'Wilderness Training' }
   ],
-  skillSets: [{ name: 'Scout', skills: [] }]
+  skillSets: [{ name: 'Scout', edges: [] }]
 };
 
 export const rankCapFixture = {
