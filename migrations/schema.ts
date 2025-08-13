@@ -40,10 +40,7 @@ export const feats = pgTable("feats", {
 export const skillSets = pgTable("skill_sets", {
   id: serial("id").primaryKey(),
   name: text("name").notNull(),
-  ability: text("ability").notNull(),
   description: text("description").notNull(),
-  untrained: boolean("untrained").default(true).notNull(),
-  focusOptions: jsonb("focus_options"),
   edges: jsonb("edges").default([]).notNull(),
   deepCutTrigger: text("deep_cut_trigger"),
   createdAt: timestamp("created_at").defaultNow().notNull(),

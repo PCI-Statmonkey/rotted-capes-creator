@@ -193,10 +193,7 @@ function parseSkillSets() {
   return items.map((s) => {
     const obj = {
       name: s.name,
-      ability: 'Intelligence',
       description: s.body.join(' ').trim(),
-      untrained: true,
-      focusOptions: [],
       edges: [],
       deepCutTrigger: null,
     };
@@ -236,7 +233,7 @@ function main() {
   const advancement = parseAdvancement();
 
   writeBoth('feats.json', feats);
-  writeBoth('skillSets.json', skillSets);
+  writeBoth('skills.json', skillSets);
   writeBoth('gear.json', gear);
   writeBoth('powers.json', powers);
   writeBoth('powerSets.json', powerSets);
