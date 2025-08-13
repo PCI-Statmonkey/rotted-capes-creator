@@ -78,33 +78,11 @@ const Step5_SkillsAndFeats = () => {
   const handlePrevious = () => setCurrentStep(4);
 
   const handleContinue = () => {
-    const grantedFeats = workingSkillSets.flatMap((entry) => {
-      const found = skillSets.find((s: any) => s.name === entry.name);
-      return (
-        found?.feats?.map((f: any) => ({
-          name: typeof f === "string" ? f : f.name,
-          free: true,
-          source: entry.name,
-        })) || []
-      );
-    });
-
-    const finalFeats = [...workingFeats, ...grantedFeats];
-
     setSelectedSkillSets(workingSkillSets);
-    setSelectedFeats(finalFeats);
+    setSelectedFeats(workingFeats);
 
-    const setSkills = workingSkillSets.flatMap((entry) => {
-      const found = skillSets.find((s: any) => s.name === entry.name);
-      return (
-        found?.skills?.map((sk: any) => (typeof sk === "string" ? sk : sk.name)) || []
-      );
-    });
-    const uniqueSkills = Array.from(new Set(setSkills));
-    const finalSkills = uniqueSkills.map((n) => ({ name: n, focuses: [] }));
-    // Update character with selected skills and feats
-    updateCharacterField('skills', finalSkills as any);
-    updateCharacterField('feats', finalFeats as any);
+    // Update character with selected feats
+    updateCharacterField('feats', workingFeats as any);
 
     setCurrentStep(6);
   };
