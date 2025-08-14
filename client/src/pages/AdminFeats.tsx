@@ -41,6 +41,8 @@ import {
   deleteGameContent,
   usingFallbackData,
 } from "@/lib/api";
+import { displayFeatName } from "@/lib/utils";
+import maneuversData from "@/rules/maneuvers.json";
 
 interface Feat {
   id: number;
@@ -84,8 +86,14 @@ export default function AdminFeats() {
   const fetchFeats = async () => {
     setIsLoading(true);
     try {
-      const data = await getGameContent("feats");
-      setFeats(data);
+      const [data, maneuvers] = await Promise.all([
+        getGameContent("feats"),
+        getGameContent("maneuvers"),
+      ]);
+      const allManeuvers =
+        maneuvers.length > 0 ? maneuvers : (maneuversData as any[]);
+      const maneuverNames = new Set(allManeuvers.map((m: any) => m.name));
+      setFeats(data.filter((f: any) => !maneuverNames.has(f.name)));
       if (usingFallbackData) {
         toast({
           title: "Database Connection Issue",
@@ -131,7 +139,7 @@ export default function AdminFeats() {
       setNewFeat({ ...emptyFeat });
       toast({
         title: "Success",
-        description: `Feat "${added.name}" has been added.`,
+        description: `Feat "${displayFeatName(added.name)}" has been added.`,
       });
     } catch (error: any) {
       console.error("Error adding feat:", error);
@@ -164,7 +172,7 @@ export default function AdminFeats() {
       setSelectedFeat(null);
       toast({
         title: "Success",
-        description: `Feat "${updated.name}" has been updated.`,
+        description: `Feat "${displayFeatName(updated.name)}" has been updated.`,
       });
     } catch (error: any) {
       console.error("Error updating feat:", error);
@@ -184,7 +192,7 @@ export default function AdminFeats() {
       setIsDeleting(false);
       toast({
         title: "Success",
-        description: `Feat "${selectedFeat.name}" has been deleted.`,
+        description: `Feat "${displayFeatName(selectedFeat.name)}" has been deleted.`,
       });
       setSelectedFeat(null);
     } catch (error: any) {
@@ -320,7 +328,7 @@ export default function AdminFeats() {
             <TableBody>
               {feats.map((feat) => (
                 <TableRow key={feat.id}>
-                  <TableCell>{feat.name}</TableCell>
+                  <TableCell>{displayFeatName(feat.name)}</TableCell>
                   <TableCell>{feat.type}</TableCell>
                   <TableCell className="max-w-md truncate">
                     {feat.description}
@@ -458,7 +466,7 @@ export default function AdminFeats() {
                           <AlertDialogHeader>
                             <AlertDialogTitle>Are you sure?</AlertDialogTitle>
                             <AlertDialogDescription>
-                              This action cannot be undone. This will permanently delete the feat "{feat.name}".
+                              {`This action cannot be undone. This will permanently delete the feat "${displayFeatName(feat.name)}".`}
                             </AlertDialogDescription>
                           </AlertDialogHeader>
                           <AlertDialogFooter>
