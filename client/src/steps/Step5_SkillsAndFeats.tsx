@@ -40,10 +40,13 @@ const Step5_SkillsAndFeats = () => {
   const [row2Maneuver, setRow2Maneuver] = useState<string>("");
   const [row3Maneuver, setRow3Maneuver] = useState<string>("");
 
-  const maneuversSet = useMemo(
-    () => new Set(allManeuvers.map((m: any) => m.name)),
-    [allManeuvers]
-  );
+  const maneuversSet = useMemo(() => {
+    const names = allManeuvers.flatMap((m: any) => [
+      m.name,
+      `${m.name} (${m.type})`,
+    ]);
+    return new Set(names);
+  }, [allManeuvers]);
   const feats = useMemo(() => {
     const unique = Array.from(
       new Map(featsData.map((f: any) => [f.name, f])).values()
