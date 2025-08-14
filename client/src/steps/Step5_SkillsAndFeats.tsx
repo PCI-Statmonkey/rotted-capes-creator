@@ -10,6 +10,7 @@ import { useCharacter } from "@/context/CharacterContext";
 import skillSetOptions from "@/data/skillSets";
 import { displayFeatName } from "@/lib/utils";
 import { getMissingPrereqs, formatPrerequisite } from "@/utils/requirementValidator";
+import maneuversData from "@/rules/maneuvers.json";
 
 const Step5_SkillsAndFeats = () => {
   const { setSelectedSkillSets, setSelectedFeats, setSelectedManeuvers } = useCharacterBuilder();
@@ -20,6 +21,9 @@ const Step5_SkillsAndFeats = () => {
 
   const { data: featsData = [] } = useCachedGameContent<any>("feats");
   const { data: maneuvers = [] } = useCachedGameContent<any>("maneuvers");
+
+  // Use static maneuvers data as a fallback in case the API does not return any.
+  const allManeuvers = maneuvers.length > 0 ? maneuvers : maneuversData;
 
   const [row1SkillSet, setRow1SkillSet] = useState<string>("");
   const [row1CustomSkill, setRow1CustomSkill] = useState<string>("");
@@ -37,8 +41,8 @@ const Step5_SkillsAndFeats = () => {
   const [row3Maneuver, setRow3Maneuver] = useState<string>("");
 
   const maneuversSet = useMemo(
-    () => new Set(maneuvers.map((m: any) => m.name)),
-    [maneuvers]
+    () => new Set(allManeuvers.map((m: any) => m.name)),
+    [allManeuvers]
   );
   const feats = useMemo(() => {
     const unique = Array.from(
@@ -210,7 +214,7 @@ const Step5_SkillsAndFeats = () => {
         <SelectValue placeholder="Select maneuver" />
       </SelectTrigger>
       <SelectContent>
-        {maneuvers.map((m: any) => (
+        {allManeuvers.map((m: any) => (
           <SelectItem key={m.name} value={m.name}>
             {m.name}
           </SelectItem>
