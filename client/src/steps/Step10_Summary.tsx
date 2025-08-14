@@ -8,7 +8,7 @@ import { Separator } from "@/components/ui/separator";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "@/hooks/use-toast";
-import { getScoreData, formatModifier } from "@/lib/utils";
+import { getScoreData, formatModifier, displayFeatName } from "@/lib/utils";
 import { Check, Save, Shield, Heart, Target } from "lucide-react";
 import { apiRequest } from "@/lib/queryClient";
 import CharacterPdfButton from "@/components/CharacterPdfButton";
@@ -618,7 +618,7 @@ export default function Step10_Summary() {
                   const missing = getMissingPrereqs(feat, prereqCharacterData).map(formatReq);
                   return (
                     <div key={index} className="border border-gray-700 rounded-lg p-2">
-                      <div className="font-semibold">{feat.name}</div>
+                      <div className="font-semibold">{displayFeatName(feat.name)}</div>
                       {feat.source && (
                         <div className="text-xs text-gray-400">Source: {feat.source}</div>
                       )}

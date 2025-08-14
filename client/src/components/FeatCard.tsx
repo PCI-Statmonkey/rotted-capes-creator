@@ -2,6 +2,7 @@ import React from "react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { parsePrerequisite, formatPrerequisite } from "@/utils/requirementValidator";
+import { displayFeatName } from "@/lib/utils";
 
 interface Prerequisite {
   type: string;
@@ -84,8 +85,7 @@ const FeatCard: React.FC<FeatCardProps> = ({
         />
         <div>
           <div className="font-semibold text-white">
-            {feat.name}
-            {feat.type === 'power' && <span className="ml-1">(power)</span>}
+            {displayFeatName(feat.name)}
           </div>
           <div className="text-white text-sm">{feat.description}</div>
           {feat.usesPerScene !== undefined && (

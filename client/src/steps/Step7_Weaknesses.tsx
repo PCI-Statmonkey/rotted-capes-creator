@@ -28,6 +28,7 @@ import {
 import skillSetsData from "@/rules/skills.json";
 import featsData from "@/rules/feats.json";
 import weaknessesData from "@/rules/weaknesses.json";
+import { displayFeatName } from "@/lib/utils";
 
 // Define weakness types
 type WeaknessType = 
@@ -868,7 +869,9 @@ export default function Step7_Weaknesses() {
                           </SelectTrigger>
                           <SelectContent>
                             {featsData.map((f) => (
-                              <SelectItem key={f.name} value={f.name}>{f.name}</SelectItem>
+                              <SelectItem key={f.name} value={f.name}>
+                                {displayFeatName(f.name)}
+                              </SelectItem>
                             ))}
                           </SelectContent>
                         </Select>
