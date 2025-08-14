@@ -15,11 +15,12 @@ export function formatModifier(mod: number): string {
 }
 
 export function displayFeatName(name: string): string {
-  // Some data sources escape the brackets in "[power feat]" as "\[power feat\]".
-  // Allow an optional leading backslash when detecting and cleaning the tag.
-  const powerFeatRegex = /\s*\\?\[power feat\]\s*/i;
-  const isPower = powerFeatRegex.test(name);
-  const cleaned = name.replace(powerFeatRegex, "").trim();
+  // Some data sources escape or wrap the "[power feat]" tag with slashes.
+  // Strip any slashes first, then detect and clean the tag.
+  const normalized = name.replace(/[\\\/]/g, "");
+  const powerFeatRegex = /\s*\[power feat\]\s*/i;
+  const isPower = powerFeatRegex.test(normalized);
+  const cleaned = normalized.replace(powerFeatRegex, "").trim();
   return isPower ? `${cleaned} (power feat)` : cleaned;
 }
 
