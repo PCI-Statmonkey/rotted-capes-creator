@@ -1,5 +1,60 @@
 [
   {
+    "name": "Charge",
+    "type": "Combat",
+    "requirements": [],
+    "attack": "Avoidance",
+    "action": "Action",
+    "range": "Melee",
+    "effect": "Base; add your Strength base die to the damage dealt on a hit. Your Avoidance is reduced by 2 until the start of your next turn.",
+    "special": null,
+    "weapons": "Any melee weapon or unarmed attack"
+  },
+  {
+    "name": "Disarm",
+    "type": "Combat",
+    "requirements": [],
+    "attack": "Avoidance",
+    "action": "Action",
+    "range": "Melee",
+    "effect": "If you hit, the target must make a Strength saving throw against a DC equal to your attack roll. On a failure, the target drops the item you aimed to disarm.",
+    "special": "If the target holds the item with two hands or has the Enhanced Strength origin feature, it gains Advantage on the saving throw.",
+    "weapons": "Any melee weapon or unarmed attack"
+  },
+  {
+    "name": "Grab",
+    "type": "Combat",
+    "requirements": [],
+    "attack": "Avoidance",
+    "action": "Action",
+    "range": "Melee",
+    "effect": "Target no more than one size larger and within reach becomes grabbed on a hit and cannot move. If your attack exceeds the target's Avoidance by 5 or more, the target is grappled and pinned.",
+    "special": "May be used as a reaction to catch a falling ally. Includes rules for escape, pin, punish, reverse, and moving a grappled creature.",
+    "weapons": "Unarmed or melee attack"
+  },
+  {
+    "name": "Shove",
+    "type": "Combat",
+    "requirements": [],
+    "attack": "Fortitude",
+    "action": "Action",
+    "range": "Melee",
+    "effect": "On a hit, push the target back one area or knock it prone.",
+    "special": "If the forced movement could cause damage, the target must succeed on a Strength saving throw against your attack roll or move to another adjacent area or fall prone.",
+    "weapons": "Any melee weapon or unarmed attack"
+  },
+  {
+    "name": "Team Attack",
+    "type": "Combat",
+    "requirements": [],
+    "attack": "Avoidance",
+    "action": "Ready (triggered by an ally attacking your target)",
+    "range": "Melee or Ranged (3 areas)",
+    "effect": "Base; after the triggering ally hits the target, you may use your reaction to attack the same target. If you hit, combine your damage with the ally's to determine massive damage.",
+    "special": null,
+    "weapons": "Any melee weapon, unarmed attack, or attack powers"
+  },
+  {
     "name": "Battlefield Command",
     "type": "Leadership",
     "requirements": ["Charisma 13+","Trained in Influence"],
