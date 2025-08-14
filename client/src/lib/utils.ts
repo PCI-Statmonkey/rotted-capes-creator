@@ -14,6 +14,12 @@ export function formatModifier(mod: number): string {
   return mod >= 0 ? `+${mod}` : `${mod}`;
 }
 
+export function displayFeatName(name: string): string {
+  const isPower = /\[power feat\]/i.test(name);
+  const cleaned = name.replace(/\s*\[power feat\]\s*/i, "").trim();
+  return isPower ? `${cleaned} (power feat)` : cleaned;
+}
+
 export const STORAGE_KEY = "rotted-capes-character";
 
 export function saveToLocalStorage(key: string, data: any) {
