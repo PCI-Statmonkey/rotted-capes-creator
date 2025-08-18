@@ -44,21 +44,16 @@
     "type": "Combat",
     "requirements": null
   },
-  {
-    "name": "Guarded Attack",
-    "type": "Combat",
-    "requirements": null
-  },
-  {
-    "name": "Guardian\u2019s Shield",
-    "type": "Combat",
-    "requirements": null
-  },
-  {
-    "name": "Lure",
-    "type": "Combat",
-    "requirements": null
-  },
+    {
+      "name": "Guarded Attack",
+      "type": "Combat",
+      "requirements": null
+    },
+    {
+      "name": "Lure",
+      "type": "Combat",
+      "requirements": null
+    },
   {
     "name": "Palm Throw",
     "type": "Combat",

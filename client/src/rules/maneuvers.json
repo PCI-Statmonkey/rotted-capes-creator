@@ -153,7 +153,7 @@
     "special": "",
     "weapons": "You may perform this maneuver with melee weapons or unarmed attacks."
   },
-   {
+  {
     "name": "Guarded Attack",
     "type": "Combat",
     "requirements": [],
@@ -165,17 +165,6 @@
     "weapons": ""
   },
   {
-    "name": "Guardian’s Shield",
-    "type": "Leadership",
-    "requirements": ["Dexterity 12+"],
-    "attack": "None",
-    "action": "Reaction",
-    "range": "Self or ally within reach",
-    "effect": "Intercept attack meant for ally and take damage instead.",
-    "special": "Add your shield's DR to your Avoidance.",
-    "weapons": "None"
-  },
- {
     "name": "Guns Akimbo",
     "type": "Combat",
     "requirements": ["Dexterity 14+"],
@@ -196,17 +185,6 @@
     "effect": "You use your action to set up your next shot, then use your bonus action take your shot. If you hit, you deal your attack’s maximum base damage, expending a single round of ammo if using a firearm. Any Zombie of Epsilon level or below successfully struck with a headshot is instantly destroyed.",
     "special": "",
     "weapons": "Any Firearm, thrown weapon, archaic missile weapon (such as bows), or ranged single target energy blast power. "
-  },
- {
-    "name": "Improved Team Attack",
-    "type": "Combat or Leadership",
-    "requirements": [],
-    "attack": "Avoidance",
-    "action": "Ready, triggered by an ally attacking a target you intend to attack.",
-    "range": "Melee or Ranged (3 Areas)",
-    "effect": "Base; If the ally you chose successfully hit your intended target, you may then use your reaction to attack the same target with Advantage, if you hit you combine your damage with that from your ally to determine if your attack deals Massive Damage.",
-    "special": "",
-    "weapons": "You may perform this maneuver with any melee weapon, unarmed attack, or attack powers."
   },
   {
     "name": "Inspiring Performance",
@@ -230,7 +208,7 @@
     "special": "",
     "weapons": "Any"
   },
- {
+  {
     "name": "Murderous Precision",
     "type": "Combat",
     "requirements": [],
@@ -240,17 +218,6 @@
     "effect": "x2. If you successfully use this maneuver on bystander, hardened, or Zeta-ranked threats, they are instantly killed.",
     "special": "",
     "weapons": "You may perform this maneuver with any melee weapon, unarmed attack, or melee attack powers."
-  },
- {
-    "name": "On My Mark",
-    "type": "Combat",
-    "requirements": ["Charisma 13+","Trained in Influence"],
-    "attack": "",
-    "action": "Bonus Action",
-    "range": "3 Areas",
-    "effect": "Designate a target within range. Allies within range gain Advantage on attack rolls against this target until the start of your next turn.",
-    "special": "Can be used once per scene.",
-    "weapons": ""
   },
   {
     "name": "Overwhelming Charge",
