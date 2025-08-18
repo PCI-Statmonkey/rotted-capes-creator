@@ -2,7 +2,7 @@
   {
     "name": "Battlefield Command",
     "type": "Leadership",
-    "requirements": "Charisma 13+, trained in Influence"
+    "requirements": "Charisma 13+"
   },
   {
     "name": "Charge",
@@ -27,22 +27,22 @@
   {
     "name": "Duel-Strikes",
     "type": "Combat",
-    "requirements": "Dual melee weapons"
+    "requirements": null
   },
   {
     "name": "Earth Strike",
     "type": "Combat",
-    "requirements": "Strength 30+"
+    "requirements": "Strength of 30+"
   },
   {
     "name": "Earth to Sky",
     "type": "Combat",
-    "requirements": "Martial Artist feat"
+    "requirements": "Martial Artist"
   },
   {
     "name": "Feint",
     "type": "Combat",
-    "requirements": null
+    "requirements": "Trained in *Influence*"
   },
     {
       "name": "Guarded Attack",
@@ -57,12 +57,12 @@
   {
     "name": "Palm Throw",
     "type": "Combat",
-    "requirements": null
+    "requirements": "Dexterity 14+"
   },
   {
     "name": "Ricochet Throw",
     "type": "Combat",
-    "requirements": null
+    "requirements": "Dexterity 14+"
   },
   {
     "name": "Shielding",
@@ -92,6 +92,6 @@
   {
     "name": "Inspiring Performance",
     "type": "Leadership",
-    "requirements": "Performance as trained skill (from feat)"
+    "requirements": "Charisma 14+"
   }
 ]

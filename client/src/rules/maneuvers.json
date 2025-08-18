@@ -57,7 +57,7 @@
   {
     "name": "Battlefield Command",
     "type": "Leadership",
-    "requirements": ["Charisma 13+","Trained in Influence"],
+    "requirements": ["Charisma 13+"],
     "attack": "None",
     "action": "Action",
     "range": "5 areas",
@@ -134,7 +134,7 @@
   {
     "name": "Feint",
     "type": "Combat",
-    "requirements": ["Trained in Influence"],
+    "requirements": ["Trained in *Influence*"],
     "attack": "Influence skill check vs target's Discipline",
     "action": "Action + Bonus Action",
     "range": "Melee",
@@ -222,7 +222,7 @@
   {
     "name": "Overwhelming Charge",
     "type": "Combat",
-    "requirements": ["Large Size","Strength of 26+"],
+    "requirements": ["Large Size, Strength of 26+"],
     "attack": "Avoidance",
     "action": "Action",
     "range": "Melee",
@@ -266,7 +266,7 @@
   {
     "name": "Rallying Cry",
     "type": "Leadership",
-    "requirements": ["Charisma 14+","Trained in Influence"],
+    "requirements": ["Charisma 14+"],
     "attack": " ",
     "action": "Action",
     "range": "3 Areas",
@@ -277,7 +277,7 @@
   {
     "name": "Rally the Troops",
     "type": "Leadership",
-    "requirements": ["Charisma 13+","Trained in Influence"],
+    "requirements": ["Charisma 13+"],
     "attack": " ",
     "action": "Action",
     "range": "4 Areas",
