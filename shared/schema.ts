@@ -356,6 +356,7 @@ export const characterSkills = pgTable("character_skills", {
   characterId: integer("character_id")
     .references(() => characters.id, { onDelete: "cascade" })
     .notNull(),
+  skillSetId: integer("skill_set_id").references(() => skillSets.id),
   name: text("name").notNull(),
   ability: text("ability").notNull(),
   ranks: integer("ranks").notNull(),

@@ -59,7 +59,7 @@ export const getCharacter = async (req: Request, res: Response) => {
       .from(characterPowers)
       .where(eq(characterPowers.characterId, id));
 
-    const skills = await db
+    const skillSets = await db
       .select()
       .from(characterSkills)
       .where(eq(characterSkills.characterId, id));
@@ -80,7 +80,7 @@ export const getCharacter = async (req: Request, res: Response) => {
         ...(character.data as any),
         feats,
         powers,
-        skills,
+        skillSets,
         gear: gearItems,
         complications,
       },
@@ -102,7 +102,7 @@ export const createCharacter = async (req: Request, res: Response) => {
       data,
       feats = [],
       powers = [],
-      skills = [],
+      skillSets = [],
       gear = [],
       complications = [],
     } = req.body;
@@ -149,11 +149,11 @@ export const createCharacter = async (req: Request, res: Response) => {
       );
     }
 
-    if (skills.length) {
+    if (skillSets.length) {
       await db.insert(characterSkills).values(
-        skills.map((s: any) => ({
+        skillSets.map((s: any) => ({
           characterId,
-          skillId: s.id ?? null,
+          skillSetId: s.id ?? null,
           name: s.name,
           ability: s.ability,
           ranks: s.ranks,
@@ -198,7 +198,7 @@ export const createCharacter = async (req: Request, res: Response) => {
 export const updateCharacter = async (req: Request, res: Response) => {
   try {
     const id = Number(req.params.id);
-    const { name, data, feats = [], powers = [], skills = [], gear = [], complications = [] } = req.body;
+    const { name, data, feats = [], powers = [], skillSets = [], gear = [], complications = [] } = req.body;
     
     // Get the character to make sure it exists and belongs to the user
     const [existingCharacter] = await db.select()
@@ -260,11 +260,11 @@ export const updateCharacter = async (req: Request, res: Response) => {
       );
     }
 
-    if (skills.length) {
+    if (skillSets.length) {
       await db.insert(characterSkills).values(
-        skills.map((s: any) => ({
+        skillSets.map((s: any) => ({
           characterId: id,
-          skillId: s.id ?? null,
+          skillSetId: s.id ?? null,
           name: s.name,
           ability: s.ability,
           ranks: s.ranks,
