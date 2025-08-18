@@ -37,12 +37,12 @@
   {
     "name": "Earth to Sky",
     "type": "Combat",
-    "requirements": "Martial Artist"
+    "requirements": "Dexterity 13+"
   },
   {
     "name": "Feint",
     "type": "Combat",
-    "requirements": "Trained in *Influence*"
+    "requirements": "Charisma 13+"
   },
     {
       "name": "Guarded Attack",

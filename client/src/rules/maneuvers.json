@@ -123,7 +123,7 @@
     {
     "name": "Earth to Sky",
     "type": "Combat",
-    "requirements": ["Martial Artist"],
+    "requirements": ["Dexterity 13+"],
     "attack": "Avoidance",
     "action": "Reaction",
     "range": "Melee",
@@ -134,8 +134,8 @@
   {
     "name": "Feint",
     "type": "Combat",
-    "requirements": ["Trained in *Influence*"],
-    "attack": "Influence skill check vs target's Discipline",
+    "requirements": ["Charisma 13+"],
+    "attack": "Charisma attack vs Discipline",
     "action": "Action + Bonus Action",
     "range": "Melee",
     "effect": "None; if successful, may immediately attack as bonus action with +5 to hit.",
@@ -222,7 +222,7 @@
   {
     "name": "Overwhelming Charge",
     "type": "Combat",
-    "requirements": ["Large Size, Strength of 26+"],
+    "requirements": ["Strength 26+"],
     "attack": "Avoidance",
     "action": "Action",
     "range": "Melee",
