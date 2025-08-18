@@ -46,9 +46,15 @@ async function runSeed() {
     await db.insert(skillSets).values({
       name: set.name,
       description: set.description || "",
+      // Older database snapshots expect these fields even if our source data
+      // doesn't explicitly provide them. Defaults keep the insert from failing
+      // on NOT NULL constraints.
+      points: set.points ?? 0,
+      skills: set.skills ?? [],
+      feats: set.feats ?? [],
       edges: set.edges ?? [],
       deepCutTrigger: set.deepCutTrigger ?? null,
-    }).onConflictDoNothing();
+    } as any).onConflictDoNothing();
   }
 
   console.log("🌱 Seeding origins...");

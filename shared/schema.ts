@@ -68,6 +68,15 @@ export const skillSets = pgTable("skill_sets", {
   id: serial("id").primaryKey(),
   name: text("name").notNull().unique(),
   description: text("description").notNull(),
+  /**
+   * Older versions of the database expect a few additional columns on the
+   * `skill_sets` table. The seed script interacts with production data that may
+   * still include these columns, so we model them here with sensible defaults
+   * to satisfy the NOT NULL constraints and keep the schema in sync.
+   */
+  points: integer("points").notNull().default(0),
+  skills: jsonb("skills").notNull().default([]),
+  feats: jsonb("feats").notNull().default([]),
   edges: text("edges").array().notNull().default([]),
   deepCutTrigger: text("deep_cut_trigger"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
@@ -155,6 +164,9 @@ export const insertArchetypeSchema = createInsertSchema(archetypes).pick({
 export const insertSkillSetSchema = createInsertSchema(skillSets).pick({
   name: true,
   description: true,
+  points: true,
+  skills: true,
+  feats: true,
   edges: true,
   deepCutTrigger: true,
 });
