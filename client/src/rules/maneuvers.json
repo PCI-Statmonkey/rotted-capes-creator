@@ -112,7 +112,7 @@
   {
     "name": "Earth Strike",
     "type": "Combat",
-    "requirements": ["Strength of 30+"],
+    "requirements": ["Strength 30+"],
     "attack": "Fortitude",
     "action": "Action",
     "range": "Area or adjacent Area",
