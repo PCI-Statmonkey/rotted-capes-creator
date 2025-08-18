@@ -839,7 +839,7 @@
   },
   {
     "name": "Earth to Sky (Combat)",
-    "description": "*You know how to use an enemy's momentum against you when charged.*  **Requirements:** Martial Artist  **Attack:** Avoidance  **Action:** Reaction  **Range**: Melee  **Effect:** When the target of a *charge*, you may, as a reaction, attempt an opposed attack roll check against your attacker's attack roll. If successful, your opponent's attack misses, and you throw them at a number of areas equal to half your throw range. Your opponent then suffers damage as if they had fallen the distance thrown, plus the number of areas your opponent traversed before they reached you. You must be aware of the incoming attack before using this maneuver.",
+    "description": "*You know how to use an enemy's momentum against you when charged.*  **Requirements:** Dexterity 13+  **Attack:** Avoidance  **Action:** Reaction  **Range**: Melee  **Effect:** When the target of a *charge*, you may, as a reaction, attempt an opposed attack roll check against your attacker's attack roll. If successful, your opponent's attack misses, and you throw them at a number of areas equal to half your throw range. Your opponent then suffers damage as if they had fallen the distance thrown, plus the number of areas your opponent traversed before they reached you. You must be aware of the incoming attack before using this maneuver.",
     "prerequisites": [],
     "type": "normal",
     "repeatable": false,
@@ -849,7 +849,7 @@
   },
   {
     "name": "Feint (Combat)",
-    "description": "**Requirements:** Trained in *Influence*  **Attack:** Charisma attack vs Discipline  **Action:** Action + Bonus Action  **Range**: Melee  **Effect**: *None;* if successful, you may immediately attack as a bonus action, gaining a +2 bonus to hit.  **Weapons:** You may perform this maneuver with melee weapons or unarmed attacks",
+    "description": "**Requirements:** Charisma 13+  **Attack:** Charisma attack vs Discipline  **Action:** Action + Bonus Action  **Range**: Melee  **Effect**: *None;* if successful, you may immediately attack as a bonus action, gaining a +2 bonus to hit.  **Weapons:** You may perform this maneuver with melee weapons or unarmed attacks",
     "prerequisites": [],
     "type": "normal",
     "repeatable": false,
@@ -929,7 +929,7 @@
   },
   {
     "name": "Overwhelming Charge (Combat)",
-    "description": "**Requirements:** Large Size, Strength of 26+  **Attack:** Avoidance  **Action:** Action  **Range:** Melee  **Effect:** *Base,* you move up to your full pace and perform a single unarmed attack against all the creatures within a single area; the creatures that are hit must make a dexterity saving throw against a DC equal to that of your attack roll or fall prone*.*  **Special:** Your Avoidance is reduced by -4 until the beginning of your next turn.  **Weapons:** You may only perform this maneuver as an unarmed attack.",
+    "description": "**Requirements:** Strength 26+  **Attack:** Avoidance  **Action:** Action  **Range:** Melee  **Effect:** *Base,* you move up to your full pace and perform a single unarmed attack against all the creatures within a single area; the creatures that are hit must make a dexterity saving throw against a DC equal to that of your attack roll or fall prone*.*  **Special:** Your Avoidance is reduced by -4 until the beginning of your next turn.  **Weapons:** You may only perform this maneuver as an unarmed attack.",
     "prerequisites": [],
     "type": "normal",
     "repeatable": false,

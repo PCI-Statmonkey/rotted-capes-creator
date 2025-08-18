@@ -135,14 +135,14 @@
     "name": "Feint",
     "type": "Combat",
     "requirements": ["Charisma 13+"],
-    "attack": "Influence skill check vs target's Discipline",
+    "attack": "Charisma attack vs Discipline",
     "action": "Action + Bonus Action",
     "range": "Melee",
     "effect": "None; if successful, may immediately attack as bonus action with +5 to hit.",
     "special": "",
     "weapons": "Melee weapons or unarmed attacks"
   },
- {
+  {
     "name": "Flowing Sand",
     "type": "Combat",
     "requirements": [],
