@@ -41,17 +41,17 @@ const Step5_SkillsAndFeats = () => {
   const [row3Maneuver, setRow3Maneuver] = useState<string>("");
 
   const maneuversSet = useMemo(() => {
-    const names = allManeuvers.flatMap((m: any) => [
-      m.name,
-      `${m.name} (${m.type})`,
-    ]);
-    return new Set(names);
+    return new Set(allManeuvers.map((m: any) => m.name));
   }, [allManeuvers]);
+
   const feats = useMemo(() => {
     const unique = Array.from(
       new Map(featsData.map((f: any) => [f.name, f])).values()
     );
-    return unique.filter((f: any) => !maneuversSet.has(f.name));
+    return unique.filter((f: any) => {
+      const baseName = f.name.replace(/\s*\(.*\)\s*$/, "");
+      return !maneuversSet.has(baseName);
+    });
   }, [featsData, maneuversSet]);
 
   const prereqCharacter = useMemo(
