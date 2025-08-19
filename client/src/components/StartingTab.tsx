@@ -10,7 +10,7 @@ interface StartingTabProps {
   setStartingFeat: (feat: string) => void;
 
   feats: any[];
-  getMissingPrereqs: (item: any) => any[];
+  getMissingPrereqs: (item: any) => { hard: any[]; soft: any[] };
 }
 
 const StartingTab = ({
@@ -38,8 +38,10 @@ const StartingTab = ({
 
   const formatReq = (req: any) => formatPrerequisite(req);
 
-  const missingPrereqs = selectedFeatObj ? getMissingPrereqs(selectedFeatObj) : [];
-  const missingStrings = missingPrereqs.map(formatReq);
+  const missingPrereqs = selectedFeatObj
+    ? getMissingPrereqs(selectedFeatObj)
+    : { hard: [], soft: [] };
+  const missingStrings = [...missingPrereqs.hard, ...missingPrereqs.soft].map(formatReq);
   return (
     <>
       <h3 className="text-white text-md mb-2">Select 2 Starting Skills</h3>
@@ -64,15 +66,15 @@ const StartingTab = ({
         <option value="">-- Select --</option>
         {feats.map((f, index) => {
           const missing = getMissingPrereqs(f);
-          const disabled = missing.length > 0;
+          const disabled = missing.hard.length > 0;
           return (
             <option
               key={f.id ? String(f.id) : `${f.name}-${index}`}
               value={f.name}
               disabled={disabled}
               title={
-                disabled
-                  ? `Missing: ${missing
+                disabled || missing.soft.length > 0
+                  ? `Missing: ${[...missing.hard, ...missing.soft]
                       .map((p) => p.name)
                       .join(", ")}`
                   : ""

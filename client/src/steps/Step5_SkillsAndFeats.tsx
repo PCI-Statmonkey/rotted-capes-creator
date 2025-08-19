@@ -189,10 +189,21 @@ const Step5_SkillsAndFeats = () => {
         {includeNone && <SelectItem value="none">None</SelectItem>}
         {feats.map((f: any) => {
           const missing = getMissingPrereqs(f, prereqCharacter);
-          const disabled = missing.length > 0;
-          const title = disabled
-            ? `Requires ${missing.map((m: any) => formatPrerequisite(m)).join(", ")}`
-            : undefined;
+          const disabled = missing.hard.length > 0;
+          const titleParts = [] as string[];
+          if (missing.hard.length > 0)
+            titleParts.push(
+              `Requires ${missing.hard
+                .map((m: any) => formatPrerequisite(m))
+                .join(", ")}`
+            );
+          if (missing.soft.length > 0)
+            titleParts.push(
+              `Story: ${missing.soft
+                .map((m: any) => formatPrerequisite(m))
+                .join(", ")}`
+            );
+          const title = titleParts.length ? titleParts.join(" | ") : undefined;
           return (
             <SelectItem
               key={f.name}

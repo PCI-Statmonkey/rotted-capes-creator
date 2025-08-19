@@ -78,7 +78,7 @@ assert(
 
 const missing = getMissingPrereqs({ prerequisites: 'Str 13 Dex 15' }, character);
 assert(
-  missing.some(r => r.type === 'ability' && r.name.toLowerCase() === 'dex' && r.value === 15)
+  missing.hard.some(r => r.type === 'ability' && r.name.toLowerCase() === 'dex' && r.value === 15)
 );
 
 // Usage prerequisite should fail if usage count is too low
@@ -116,7 +116,7 @@ const missingManeuver = getMissingPrereqs(
   { ...character, maneuverRequirements: ['Dexterity 15'] }
 );
 assert(
-  missingManeuver.some((r) => r.type === 'maneuverPrereq')
+  missingManeuver.hard.some((r) => r.type === 'maneuverPrereq')
 );
 
 // Skill set and edge prerequisites using fixtures
@@ -136,7 +136,20 @@ const missingEdge = getMissingPrereqs(
   { prerequisites: 'Edge: Stealthy' },
   customSkillSetCharacter
 );
-assert(missingEdge.some((r) => r.type === 'edge'));
+assert(missingEdge.hard.some((r) => r.type === 'edge'));
+
+// Soft requirement should not block feat selection
+assert(
+  meetsPrerequisites(
+    { prerequisites: 'Editor-in-Chief approval' },
+    character
+  )
+);
+const missingApproval = getMissingPrereqs(
+  { prerequisites: 'Editor-in-Chief approval' },
+  character
+);
+assert(missingApproval.soft.some((r) => r.type === 'approval'));
 
 // Feat-granted skill set
 assert(

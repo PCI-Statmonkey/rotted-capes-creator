@@ -6,7 +6,7 @@ interface ManeuverDropdownProps {
   onChange: (value: string) => void;
   maneuvers: any[];
   meetsPrerequisites: (item: any) => boolean;
-  getMissingPrereqs: (item: any) => any[];
+  getMissingPrereqs: (item: any) => { hard: any[]; soft: any[] };
 }
 
 const ManeuverDropdown: React.FC<ManeuverDropdownProps> = ({
@@ -29,14 +29,15 @@ const ManeuverDropdown: React.FC<ManeuverDropdownProps> = ({
         {maneuvers.map((m) => {
           const reqObj = { prerequisites: m.requirements };
           const disabled = !meetsPrerequisites(reqObj);
+          const missing = getMissingPrereqs(reqObj);
           return (
             <option
               key={m.name}
               value={m.name}
               disabled={disabled}
               title={
-                disabled
-                  ? `Missing: ${getMissingPrereqs(reqObj)
+                disabled || missing.soft.length > 0
+                  ? `Missing: ${[...missing.hard, ...missing.soft]
                       .map((p) => p.name)
                       .join(", ")}`
                   : ""

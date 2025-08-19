@@ -615,7 +615,13 @@ export default function Step10_Summary() {
                     typeof p === "string" ? parsePrerequisite(p) : [p]
                   );
                   const formatReq = (req: any) => formatPrerequisite(req);
-                  const missing = getMissingPrereqs(feat, prereqCharacterData).map(formatReq);
+                  const missingObj = getMissingPrereqs(
+                    feat,
+                    prereqCharacterData
+                  );
+                  const missing = [...missingObj.hard, ...missingObj.soft].map(
+                    formatReq
+                  );
                   return (
                     <div key={index} className="border border-gray-700 rounded-lg p-2">
                       <div className="font-semibold">{displayFeatName(feat.name)}</div>
