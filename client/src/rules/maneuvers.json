@@ -165,6 +165,17 @@
     "weapons": ""
   },
   {
+    "name": "Guardian's Shield",
+    "type": "Combat",
+    "requirements": ["Dexterity 12+"],
+    "attack": "None",
+    "action": "Reaction",
+    "range": "Self or ally within reach",
+    "effect": "Intercept an attack targeting an ally within reach, taking the damage instead.",
+    "special": "Add your shield's DR to your Avoidance for this attack.",
+    "weapons": "Shield"
+  },
+  {
     "name": "Guns Akimbo",
     "type": "Combat",
     "requirements": ["Dexterity 14+"],
@@ -185,6 +196,17 @@
     "effect": "You use your action to set up your next shot, then use your bonus action take your shot. If you hit, you deal your attack’s maximum base damage, expending a single round of ammo if using a firearm. Any Zombie of Epsilon level or below successfully struck with a headshot is instantly destroyed.",
     "special": "",
     "weapons": "Any Firearm, thrown weapon, archaic missile weapon (such as bows), or ranged single target energy blast power. "
+  },
+  {
+    "name": "Improved Team Attack",
+    "type": "Combat, Leadership",
+    "requirements": [],
+    "attack": "Avoidance",
+    "action": "Ready (triggered by an ally attacking a target you intend to attack)",
+    "range": "Melee or Ranged (3 Areas)",
+    "effect": "Base; If the ally you chose successfully hits your intended target, you may use your reaction to attack the same target with Advantage. If you hit, combine your damage with your ally's to determine massive damage.",
+    "special": "",
+    "weapons": "Any melee weapon, unarmed attack, or attack powers"
   },
   {
     "name": "Inspiring Performance",
@@ -218,6 +240,17 @@
     "effect": "x2. If you successfully use this maneuver on bystander, hardened, or Zeta-ranked threats, they are instantly killed.",
     "special": "",
     "weapons": "You may perform this maneuver with any melee weapon, unarmed attack, or melee attack powers."
+  },
+  {
+    "name": "On my mark",
+    "type": "Leadership",
+    "requirements": ["Charisma 13+"],
+    "attack": "None",
+    "action": "Bonus Action",
+    "range": "3 areas",
+    "effect": "Designate a target within range. Allies within range gain Advantage on attack rolls against this target until the start of your next turn.",
+    "special": "Can be used once per scene.",
+    "weapons": "None"
   },
   {
     "name": "Overwhelming Charge",
