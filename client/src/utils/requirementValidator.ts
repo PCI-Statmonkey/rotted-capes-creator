@@ -221,6 +221,8 @@ export function formatPrerequisite(req: any): string {
       return req.name ?? "";
   }
 }
+// Requirement types that shouldn't block selection
+const SOFT_REQUIREMENTS = new Set(['approval']);
 
 export const meetsPrerequisites = (feat: any, character: any) => {
   if (!feat) return true;
@@ -279,6 +281,8 @@ export const meetsPrerequisites = (feat: any, character: any) => {
   });
 
   const evaluate = (req: any): boolean => {
+    // Soft requirements never block selection
+    if (SOFT_REQUIREMENTS.has(req.type)) return true;
     switch (req.type) {
       case 'compound':
         return req.operator === 'or'
@@ -379,7 +383,7 @@ export const meetsPrerequisites = (feat: any, character: any) => {
 };
 
 export const getMissingPrereqs = (feat: any, character: any) => {
-  const missing = [] as any[];
+  const missing = { hard: [] as any[], soft: [] as any[] };
 
   const {
     abilityScores = {},
@@ -417,7 +421,7 @@ export const getMissingPrereqs = (feat: any, character: any) => {
 
   const ownedFeats = selectedFeats.map((f: any) => f.name);
 
-  if (!feat) return [];
+  if (!feat) return missing;
 
   const prereqList = Array.isArray(feat.prerequisites)
     ? feat.prerequisites
@@ -425,7 +429,7 @@ export const getMissingPrereqs = (feat: any, character: any) => {
     ? [feat.prerequisites]
     : [];
 
-  if (prereqList.length === 0) return [];
+  if (prereqList.length === 0) return missing;
 
   // Parse all prerequisites
   const parsedPrereqs = prereqList.flatMap((prereqString: any) => {
@@ -536,7 +540,8 @@ export const getMissingPrereqs = (feat: any, character: any) => {
     if (req.type === 'compound') {
       if (req.operator === 'or') {
         if (!req.requirements.some((r: any) => evaluate(r))) {
-          missing.push(req);
+          const allSoft = req.requirements.every((r: any) => SOFT_REQUIREMENTS.has(r.type));
+          (allSoft ? missing.soft : missing.hard).push(req);
         }
       } else {
         req.requirements.forEach((r: any) => collectMissing(r));
@@ -544,7 +549,7 @@ export const getMissingPrereqs = (feat: any, character: any) => {
       return;
     }
     if (!evaluate(req)) {
-      missing.push(req);
+      (SOFT_REQUIREMENTS.has(req.type) ? missing.soft : missing.hard).push(req);
     }
   };
 
