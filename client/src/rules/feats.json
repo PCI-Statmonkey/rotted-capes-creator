@@ -12,7 +12,9 @@
   {
     "name": "Ace",
     "description": "**Requirements:** Dexterity 12+  **Benefits:** Increase your Dexterity score by +1 You are trained to operate one class of aircraft (e.g., fixed-wing, helicopter, VTOL). You may attempt related piloting actions even if you do not possess a Skill Set that includes aviation training. When doing so, add your Rank bonus to the roll. If you do have a relevant Skill Set (e.g., Sky Courier, Stunt Pilot, Military Aviator), you instead gain an Edge when operating that class of aircraft.  You may take this feat multiple times, selecting a different aircraft class each time.",
-    "prerequisites": [],
+    "prerequisites": [
+      "Dexterity 12+"
+    ],
     "type": "normal",
     "repeatable": false,
     "tags": [],
@@ -22,7 +24,9 @@
   {
     "name": "Acrobatic",
     "description": "**Requirements:** Dexterity 12+  **Benefits:** Increase your Dexterity score by 1 If you possess a Skill Set that thematically includes acrobatic movement (e.g., Parkour Artist, Circus Performer, Martial Artist), you gain an Edge when making rolls involving balance, flips, vaulting, or movement-based stunts.  In addition, you gain the following special movement abilities:  - **Kick-Up**: As a bonus action, you may instantly rise from a prone position without spending movement.  - **Up the Wall**: With a 1-area running start, you may move vertically up a wall with a number of feet equal to 5 plus half the result of an applicable acrobatic movement check.  - **Free Running**: Once per turn, you may ignore 1 area of difficult terrain during your movement.  **Special:** If you do not possess a relevant Skill Set, you can still use the above tricks, but do not gain an Edge on related rolls.",
-    "prerequisites": [],
+    "prerequisites": [
+      "Dexterity 12+"
+    ],
     "type": "normal",
     "repeatable": false,
     "tags": [],
@@ -32,7 +36,9 @@
   {
     "name": "Additional Origin",
     "description": "**Requirements:** Approval of your editor-in-chief.  **Benefit:** You gain an additional Origin, including its restrictions and advancement options, but not its initial benefits. When you take this feat, choose one ability score that your new Origin would normally increase; that score increases by +1.  Before selecting this feat, you must discuss it with your Editor-in-Chief to ensure it fits the narrative. Some events or story arcs may also grant this feat to heroes and other players as a reward for pivotal moments that fundamentally alter a character’s nature.",
-    "prerequisites": [],
+    "prerequisites": [
+      "Approval of your editor-in-chief."
+    ],
     "type": "normal",
     "repeatable": false,
     "tags": [],
@@ -42,7 +48,9 @@
   {
     "name": "Amateur Investigator",
     "description": "**Requirements:** Intelligence 13+  **Benefit:** Increase your Intelligence score by 1 When you take this feat, choose one area of investigative expertise (e.g., forensic evidence, criminal law, witness interrogation, case research), subject to Editor-in-Chief approval.  When attempting to meet a challenge involving your chosen area of expertise, you may add your **Rank bonus** to the roll if you do not possess a Skill Set that includes investigative training. If you do have a relevant Skill Set (e.g., Detective, Forensic Analyst, Crime Reporter), you instead gain an **Edge** on these checks.  This feat does not grant broad investigative capability. It reflects a particular method, study, or personal specialty you’ve developed, formally or not.",
-    "prerequisites": [],
+    "prerequisites": [
+      "Intelligence 13+"
+    ],
     "type": "normal",
     "repeatable": false,
     "tags": [],
@@ -52,7 +60,9 @@
   {
     "name": "Attack Focus",
     "description": "**Requirement:** Must be capable of performing the chosen attack.  **Benefit:** Choose a specific melee attack, ranged attack, or power that requires an attack roll that you can perform. You gain a +1 bonus to attack rolls with the chosen attack. Additionally, you deal an extra +2 points of damage when using this attack. For example, you can take attack focus on attacks with your energy blast power or your unarmed attacks.  **Special:** You can select this feat multiple times. Each time, it applies to a different attack**.**",
-    "prerequisites": [],
+    "prerequisites": [
+      "Must be capable of performing the chosen attack."
+    ],
     "type": "normal",
     "repeatable": false,
     "tags": [],
@@ -62,7 +72,9 @@
   {
     "name": "Blind-Fighting",
     "description": "**Requirements:** Wisdom 13+  **Benefit:** When you cannot see an opponent in your area but are aware of their presence (through sound, powers, or other senses), they do not gain Advantage on attacks against you, and your attacks against them do not suffer Disadvantage.",
-    "prerequisites": [],
+    "prerequisites": [
+      "Wisdom 13+"
+    ],
     "type": "normal",
     "repeatable": false,
     "tags": [],
@@ -72,7 +84,9 @@
   {
     "name": "Burglar",
     "description": "**Requirements:** Dexterity 12+  **Benefit:** Increase your Dexterity score by 1 When attempting to meet a challenge involving bypassing locks or electronic security systems, you add your Rank bonus to the roll if you do not possess a Skill Set that includes larceny or infiltration. If you do have a relevant Skill Set (e.g., Cat Burglar, Ex-Criminal, Infiltrator), you instead gain an Edge when attempting either bypass locks or electronic security systems.  You must choose whether your Edge applies to physical locks or electronic systems when you gain this feat.",
-    "prerequisites": [],
+    "prerequisites": [
+      "Dexterity 12+"
+    ],
     "type": "normal",
     "repeatable": false,
     "tags": [],
@@ -82,7 +96,9 @@
   {
     "name": "Captivating Performer",
     "description": "**Requirements:** Charisma 13+  **Benefit:** Increase your Charisma score by 1.**  ** When attempting to meet a challenge involving commanding attention, evoking emotion, or captivating an audience through a performance, you add your Rank bonus to the roll if you do not possess a Skill Set that includes performance training. If you do have a relevant Skill Set (e.g., Stage Actor, Street Musician, Cult Figure), you instead gain an Edge when performing.  In addition, you gain the Inspiring Performance maneuver (see page XX).",
-    "prerequisites": [],
+    "prerequisites": [
+      "Charisma 13+"
+    ],
     "type": "normal",
     "repeatable": false,
     "tags": [],
@@ -92,7 +108,9 @@
   {
     "name": "Combat Intuition",
     "description": "*You have an uncanny clarity of mind in combat, allowing you to feel the ebb and flow of battle.*  **Requirements:** Wisdom or Dexterity 13+  **Benefits:** Increase your Wisdom or Dexterity score by 1. You gain immunity to outnumbering condition in combat. This means that even when you are outnumbered, you do not suffer the usual disadvantages. This immunity takes precedence over any other rules or feats (such as wolf pack tactics) that provide outnumbering penalties.",
-    "prerequisites": [],
+    "prerequisites": [
+      "Wisdom or Dexterity 13+"
+    ],
     "type": "normal",
     "repeatable": false,
     "tags": [],
@@ -102,7 +120,9 @@
   {
     "name": "Critical Precision",
     "description": "*“Always aim for the head.”*  **Requirement:** Must be capable of performing the chosen attack.  **Benefit:** Choose a specific melee attack, ranged attack, or power that requires an attack roll that you can perform, you score a critical hit on a roll of 19 or 20 with that attack.",
-    "prerequisites": [],
+    "prerequisites": [
+      "Must be capable of performing the chosen attack."
+    ],
     "type": "normal",
     "repeatable": false,
     "tags": [],
@@ -122,7 +142,9 @@
   {
     "name": "Disciplined",
     "description": "*You keep an even keel, even in the roughest of waters.*  **Requirements:** Wisdom 12+  **Benefit:** Increase your Willpower defense by +1. You also have Advantage on saving throws against mental control. If using the optional psychosis rules, you also have Advantage on saving throws against psychosis.",
-    "prerequisites": [],
+    "prerequisites": [
+      "Wisdom 12+"
+    ],
     "type": "normal",
     "repeatable": false,
     "tags": [],
@@ -142,7 +164,10 @@
   {
     "name": "Engineering Prodigy",
     "description": "**Requirements:** Intelligence 12+, Wisdom 12+  *You have an intuitive knack for fixing and modifying equipment, even if you don’t fully understand how it works.*  **Benefit:** Increase your Intelligence or Wisdom score by 1. When you take this feat, choose a specific type of equipment this talent applies to (e.g., weapons, vehicles, power tools, armor), subject to Editor-in-Chief approval.  When attempting to meet a challenge involving quick repairs, salvaging parts, or modifying existing equipment of the chosen type, you may add your Rank bonus to the roll if you do not possess a Skill Set that includes engineering. If you do have a relevant Skill Set (e.g., Technician, Tinkerer, Gearhead), you instead gain an Edge on these checks.  This feat does not enable you to design new devices, build complex systems, or reverse-engineer advanced technology; it only allows you to work with what already exists.  You may take these feat multiple times, choosing a different specific type of equipment each time.",
-    "prerequisites": [],
+    "prerequisites": [
+      "Intelligence 12+",
+      "Wisdom 12+"
+    ],
     "type": "normal",
     "repeatable": false,
     "tags": [],
@@ -152,7 +177,9 @@
   {
     "name": "Empathic Intuition",
     "description": "*You can attempt to defuse tension with a word and a look.*  **Requirements:** Wisdom 16+  **Benefit:** Increase your Wisdom score by 1. When attempting to meet a challenge involving reading emotional states, calming someone down, or navigating emotionally volatile situations, you add your Rank bonus to the roll if you do not possess a Skill Set that includes interpersonal or psychological training. If you do have a relevant Skill Set (e.g., Counselor, Negotiator, Therapist), you instead gain an Edge on these checks.  As an action, you may attempt to calm an agitated individual. The Editor sets the DC based on the target’s current emotional state.",
-    "prerequisites": [],
+    "prerequisites": [
+      "Wisdom 16+"
+    ],
     "type": "normal",
     "repeatable": false,
     "tags": [],
@@ -162,7 +189,9 @@
   {
     "name": "Escape Artist",
     "description": "**Requirements:** Dexterity 13+  **Benefit:** Increase your Dexterity score by 1.**  ** When attempting to meet a challenge involving escaping from restraints, bindings, or tight enclosures, you add your Rank bonus to the roll if you do not possess a Skill Set that includes escape techniques. If you do have a relevant Skill Set (e.g., Escapist, Stage Magician, Cat Burglar), you instead gain an Edge on these checks.  In addition, you may escape from mundane, non-powered restraints without making a check, unless the restraints were specifically designed to counter your origin or powers.",
-    "prerequisites": [],
+    "prerequisites": [
+      "Dexterity 13+"
+    ],
     "type": "normal",
     "repeatable": false,
     "tags": [],
@@ -172,7 +201,9 @@
   {
     "name": "Expert Driver",
     "description": "**Requirements:** Dexterity 13+  **Benefit:** Increase your Dexterity score by 1. When you take this feat, choose one area of vehicular expertise (e.g., evasive maneuvers in tight streets, motorcycle stunts, high-speed pursuit under fire), subject to Editor-in-Chief approval.  When attempting to meet a challenge involving your chosen driving specialty, you add your Rank bonus to the roll if you do not possess a Skill Set focused on vehicle operation or piloting (e.g., Driver, Courier, Stunt Rider). If you do possess a relevant Skill Set, you instead gain an Edge on these checks.  Additionally, while driving or riding in a vehicle during combat, you gain a +2 bonus on all vehicle-related checks (such as maneuvering, escaping pursuit, or executing tactical actions). This stacks with other bonuses unless otherwise specified by the Editor-in-Chief.",
-    "prerequisites": [],
+    "prerequisites": [
+      "Dexterity 13+"
+    ],
     "type": "normal",
     "repeatable": false,
     "tags": [],
@@ -192,7 +223,9 @@
   {
     "name": "Gearhead",
     "description": "*“It's all about family.”*  **Requirements:** Intelligence 12+  **Benefit:** Increase your Intelligence score by 1. When attempting to meet a challenge involving automobile repair, modification, or diagnostics, you add your Rank bonus to the roll if you do not possess a Skill Set that includes vehicle engineering. If you do have a relevant Skill Set (e.g., Auto Mechanic, Gearhead, Street Tech), you instead gain an Edge on these checks.  Additionally, you gain a +2 bonus to Drive checks when operating ground vehicles.",
-    "prerequisites": [],
+    "prerequisites": [
+      "Intelligence 12+"
+    ],
     "type": "normal",
     "repeatable": false,
     "tags": [],
@@ -202,7 +235,9 @@
   {
     "name": "Hacker",
     "description": "**Requirements:** Intelligence 12+  **Benefit:** Increase your Intelligence score by 1.**  ** When attempting to meet a challenge involving bypassing digital security, accessing restricted systems, or navigating computer networks, you add your Rank bonus to the roll if you do not possess a Skill Set that includes computer hacking. If you do have a relevant Skill Set (e.g., Cyber Specialist, IT Security, Black Hat), you instead gain an Edge on these checks.  In addition, you require only half the normal time to perform hacking attempts.",
-    "prerequisites": [],
+    "prerequisites": [
+      "Intelligence 12+"
+    ],
     "type": "normal",
     "repeatable": false,
     "tags": [],
@@ -212,7 +247,9 @@
   {
     "name": "Hawkeye",
     "description": "**Requirements:** Dexterity 12+  **Benefit:** When making a ranged attack, you do not suffer penalties for attacking at range as long as that target is within a number of areas equal to your wisdom score.  Additionally, your ranged weapon attacks ignore partial cover.",
-    "prerequisites": [],
+    "prerequisites": [
+      "Dexterity 12+"
+    ],
     "type": "normal",
     "repeatable": false,
     "tags": [],
@@ -222,7 +259,9 @@
   {
     "name": "Healing Hands",
     "description": "*You have a natural ability to heal others, which is useful in a world without functioning hospitals or medical supplies.*  **Requirements:** Wisdom 13+  **Benefit:** Increase your Wisdom score by 1. When attempting to meet a challenge involving stabilizing wounds, treating injuries, or performing first aid, you add your rank bonus to the roll if you do not possess a Skill Set that includes medical training. If you have a relevant Skill Set (e.g., Field Medic, EMT, Combat Nurse), you instead gain an *Edge* on these checks.  In addition, once per scene, you may attempt to revive a living creature reduced to 0 Stamina. Roll an Intelligence check and add your Rank; the target regains Stamina equal to the result.",
-    "prerequisites": [],
+    "prerequisites": [
+      "Wisdom 13+"
+    ],
     "type": "normal",
     "repeatable": false,
     "tags": [],
@@ -233,7 +272,9 @@
   {
     "name": "Hidden Stash",
     "description": "*Deep down inside, you know that one day, you may have to make a break for it. With that in mind, you've stashed a few ready-to-go packs around town.*  **Requirements:** I've Done All Right for Myself (feat)  **Benefit:** Increase your Intelligence score by 1. As an action, you can search an area for one of your stashes. These stashes typically contain basic medical kits, a sidearm with ammunition or a restock of one type of ammunition, and a few pieces of handy equipment, all stored in a small bag or backpack. You regain the ability to use this feat after completing a Hiatus. Alternatively, you may use a plot point to find one of your \"go-bag\" stashes, allowing you to produce a number of stashes equal to your Intelligence bonus.  Your Editor-in-Chief may decide that having a stash nearby is impossible (for example, if you are investigating the lair of a villain, you never knew existed). Additionally, it is up to the Editor-in-Chief to determine what would be reasonably found in the pack in the given scene. In general, the value of the stash will be up to your Intelligence bonus + your rank bonus in AP (minimum of 2). After using this feat, a number of times equal to your rank bonus, you must use an Enclave Interlude to go into the city and refill your stashes.  **Note**: If your campaign moves from city to city, this feat may be less useful. However, with the Editor-in-Chief's approval, you may have planted several such packs in different cities before Z-Day, allowing you to use this feat on the road.",
-    "prerequisites": [],
+    "prerequisites": [
+      "I've Done All Right for Myself (feat)"
+    ],
     "type": "normal",
     "repeatable": false,
     "tags": [],
@@ -243,7 +284,9 @@
   {
     "name": "Honeyed Tongue",
     "description": "**Requirements:** Charisma 13+  **Benefit:** Increase your Charisma score by 1. When attempting to meet a challenge involving lying, persuading, or manipulating others, you add your Rank bonus to the roll if you do not possess a Skill Set that includes interpersonal influence. If you do have a relevant Skill Set (e.g., Con Artist, Diplomat, Silver-Tongued Scoundrel), you instead gain an Edge on these checks.  In addition, you gain a +2 bonus on wisdom based rolls to gauge whether someone is believing your deception or resisting your persuasion.",
-    "prerequisites": [],
+    "prerequisites": [
+      "Charisma 13+"
+    ],
     "type": "normal",
     "repeatable": false,
     "tags": [],
@@ -253,7 +296,9 @@
   {
     "name": "Horse Whisperer",
     "description": "**Requirement:** Wisdom 13+  **Benefit:** Increase your Wisdom score by 1. When attempting to meet a challenge involving calming, training, riding, or handling horses, you add your Rank bonus to the roll if you do not possess a Skill Set that includes animal handling or mounted training. If you do have a relevant Skill Set (e.g., Rancher, Cavalry Scout, Beast Tamer), you instead gain an Edge on these checks.  With Editor-in-Chief approval, you acquire with a bonded horse, an animal you care for and travel with. While not a combat mount by default, this horse is loyal and can be trained or improved through roleplay and story progression.",
-    "prerequisites": [],
+    "prerequisites": [
+      "Wisdom 13+"
+    ],
     "type": "normal",
     "repeatable": false,
     "tags": [],
@@ -263,7 +308,9 @@
   {
     "name": "Hunter",
     "description": "**Requirements:** Wisdom 13+  **Benefit:** Increase your Wisdom score by 1. When attempting to meet a challenge involving tracking or hunting, you add your Rank bonus to the roll if you do not possess a Skill Set that includes wilderness survival. If you do have a relevant Skill Set (e.g., Tracker, Survivalist, Forest Ranger), you instead gain an Edge on these checks.",
-    "prerequisites": [],
+    "prerequisites": [
+      "Wisdom 13+"
+    ],
     "type": "normal",
     "repeatable": false,
     "tags": [],
@@ -273,7 +320,9 @@
   {
     "name": "I've Done Alright for Myself",
     "description": "**Requirements:** Intelligence 13+  **Benefit:** Increase your Intelligence score by 1. When you take this feat, choose one area of urban survival expertise (e.g., scrounging for gear, navigating hostile neighborhoods, finding safe places to sleep, or dealing with black market contacts), subject to Editor-in-Chief approval.  When attempting to meet a challenge involving your chosen area of expertise, you add your **Rank bonus** to the roll if you do not possess a Skill Set that includes urban survival. If you do have a relevant Skill Set (e.g., Streetwise, Urban Nomad, Black Market Runner), you instead gain an **Edge** on these checks.  In addition, you begin play with either a bonded horse or a reliable common vehicle, and you start each Issue with 4 AP worth of gear selected before the session begins.",
-    "prerequisites": [],
+    "prerequisites": [
+      "Intelligence 13+"
+    ],
     "type": "normal",
     "repeatable": false,
     "tags": [],
@@ -283,7 +332,9 @@
   {
     "name": "Jury Rigging",
     "description": "**Requirements:** Intelligence 13+  **Benefit:** Increase your Intelligence or Wisdom score by 1.**  ** When you take this feat, choose one category of common equipment or systems you’re known for patching together (e.g., vehicles, weapons, generators, powered doors), subject to Editor-in-Chief approval.  When attempting to meet a challenge involving quick repairs or improvised mechanical fixes to your chosen category, you add your Rank bonus to the roll if you do not possess a Skill Set that includes engineering or technical work. If you do have a relevant Skill Set (e.g., Technician, Tinkerer, Vehicle Mechanic), you instead gain an Edge on these checks.  In addition, you may attempt any relevant Jury Rig challenge with a DC of 20 or lower without requiring proper tools or equipment, provided you have access to basic scrap, parts, or materials.",
-    "prerequisites": [],
+    "prerequisites": [
+      "Intelligence 13+"
+    ],
     "type": "normal",
     "repeatable": false,
     "tags": [],
@@ -303,7 +354,9 @@
   {
     "name": "Learn Combat Maneuver",
     "description": "**Requirements:** As specified by the combat maneuver  **Benefit:** You learn one combat Maneuver for which you meet the listed prerequisites (see Maneuvers, pg. XX). Representing specialized combat training, battlefield improvisation, or inherited techniques developed through hard-won experience.  You may take this feat multiple times. Each time, you learn a different Maneuver.",
-    "prerequisites": [],
+    "prerequisites": [
+      "As specified by the combat maneuver"
+    ],
     "type": "normal",
     "repeatable": false,
     "tags": [],
@@ -313,7 +366,9 @@
   {
     "name": "Martial Artist",
     "description": "*You are an expert martial artist, but you're no Shadow Fist.*  **Requirements:** Dexterity or Strength 13+  **Benefit:** You are trained in disciplined unarmed combat techniques that let you adapt to any threat. At the start of your turn, choose one of the following stances. The stance remains active until you choose a different one at the start of a future turn:  - **Precision:** You gain a +1 bonus to hit with unarmed attacks.  - **Powerful:** Your unarmed attacks deal +2 damage  - **Quick:** You may use your Dexterity modifier instead of Strength for unarmed attack and damage rolls. While in this stance, your unarmed attacks deal kinetic damage equal to your Dexterity base die plus your Dexterity modifier.  In addition, once per scene, when you hit with an unarmed attack, you may immediately use a Maneuver that involves an unarmed strike as a free follow-up, provided it requires no special equipment.",
-    "prerequisites": [],
+    "prerequisites": [
+      "Dexterity or Strength 13+"
+    ],
     "type": "normal",
     "repeatable": false,
     "tags": [],
@@ -330,7 +385,9 @@
   {
     "name": "Mind over Body",
     "description": "**Requirements:** Wisdom 13+  **Benefit:** Increase your Wisdom score by 1. Once per scene, when attacked as a reaction, you may use your willpower defense in place of either your avoidance or fortitude defense, but you must choose to use this feat before the attack is resolved.",
-    "prerequisites": [],
+    "prerequisites": [
+      "Wisdom 13+"
+    ],
     "type": "normal",
     "repeatable": false,
     "tags": [],
@@ -341,7 +398,9 @@
   {
     "name": "Natural Born Leader",
     "description": "*You possess a powerful presence that inspires others*  **Requirements:** As specified by the leadership maneuver  **Benefit:** You learn two leadership maneuvers of your choice. See page XX for a full list of maneuvers.  **Special:** You can take these feat multiple times learning a leadership maneuver each time.",
-    "prerequisites": [],
+    "prerequisites": [
+      "As specified by the leadership maneuver"
+    ],
     "type": "normal",
     "repeatable": false,
     "tags": [],
@@ -351,7 +410,9 @@
   {
     "name": "Night Owl",
     "description": "*You sleep with one eye open.*  **Requirements:** Wisdom and Constitution of 13+  **Benefit:** You require only 4 total hours of sleep per day to gain the benefits of a Hiatus. These hours may be broken into segments, provided that each rest period is at least 1 hour in length.  When attempting to meet a challenge involving noticing danger while resting, waking up quickly, or staying alert during interrupted rest, you may add your Rank bonus to the roll if you do not possess a Skill Set that includes heightened awareness or survival instincts. If you do have a relevant Skill Set (e.g., Wilderness Scout, Night Watchman), you instead gain an Edge on those checks.",
-    "prerequisites": [],
+    "prerequisites": [
+      "Wisdom and Constitution of 13+"
+    ],
     "type": "normal",
     "repeatable": false,
     "tags": [],
@@ -361,7 +422,9 @@
   {
     "name": "Occult Scholar",
     "description": "**Requirements:** Wisdom 13+  **Benefit:** Increase your Wisdom score by 1. When you take this feat, choose one area of occult knowledge (e.g., arcane symbols, ritual theory, supernatural lore), subject to Editor-in-Chief approval.  When attempting to meet a challenge involving your chosen occult topic, you add your Rank bonus to the roll if you do not possess a Skill Set that includes occult training. If you do have a relevant Skill Set (e.g., Occultist, Arcane Researcher, Cult Survivor), you instead gain an **Edge** on these checks.",
-    "prerequisites": [],
+    "prerequisites": [
+      "Wisdom 13+"
+    ],
     "type": "normal",
     "repeatable": false,
     "tags": [],
@@ -371,7 +434,9 @@
   {
     "name": "Perfect Aim",
     "description": "*Your precision with ranged weapons is unparalleled.*  **Requirements:** Hawkeye (feat)  **Benefit:** You gain a +1 bonus to attack rolls made with ranged attacks.  Additionally, once per scene, as a bonus action, you may make a ranged attack with Advantage against a target you can clearly see and aim at without obstruction.",
-    "prerequisites": [],
+    "prerequisites": [
+      "Hawkeye (feat)"
+    ],
     "type": "normal",
     "repeatable": false,
     "tags": [],
@@ -382,7 +447,9 @@
   {
     "name": "Political Maneuvering",
     "description": "*In a world where the wrong phrase can get you shot, this ability enables you to keep the peace.*  **Requirements:** Honey Tongue (feat)  **Benefit:** Increase your Wisdom score by 1. Once per scene, you may intervene on behalf of an ally who has made a social or political misstep. Replace the result of their failed check with a new roll using your Influence-based ability (typically Charisma), representing your skill in smoothing things over or redirecting attention.  This does not grant a reroll to the original character; it fully replaces their result with yours.",
-    "prerequisites": [],
+    "prerequisites": [
+      "Honey Tongue (feat)"
+    ],
     "type": "normal",
     "repeatable": false,
     "tags": [],
@@ -393,7 +460,9 @@
   {
     "name": "Polyglot",
     "description": "**Requirements:** Intelligence 13+  **Benefit:** Increase your Intelligence score by 1. When you take this feat, choose three additional languages you can read, write, and speak fluently.  If you do not possess a Skill Set that includes linguistic training, you may attempt language-based decoding or translation tasks using your Rank bonus. If you do have a relevant Skill Set (e.g., Linguist, Cultural Researcher), you instead gain an Edge on those checks.  **Special:** You may take this feat multiple times, each time gaining three additional languages.",
-    "prerequisites": [],
+    "prerequisites": [
+      "Intelligence 13+"
+    ],
     "type": "normal",
     "repeatable": false,
     "tags": [],
@@ -403,7 +472,9 @@
   {
     "name": "Quick",
     "description": "**Requirements:** Dexterity 12+  *You are quicker than most*  **Benefit:** Increase your walking pace by +1 and your Avoidance by +1; you can also have a walking pace greater than 5.",
-    "prerequisites": [],
+    "prerequisites": [
+      "Dexterity 12+"
+    ],
     "type": "normal",
     "repeatable": false,
     "tags": [],
@@ -413,7 +484,9 @@
   {
     "name": "Seasoned Survivor",
     "description": "**Requirements:** Wisdom 13+  **Benefit:** Choose one specific city or urban area you specialize in (subject to Editor-in-Chief approval). When operating in that city, you gain the following benefits:  - You have an **Edge** when applying your Skill Sets to challenges involving *navigation, scavenging, identifying safe routes* or *shelters,* or *avoiding hazards and local threats* in that city.  - Once per scene in your city, you may re-roll a failed Skill Set check related to survival or local knowledge (keeping the new result).  These benefits represent your familiarity with the terrain, hidden resources, and dangers unique to your city. Outside your chosen city, this feat provides no benefit.",
-    "prerequisites": [],
+    "prerequisites": [
+      "Wisdom 13+"
+    ],
     "type": "normal",
     "repeatable": false,
     "tags": [],
@@ -434,7 +507,9 @@
   {
     "name": "Sharp Eyes",
     "description": "**Requirements:** Wisdom 13+  **Benefit:** You are particularly adept at noticing danger before it strikes. Add your rank bonus when attempting to meet a challenge to detect hidden threats, such as traps or ambushes. If you possess a relevant Skill Set (such as Scout, Lookout, or Tracker), you gain Edge in an appropriate cinematic focus, such as *“never caught off guard by an ambush. or “head on a swivel.”*",
-    "prerequisites": [],
+    "prerequisites": [
+      "Wisdom 13+"
+    ],
     "type": "normal",
     "repeatable": false,
     "tags": [],
@@ -454,7 +529,9 @@
   {
     "name": "Shield Expert",
     "description": "*Yes, shields protect you, but in your hands, it's just as much a weapon as a defensive tool.*  **Requirements:** Dexterity 12+  **Benefit:** While wielding a shield:  - Your Avoidance increases by +1.  - You may take the shove action as a bonus action.  - You may throw your shield a number of areas equal to your throw range, and it returns to your hand at the end of your turn, regardless of whether you hit or miss  This feat assumes a reinforced or ricochet-capable shield and requires Editor-in-Chief approval for improvised or makeshift equivalents.",
-    "prerequisites": [],
+    "prerequisites": [
+      "Dexterity 12+"
+    ],
     "type": "normal",
     "repeatable": false,
     "tags": [],
@@ -464,7 +541,9 @@
   {
     "name": "Stealthy",
     "description": "**Requirements:** Dexterity 12+  **Benefit:** Increase your Dexterity score by 1. When attempting a Challenge to move unseen or unheard, add your Rank bonus to the roll even if you lack a relevant Skill Set. If you do have a relevant Skill Set (e.g., *Infiltrator*, *Scout*, *Spy*), you instead gain an Edge when stealing in a specific condition of your choice, subject to Editor-in-Chief approval. (For example, moving silently across debris, remaining hidden while observing a scene, vanishing into urban terrain)  Additionally, when hiding, you may move at your full Pace without automatically revealing yourself. However, obvious environmental factors (like bright light, noisy terrain, or a direct line of sight) may still expose you at the Editor’s discretion.",
-    "prerequisites": [],
+    "prerequisites": [
+      "Dexterity 12+"
+    ],
     "type": "normal",
     "repeatable": false,
     "tags": [],
@@ -474,7 +553,10 @@
   {
     "name": "Street Magic",
     "description": "**Requirements:** Dexterity 13+, Charisma 12+  **Benefit:** Increase your Charisma score by 1. When you take this feat, choose one area of sleight-of-hand or illusionary expertise (e.g., misdirection with cards, flawless pickpocketing, street-side psychic reads), subject to Editor-in-Chief approval.  When attempting to meet a challenge involving your chosen magical flair, you add your Rank bonus to the roll if you do not possess a Skill Set that includes minor magical manipulation or stagecraft (e.g., Magician, Grifter, Street Performer). If you **do** possess a relevant Skill Set, you instead gain an Edge on these checks.",
-    "prerequisites": [],
+    "prerequisites": [
+      "Dexterity 13+",
+      "Charisma 12+"
+    ],
     "type": "normal",
     "repeatable": false,
     "tags": [],
@@ -484,7 +566,9 @@
   {
     "name": "Scientific Mind",
     "description": "**Requirements:** Intelligence 15+  **Benefit:** Increase your Intelligence score by 1. When you take this feat, choose one scientific discipline (e.g., chemistry, virology, theoretical physics), subject to Editor-in-Chief approval.  When attempting to meet a challenge involving your chosen scientific specialty, you add your Rank bonus to the roll if you do not possess a Skill Set related to scientific analysis (e.g., Researcher, Engineer, Medical Specialist). If you do possess a relevant Skill Set, you instead gain an Edge on these checks.",
-    "prerequisites": [],
+    "prerequisites": [
+      "Intelligence 15+"
+    ],
     "type": "normal",
     "repeatable": false,
     "tags": [],
@@ -514,7 +598,9 @@
   {
     "name": "Technological Savant",
     "description": "**Requirements:** Intelligence 15+  **Benefits:** \\|Increase your Intelligence score by 1. When you take this feat, choose one area of technological mastery (e.g., robotics diagnostics, field repair under fire, system bypassing), subject to Editor-in-Chief approval.  When attempting to meet a challenge involving your chosen technological specialty, you add your Rank bonus to the roll if you do not possess a Skill Set that includes advanced technical training (e.g., Engineer, Hacker, Tech Operator). If you do possess a relevant Skill Set, you instead gain an Edge on these checks.",
-    "prerequisites": [],
+    "prerequisites": [
+      "Intelligence 15+"
+    ],
     "type": "normal",
     "repeatable": false,
     "tags": [],
@@ -524,7 +610,9 @@
   {
     "name": "Technophile",
     "description": "**Requirements:** Intelligence 11+  **Benefit:** Increase your Intelligence score by 1. When you take this feat, choose one area of basic technological familiarity (e.g., scavenged tech use, handheld device repair, jury-rigging common systems), subject to Editor-in-Chief approval.  When attempting to meet a challenge involving your chosen basic tech specialty, you add your Rank bonus to the roll if you do not possess a Skill Set related to basic or everyday technology (e.g., Scavenger, Tinkerer, Technician). If you do possess a relevant Skill Set, you instead gain an Edge on these checks.  In addition, you may attempt basic tech-related challenges with a DC of 20 or lower without penalty, even without proper equipment or stable conditions.",
-    "prerequisites": [],
+    "prerequisites": [
+      "Intelligence 11+"
+    ],
     "type": "normal",
     "repeatable": false,
     "tags": [],
@@ -534,7 +622,9 @@
   {
     "name": "Third Eye",
     "description": "*You always seem to sense when something isn’t quite right, even when there’s nothing visible to detect.*  **Requirements:** Wisdom 16+  **Benefit:** Increase your Wisdom score by 1. When a character uses a power or ability that normally renders them undetectable (e.g., Chameleon, Free Consciousness, Invisibility), and they enter the range of your normal senses, they must make an opposed challenge against you. This is typically a Power Check (e.g., Stealth-based effect) versus an Insightful or Awareness-based Skill Set you possess (e.g., Occultist, Mystic Wanderer, Watchman, or Mystical Seer). If you do not possess a relevant Skill Set, you may still roll, but without Edge.  If you win the opposed challenge, you become aware that something is present, though you cannot pinpoint the source or exact location.  If you lose, the intruder remains undetected.  Once you’ve sensed a hidden presence, you gain Edge on future attempts to expose or engage with it, including Skill or Power checks made to uncover, follow, or interact with the hidden source.",
-    "prerequisites": [],
+    "prerequisites": [
+      "Wisdom 16+"
+    ],
     "type": "normal",
     "repeatable": false,
     "tags": [],
@@ -544,7 +634,9 @@
   {
     "name": "Toughness",
     "description": "**Requirements:** Can not possess the *diminished vitality* weakness  **Benefit:** You gain a +1 bonus to your fortitude defense and increase your max Stamina by 10.  **Special:** You can take this Feat a second time. If you do, you gain +1 wound instead of a +1 bonus to your fortitude defense.",
-    "prerequisites": [],
+    "prerequisites": [
+      "Can not possess the diminished vitality weakness"
+    ],
     "type": "normal",
     "repeatable": false,
     "tags": [],
@@ -554,7 +646,9 @@
   {
     "name": "Uncanny Reactions",
     "description": "**Requirements:** Dexterity 18+  **Benefit:** You can take two reactions instead of one.",
-    "prerequisites": [],
+    "prerequisites": [
+      "Dexterity 18+"
+    ],
     "type": "normal",
     "repeatable": false,
     "tags": [],
@@ -574,7 +668,10 @@
   {
     "name": "Wary",
     "description": "**Requirements:** Dexterity 13+, Wisdom 13+  **Benefit:** Add your rank bonus to initiative checks. Additionally, you gain Advantage on a signal initiative check but cannot do so again until you complete a Hiatus.",
-    "prerequisites": [],
+    "prerequisites": [
+      "Dexterity 13+",
+      "Wisdom 13+"
+    ],
     "type": "normal",
     "repeatable": false,
     "tags": [],
@@ -604,7 +701,10 @@
   {
     "name": "Acquire New Power \\[power feat\\]",
     "description": "*You gain a new power.*  **Requirement:** You may choose this feat freely during character creation, after which you must have permission from your editor-in-chief.  **Benefit:** Gain a new power at a score of 12; the starting score can be higher with the permission of the editor-in-chief. Also, you may apply power modifications to this power with your editor-in-chief's approval.",
-    "prerequisites": [],
+    "prerequisites": [
+      "You may choose this feat freely during character creation",
+      "after which you must have permission from your editor-in-chief."
+    ],
     "type": "normal",
     "repeatable": false,
     "tags": [],
@@ -714,7 +814,9 @@
   {
     "name": "Standardize Equipment \\[power feat\\]",
     "description": "*After trial and error, you finally get that bit of gear you were working on to work reliably.*  **Requirement:** Item crafted by you and permission from your editor-in-chief.  **Benefit:** Add the item you created to your listed powers; this item no longer has unreliable power modification; alternately, you can choose to keep the unreliable power modification and increase the power's score by +4.",
-    "prerequisites": [],
+    "prerequisites": [
+      "Item crafted by you and permission from your editor-in-chief."
+    ],
     "type": "normal",
     "repeatable": false,
     "tags": [],
@@ -724,7 +826,9 @@
   {
     "name": "Quick Transformation \\[power feat\\]",
     "description": "*You change into your powered form in a snap.*  **Requirement:** Powers with the unpowered form power modification  **Benefit:** You can transform into your powered form as an action instead of as a demanding action.",
-    "prerequisites": [],
+    "prerequisites": [
+      "Powers with the unpowered form power modification"
+    ],
     "type": "normal",
     "repeatable": false,
     "tags": [],
