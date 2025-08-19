@@ -32,7 +32,14 @@ export const storage = {
   deleteArchetype: (id: number) => db.delete(archetypes).where(eq(archetypes.id, id)),
 
   // FEAT
-  getAllFeat: () => db.select().from(feats),
+  getAllFeat: async () => {
+    const [allFeats, allManeuvers] = await Promise.all([
+      db.select().from(feats),
+      db.select({ name: maneuvers.name }).from(maneuvers),
+    ]);
+    const maneuverNames = new Set(allManeuvers.map((m) => m.name));
+    return allFeats.filter((f) => !maneuverNames.has(f.name));
+  },
   getFeatById: (id: number) => db.query.feats.findFirst({ where: eq(feats.id, id) }),
   createFeat: (data: any) => db.insert(feats).values(data).returning().then(r => r[0]),
   updateFeat: (id: number, data: any) => db.update(feats).set(data).where(eq(feats.id, id)).returning().then(r => r[0]),

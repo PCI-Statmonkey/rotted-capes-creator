@@ -1,5 +1,4 @@
 import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
 import { parsePrerequisite, formatPrerequisite } from "@/utils/requirementValidator";
 
 interface StartingTabProps {
@@ -10,12 +9,7 @@ interface StartingTabProps {
   startingFeat: string;
   setStartingFeat: (feat: string) => void;
 
-  selectedManeuver: string;
-  setSelectedManeuver: (maneuver: string) => void;
-
   feats: any[];
-  maneuvers: any[];
-  meetsPrerequisites: (item: any) => boolean;
   getMissingPrereqs: (item: any) => any[];
 }
 
@@ -25,11 +19,7 @@ const StartingTab = ({
   toggleStartingSkill,
   startingFeat,
   setStartingFeat,
-  selectedManeuver,
-  setSelectedManeuver,
   feats,
-  maneuvers,
-  meetsPrerequisites,
   getMissingPrereqs
 }: StartingTabProps) => {
   const selectedFeatObj = feats.find((f) => f.name === startingFeat);
@@ -111,35 +101,6 @@ const StartingTab = ({
         </div>
       )}
 
-      <h3 className="text-white text-md mb-2 mt-4">Choose a Starting Maneuver</h3>
-      <select
-        value={selectedManeuver || ""}
-        onChange={(e) => setSelectedManeuver(e.target.value)}
-        className="w-full p-2 rounded bg-gray-800 border border-gray-600 text-white"
-      >
-        <option value="">-- Select --</option>
-        {maneuvers.map((m) => {
-          const missing = getMissingPrereqs(m);
-          const disabled = missing.length > 0;
-          return (
-            <option
-              key={m.name}
-              value={m.name}
-              disabled={disabled}
-              title={
-                disabled
-                  ? `Missing: ${missing
-                      .map((p) => p.name)
-                      .join(", ")}`
-                  : ""
-              }
-              className={disabled ? "text-gray-400" : ""}
-            >
-              {m.name}
-            </option>
-          );
-        })}
-      </select>
     </>
   );
 };

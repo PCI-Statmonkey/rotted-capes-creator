@@ -26,7 +26,6 @@ export type Character = {
   selectedFeats: { name: string; input?: string | string[]; source?: string; free?: boolean; skillSet?: string; edge?: string; option?: string; stance?: string; usesPerScene?: number }[];
   selectedSkillSets: { name: string; edges: string[]; source?: string; deepCutNotes?: string }[];
   selectedManeuvers: string[];
-  startingManeuver: string;
   skillsTab: string;
   currentStep: number;
   archetypeSkill?: string | null;
@@ -45,7 +44,6 @@ export const useCharacterBuilder = () => {
   );
   const [selectedSkillSets, setSelectedSkillSets] = useState<{ name: string; edges: string[]; source?: string; deepCutNotes?: string }[]>(initialSkillSets);
   const [selectedManeuvers, setSelectedManeuvers] = useState<string[]>(saved?.selectedManeuvers || []);
-  const [startingManeuver, setStartingManeuver] = useState<string>(saved?.startingManeuver || "");
   const [skillsTab, setSkillsTab] = useState<string>(saved?.skillsTab || "starting");
   const [currentStep, setCurrentStep] = useState<number>(saved?.currentStep || 1);
   const [archetypeSkill, setArchetypeSkill] = useState<string | null>(saved?.archetypeSkill || null);
@@ -69,7 +67,6 @@ export const useCharacterBuilder = () => {
     setSelectedFeats([]);
     setSelectedSkillSets([]);
     setSelectedManeuvers([]);
-    setStartingManeuver("");
     setSkillsTab("starting");
     setArchetypeSkill(null);
     setAbilityScores({
@@ -95,7 +92,6 @@ export const useCharacterBuilder = () => {
       selectedFeats,
       selectedSkillSets,
       selectedManeuvers,
-      startingManeuver,
       skillsTab,
       currentStep,
       archetypeSkill,
@@ -104,7 +100,7 @@ export const useCharacterBuilder = () => {
       rankBonus,
       grit,
     });
-  }, [abilityScores, startingSkills, selectedSkills, selectedFeats, selectedSkillSets, selectedManeuvers, startingManeuver, skillsTab, currentStep, archetypeSkill, rank, level, rankBonus, grit]);
+  }, [abilityScores, startingSkills, selectedSkills, selectedFeats, selectedSkillSets, selectedManeuvers, skillsTab, currentStep, archetypeSkill, rank, level, rankBonus, grit]);
 
   return {
     abilityScores,
@@ -119,8 +115,6 @@ export const useCharacterBuilder = () => {
     setSelectedSkillSets,
     selectedManeuvers,
     setSelectedManeuvers,
-    startingManeuver,
-    setStartingManeuver,
     skillsTab,
     setSkillsTab,
     currentStep,
