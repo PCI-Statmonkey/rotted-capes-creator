@@ -36,9 +36,7 @@
   {
     "name": "Additional Origin",
     "description": "**Requirements:** Approval of your editor-in-chief.  **Benefit:** You gain an additional Origin, including its restrictions and advancement options, but not its initial benefits. When you take this feat, choose one ability score that your new Origin would normally increase; that score increases by +1.  Before selecting this feat, you must discuss it with your Editor-in-Chief to ensure it fits the narrative. Some events or story arcs may also grant this feat to heroes and other players as a reward for pivotal moments that fundamentally alter a character’s nature.",
-    "prerequisites": [
-      "Approval of your editor-in-chief."
-    ],
+    "prerequisites": [],
     "type": "normal",
     "repeatable": false,
     "tags": [],
@@ -60,9 +58,7 @@
   {
     "name": "Attack Focus",
     "description": "**Requirement:** Must be capable of performing the chosen attack.  **Benefit:** Choose a specific melee attack, ranged attack, or power that requires an attack roll that you can perform. You gain a +1 bonus to attack rolls with the chosen attack. Additionally, you deal an extra +2 points of damage when using this attack. For example, you can take attack focus on attacks with your energy blast power or your unarmed attacks.  **Special:** You can select this feat multiple times. Each time, it applies to a different attack**.**",
-    "prerequisites": [
-      "Must be capable of performing the chosen attack."
-    ],
+    "prerequisites": [],
     "type": "normal",
     "repeatable": false,
     "tags": [],
@@ -120,9 +116,7 @@
   {
     "name": "Critical Precision",
     "description": "*“Always aim for the head.”*  **Requirement:** Must be capable of performing the chosen attack.  **Benefit:** Choose a specific melee attack, ranged attack, or power that requires an attack roll that you can perform, you score a critical hit on a roll of 19 or 20 with that attack.",
-    "prerequisites": [
-      "Must be capable of performing the chosen attack."
-    ],
+    "prerequisites": [],
     "type": "normal",
     "repeatable": false,
     "tags": [],
@@ -354,9 +348,7 @@
   {
     "name": "Learn Combat Maneuver",
     "description": "**Requirements:** As specified by the combat maneuver  **Benefit:** You learn one combat Maneuver for which you meet the listed prerequisites (see Maneuvers, pg. XX). Representing specialized combat training, battlefield improvisation, or inherited techniques developed through hard-won experience.  You may take this feat multiple times. Each time, you learn a different Maneuver.",
-    "prerequisites": [
-      "As specified by the combat maneuver"
-    ],
+    "prerequisites": [],
     "type": "normal",
     "repeatable": false,
     "tags": [],
@@ -398,9 +390,7 @@
   {
     "name": "Natural Born Leader",
     "description": "*You possess a powerful presence that inspires others*  **Requirements:** As specified by the leadership maneuver  **Benefit:** You learn two leadership maneuvers of your choice. See page XX for a full list of maneuvers.  **Special:** You can take these feat multiple times learning a leadership maneuver each time.",
-    "prerequisites": [
-      "As specified by the leadership maneuver"
-    ],
+    "prerequisites": [],
     "type": "normal",
     "repeatable": false,
     "tags": [],
@@ -701,10 +691,7 @@
   {
     "name": "Acquire New Power \\[power feat\\]",
     "description": "*You gain a new power.*  **Requirement:** You may choose this feat freely during character creation, after which you must have permission from your editor-in-chief.  **Benefit:** Gain a new power at a score of 12; the starting score can be higher with the permission of the editor-in-chief. Also, you may apply power modifications to this power with your editor-in-chief's approval.",
-    "prerequisites": [
-      "You may choose this feat freely during character creation",
-      "after which you must have permission from your editor-in-chief."
-    ],
+    "prerequisites": [],
     "type": "normal",
     "repeatable": false,
     "tags": [],
@@ -814,9 +801,7 @@
   {
     "name": "Standardize Equipment \\[power feat\\]",
     "description": "*After trial and error, you finally get that bit of gear you were working on to work reliably.*  **Requirement:** Item crafted by you and permission from your editor-in-chief.  **Benefit:** Add the item you created to your listed powers; this item no longer has unreliable power modification; alternately, you can choose to keep the unreliable power modification and increase the power's score by +4.",
-    "prerequisites": [
-      "Item crafted by you and permission from your editor-in-chief."
-    ],
+    "prerequisites": [],
     "type": "normal",
     "repeatable": false,
     "tags": [],
