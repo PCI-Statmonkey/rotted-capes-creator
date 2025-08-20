@@ -101,6 +101,8 @@ export default function Step6_Weaknesses() {
   const [tenPointFeat, setTenPointFeat] = useState("");
   const [tenPointAbility1, setTenPointAbility1] = useState("");
   const [tenPointAbility2, setTenPointAbility2] = useState("");
+  const [tenPointPower1, setTenPointPower1] = useState("");
+  const [tenPointPower2, setTenPointPower2] = useState("");
   const [fifteenPointAbility, setFifteenPointAbility] = useState("");
 
   // Calculate total weakness points
@@ -301,11 +303,30 @@ export default function Step6_Weaknesses() {
     if (remainingWeaknessPoints < 10) return;
     if (tenPointMode === 'feat') {
       if (!tenPointFeat) return;
-      if (!character.feats.some(f => f.name === tenPointFeat)) {
-        updateCharacterField('feats', [...character.feats, { name: tenPointFeat }]);
+      if (tenPointFeat.startsWith('Power Score Increase')) {
+        if (!tenPointPower1) return;
+        applyAbilityOrPower(tenPointPower1, 1);
+        applyAbilityOrPower(tenPointPower2 || tenPointPower1, 1);
+        const featObj = {
+          name: tenPointFeat,
+          powerChoices: [tenPointPower1, tenPointPower2 || tenPointPower1]
+        };
+        if (!character.feats.some(f => f.name === tenPointFeat)) {
+          updateCharacterField('feats', [...character.feats, featObj]);
+        }
+        setAllocations([...allocations, { type: '10-feat', target: tenPointFeat, amount: 10 }]);
+        setTenPointFeat('');
+        setTenPointPower1('');
+        setTenPointPower2('');
+      } else {
+        if (!character.feats.some(f => f.name === tenPointFeat)) {
+          updateCharacterField('feats', [...character.feats, { name: tenPointFeat }]);
+        }
+        setAllocations([...allocations, { type: '10-feat', target: tenPointFeat, amount: 10 }]);
+        setTenPointFeat('');
+        setTenPointPower1('');
+        setTenPointPower2('');
       }
-      setAllocations([...allocations, { type: '10-feat', target: tenPointFeat, amount: 10 }]);
-      setTenPointFeat('');
     } else {
       if (!tenPointAbility1 || !tenPointAbility2) return;
       applyAbilityOrPower(tenPointAbility1, 1);
@@ -863,7 +884,14 @@ export default function Step6_Weaknesses() {
                     {tenPointMode === 'feat' ? (
                       <div>
                         <label className="block text-sm mb-1">Feat</label>
-                        <Select value={tenPointFeat} onValueChange={setTenPointFeat}>
+                        <Select
+                          value={tenPointFeat}
+                          onValueChange={(v) => {
+                            setTenPointFeat(v);
+                            setTenPointPower1('');
+                            setTenPointPower2('');
+                          }}
+                        >
                           <SelectTrigger className="bg-gray-700">
                             <SelectValue placeholder="Select feat" />
                           </SelectTrigger>
@@ -875,6 +903,52 @@ export default function Step6_Weaknesses() {
                             ))}
                           </SelectContent>
                         </Select>
+                        {tenPointFeat.startsWith('Power Score Increase') && (
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mt-2">
+                            <div>
+                              <label className="block text-sm mb-1">Power 1</label>
+                              <Select
+                                value={tenPointPower1}
+                                onValueChange={(v) =>
+                                  setTenPointPower1(v === 'none' ? '' : v)
+                                }
+                              >
+                                <SelectTrigger className="bg-gray-700">
+                                  <SelectValue placeholder="Select power" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  <SelectItem value="none">None</SelectItem>
+                                  {character.powers.map((p) => (
+                                    <SelectItem key={p.name} value={p.name}>
+                                      {p.name}
+                                    </SelectItem>
+                                  ))}
+                                </SelectContent>
+                              </Select>
+                            </div>
+                            <div>
+                              <label className="block text-sm mb-1">Power 2 (optional)</label>
+                              <Select
+                                value={tenPointPower2}
+                                onValueChange={(v) =>
+                                  setTenPointPower2(v === 'none' ? '' : v)
+                                }
+                              >
+                                <SelectTrigger className="bg-gray-700">
+                                  <SelectValue placeholder="Select power" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  <SelectItem value="none">None</SelectItem>
+                                  {character.powers.map((p) => (
+                                    <SelectItem key={p.name} value={p.name}>
+                                      {p.name}
+                                    </SelectItem>
+                                  ))}
+                                </SelectContent>
+                              </Select>
+                            </div>
+                          </div>
+                        )}
                       </div>
                     ) : (
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
@@ -912,7 +986,15 @@ export default function Step6_Weaknesses() {
                         </div>
                       </div>
                     )}
-                    <Button onClick={handleAllocate10} disabled={tenPointMode === 'feat' ? !tenPointFeat || remainingWeaknessPoints < 10 : !tenPointAbility1 || !tenPointAbility2 || remainingWeaknessPoints < 10} className="w-full">
+                    <Button
+                      onClick={handleAllocate10}
+                      disabled={
+                        tenPointMode === 'feat'
+                          ? !tenPointFeat || (tenPointFeat.startsWith('Power Score Increase') && !tenPointPower1) || remainingWeaknessPoints < 10
+                          : !tenPointAbility1 || !tenPointAbility2 || remainingWeaknessPoints < 10
+                      }
+                      className="w-full"
+                    >
                       Spend 10 Points
                     </Button>
                   </div>
