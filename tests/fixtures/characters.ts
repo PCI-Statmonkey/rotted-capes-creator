@@ -31,6 +31,18 @@ export const featGrantedSkillSetCharacter = {
   skillSets: [{ name: 'Scout', edges: [] }]
 };
 
+export const diminishedVitalityCharacter = {
+  ...baseCharacter,
+  complications: [
+    {
+      name: 'DiminishedVitality',
+      type: 'DiminishedVitality',
+      description: '',
+      points: 5
+    }
+  ]
+};
+
 export const rankCapFixture = {
   rank: 1,
   rankBonus: 1,

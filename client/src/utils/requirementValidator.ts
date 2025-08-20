@@ -151,11 +151,12 @@ export const parsePrerequisite = (prereqString: string) => {
       continue;
     }
 
-    // Check for "Cannot have" requirements
-    if (normalizeName(part).startsWith('cannot have')) {
+    // Check for "cannot have" or "cannot possess" requirements (including weaknesses)
+    const cannotHaveMatch = part.match(/^(?:can\s*not|cannot)\s+(?:have|possess)\s+(?:the\s+)?(.+?)(?:\s+weakness)?$/i);
+    if (cannotHaveMatch) {
       requirements.push({
         type: 'cannot_have',
-        name: part.replace(/^cannot have\s+/i, '').trim()
+        name: cannotHaveMatch[1].trim()
       });
       continue;
     }
@@ -347,18 +348,21 @@ export const meetsPrerequisites = (feat: any, character: any) => {
       case 'approval':
         return Boolean(character.editorApproved);
 
-      case 'cannot_have':
-        const cannot = normalizeName(req.name);
-        const hasFeat = ownedFeats
-          .map((f: any) => normalizeName(f))
-          .includes(cannot);
-        const hasSkill = allSkills.has(cannot);
+      case 'cannot_have': {
+        const norm = (val: string) => normalizeName(val).replace(/\s+/g, '');
+        const cannot = norm(req.name);
+        const hasFeat = ownedFeats.map((f: any) => norm(f)).includes(cannot);
+        const hasSkill = Array.from(allSkills).some((s: string) => norm(s) === cannot);
         const hasPower = (character.powers || [])
-          .map((p: any) =>
-            typeof p === 'string' ? normalizeName(p) : normalizeName(p.name)
-          )
+          .map((p: any) => norm(typeof p === 'string' ? p : p.name))
           .includes(cannot);
-        return !(hasFeat || hasSkill || hasPower);
+        const hasWeakness = (character.complications || [])
+          .some((w: any) => {
+            const wName = typeof w === 'string' ? w : w.name || w.type;
+            return norm(wName) === cannot;
+          });
+        return !(hasFeat || hasSkill || hasPower || hasWeakness);
+      }
 
       case 'usage':
         const usageCounts = character.usageCounts || {};
@@ -504,18 +508,21 @@ export const getMissingPrereqs = (feat: any, character: any) => {
       case 'approval':
         return Boolean(character.editorApproved);
 
-      case 'cannot_have':
-        const cannot = normalizeName(req.name);
-        const hasFeat = ownedFeats
-          .map((f: any) => normalizeName(f))
-          .includes(cannot);
-        const hasSkill = allSkills.has(cannot);
+      case 'cannot_have': {
+        const norm = (val: string) => normalizeName(val).replace(/\s+/g, '');
+        const cannot = norm(req.name);
+        const hasFeat = ownedFeats.map((f: any) => norm(f)).includes(cannot);
+        const hasSkill = Array.from(allSkills).some((s: string) => norm(s) === cannot);
         const hasPower = (character.powers || [])
-          .map((p: any) =>
-            typeof p === 'string' ? normalizeName(p) : normalizeName(p.name)
-          )
+          .map((p: any) => norm(typeof p === 'string' ? p : p.name))
           .includes(cannot);
-        return !(hasFeat || hasSkill || hasPower);
+        const hasWeakness = (character.complications || [])
+          .some((w: any) => {
+            const wName = typeof w === 'string' ? w : w.name || w.type;
+            return norm(wName) === cannot;
+          });
+        return !(hasFeat || hasSkill || hasPower || hasWeakness);
+      }
 
       case 'usage':
         const usageCounts = character.usageCounts || {};

@@ -1,9 +1,10 @@
 import assert from 'assert';
-import { parsePrerequisiteString, meetsPrerequisites, getMissingPrereqs } from '../client/src/utils/requirementValidator.ts';
+import { parsePrerequisiteString, meetsPrerequisites, getMissingPrereqs, parsePrerequisite } from '../client/src/utils/requirementValidator.ts';
 import {
   baseCharacter as character,
   customSkillSetCharacter,
-  featGrantedSkillSetCharacter
+  featGrantedSkillSetCharacter,
+  diminishedVitalityCharacter
 } from './fixtures/characters.ts';
 
 assert.deepStrictEqual(
@@ -54,6 +55,11 @@ assert.deepStrictEqual(
   }
 );
 
+assert.deepStrictEqual(
+  parsePrerequisite('Can not possess the diminished vitality weakness'),
+  [{ type: 'cannot_have', name: 'diminished vitality' }]
+);
+
 assert(
   meetsPrerequisites({ prerequisites: 'Str 13 or Dex 15' }, character)
 );
@@ -80,6 +86,32 @@ const missing = getMissingPrereqs({ prerequisites: 'Str 13 Dex 15' }, character)
 assert(
   missing.hard.some(r => r.type === 'ability' && r.name.toLowerCase() === 'dex' && r.value === 15)
 );
+
+assert(
+  meetsPrerequisites(
+    { prerequisites: 'Can not possess the diminished vitality weakness' },
+    character
+  )
+);
+
+assert(
+  !meetsPrerequisites(
+    { prerequisites: 'Can not possess the diminished vitality weakness' },
+    diminishedVitalityCharacter
+  )
+);
+
+const missingWeakness = getMissingPrereqs(
+  { prerequisites: 'Can not possess the diminished vitality weakness' },
+  diminishedVitalityCharacter
+);
+assert(missingWeakness.hard.some(r => r.type === 'cannot_have'));
+
+const noMissingWeakness = getMissingPrereqs(
+  { prerequisites: 'Can not possess the diminished vitality weakness' },
+  character
+);
+assert.equal(noMissingWeakness.hard.length, 0);
 
 // Usage prerequisite should fail if usage count is too low
 const usageChar = { ...character, usageCounts: { 'emulated power': 5 } };
