@@ -61,6 +61,7 @@ export interface Feat {
   name: string;
   source?: string;
   skillSetName?: string;
+  abilityChoices?: (keyof Abilities)[];
 }
 
 export interface Maneuver {
