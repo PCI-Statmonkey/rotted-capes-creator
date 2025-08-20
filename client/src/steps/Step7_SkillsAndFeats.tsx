@@ -60,8 +60,9 @@ const Step7_SkillsAndFeats = () => {
         Object.entries(character.abilities).map(([k, v]) => [k, (v as any).value])
       ),
       selectedFeats: character.feats,
+      complications: character.complications,
     }),
-    [character.abilities, character.feats]
+    [character.abilities, character.feats, character.complications]
   );
 
   const handlePrevious = () => setCurrentStep(6);
