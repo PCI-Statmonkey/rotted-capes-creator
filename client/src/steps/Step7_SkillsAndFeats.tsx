@@ -67,16 +67,32 @@ const Step7_SkillsAndFeats = () => {
 
   const handlePrevious = () => setCurrentStep(6);
 
-  const firstSkillValid = row1SkillSet === "custom" ? row1CustomSkill.trim() !== "" : row1SkillSet !== "";
+  const getManeuver = (name: string) =>
+    allManeuvers.find((m: any) => m.name === name);
+
+  const maneuverMeetsReqs = (name: string) => {
+    const maneuver = getManeuver(name);
+    if (!maneuver) return false;
+    const missing = getMissingPrereqs(
+      { prerequisites: maneuver.requirements || [] },
+      prereqCharacter
+    );
+    return missing.hard.length === 0;
+  };
+
+  const firstSkillValid =
+    row1SkillSet === "custom" ? row1CustomSkill.trim() !== "" : row1SkillSet !== "";
   const row1FeatValid =
     row1Feat !== "" &&
-    (row1Feat !== "Learn Combat Maneuver" || row1Maneuver !== "");
+    (row1Feat !== "Learn Combat Maneuver" ||
+      (row1Maneuver !== "" && maneuverMeetsReqs(row1Maneuver)));
   const row2Valid = row2SkillSet
     ? row2SkillSet === "custom"
       ? row2CustomSkill.trim() !== ""
       : true
     : row2Feat !== "" &&
-      (row2Feat !== "Learn Combat Maneuver" || row2Maneuver !== "");
+      (row2Feat !== "Learn Combat Maneuver" ||
+        (row2Maneuver !== "" && maneuverMeetsReqs(row2Maneuver)));
   const row3Valid = !isSkillBased
     ? true
     : row3SkillSet
@@ -84,7 +100,8 @@ const Step7_SkillsAndFeats = () => {
       ? row3CustomSkill.trim() !== ""
       : true
     : row3Feat !== "" &&
-      (row3Feat !== "Learn Combat Maneuver" || row3Maneuver !== "");
+      (row3Feat !== "Learn Combat Maneuver" ||
+        (row3Maneuver !== "" && maneuverMeetsReqs(row3Maneuver)));
 
   const canContinue = firstSkillValid && row1FeatValid && row2Valid && row3Valid;
 
@@ -229,11 +246,37 @@ const Step7_SkillsAndFeats = () => {
         <SelectValue placeholder="Select maneuver" />
       </SelectTrigger>
       <SelectContent>
-        {allManeuvers.map((m: any) => (
-          <SelectItem key={m.name} value={m.name}>
-            {m.name}
-          </SelectItem>
-        ))}
+        {allManeuvers.map((m: any) => {
+          const missing = getMissingPrereqs(
+            { prerequisites: m.requirements || [] },
+            prereqCharacter
+          );
+          const disabled = missing.hard.length > 0;
+          const titleParts: string[] = [];
+          if (missing.hard.length > 0)
+            titleParts.push(
+              `Requires ${missing.hard
+                .map((r: any) => formatPrerequisite(r))
+                .join(", ")}`
+            );
+          if (missing.soft.length > 0)
+            titleParts.push(
+              `Story: ${missing.soft
+                .map((r: any) => formatPrerequisite(r))
+                .join(", ")}`
+            );
+          const title = titleParts.length ? titleParts.join(" | ") : undefined;
+          return (
+            <SelectItem
+              key={m.name}
+              value={m.name}
+              disabled={disabled}
+              title={title}
+            >
+              {m.name}
+            </SelectItem>
+          );
+        })}
       </SelectContent>
     </Select>
   );
