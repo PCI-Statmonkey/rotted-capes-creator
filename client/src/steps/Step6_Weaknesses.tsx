@@ -77,7 +77,7 @@ const ABILITIES = [
   "Charisma",
 ];
 
-export default function Step7_Weaknesses() {
+export default function Step6_Weaknesses() {
   const { character, updateCharacterField, updateAbilityScore, setCurrentStep, saveCharacter } = useCharacter();
   const [selectedWeaknessType, setSelectedWeaknessType] = useState<WeaknessType | "">("");
   const [newWeakness, setNewWeakness] = useState<Weakness>({
@@ -128,9 +128,9 @@ export default function Step7_Weaknesses() {
     // Track the event in analytics
     trackEvent('complete_step', 'character_creation', 'weaknesses');
     
-    // Save progress and navigate to next step - Gear
+    // Save progress and navigate to next step - Skills & Feats
     saveCharacter();
-    window.location.href = "/creator/gear";
+    window.location.href = "/creator/skillsfeats";
   };
 
   // Add a weakness to the character
@@ -360,7 +360,7 @@ export default function Step7_Weaknesses() {
       className="w-full"
     >
       <div className="bg-gray-900 bg-opacity-60 p-6 rounded-xl shadow-xl">
-        <h2 className="text-3xl font-display font-bold text-red-500 mb-6">Step 7: Character Weaknesses</h2>
+        <h2 className="text-3xl font-display font-bold text-red-500 mb-6">Step 6: Character Weaknesses</h2>
         
         <div className="text-gray-300 mb-6 font-comic-light">
           <p className="mb-2">

@@ -12,7 +12,7 @@ import { displayFeatName } from "@/lib/utils";
 import { getMissingPrereqs, formatPrerequisite } from "@/utils/requirementValidator";
 import maneuversData from "@/rules/maneuvers.json";
 
-const Step5_SkillsAndFeats = () => {
+const Step7_SkillsAndFeats = () => {
   const { setSelectedSkillSets, setSelectedFeats, setSelectedManeuvers } = useCharacterBuilder();
   const { character, setCurrentStep, updateCharacterField } = useCharacter();
 
@@ -64,7 +64,7 @@ const Step5_SkillsAndFeats = () => {
     [character.abilities, character.feats]
   );
 
-  const handlePrevious = () => setCurrentStep(4);
+  const handlePrevious = () => setCurrentStep(6);
 
   const firstSkillValid = row1SkillSet === "custom" ? row1CustomSkill.trim() !== "" : row1SkillSet !== "";
   const row1FeatValid =
@@ -122,7 +122,7 @@ const Step5_SkillsAndFeats = () => {
     setSelectedManeuvers(maneuversSelected.map((m) => m.name));
     updateCharacterField('feats', featsSelected as any);
     updateCharacterField('maneuvers', maneuversSelected as any);
-    setCurrentStep(6);
+    setCurrentStep(8);
   };
 
   const renderSkillSelect = (
@@ -245,7 +245,7 @@ const Step5_SkillsAndFeats = () => {
       transition={{ duration: 0.3 }}
       className="p-6 bg-gray-800 rounded-lg shadow-lg"
     >
-      <h2 className="text-2xl font-bold mb-4">Step 5: Skills & Feats</h2>
+      <h2 className="text-2xl font-bold mb-4">Step 7: Skills & Feats</h2>
       <p className="mb-4 text-sm text-gray-300">
         Pick skill sets and feats for your hero. The first row requires one of each;
         the following rows let you choose either a skill set or a feat.
@@ -343,4 +343,4 @@ const Step5_SkillsAndFeats = () => {
   );
 };
 
-export default Step5_SkillsAndFeats;
+export default Step7_SkillsAndFeats;
