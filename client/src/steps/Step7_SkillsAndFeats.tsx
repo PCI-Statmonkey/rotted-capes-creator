@@ -13,8 +13,14 @@ import { getMissingPrereqs, formatPrerequisite } from "@/utils/requirementValida
 import maneuversData from "@/rules/maneuvers.json";
 
 const Step7_SkillsAndFeats = () => {
-  const { setSelectedSkillSets, setSelectedFeats, setSelectedManeuvers } = useCharacterBuilder();
-  const { character, setCurrentStep, updateCharacterField } = useCharacter();
+  const { setSelectedSkillSets, setSelectedFeats, setSelectedManeuvers } =
+    useCharacterBuilder();
+  const {
+    character,
+    setCurrentStep,
+    updateCharacterField,
+    updateAbilityScore,
+  } = useCharacter();
 
   const originName = character.origin?.split("(")[0].trim();
   const isSkillBased = originName === "Highly Trained";
@@ -24,6 +30,14 @@ const Step7_SkillsAndFeats = () => {
 
   // Use static maneuvers data as a fallback in case the API does not return any.
   const allManeuvers = maneuvers.length > 0 ? maneuvers : maneuversData;
+  const abilityOptions = [
+    "strength",
+    "dexterity",
+    "constitution",
+    "intelligence",
+    "wisdom",
+    "charisma",
+  ];
 
   const [row1SkillSet, setRow1SkillSet] = useState<string>("");
   const [row1CustomSkill, setRow1CustomSkill] = useState<string>("");
@@ -36,6 +50,12 @@ const Step7_SkillsAndFeats = () => {
   const [row3SkillSet, setRow3SkillSet] = useState<string>("");
   const [row3CustomSkill, setRow3CustomSkill] = useState<string>("");
   const [row3Feat, setRow3Feat] = useState<string>("");
+  const [row1Ability1, setRow1Ability1] = useState<string>("");
+  const [row1Ability2, setRow1Ability2] = useState<string>("");
+  const [row2Ability1, setRow2Ability1] = useState<string>("");
+  const [row2Ability2, setRow2Ability2] = useState<string>("");
+  const [row3Ability1, setRow3Ability1] = useState<string>("");
+  const [row3Ability2, setRow3Ability2] = useState<string>("");
   const [row1Maneuver, setRow1Maneuver] = useState<string>("");
   const [row2Maneuver, setRow2Maneuver] = useState<string>("");
   const [row3Maneuver, setRow3Maneuver] = useState<string>("");
@@ -82,17 +102,25 @@ const Step7_SkillsAndFeats = () => {
 
   const firstSkillValid =
     row1SkillSet === "custom" ? row1CustomSkill.trim() !== "" : row1SkillSet !== "";
+  const abilityIncreaseValid = (a1: string, a2: string) =>
+    a1 !== "" && a2 !== "" && a1 !== a2;
   const row1FeatValid =
     row1Feat !== "" &&
-    (row1Feat !== "Learn Combat Maneuver" ||
-      (row1Maneuver !== "" && maneuverMeetsReqs(row1Maneuver)));
+    (row1Feat === "Learn Combat Maneuver"
+      ? row1Maneuver !== "" && maneuverMeetsReqs(row1Maneuver)
+      : row1Feat === "Ability Score Increase"
+      ? abilityIncreaseValid(row1Ability1, row1Ability2)
+      : true);
   const row2Valid = row2SkillSet
     ? row2SkillSet === "custom"
       ? row2CustomSkill.trim() !== ""
       : true
     : row2Feat !== "" &&
-      (row2Feat !== "Learn Combat Maneuver" ||
-        (row2Maneuver !== "" && maneuverMeetsReqs(row2Maneuver)));
+      (row2Feat === "Learn Combat Maneuver"
+        ? row2Maneuver !== "" && maneuverMeetsReqs(row2Maneuver)
+        : row2Feat === "Ability Score Increase"
+        ? abilityIncreaseValid(row2Ability1, row2Ability2)
+        : true);
   const row3Valid = !isSkillBased
     ? true
     : row3SkillSet
@@ -100,8 +128,11 @@ const Step7_SkillsAndFeats = () => {
       ? row3CustomSkill.trim() !== ""
       : true
     : row3Feat !== "" &&
-      (row3Feat !== "Learn Combat Maneuver" ||
-        (row3Maneuver !== "" && maneuverMeetsReqs(row3Maneuver)));
+      (row3Feat === "Learn Combat Maneuver"
+        ? row3Maneuver !== "" && maneuverMeetsReqs(row3Maneuver)
+        : row3Feat === "Ability Score Increase"
+        ? abilityIncreaseValid(row3Ability1, row3Ability2)
+        : true);
 
   const canContinue = firstSkillValid && row1FeatValid && row2Valid && row3Valid;
 
@@ -113,33 +144,83 @@ const Step7_SkillsAndFeats = () => {
 
   const handleContinue = () => {
     const skills: { name: string; edges: string[] }[] = [];
-    const featsSelected: { name: string }[] = [];
+    const featsSelected: { name: string; abilityChoices?: string[] }[] = [];
     const maneuversSelected: { name: string }[] = [];
     pushSkill(row1SkillSet, row1CustomSkill, skills);
     pushSkill(row2SkillSet, row2CustomSkill, skills);
     if (isSkillBased) pushSkill(row3SkillSet, row3CustomSkill, skills);
 
     if (row1Feat) {
-      featsSelected.push({ name: row1Feat });
+      const feat: { name: string; abilityChoices?: string[] } = {
+        name: row1Feat,
+      };
+      if (
+        row1Feat === "Ability Score Increase" &&
+        abilityIncreaseValid(row1Ability1, row1Ability2)
+      ) {
+        feat.abilityChoices = [row1Ability1, row1Ability2];
+      }
+      featsSelected.push(feat);
       if (row1Feat === "Learn Combat Maneuver" && row1Maneuver)
         maneuversSelected.push({ name: row1Maneuver });
     }
     if (row2Feat) {
-      featsSelected.push({ name: row2Feat });
+      const feat: { name: string; abilityChoices?: string[] } = {
+        name: row2Feat,
+      };
+      if (
+        row2Feat === "Ability Score Increase" &&
+        abilityIncreaseValid(row2Ability1, row2Ability2)
+      ) {
+        feat.abilityChoices = [row2Ability1, row2Ability2];
+      }
+      featsSelected.push(feat);
       if (row2Feat === "Learn Combat Maneuver" && row2Maneuver)
         maneuversSelected.push({ name: row2Maneuver });
     }
     if (isSkillBased && row3Feat) {
-      featsSelected.push({ name: row3Feat });
+      const feat: { name: string; abilityChoices?: string[] } = {
+        name: row3Feat,
+      };
+      if (
+        row3Feat === "Ability Score Increase" &&
+        abilityIncreaseValid(row3Ability1, row3Ability2)
+      ) {
+        feat.abilityChoices = [row3Ability1, row3Ability2];
+      }
+      featsSelected.push(feat);
       if (row3Feat === "Learn Combat Maneuver" && row3Maneuver)
         maneuversSelected.push({ name: row3Maneuver });
     }
 
+    // Remove previous ability score increases
+    const abilities = { ...character.abilities } as Record<string, any>;
+    character.feats.forEach((f: any) => {
+      if (f.name === "Ability Score Increase" && f.abilityChoices) {
+        f.abilityChoices.forEach((ab: string) => {
+          abilities[ab].value -= 1;
+        });
+      }
+    });
+
+    // Apply new ability score increases
+    featsSelected.forEach((f) => {
+      if (f.name === "Ability Score Increase" && f.abilityChoices) {
+        f.abilityChoices.forEach((ab) => {
+          abilities[ab].value += 1;
+        });
+      }
+    });
+
+    (Object.keys(abilities) as string[]).forEach((ab) => {
+      updateAbilityScore(ab as any, abilities[ab].value);
+    });
+
     setSelectedSkillSets(skills);
-    setSelectedFeats(featsSelected);
+    setSelectedFeats(featsSelected as any);
     setSelectedManeuvers(maneuversSelected.map((m) => m.name));
-    updateCharacterField('feats', featsSelected as any);
-    updateCharacterField('maneuvers', maneuversSelected as any);
+    updateCharacterField("feats", featsSelected as any);
+    updateCharacterField("maneuvers", maneuversSelected as any);
     setCurrentStep(8);
   };
 
@@ -281,6 +362,40 @@ const Step7_SkillsAndFeats = () => {
     </Select>
   );
 
+  const renderAbilitySelects = (
+    a1: string,
+    setA1: (v: string) => void,
+    a2: string,
+    setA2: (v: string) => void
+  ) => (
+    <div className="mt-2 flex space-x-2">
+      <Select value={a1} onValueChange={setA1}>
+        <SelectTrigger className="w-full">
+          <SelectValue placeholder="Ability 1" />
+        </SelectTrigger>
+        <SelectContent>
+          {abilityOptions.map((ab) => (
+            <SelectItem key={ab} value={ab} disabled={ab === a2}>
+              {ab.charAt(0).toUpperCase() + ab.slice(1)}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
+      <Select value={a2} onValueChange={setA2}>
+        <SelectTrigger className="w-full">
+          <SelectValue placeholder="Ability 2" />
+        </SelectTrigger>
+        <SelectContent>
+          {abilityOptions.map((ab) => (
+            <SelectItem key={ab} value={ab} disabled={ab === a1}>
+              {ab.charAt(0).toUpperCase() + ab.slice(1)}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
+    </div>
+  );
+
   return (
     <motion.div
       initial={{ opacity: 0, x: 20 }}
@@ -301,9 +416,18 @@ const Step7_SkillsAndFeats = () => {
             {renderFeatSelect(row1Feat, (v) => {
               setRow1Feat(v);
               setRow1Maneuver("");
+              setRow1Ability1("");
+              setRow1Ability2("");
             })}
             {row1Feat === "Learn Combat Maneuver" &&
               renderManeuverSelect(row1Maneuver, setRow1Maneuver)}
+            {row1Feat === "Ability Score Increase" &&
+              renderAbilitySelects(
+                row1Ability1,
+                setRow1Ability1,
+                row1Ability2,
+                setRow1Ability2
+              )}
           </div>
         </div>
         <div className="grid md:grid-cols-2 gap-4">
@@ -314,6 +438,8 @@ const Step7_SkillsAndFeats = () => {
               if (v) {
                 setRow2Feat("");
                 setRow2Maneuver("");
+                setRow2Ability1("");
+                setRow2Ability2("");
               }
             },
             row2CustomSkill,
@@ -330,6 +456,8 @@ const Step7_SkillsAndFeats = () => {
                 if (v) {
                   setRow2SkillSet("");
                   setRow2CustomSkill("");
+                  setRow2Ability1("");
+                  setRow2Ability2("");
                 }
               },
               !!row2SkillSet,
@@ -337,6 +465,13 @@ const Step7_SkillsAndFeats = () => {
             )}
             {row2Feat === "Learn Combat Maneuver" &&
               renderManeuverSelect(row2Maneuver, setRow2Maneuver)}
+            {row2Feat === "Ability Score Increase" &&
+              renderAbilitySelects(
+                row2Ability1,
+                setRow2Ability1,
+                row2Ability2,
+                setRow2Ability2
+              )}
           </div>
         </div>
         {isSkillBased && (
@@ -348,6 +483,8 @@ const Step7_SkillsAndFeats = () => {
                 if (v) {
                   setRow3Feat("");
                   setRow3Maneuver("");
+                  setRow3Ability1("");
+                  setRow3Ability2("");
                 }
               },
               row3CustomSkill,
@@ -364,6 +501,8 @@ const Step7_SkillsAndFeats = () => {
                   if (v) {
                     setRow3SkillSet("");
                     setRow3CustomSkill("");
+                    setRow3Ability1("");
+                    setRow3Ability2("");
                   }
                 },
                 !!row3SkillSet,
@@ -371,6 +510,13 @@ const Step7_SkillsAndFeats = () => {
               )}
               {row3Feat === "Learn Combat Maneuver" &&
                 renderManeuverSelect(row3Maneuver, setRow3Maneuver)}
+              {row3Feat === "Ability Score Increase" &&
+                renderAbilitySelects(
+                  row3Ability1,
+                  setRow3Ability1,
+                  row3Ability2,
+                  setRow3Ability2
+                )}
             </div>
           </div>
         )}
