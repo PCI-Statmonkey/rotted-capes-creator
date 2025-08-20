@@ -7,9 +7,9 @@ import Step1_Concept from "@/steps/Step1_Concept";
 import Step2_Origin from "@/steps/Step2_Origin";
 import Step3_Archetype from "@/steps/Step3_Archetype";
 import Step4_Abilities from "@/steps/Step4_Abilities";
-import Step5_SkillsAndFeats from "@/steps/Step5_SkillsAndFeats";
-import Step6_Powers from "@/steps/Step6_Powers";
-import Step7_Weaknesses from "@/steps/Step7_Weaknesses";
+import Step7_SkillsAndFeats from "@/steps/Step7_SkillsAndFeats";
+import Step5_Powers from "@/steps/Step5_Powers";
+import Step6_Weaknesses from "@/steps/Step6_Weaknesses";
 import Step8_Gear from "@/steps/Step8_Gear";
 import Step9_FinishingTouches from "@/steps/Step9_FinishingTouches";
 import Step10_Summary from "@/steps/Step10_Summary";
@@ -75,11 +75,11 @@ export default function Creator() {
       case 4:
         return <Step4_Abilities />;
       case 5:
-        return <Step5_SkillsAndFeats />;
+        return <Step5_Powers />;
       case 6:
-        return <Step6_Powers />;
+        return <Step6_Weaknesses />;
       case 7:
-        return <Step7_Weaknesses />;
+        return <Step7_SkillsAndFeats />;
       case 8:
         return <Step8_Gear />;
       case 9:

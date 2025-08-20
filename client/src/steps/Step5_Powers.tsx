@@ -154,7 +154,7 @@ const DAMAGE_TYPES = [
   "Light", "Radiation", "Dark", "Force", "Psychic"
 ];
 
-export default function Step6_Powers() {
+export default function Step5_Powers() {
   const { character, updateCharacterField, setCurrentStep, updateDerivedStats } = useCharacter();
   const [powerCreationMethod, setPowerCreationMethod] = useState<"powerSet" | "array" | "pointBuy">("powerSet");
   const [selectedPowerSet, setSelectedPowerSet] = useState<string>("");
@@ -612,7 +612,7 @@ export default function Step6_Powers() {
 
   // Handle going to previous step
   const handlePrevious = () => {
-    setCurrentStep(5);
+    setCurrentStep(4);
   };
 
   // Handle going to next step
@@ -642,7 +642,7 @@ export default function Step6_Powers() {
     );
     
     // Move to the next step
-    setCurrentStep(7);
+    setCurrentStep(6);
   };
 
   // Check if user can proceed
@@ -683,7 +683,7 @@ export default function Step6_Powers() {
       transition={{ duration: 0.3 }}
     >
       <div className="mb-6 border-b-2 border-gray-700 pb-4">
-        <h2 className="font-display text-3xl text-red-500 tracking-wide">Step 6: Powers</h2>
+        <h2 className="font-display text-3xl text-red-500 tracking-wide">Step 5: Powers</h2>
         <p className="text-gray-300 mt-2">
           Powers are extraordinary abilities that set heroes apart from regular folk. Choose your powers and their strength.
         </p>
