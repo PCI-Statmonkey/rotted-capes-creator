@@ -3,7 +3,7 @@ import { STORAGE_KEY, saveToLocalStorage, loadFromLocalStorage, getScoreData } f
 import type { MasterValue } from "@shared/masterValues";
 import { trackCharacterEvent, trackEvent } from "@/lib/analytics";
 import { RANK_CAPS, getRankCap } from "../utils/rank";
-const DEFAULT_RANK_BONUS = 1; // Starting rank bonus
+const DEFAULT_RANK_BONUS = 2; // Starting rank bonus
 
 export interface Ability extends Omit<MasterValue, "min" | "max"> {
   value: number;
@@ -139,7 +139,7 @@ export const createEmptyCharacter = (): Character => ({
   archetype: "",
   personalityFlaws: [],
   tagline: "",
-  rank: 1,
+  rank: 2,
   level: 1,
   rankBonus: DEFAULT_RANK_BONUS,
   grit: DEFAULT_RANK_BONUS,

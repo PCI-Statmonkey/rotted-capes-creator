@@ -4,7 +4,7 @@ import { rankCapFixture } from './fixtures/characters.ts';
 
 // Initial rank cap
 const cap = getRankCap(rankCapFixture.rank);
-assert.strictEqual(cap, 20);
+assert.strictEqual(cap, 24);
 const cappedPowerRank = Math.min(rankCapFixture.powers[0].rank, cap);
 assert.strictEqual(cappedPowerRank, cap);
 

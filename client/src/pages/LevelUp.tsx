@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useCharacter } from "@/context/CharacterContext";
-import { getRankCap } from "@/utils/rank";
+import { getRankCap, getRankName } from "@/utils/rank";
 import { Button } from "@/components/ui/button";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
@@ -46,7 +46,9 @@ export default function LevelUp() {
   return (
     <div className="container mx-auto p-4">
       <h1 className="text-2xl font-comic mb-4">Level Up</h1>
-      <p className="mb-4">Current Rank {character.rank}, Level {character.level}</p>
+      <p className="mb-4">
+        Current Rank {character.rank} ({getRankName(character.rank)}), Level {character.level}
+      </p>
       <RadioGroup value={choice} onValueChange={setChoice} className="space-y-2 mb-4">
         <div className="flex items-center space-x-2">
           <RadioGroupItem value="rank" id="rank" />

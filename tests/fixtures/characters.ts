@@ -6,8 +6,8 @@ export const baseCharacter = {
   skillSets: [],
   selectedFeats: [],
   powers: [],
-  rank: 1,
-  rankBonus: 1,
+  rank: 2,
+  rankBonus: 2,
   burnoutThreshold: 10,
   currentBurnout: 0
 };
@@ -44,8 +44,8 @@ export const diminishedVitalityCharacter = {
 };
 
 export const rankCapFixture = {
-  rank: 1,
-  rankBonus: 1,
+  rank: 2,
+  rankBonus: 2,
   burnoutThreshold: 10,
   powers: [{ name: 'Flight', rank: 50, burnout: 5, uses: 1 }]
 };

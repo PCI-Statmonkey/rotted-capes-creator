@@ -55,10 +55,10 @@ export const useCharacterBuilder = () => {
     WIS: 10,
     CHA: 10,
   });
-  const [rank, setRank] = useState<number>(saved?.rank || 1);
+  const [rank, setRank] = useState<number>(saved?.rank || 2);
   const [level, setLevel] = useState<number>(saved?.level || 1);
-  const [rankBonus, setRankBonus] = useState<number>(saved?.rankBonus || 1);
-  const [grit, setGrit] = useState<number>(saved?.grit || 1);
+  const [rankBonus, setRankBonus] = useState<number>(saved?.rankBonus || 2);
+  const [grit, setGrit] = useState<number>(saved?.grit || 2);
 
   const resetBuilder = () => {
     localStorage.removeItem(BUILDER_STORAGE_KEY);
@@ -77,10 +77,10 @@ export const useCharacterBuilder = () => {
       WIS: 10,
       CHA: 10,
     });
-    setRank(1);
+    setRank(2);
     setLevel(1);
-    setRankBonus(1);
-    setGrit(1);
+    setRankBonus(2);
+    setGrit(2);
     setCurrentStep(1);
   };
 
