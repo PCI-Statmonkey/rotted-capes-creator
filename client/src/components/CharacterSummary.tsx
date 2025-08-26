@@ -12,6 +12,7 @@ import InlineCharacterSheet from "./InlineCharacterSheet";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 import { formatModifier } from "@/lib/utils";
+import { getRankName } from "@/utils/rank";
 
 export default function CharacterSummary() {
   const { character } = useCharacter();
@@ -85,7 +86,9 @@ export default function CharacterSummary() {
         <div className="border-2 border-gray-700 rounded-lg p-3 bg-gray-800 mb-4 space-y-2">
           <div className="flex items-center justify-between">
             <span className="text-gray-400">Rank/Level:</span>
-            <span>Rank {character.rank} / Level {character.level}</span>
+            <span>
+              Rank {character.rank} ({getRankName(character.rank)}) / Level {character.level}
+            </span>
           </div>
           <div className="flex items-center justify-between">
             <span className="text-gray-400">Rank Bonus:</span>

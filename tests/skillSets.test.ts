@@ -26,7 +26,7 @@ assert(
 );
 
 // Rank cap enforcement for skill ranks
-const cap = getRankCap(1);
+const cap = getRankCap(2);
 const enforced = Math.min(25, cap);
 assert.strictEqual(enforced, cap);
 
