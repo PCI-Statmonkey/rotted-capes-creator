@@ -14,7 +14,7 @@
         "value": 2,
         "applies_to": "one power from typical_powers"
       },
-      "free_skill": "Outdoorsman"
+      "free_feat": "Hunter"
     }
   },
   {
@@ -30,7 +30,7 @@
         "value": 2,
         "applies_to": "one power from typical_powers"
       },
-      "free_skill": "Athletics"
+      "free_feat": "Hawkeye"
     }
   },
   {
@@ -42,8 +42,7 @@
       "Enhanced Senses", "Force Field. Personal", "Invulnerability", "Regeneration", "Resistance", "Super-Sense"
     ],
     "mechanics": {
-      "choice_feat": ["Martial Arts", "Weapon Master"],
-      "free_skill": "Athletics"
+      "choice_feat": ["Martial Artist", "Weapon Master"]
     }
   },
   {
@@ -59,7 +58,7 @@
         "value": 2,
         "applies_to": "one power from typical_powers"
       },
-      "free_skill": "Influence"
+      "free_feat": "Honeyed Tongue"
     }
   },
   {
@@ -75,7 +74,7 @@
         "value": 2,
         "applies_to": "one power from typical_powers"
       },
-      "free_skill": "Medicine"
+      "free_feat": "Healing Hands"
     }
   },
   {
@@ -91,7 +90,7 @@
         "value": 2,
         "applies_to": "one power from typical_powers"
       },
-      "free_skill": "Investigation"
+      "free_feat": "Amateur Investigator"
     }
   },
   {
@@ -106,7 +105,7 @@
         "value": 2,
         "applies_to": "one power from typical_powers"
       },
-      "free_skill": "Influence"
+      "free_feat": "Natural Born Leader"
     }
   },
   {
@@ -122,7 +121,7 @@
         "value": 2,
         "applies_to": "one power from typical_powers"
       },
-      "free_skill": "Athletics"
+      "free_feat": "Quick"
     }
   },
   {
@@ -138,7 +137,7 @@
         "value": 2,
         "applies_to": "one power from typical_powers"
       },
-      "free_skill": "Basic Technology"
+      "free_feat": "Technophile"
     }
   }
 ]

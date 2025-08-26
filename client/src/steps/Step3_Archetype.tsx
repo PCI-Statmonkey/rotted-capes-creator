@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { ArrowLeft, ArrowRight, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -15,13 +15,14 @@ interface ArchetypeData {
   description: string;
   keyAbilities: string[]; // Key abilities for this archetype
   specialAbility: string; // Special ability that comes with the archetype
-  trainedSkill: string; // Skill training that comes with the archetype
-  image: string; // Image path 
+  freeFeat?: string; // Free feat granted by the archetype
+  featChoices?: string[]; // Optional feat choices
+  image: string; // Image path
 }
 
 export default function Step3_Archetype() {
   const { character, updateCharacterField, setCurrentStep } = useCharacter();
-  const { setArchetypeSkill } = useCharacterBuilder();
+  const { setArchetypeFeat } = useCharacterBuilder();
   const [selectedArchetype, setSelectedArchetype] = useState<string>(character.archetype || "");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -31,7 +32,10 @@ export default function Step3_Archetype() {
       updateCharacterField('archetype', selectedArchetype);
 
       const selectedData = archetypesData.find(a => a.name === selectedArchetype);
-      if (selectedData) setArchetypeSkill(selectedData.trainedSkill);
+      if (selectedData) {
+        if (selectedData.freeFeat) setArchetypeFeat(selectedData.freeFeat);
+        else if (selectedData.featChoices) setArchetypeFeat(selectedData.featChoices);
+      }
       
       // Track the selection in analytics
       trackEvent('archetype_selected', 'character', selectedArchetype);
@@ -51,32 +55,32 @@ export default function Step3_Archetype() {
       name: "Andromorph",
       description: "You are an animal/human hybrid or super-evolved animal. Your feral senses enable you to detect zombies before they detect you.",
       keyAbilities: ["Strength", "Dexterity"],
-      specialAbility: "Beast Within: +2 power score bonus to any one power on the typical powers list",
-      trainedSkill: "Outdoorsman",
+      specialAbility: "Beast Within: +2 power score bonus to any one power on the typical powers list; gain the Hunter feat",
+      freeFeat: "Hunter",
       image: "https://placehold.co/400x225/065f46/ffffff?text=Andromorph"
     },
     {
       name: "Blaster",
       description: "You excel at blasting people from a distance. A handy attribute when facing down a pack of zombies or super zombies without range powers.",
       keyAbilities: ["Dexterity", "Charisma"],
-      specialAbility: "Marksman: +2 power score bonus to any one power on the typical powers list",
-      trainedSkill: "Athletics",
+      specialAbility: "Marksman: +2 power score bonus to any one power on the typical powers list; gain the Hawkeye feat",
+      freeFeat: "Hawkeye",
       image: "https://placehold.co/400x225/ea580c/ffffff?text=Blaster"
     },
     {
       name: "Brawler",
       description: "You like to get into the thick of it! You get in the midst of the action, right between the chattering teeth and ripping claws... right where you like it.",
       keyAbilities: ["Strength", "Dexterity", "Constitution"],
-      specialAbility: "Scrapper: Choice between the Martial Arts feat and the Weapon Master feat",
-      trainedSkill: "Athletics",
+      specialAbility: "Scrapper: Choice between the Martial Artist feat and the Weapon Master feat",
+      featChoices: ["Martial Artist", "Weapon Master"],
       image: "https://placehold.co/400x225/991b1b/ffffff?text=Brawler"
     },
     {
       name: "Controller",
       description: "You have the ability to control something or someone. As a telepath, you survive by wit and guile. As a kinetic, you crush or throw Zombies out of your way.",
       keyAbilities: ["Wisdom", "Charisma"],
-      specialAbility: "Manipulator: +2 power score bonus to any one power on the typical powers list",
-      trainedSkill: "Influence",
+      specialAbility: "Manipulator: +2 power score bonus to any one power on the typical powers list; gain the Honeyed Tongue feat",
+      freeFeat: "Honeyed Tongue",
       image: "https://placehold.co/400x225/4f46e5/ffffff?text=Controller"
     },
     {
@@ -84,7 +88,7 @@ export default function Step3_Archetype() {
       description: "Most people refer to your type as 'ghosts'; always slipping in, out, or through and always one step ahead of trouble. Maybe you walk through walls or can simply disappear.",
       keyAbilities: ["Dexterity", "Intelligence"],
       specialAbility: "Ghost: Gain the Stealthy feat for free",
-      trainedSkill: "Stealth",
+      freeFeat: "Stealthy",
       image: "https://placehold.co/400x225/7c3aed/ffffff?text=Infiltrator"
     },
     {
@@ -92,15 +96,15 @@ export default function Step3_Archetype() {
       description: "Some people refer to you as a 'shaker' because when you throw it down, people feel it blocks away. You're stronger, tougher, and bigger... much bigger.",
       keyAbilities: ["Strength", "Constitution"],
       specialAbility: "Relentless: Gain the Toughness feat",
-      trainedSkill: "Athletics",
+      freeFeat: "Toughness",
       image: "https://placehold.co/400x225/0284c7/ffffff?text=Heavy"
     },
     {
       name: "Transporter",
       description: "You possess the ability to move from place to place with ease. Perhaps you're a flyer or a speedster, or the rarest of Transporters: a Teleporter.",
       keyAbilities: ["Dexterity", "Wisdom"],
-      specialAbility: "In and Out: +2 power score bonus to any one power on the typical powers list",
-      trainedSkill: "Athletics",
+      specialAbility: "In and Out: +2 power score bonus to any one power on the typical powers list; gain the Quick feat",
+      freeFeat: "Quick",
       image: "https://placehold.co/400x225/db2777/ffffff?text=Transporter"
     }
   ];
@@ -180,17 +184,37 @@ export default function Step3_Archetype() {
                       <h4 className="text-sm font-medium text-gray-300">Special Ability:</h4>
                       <p className="text-gray-400 text-xs font-comic-light">{archetype.specialAbility}</p>
                     </div>
-                    
-                    {/* Trained Skill */}
-                    <div className="space-y-1">
-                      <h4 className="text-sm font-medium text-gray-300">Trained In:</h4>
-                      <Badge
-                        variant={selectedArchetype === archetype.name ? "secondary" : "outline"}
-                        className="font-medium"
-                      >
-                        {archetype.trainedSkill}
-                      </Badge>
-                    </div>
+
+                    {/* Free Feat */}
+                    {archetype.freeFeat && (
+                      <div className="space-y-1">
+                        <h4 className="text-sm font-medium text-gray-300">Free Feat:</h4>
+                        <Badge
+                          variant={selectedArchetype === archetype.name ? "secondary" : "outline"}
+                          className="font-medium"
+                        >
+                          {archetype.freeFeat}
+                        </Badge>
+                      </div>
+                    )}
+
+                    {/* Feat Choices */}
+                    {archetype.featChoices && (
+                      <div className="space-y-1">
+                        <h4 className="text-sm font-medium text-gray-300">Feat Options:</h4>
+                        <div className="flex flex-wrap gap-2">
+                          {archetype.featChoices.map((feat, index) => (
+                            <Badge
+                              key={index}
+                              variant={selectedArchetype === archetype.name ? "secondary" : "outline"}
+                              className="font-medium"
+                            >
+                              {feat}
+                            </Badge>
+                          ))}
+                        </div>
+                      </div>
+                    )}
                   </div>
                 </CardContent>
               </Card>
