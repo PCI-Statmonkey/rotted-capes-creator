@@ -11,6 +11,7 @@ import skillSetOptions from "@/data/skillSets";
 import { displayFeatName } from "@/lib/utils";
 import { getMissingPrereqs, formatPrerequisite } from "@/utils/requirementValidator";
 import maneuversData from "@/rules/maneuvers.json";
+import featsFallback from "@/rules/feats.json";
 
 const Step7_SkillsAndFeats = () => {
   const { setSelectedSkillSets, setSelectedFeats, setSelectedManeuvers } =
@@ -71,8 +72,9 @@ const Step7_SkillsAndFeats = () => {
   }, [allManeuvers]);
 
   const feats = useMemo(() => {
+    const combined = [...featsFallback, ...featsData];
     const unique = Array.from(
-      new Map(featsData.map((f: any) => [f.name, f])).values()
+      new Map(combined.map((f: any) => [f.name, f])).values()
     );
     return unique.filter((f: any) => {
       const baseName = f.name.replace(/\s*\(.*\)\s*$/, "");
