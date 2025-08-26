@@ -28,7 +28,7 @@ export type Character = {
   selectedManeuvers: string[];
   skillsTab: string;
   currentStep: number;
-  archetypeSkill?: string | null;
+  archetypeFeat?: string | string[] | null;
 };
 
 export const useCharacterBuilder = () => {
@@ -46,7 +46,7 @@ export const useCharacterBuilder = () => {
   const [selectedManeuvers, setSelectedManeuvers] = useState<string[]>(saved?.selectedManeuvers || []);
   const [skillsTab, setSkillsTab] = useState<string>(saved?.skillsTab || "starting");
   const [currentStep, setCurrentStep] = useState<number>(saved?.currentStep || 1);
-  const [archetypeSkill, setArchetypeSkill] = useState<string | null>(saved?.archetypeSkill || null);
+  const [archetypeFeat, setArchetypeFeat] = useState<string | string[] | null>(saved?.archetypeFeat || null);
   const [abilityScores, setAbilityScores] = useState(saved?.abilityScores || {
     STR: 10,
     DEX: 10,
@@ -68,7 +68,7 @@ export const useCharacterBuilder = () => {
     setSelectedSkillSets([]);
     setSelectedManeuvers([]);
     setSkillsTab("starting");
-    setArchetypeSkill(null);
+    setArchetypeFeat(null);
     setAbilityScores({
       STR: 10,
       DEX: 10,
@@ -94,13 +94,13 @@ export const useCharacterBuilder = () => {
       selectedManeuvers,
       skillsTab,
       currentStep,
-      archetypeSkill,
+      archetypeFeat,
       rank,
       level,
       rankBonus,
       grit,
     });
-  }, [abilityScores, startingSkills, selectedSkills, selectedFeats, selectedSkillSets, selectedManeuvers, skillsTab, currentStep, archetypeSkill, rank, level, rankBonus, grit]);
+  }, [abilityScores, startingSkills, selectedSkills, selectedFeats, selectedSkillSets, selectedManeuvers, skillsTab, currentStep, archetypeFeat, rank, level, rankBonus, grit]);
 
   return {
     abilityScores,
@@ -119,8 +119,8 @@ export const useCharacterBuilder = () => {
     setSkillsTab,
     currentStep,
     setCurrentStep,
-    archetypeSkill,
-    setArchetypeSkill,
+    archetypeFeat,
+    setArchetypeFeat,
     rank,
     setRank,
     level,
