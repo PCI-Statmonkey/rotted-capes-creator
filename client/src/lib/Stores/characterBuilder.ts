@@ -23,7 +23,19 @@ export type Character = {
   grit: number;
   startingSkills: string[];
   selectedSkills: CharacterSkill[];
-  selectedFeats: { name: string; input?: string | string[]; source?: string; free?: boolean; skillSet?: string; edge?: string; option?: string; stance?: string; usesPerScene?: number }[];
+  selectedFeats: {
+    name: string;
+    input?: string | string[];
+    source?: string;
+    free?: boolean;
+    skillSet?: string;
+    edge?: string;
+    option?: string;
+    stance?: string;
+    usesPerScene?: number;
+    abilityChoices?: string[];
+    powerChoices?: string[];
+  }[];
   selectedSkillSets: { name: string; edges: string[]; source?: string; deepCutNotes?: string }[];
   selectedManeuvers: string[];
   skillsTab: string;
@@ -36,7 +48,19 @@ export const useCharacterBuilder = () => {
 
   const [startingSkills, setStartingSkills] = useState<string[]>(saved?.startingSkills || []);
   const [selectedSkills, setSelectedSkills] = useState<CharacterSkill[]>(saved?.selectedSkills || []);
-  const [selectedFeats, setSelectedFeats] = useState<{ name: string; input?: string | string[]; source?: string; free?: boolean; skillSet?: string; edge?: string; option?: string; stance?: string; usesPerScene?: number }[]>(saved?.selectedFeats || []);
+  const [selectedFeats, setSelectedFeats] = useState<{
+    name: string;
+    input?: string | string[];
+    source?: string;
+    free?: boolean;
+    skillSet?: string;
+    edge?: string;
+    option?: string;
+    stance?: string;
+    usesPerScene?: number;
+    abilityChoices?: string[];
+    powerChoices?: string[];
+  }[]>(saved?.selectedFeats || []);
   const initialSkillSets = (saved?.selectedSkillSets || []).map((s: any) =>
     typeof s === 'string'
       ? { name: s, edges: [], deepCutNotes: "" }

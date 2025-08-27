@@ -98,7 +98,7 @@ export default function Step6_Weaknesses() {
     type: string;
     target: string;
     amount: number;
-  }>>([]);
+  }>>(character.weaknessAllocations || []);
 
   const [fivePointSkill, setFivePointSkill] = useState("");
   const [fivePointAbility, setFivePointAbility] = useState("");
@@ -122,6 +122,15 @@ export default function Step6_Weaknesses() {
   useEffect(() => {
     calculatePoints();
   }, [character.complications, allocations]);
+
+  useEffect(() => {
+    setAllocations(character.weaknessAllocations || []);
+  }, [character.weaknessAllocations]);
+
+  const updateAllocations = (newAllocs: Array<{ type: string; target: string; amount: number }>) => {
+    setAllocations(newAllocs);
+    updateCharacterField('weaknessAllocations', newAllocs as any);
+  };
 
   // Handle going to previous step
   const handlePrevious = () => {
@@ -302,7 +311,7 @@ export default function Step6_Weaknesses() {
       updateCharacterField('skills', [...character.skills, { name: fivePointSkill, ability: '', ranks: 0, trained: true }]);
     }
     applyAbilityOrPower(fivePointAbility, 1);
-    setAllocations([...allocations, { type: '5', target: `${fivePointSkill} + ${fivePointAbility}`, amount: 5 }]);
+    updateAllocations([...allocations, { type: '5', target: `${fivePointSkill} + ${fivePointAbility}`, amount: 5 }]);
     setFivePointSkill('');
     setFivePointAbility('');
   };
@@ -323,7 +332,7 @@ export default function Step6_Weaknesses() {
         if (!character.feats.some(f => f.name === tenPointFeat)) {
           updateCharacterField('feats', [...character.feats, featObj]);
         }
-        setAllocations([...allocations, { type: '10-feat', target: tenPointFeat, amount: 10 }]);
+        updateAllocations([...allocations, { type: '10-feat', target: tenPointFeat, amount: 10 }]);
         setTenPointFeat('');
         setTenPointPower1('');
         setTenPointPower2('');
@@ -331,7 +340,7 @@ export default function Step6_Weaknesses() {
         if (!character.feats.some(f => f.name === tenPointFeat)) {
           updateCharacterField('feats', [...character.feats, { name: tenPointFeat, source: 'Weakness' }]);
         }
-        setAllocations([...allocations, { type: '10-feat', target: tenPointFeat, amount: 10 }]);
+        updateAllocations([...allocations, { type: '10-feat', target: tenPointFeat, amount: 10 }]);
         setTenPointFeat('');
         setTenPointPower1('');
         setTenPointPower2('');
@@ -340,7 +349,7 @@ export default function Step6_Weaknesses() {
       if (!tenPointAbility1 || !tenPointAbility2) return;
       applyAbilityOrPower(tenPointAbility1, 1);
       applyAbilityOrPower(tenPointAbility2, 1);
-      setAllocations([...allocations, { type: '10-ability', target: `${tenPointAbility1} & ${tenPointAbility2}`, amount: 10 }]);
+      updateAllocations([...allocations, { type: '10-ability', target: `${tenPointAbility1} & ${tenPointAbility2}`, amount: 10 }]);
       setTenPointAbility1('');
       setTenPointAbility2('');
     }
@@ -349,7 +358,7 @@ export default function Step6_Weaknesses() {
   const handleAllocate15 = () => {
     if (remainingWeaknessPoints < 15 || !fifteenPointAbility) return;
     applyAbilityOrPower(fifteenPointAbility, 2);
-    setAllocations([...allocations, { type: '15-ability', target: fifteenPointAbility, amount: 15 }]);
+    updateAllocations([...allocations, { type: '15-ability', target: fifteenPointAbility, amount: 15 }]);
     setFifteenPointAbility('');
   };
 
