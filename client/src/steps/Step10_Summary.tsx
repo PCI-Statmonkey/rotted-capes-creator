@@ -51,6 +51,17 @@ export default function Step10_Summary() {
     [character.powers]
   );
 
+  const getFinalPowerScore = (power: any) => {
+    const flaws = power.flaws?.map((f: string) => f.toLowerCase()) || [];
+    const isInborn = !flaws.some((f: string) =>
+      f.includes("external power source") ||
+      f.includes("all-skill") ||
+      f.includes("removable")
+    );
+    const baseScore = power.finalScore ?? power.score ?? 0;
+    return isInborn ? baseScore + 1 : baseScore;
+  };
+
   // Calculate derived stats
   const calculateDerivedStats = () => {
     const strMod = getScoreData(character.abilities.strength.value).modifier;
@@ -81,7 +92,7 @@ export default function Step10_Summary() {
     // Running pace is based on Dexterity modifier (min 1, max 5)
     // Quick feat grants an additional +1 to pace
     const hasQuick = feats.some((f) => f.name === "Quick");
-    const runningPace = Math.min(Math.max(dexMod, 1), 5) + (hasQuick ? 1 : 0);
+    const runningPace = Math.min(Math.max(1 + dexMod, 1), 5) + (hasQuick ? 1 : 0);
     
     return {
       avoidance,
@@ -129,6 +140,10 @@ export default function Step10_Summary() {
     const userId = 1; // TEMP: Replace with actual user lookup if needed
 
     const { powers, skills, gear, complications, ...base } = character;
+    const powersWithBonus = powers.map(p => ({
+      ...p,
+      finalScore: getFinalPowerScore(p),
+    }));
 
     const payload = {
       userId,
@@ -139,7 +154,7 @@ export default function Step10_Summary() {
         updatedAt: new Date().toISOString(),
       },
       feats,
-      powers,
+      powers: powersWithBonus,
       skills,
       gear,
       complications,
@@ -442,13 +457,14 @@ export default function Step10_Summary() {
             {character.powers.length > 0 ? (
               <div className="space-y-4">
                 {character.powers.map((power, index) => {
-                  const data = getScoreData(power.finalScore || power.score || 0);
+                  const score = getFinalPowerScore(power);
+                  const data = getScoreData(score);
                   return (
                     <div key={index} className="border border-gray-700 rounded-lg p-3">
                       <div className="flex justify-between items-start">
                         <h3 className="font-medium">{power.name}</h3>
-                        {power.score && (
-                          <Badge variant="secondary">{power.score}</Badge>
+                        {score > 0 && (
+                          <Badge variant="secondary">{score}</Badge>
                         )}
                       </div>
                       <div className="text-xs text-gray-300 mt-1">
