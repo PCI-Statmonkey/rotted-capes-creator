@@ -186,7 +186,7 @@ export default function Step10_Summary() {
   return (
     <div className="container mx-auto px-4 py-6" ref={summaryRef}>
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-display font-bold text-red-500">Step 10: Character Sheet</h1>
+        <h1 className="text-3xl font-display font-semibold text-red-500">Step 10: Character Sheet</h1>
         <div className="flex gap-2">
           <Button 
             onClick={handleSaveCharacter} 
@@ -266,7 +266,7 @@ export default function Step10_Summary() {
         {/* Abilities Column */}
         <Card>
           <CardHeader className="py-3">
-            <CardTitle className="text-center">Abilities</CardTitle>
+            <CardTitle className="text-center text-xl font-medium">Abilities</CardTitle>
           </CardHeader>
           <CardContent className="px-4 pb-4 pt-0">
             <table className="w-full">
@@ -324,7 +324,7 @@ export default function Step10_Summary() {
         {/* Defenses Column */}
         <Card>
           <CardHeader className="py-3">
-            <CardTitle className="text-center">Defenses</CardTitle>
+            <CardTitle className="text-center text-xl font-medium">Defenses</CardTitle>
           </CardHeader>
           <CardContent className="p-4 pt-0">
             <div className="grid grid-cols-1 gap-4">
@@ -361,7 +361,7 @@ export default function Step10_Summary() {
         {/* Health Column */}
         <Card>
           <CardHeader className="py-3">
-            <CardTitle className="text-center">Health & Initiative</CardTitle>
+            <CardTitle className="text-center text-xl font-medium">Health & Initiative</CardTitle>
           </CardHeader>
           <CardContent className="p-4 pt-0">
             <div className="grid grid-cols-1 gap-4">
@@ -401,7 +401,7 @@ export default function Step10_Summary() {
         {/* Powers Section */}
         <Card>
           <CardHeader className="py-3">
-            <CardTitle className="flex items-center">
+            <CardTitle className="flex items-center text-xl font-medium">
               <span className="flex-1">Powers</span>
               <Badge variant="outline" className="ml-2">{character.powers.length}</Badge>
             </CardTitle>
@@ -414,17 +414,14 @@ export default function Step10_Summary() {
                   return (
                     <div key={index} className="border border-gray-700 rounded-lg p-3">
                       <div className="flex justify-between items-start">
-                        <h3 className="font-semibold">{power.name}</h3>
+                        <h3 className="font-medium">{power.name}</h3>
                         {power.score && (
                           <Badge variant="secondary">{power.score}</Badge>
                         )}
                       </div>
                       <div className="text-xs text-gray-300 mt-1">
-                        Die: {data.baseDie || "-"} {formatModifier(data.modifier)} | Range: {data.powerRange}
-                        {data.maxLift && ` | Max Lift: ${data.maxLift}`}
-                        {data.topMPH && data.topMPH !== '-' && ` | Top MPH: ${data.topMPH}`}
+                        Bonus: {formatModifier(data.modifier)}
                       </div>
-                      <p className="text-sm text-gray-400 mt-1">{power.description}</p>
 
                       {(power.perks.length > 0 || power.flaws.length > 0) && (
                         <div className="grid grid-cols-2 gap-2 mt-2">
@@ -466,7 +463,7 @@ export default function Step10_Summary() {
           {/* Skills Section */}
           <Card>
             <CardHeader className="py-3">
-              <CardTitle className="flex items-center">
+              <CardTitle className="flex items-center text-xl font-medium">
                 <span className="flex-1">Skills</span>
                 <Badge variant="outline" className="ml-2">{character.skills.length}</Badge>
               </CardTitle>
@@ -512,7 +509,7 @@ export default function Step10_Summary() {
 
           <Card>
             <CardHeader className="py-3">
-              <CardTitle className="flex items-center">
+              <CardTitle className="flex items-center text-xl font-medium">
                 <span className="flex-1">Skill Sets</span>
                 <Badge variant="outline" className="ml-2">{selectedSkillSets.length}</Badge>
               </CardTitle>
@@ -538,7 +535,7 @@ export default function Step10_Summary() {
           {/* Gear Section */}
           <Card>
             <CardHeader className="py-3">
-              <CardTitle className="flex items-center">
+              <CardTitle className="flex items-center text-xl font-medium">
                 <span className="flex-1">Gear</span>
                 <Badge variant="outline" className="ml-2">{character.gear.length}</Badge>
               </CardTitle>
@@ -568,7 +565,7 @@ export default function Step10_Summary() {
         {/* Complications Section */}
         <Card>
           <CardHeader className="py-3">
-            <CardTitle className="flex items-center">
+            <CardTitle className="flex items-center text-xl font-medium">
               <span className="flex-1">Complications</span>
               <Badge variant="outline" className="ml-2">{character.complications.length}</Badge>
             </CardTitle>
@@ -597,7 +594,7 @@ export default function Step10_Summary() {
         {/* Feats Section */}
         <Card>
           <CardHeader className="py-3">
-            <CardTitle className="flex items-center">
+            <CardTitle className="flex items-center text-xl font-medium">
               <span className="flex-1">Feats</span>
               <Badge variant="outline" className="ml-2">{character.feats.length}</Badge>
             </CardTitle>
@@ -658,7 +655,7 @@ export default function Step10_Summary() {
       {/* Character Completion Checklist */}
       <Card className="mb-6">
         <CardHeader className="py-3">
-          <CardTitle>Character Completion Checklist</CardTitle>
+          <CardTitle className="text-xl font-medium">Character Completion Checklist</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
