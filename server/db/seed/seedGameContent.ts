@@ -83,11 +83,21 @@ async function runSeed() {
   for (const arch of archetypesData as any[]) {
     await db.insert(archetypes).values({
       name: arch.name,
+      // Some of our archetype JSON data doesn't yet include rich descriptions.
+      // Use an empty string as a fallback so the NOT NULL constraint passes.
       description: arch.description || "",
-      keyAbilities: arch.keyAbilities || [],
-      specialAbility: arch.specialAbility || "",
+      // Earlier data sets used `ability_bonus` instead of `keyAbilities`.
+      // Support either format so seeds work across versions.
+      keyAbilities: arch.keyAbilities || arch.ability_bonus || [],
+      // Our current JSON represents the archetype mechanics as a nested object.
+      // Persist it as a string until the table/schema are updated to something richer.
+      specialAbility:
+        arch.specialAbility ||
+        (arch.mechanics ? JSON.stringify(arch.mechanics) : ""),
+      // Some older seeds don't track a trained skill for the archetype.
       trainedSkill: arch.trainedSkill || "",
-      imageUrl: arch.imageUrl || "",
+      // Accept either `imageUrl` or the legacy `image` property.
+      imageUrl: arch.imageUrl || arch.image || "",
     }).onConflictDoNothing();
   }
 
