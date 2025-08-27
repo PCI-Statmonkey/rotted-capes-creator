@@ -89,10 +89,10 @@ export default function Step10_Summary() {
     // Initiative calculation
     const initiative = dexMod;
     
-    // Running pace is based on Dexterity modifier (min 1, max 5)
+    // Running pace is based on Dexterity modifier (min 1, max 4)
     // Quick feat grants an additional +1 to pace
     const hasQuick = feats.some((f) => f.name === "Quick");
-    const runningPace = Math.min(Math.max(1 + dexMod, 1), 5) + (hasQuick ? 1 : 0);
+    const runningPace = Math.min(Math.max(dexMod, 1), 4) + (hasQuick ? 1 : 0);
     
     return {
       avoidance,
@@ -381,7 +381,7 @@ export default function Step10_Summary() {
                   <Shield className="h-5 w-5 text-blue-400" />
                   {derivedStats.avoidance}
                 </div>
-                <p className="text-xs text-gray-400 mt-1">DEX or INT Bonus + 10</p>
+                <p className="text-xs text-gray-400 mt-1">DEX or INT bonus + rank bonus + 10</p>
               </div>
               
               <div className="text-center p-3 bg-gray-800 rounded-lg">
@@ -390,7 +390,7 @@ export default function Step10_Summary() {
                   <Shield className="h-5 w-5 text-red-400" />
                   {derivedStats.fortitude}
                 </div>
-                <p className="text-xs text-gray-400 mt-1">STR or CON Bonus + 10</p>
+                <p className="text-xs text-gray-400 mt-1">STR or CON bonus + rank bonus + 10</p>
               </div>
               
               <div className="text-center p-3 bg-gray-800 rounded-lg">
@@ -399,7 +399,7 @@ export default function Step10_Summary() {
                   <Shield className="h-5 w-5 text-purple-400" />
                   {derivedStats.willpower}
                 </div>
-                <p className="text-xs text-gray-400 mt-1">WIS or CHA Bonus + 10</p>
+                <p className="text-xs text-gray-400 mt-1">WIS or CHA bonus + rank bonus + 10</p>
               </div>
             </div>
           </CardContent>
