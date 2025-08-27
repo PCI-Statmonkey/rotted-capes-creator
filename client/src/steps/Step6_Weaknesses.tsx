@@ -317,7 +317,8 @@ export default function Step6_Weaknesses() {
         applyAbilityOrPower(tenPointPower2 || tenPointPower1, 1);
         const featObj = {
           name: tenPointFeat,
-          powerChoices: [tenPointPower1, tenPointPower2 || tenPointPower1]
+          powerChoices: [tenPointPower1, tenPointPower2 || tenPointPower1],
+          source: 'Weakness',
         };
         if (!character.feats.some(f => f.name === tenPointFeat)) {
           updateCharacterField('feats', [...character.feats, featObj]);
@@ -328,7 +329,7 @@ export default function Step6_Weaknesses() {
         setTenPointPower2('');
       } else {
         if (!character.feats.some(f => f.name === tenPointFeat)) {
-          updateCharacterField('feats', [...character.feats, { name: tenPointFeat }]);
+          updateCharacterField('feats', [...character.feats, { name: tenPointFeat, source: 'Weakness' }]);
         }
         setAllocations([...allocations, { type: '10-feat', target: tenPointFeat, amount: 10 }]);
         setTenPointFeat('');

@@ -1,11 +1,9 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import { useCharacter } from "@/context/CharacterContext";
 import { useCharacterBuilder } from "@/lib/Stores/characterBuilder";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
-import { Separator } from "@/components/ui/separator";
-import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "@/hooks/use-toast";
 import { getScoreData, formatModifier, displayFeatName } from "@/lib/utils";
@@ -47,7 +45,9 @@ export default function Step10_Summary() {
     const initiative = dexMod;
     
     // Running pace is based on Dexterity modifier (min 1, max 5)
-    const runningPace = Math.min(Math.max(dexMod, 1), 5);
+    // Quick feat grants an additional +1 to pace
+    const hasQuick = character.feats.some((f) => f.name === "Quick");
+    const runningPace = Math.min(Math.max(dexMod, 1), 5) + (hasQuick ? 1 : 0);
     
     return {
       avoidance,
@@ -67,7 +67,7 @@ export default function Step10_Summary() {
     abilityScores: Object.fromEntries(
       Object.entries(character.abilities).map(([k, v]) => [k, (v as any).value])
     ),
-    selectedSkills: character.skills,
+    selectedSkills: [],
     startingSkills: [] as any[],
     selectedFeats: character.feats,
     selectedSkillSets,
@@ -143,10 +143,8 @@ export default function Step10_Summary() {
       abilitiesPoints += Math.max(0, abilityValue - 10);
     }
 
-    // Skills points (1 point per rank)
-    const skillsPoints = character.skills.reduce((total, skill) => {
-      return total + (skill.ranks || 0);
-    }, 0);
+    // Skill points are no longer used; skill sets do not cost points here
+    const skillsPoints = 0;
 
     // Powers points (varies by power)
     const powersPoints = character.powers.reduce((total, power) => {
@@ -181,12 +179,12 @@ export default function Step10_Summary() {
   useEffect(() => {
     const pointsSpent = calculatePointsSpent();
     updateCharacterField('pointsSpent', pointsSpent);
-  }, [character.abilities, character.skills, character.powers, updateCharacterField]);
+  }, [character.abilities, character.powers, updateCharacterField]);
 
   return (
-    <div className="container mx-auto px-4 py-6" ref={summaryRef}>
+    <div className="container mx-auto px-4 py-6 font-comic" ref={summaryRef}>
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-display font-semibold text-red-500">Step 10: Character Sheet</h1>
+        <h1 className="text-3xl font-bold text-red-500">Step 10: Character Sheet</h1>
         <div className="flex gap-2">
           <Button 
             onClick={handleSaveCharacter} 
@@ -396,7 +394,7 @@ export default function Step10_Summary() {
         </Card>
       </div>
       
-      {/* Powers, Skills, Gear */}
+      {/* Powers, Skill Sets, Gear */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
         {/* Powers Section */}
         <Card>
@@ -422,6 +420,13 @@ export default function Step10_Summary() {
                       <div className="text-xs text-gray-300 mt-1">
                         Bonus: {formatModifier(data.modifier)}
                       </div>
+
+                      {power.linkedPowers && power.linkedPowers.length > 0 && (
+                        <div className="text-xs text-gray-300 mt-1">
+                          <Label className="text-xs text-gray-400">Linked To:</Label>{" "}
+                          {power.linkedPowers.join(", ")}
+                        </div>
+                      )}
 
                       {(power.perks.length > 0 || power.flaws.length > 0) && (
                         <div className="grid grid-cols-2 gap-2 mt-2">
@@ -458,55 +463,8 @@ export default function Step10_Summary() {
           </CardContent>
         </Card>
         
-        {/* Skills and Gear */}
+        {/* Skill Sets and Gear */}
         <div className="space-y-6">
-          {/* Skills Section */}
-          <Card>
-            <CardHeader className="py-3">
-              <CardTitle className="flex items-center text-xl font-medium">
-                <span className="flex-1">Skills</span>
-                <Badge variant="outline" className="ml-2">{character.skills.length}</Badge>
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="max-h-52 overflow-y-auto">
-              {character.skills.length > 0 ? (
-                <table className="w-full">
-                  <thead>
-                    <tr className="text-xs uppercase text-gray-400 border-b border-gray-700">
-                      <th className="text-left p-2">Skill</th>
-                      <th className="text-center p-2">Ability</th>
-                      <th className="text-center p-2">Ranks</th>
-                      <th className="text-center p-2">Trained</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {character.skills.map((skill, index) => (
-                      <tr key={index} className="border-b border-gray-700">
-                        <td className="p-2">
-                          {skill.name}
-                          {skill.specialization && (
-                            <span className="text-xs text-gray-400"> ({skill.specialization})</span>
-                          )}
-                        </td>
-                        <td className="text-center p-2">{skill.ability.substring(0, 3).toUpperCase()}</td>
-                        <td className="text-center p-2">{skill.ranks}</td>
-                        <td className="text-center p-2">
-                          {skill.trained ? (
-                            <Check className="h-4 w-4 text-green-400 mx-auto" />
-                          ) : (
-                            <span>—</span>
-                          )}
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              ) : (
-                <div className="text-center py-6 text-gray-500">No skills defined</div>
-              )}
-          </CardContent>
-          </Card>
-
           <Card>
             <CardHeader className="py-3">
               <CardTitle className="flex items-center text-xl font-medium">
@@ -703,8 +661,8 @@ export default function Step10_Summary() {
               </div>
               
               <div className="flex items-center">
-                <Check className={`h-5 w-5 mr-2 ${character.skills.length > 0 ? "text-green-400" : "text-gray-500"}`} />
-                <span className={character.skills.length > 0 ? "" : "text-gray-500"}>Skills selected</span>
+                <Check className={`h-5 w-5 mr-2 ${selectedSkillSets.length > 0 ? "text-green-400" : "text-gray-500"}`} />
+                <span className={selectedSkillSets.length > 0 ? "" : "text-gray-500"}>Skill sets selected</span>
               </div>
               
               <div className="flex items-center">
