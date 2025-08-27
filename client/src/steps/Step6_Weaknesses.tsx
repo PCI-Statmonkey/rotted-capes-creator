@@ -875,10 +875,10 @@ export default function Step6_Weaknesses() {
             
             <Accordion type="single" collapsible className="w-full">
               <AccordionItem value="item-1">
-                <AccordionTrigger className="text-accent">
+                <AccordionTrigger className="bg-gray-700 text-white px-4 hover:bg-gray-600 data-[state=open]:bg-gray-600">
                   5 Points: Gain training in a skill set and +1 to any ability/power score
                 </AccordionTrigger>
-                <AccordionContent>
+              <AccordionContent>
                   <div className="space-y-3 p-2">
                     <div>
                       <label className="block text-sm mb-1">Skill Set</label>
@@ -917,7 +917,7 @@ export default function Step6_Weaknesses() {
               </AccordionItem>
 
               <AccordionItem value="item-2">
-                <AccordionTrigger className="text-accent">
+                <AccordionTrigger className="bg-gray-700 text-white px-4 hover:bg-gray-600 data-[state=open]:bg-gray-600">
                   10 Points: Gain a feat or +1 to any two ability/power scores
                 </AccordionTrigger>
                 <AccordionContent>
@@ -1055,7 +1055,7 @@ export default function Step6_Weaknesses() {
               </AccordionItem>
 
               <AccordionItem value="item-3">
-                <AccordionTrigger className="text-accent">
+                <AccordionTrigger className="bg-gray-700 text-white px-4 hover:bg-gray-600 data-[state=open]:bg-gray-600">
                   15 Points: Gain +2 to any ability/power score
                 </AccordionTrigger>
                 <AccordionContent>
