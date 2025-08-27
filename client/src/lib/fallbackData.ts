@@ -199,6 +199,93 @@ export const samplePowerSets = [
   }
 ];
 
+// Sample Gear data
+export const sampleGear = [
+  {
+    id: 0,
+    name: "Handgun",
+    description: "A reliable sidearm.",
+    category: "firearms",
+    ap: 2,
+    ammo_type: ["light"],
+    tags: [],
+    batteryPowered: false,
+  },
+  {
+    id: 1,
+    name: "Longbow",
+    description: "Silent ranged weapon.",
+    category: "archaicWeapons",
+    ap: 2,
+    tags: [],
+    batteryPowered: false,
+  },
+  {
+    id: 2,
+    name: "Machete",
+    description: "Sturdy chopping blade.",
+    category: "meleeWeapons",
+    ap: 1,
+    examples: ["Machete", "Hatchet"],
+    tags: [],
+    batteryPowered: false,
+  },
+  {
+    id: 3,
+    name: "Grenade",
+    description: "Explosive device.",
+    category: "otherModernWeapons",
+    ap: 3,
+    tags: [],
+    batteryPowered: false,
+  },
+  {
+    id: 4,
+    name: "Kevlar Vest",
+    description: "Light protective armor.",
+    category: "armor",
+    ap: 2,
+    tags: [],
+    batteryPowered: false,
+  },
+  {
+    id: 5,
+    name: "Flashlight",
+    description: "Illuminates dark areas.",
+    category: "equipment",
+    ap: 1,
+    tags: [],
+    batteryPowered: true,
+  },
+  {
+    id: 6,
+    name: "Binoculars",
+    description: "Helpful for scouting.",
+    category: "optics",
+    ap: 1,
+    tags: [],
+    batteryPowered: false,
+  },
+  {
+    id: 7,
+    name: "Holster",
+    description: "Carries a sidearm.",
+    category: "tacticalAccessory",
+    ap: 1,
+    tags: [],
+    batteryPowered: false,
+  },
+  {
+    id: 8,
+    name: "Red Dot Sight",
+    description: "Improves aim with a glowing dot.",
+    category: "tacticalSight",
+    ap: 1,
+    tags: [],
+    batteryPowered: true,
+  },
+];
+
 // Sample Power Modifiers data
 export const samplePowerModifiers = [
   {
@@ -291,6 +378,8 @@ export const getSampleData = (contentType: string): any[] => {
     case 'powerSets':
     case 'power-sets':
       return samplePowerSets;
+    case 'gear':
+      return sampleGear;
     case 'powerModifiers':
     case 'power-modifiers':
       return samplePowerModifiers;
