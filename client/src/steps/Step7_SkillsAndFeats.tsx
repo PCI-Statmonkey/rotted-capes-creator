@@ -288,7 +288,14 @@ const Step7_SkillsAndFeats = () => {
     setSelectedSkillSets(skills);
     setSelectedFeats(featsSelected as any);
     setSelectedManeuvers(maneuversSelected.map((m) => m.name));
-    updateCharacterField("feats", featsSelected as any);
+    // Preserve existing feats (such as those from archetypes or weaknesses)
+    const mergedFeats = [...(character.feats as any[])];
+    (featsSelected as any[]).forEach((f) => {
+      if (!mergedFeats.some((existing) => existing.name === f.name)) {
+        mergedFeats.push(f);
+      }
+    });
+    updateCharacterField("feats", mergedFeats as any);
     updateCharacterField("maneuvers", maneuversSelected as any);
     setCurrentStep(8);
   };

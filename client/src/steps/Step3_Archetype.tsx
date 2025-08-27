@@ -29,17 +29,28 @@ export default function Step3_Archetype() {
 
   const handleContinue = () => {
     if (selectedArchetype) {
+      const selectedData = archetypesData.find(a => a.name === selectedArchetype);
+
       updateCharacterField('archetype', selectedArchetype);
 
-      const selectedData = archetypesData.find(a => a.name === selectedArchetype);
       if (selectedData) {
-        if (selectedData.freeFeat) setArchetypeFeat(selectedData.freeFeat);
-        else if (selectedData.featChoices) setArchetypeFeat(selectedData.featChoices);
+        if (selectedData.freeFeat) {
+          // Store the free feat from the archetype on the character if not already present
+          if (!character.feats.some(f => f.name === selectedData.freeFeat)) {
+            updateCharacterField('feats', [
+              ...character.feats,
+              { name: selectedData.freeFeat, source: 'Archetype' },
+            ]);
+          }
+          setArchetypeFeat(selectedData.freeFeat);
+        } else if (selectedData.featChoices) {
+          setArchetypeFeat(selectedData.featChoices);
+        }
       }
-      
+
       // Track the selection in analytics
       trackEvent('archetype_selected', 'character', selectedArchetype);
-      
+
       // Move to the next step (Abilities)
       setCurrentStep(4);
     }
