@@ -471,12 +471,13 @@ export default function Step8_Gear() {
               {Object.entries(goBags).map(([key, bag]) => (
                 <label
                   key={key}
-                  className="flex items-start space-x-2 text-white"
+                  className="flex items-start space-x-2 text-white cursor-pointer"
                   onMouseEnter={() => setHoveredGoBag(key as GoBagType)}
                   onMouseLeave={() => setHoveredGoBag("")}
                 >
                   <input
                     type="checkbox"
+                    className="w-5 h-5"
                     checked={selectedGoBag === key}
                     onChange={() => toggleGoBag(key as GoBagType)}
                   />
@@ -513,17 +514,20 @@ export default function Step8_Gear() {
           <h3 className="text-white text-md mb-2">Firearms</h3>
           {firearms.map((w) => (
             <div key={w.name} className="flex items-center space-x-2 text-white mb-1">
-              <input
-                type="checkbox"
-                checked={freeRangedWeapon === w.name || !!purchased[w.name]}
-                onChange={() => toggleRanged(w.name, true)}
-              />
-              <span>
-                {w.name} ({w.ap} AP)
-                {w.batteryPowered && (
-                  <Battery className="inline w-4 h-4 text-yellow-400 ml-1" />
-                )}
-              </span>
+              <label className="flex items-center space-x-2 cursor-pointer">
+                <input
+                  type="checkbox"
+                  className="w-5 h-5"
+                  checked={freeRangedWeapon === w.name || !!purchased[w.name]}
+                  onChange={() => toggleRanged(w.name, true)}
+                />
+                <span>
+                  {w.name} ({w.ap} AP)
+                  {w.batteryPowered && (
+                    <Battery className="inline w-4 h-4 text-yellow-400 ml-1" />
+                  )}
+                </span>
+              </label>
               {(freeRangedWeapon === w.name || !!purchased[w.name]) && w.ammoType && w.ammoType.length > 0 && (
                 <Select
                   value={selectedAmmoTypes[w.name]}
@@ -546,9 +550,10 @@ export default function Step8_Gear() {
 
           <h3 className="text-white text-md mt-4 mb-2">Archaic Weapons</h3>
           {archaicWeapons.map((w) => (
-            <label key={w.name} className="flex items-start space-x-2 text-white">
+            <label key={w.name} className="flex items-start space-x-2 text-white cursor-pointer">
               <input
                 type="checkbox"
+                className="w-5 h-5"
                 checked={freeRangedWeapon === w.name || !!purchased[w.name]}
                 onChange={() => toggleRanged(w.name)}
               />
@@ -567,17 +572,20 @@ export default function Step8_Gear() {
           <h3 className="text-white text-md mb-2">Melee Weapons</h3>
           {meleeWeapons.map((m) => (
             <div key={m.name} className="flex items-center space-x-2 text-white mb-1">
-              <input
-                type="checkbox"
-                checked={freeMeleeWeapon === m.name || !!purchased[m.name]}
-                onChange={() => toggleMelee(m.name)}
-              />
-              <span>
-                {m.name} ({m.ap} AP)
-                {m.batteryPowered && (
-                  <Battery className="inline w-4 h-4 text-yellow-400 ml-1" />
-                )}
-              </span>
+              <label className="flex items-center space-x-2 cursor-pointer">
+                <input
+                  type="checkbox"
+                  className="w-5 h-5"
+                  checked={freeMeleeWeapon === m.name || !!purchased[m.name]}
+                  onChange={() => toggleMelee(m.name)}
+                />
+                <span>
+                  {m.name} ({m.ap} AP)
+                  {m.batteryPowered && (
+                    <Battery className="inline w-4 h-4 text-yellow-400 ml-1" />
+                  )}
+                </span>
+              </label>
               {(freeMeleeWeapon === m.name || !!purchased[m.name]) && m.examples && m.examples.length > 0 && (
                 <Select
                   value={selectedMeleeExamples[m.name]}
@@ -605,9 +613,13 @@ export default function Step8_Gear() {
         <TabsContent value="other">
           <h3 className="text-white text-md mb-2">Other Weapons</h3>
           {otherWeapons.map((w) => (
-            <label key={w.name} className="flex items-start space-x-2 text-white">
+            <label
+              key={w.name}
+              className="flex items-start space-x-2 text-white cursor-pointer"
+            >
               <input
                 type="checkbox"
+                className="w-5 h-5"
                 checked={!!purchased[w.name]}
                 onChange={() => togglePurchase(otherWeapons, w.name)}
               />
@@ -625,9 +637,13 @@ export default function Step8_Gear() {
         <TabsContent value="armor">
           <h3 className="text-white text-md mb-2">Armor</h3>
           {armors.map((a) => (
-            <label key={a.name} className="flex items-start space-x-2 text-white">
+            <label
+              key={a.name}
+              className="flex items-start space-x-2 text-white cursor-pointer"
+            >
               <input
                 type="checkbox"
+                className="w-5 h-5"
                 checked={!!purchased[a.name]}
                 onChange={() => togglePurchase(armors, a.name)}
               />
@@ -650,9 +666,13 @@ export default function Step8_Gear() {
                 {cat.replace(/([A-Z])/g, ' $1')}
               </h4>
               {gearItems[cat]?.map((g) => (
-                <label key={g.name} className="flex items-start space-x-2 text-white">
+                <label
+                  key={g.name}
+                  className="flex items-start space-x-2 text-white cursor-pointer"
+                >
                   <input
                     type="checkbox"
+                    className="w-5 h-5"
                     checked={!!purchased[g.name]}
                     onChange={() => togglePurchase(gearItems[cat], g.name)}
                   />
