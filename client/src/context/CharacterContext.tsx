@@ -49,6 +49,12 @@ export interface Complication {
   type?: string;
 }
 
+export interface WeaknessAllocation {
+  type: string;
+  target: string;
+  amount: number;
+}
+
 export interface GearItem {
   name: string;
   description: string;
@@ -96,6 +102,7 @@ export interface Character {
   gear: GearItem[];
   feats: Feat[];
   maneuvers: Maneuver[];
+  weaknessAllocations: WeaknessAllocation[];
   defense: number;
   toughness: number;
   fortitude: number;
@@ -150,6 +157,7 @@ export const createEmptyCharacter = (): Character => ({
   gear: [],
   feats: [],
   maneuvers: [],
+  weaknessAllocations: [],
   defense: 10,
   toughness: 0,
   fortitude: 0,

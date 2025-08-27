@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { motion } from "framer-motion";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -14,8 +14,14 @@ import maneuversData from "@/rules/maneuvers.json";
 import featsFallback from "@/rules/feats.json";
 
 const Step7_SkillsAndFeats = () => {
-  const { setSelectedSkillSets, setSelectedFeats, setSelectedManeuvers } =
-    useCharacterBuilder();
+  const {
+    selectedSkillSets,
+    selectedFeats,
+    selectedManeuvers,
+    setSelectedSkillSets,
+    setSelectedFeats,
+    setSelectedManeuvers,
+  } = useCharacterBuilder();
   const {
     character,
     setCurrentStep,
@@ -66,6 +72,79 @@ const Step7_SkillsAndFeats = () => {
   const [row1Maneuver, setRow1Maneuver] = useState<string>("");
   const [row2Maneuver, setRow2Maneuver] = useState<string>("");
   const [row3Maneuver, setRow3Maneuver] = useState<string>("");
+
+  useEffect(() => {
+    if (selectedSkillSets[0]) {
+      const name = selectedSkillSets[0].name;
+      if (skillSetOptions.includes(name)) {
+        setRow1SkillSet(name);
+      } else {
+        setRow1SkillSet("custom");
+        setRow1CustomSkill(name);
+      }
+    }
+    if (selectedSkillSets[1]) {
+      const name = selectedSkillSets[1].name;
+      if (skillSetOptions.includes(name)) {
+        setRow2SkillSet(name);
+      } else {
+        setRow2SkillSet("custom");
+        setRow2CustomSkill(name);
+      }
+    }
+    if (isSkillBased && selectedSkillSets[2]) {
+      const name = selectedSkillSets[2].name;
+      if (skillSetOptions.includes(name)) {
+        setRow3SkillSet(name);
+      } else {
+        setRow3SkillSet("custom");
+        setRow3CustomSkill(name);
+      }
+    }
+
+    if (selectedFeats[0]) {
+      setRow1Feat(selectedFeats[0].name);
+      if (selectedFeats[0].abilityChoices) {
+        setRow1Ability1(selectedFeats[0].abilityChoices[0] || "");
+        setRow1Ability2(selectedFeats[0].abilityChoices[1] || "");
+      }
+      if (selectedFeats[0].powerChoices) {
+        setRow1Power1(selectedFeats[0].powerChoices[0] || "");
+        setRow1Power2(selectedFeats[0].powerChoices[1] || "");
+      }
+    }
+    if (selectedFeats[1]) {
+      setRow2Feat(selectedFeats[1].name);
+      if (selectedFeats[1].abilityChoices) {
+        setRow2Ability1(selectedFeats[1].abilityChoices[0] || "");
+        setRow2Ability2(selectedFeats[1].abilityChoices[1] || "");
+      }
+      if (selectedFeats[1].powerChoices) {
+        setRow2Power1(selectedFeats[1].powerChoices[0] || "");
+        setRow2Power2(selectedFeats[1].powerChoices[1] || "");
+      }
+    }
+    if (isSkillBased && selectedFeats[2]) {
+      setRow3Feat(selectedFeats[2].name);
+      if (selectedFeats[2].abilityChoices) {
+        setRow3Ability1(selectedFeats[2].abilityChoices[0] || "");
+        setRow3Ability2(selectedFeats[2].abilityChoices[1] || "");
+      }
+      if (selectedFeats[2].powerChoices) {
+        setRow3Power1(selectedFeats[2].powerChoices[0] || "");
+        setRow3Power2(selectedFeats[2].powerChoices[1] || "");
+      }
+    }
+    if (selectedFeats[0]?.name === "Learn Combat Maneuver" && selectedManeuvers[0]) {
+      setRow1Maneuver(selectedManeuvers[0]);
+    }
+    if (selectedFeats[1]?.name === "Learn Combat Maneuver" && selectedManeuvers[1]) {
+      setRow2Maneuver(selectedManeuvers[1]);
+    }
+    if (isSkillBased && selectedFeats[2]?.name === "Learn Combat Maneuver" && selectedManeuvers[2]) {
+      setRow3Maneuver(selectedManeuvers[2]);
+    }
+  }, [isSkillBased, selectedSkillSets, selectedFeats, selectedManeuvers]);
 
   const maneuversSet = useMemo(() => {
     return new Set(allManeuvers.map((m: any) => m.name));
