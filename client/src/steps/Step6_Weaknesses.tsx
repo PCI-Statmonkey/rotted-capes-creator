@@ -31,14 +31,19 @@ import weaknessesData from "@/rules/weaknesses.json";
 import { displayFeatName } from "@/lib/utils";
 
 // Define weakness types
-type WeaknessType = 
-  | "Addiction" 
-  | "DarkSecret" 
-  | "Dependence" 
-  | "Dependent" 
-  | "DiminishedVitality" 
-  | "Enemy" 
-  | "Taboo" 
+type WeaknessType =
+  | "Addiction"
+  | "DarkSecret"
+  | "Dependence"
+  | "Dependent"
+  | "DiminishedVitality"
+  | "Enemy"
+  | "Taboo"
+  | "MentalCondition"
+  | "PhysicalCondition"
+  | "PhysicalVulnerabilities"
+  | "RavenousMetabolism"
+  | "StrangeAppearance"
   | "Custom";
 
 // Define weakness interface
@@ -178,18 +183,21 @@ export default function Step6_Weaknesses() {
   // Handle weakness type selection
   const handleWeaknessTypeChange = (type: WeaknessType) => {
     setSelectedWeaknessType(type);
-    
+
+    // Look up the display name from the data
+    const found = weaknessesData.find((w) => w.id === type);
+
     // Reset the form with appropriate defaults based on type
     let initialPoints = 0;
-    
+
     // Set initial points for simple weakness types
-    if (type === "DiminishedVitality") {
+    if (type === "DiminishedVitality" || type === "RavenousMetabolism") {
       initialPoints = 5;
     }
-    
+
     setNewWeakness({
       type,
-      name: type,
+      name: found ? found.name : type,
       description: "",
       points: initialPoints,
       details: {}
@@ -744,7 +752,51 @@ export default function Step6_Weaknesses() {
                   </div>
                 </div>
               )}
-              
+
+              {/* Generic form for other weakness types */}
+              {![
+                "Addiction",
+                "DarkSecret",
+                "Dependence",
+                "Dependent",
+                "DiminishedVitality",
+                "Enemy",
+                "Taboo",
+                "Custom",
+              ].includes(selectedWeaknessType) && (
+                <div className="space-y-3">
+                  <div>
+                    <label className="block text-sm mb-1">Description</label>
+                    <Textarea
+                      value={newWeakness.description}
+                      onChange={(e) =>
+                        setNewWeakness({ ...newWeakness, description: e.target.value })
+                      }
+                      placeholder={`Describe your character's ${newWeakness.name.toLowerCase()}...`}
+                      className="bg-gray-700"
+                      rows={3}
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm mb-1">Point Value</label>
+                    <Select
+                      onValueChange={(value) =>
+                        setNewWeakness({ ...newWeakness, points: parseInt(value) })
+                      }
+                    >
+                      <SelectTrigger className="bg-gray-700">
+                        <SelectValue placeholder="Select point value" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="5">Minor Weakness (5 points)</SelectItem>
+                        <SelectItem value="10">Moderate Weakness (10 points)</SelectItem>
+                        <SelectItem value="15">Major Weakness (15 points)</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
+              )}
+
               {/* Custom Weakness */}
               {selectedWeaknessType === "Custom" && (
                 <div className="space-y-3">

@@ -33,5 +33,30 @@
     "id": "Taboo",
     "name": "Taboo",
     "description": "Breaking a personal or cultural taboo has dire consequences for you."
+  },
+  {
+    "id": "MentalCondition",
+    "name": "Mental Condition",
+    "description": "Phobias, trauma, or cognitive limits hinder your mind."
+  },
+  {
+    "id": "PhysicalCondition",
+    "name": "Physical Condition",
+    "description": "Injuries or frail physiology restrict your body."
+  },
+  {
+    "id": "PhysicalVulnerabilities",
+    "name": "Physical Vulnerabilities",
+    "description": "Certain materials or environments bypass your defenses."
+  },
+  {
+    "id": "RavenousMetabolism",
+    "name": "Ravenous Metabolism",
+    "description": "You must eat frequently or suffer a reduced burnout threshold."
+  },
+  {
+    "id": "StrangeAppearance",
+    "name": "Strange Appearance",
+    "description": "An unsettling appearance provokes fear or fascination."
   }
 ]
