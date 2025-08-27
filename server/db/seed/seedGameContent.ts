@@ -160,17 +160,30 @@ async function runSeed() {
   console.log("🌱 Seeding gear...");
   // Clear existing gear to avoid stale or partial data
   await db.delete(gear);
-  for (const [category, items] of Object.entries(gearData as any)) {
-    if (!Array.isArray(items)) continue;
-    for (const item of items as any[]) {
+  if (Array.isArray(gearData)) {
+    for (const item of gearData as any[]) {
       await db.insert(gear).values({
         name: item.name,
         description: item.description || item.damage || "",
-        category,
+        category: item.category || "general",
         ap: item.ap ?? item.costAP ?? 0,
         tags: item.qualities || item.tags || item.ammo_type || [],
         batteryPowered: item.batteryPowered ?? false,
       }).onConflictDoNothing();
+    }
+  } else {
+    for (const [category, items] of Object.entries(gearData as any)) {
+      if (!Array.isArray(items)) continue;
+      for (const item of items as any[]) {
+        await db.insert(gear).values({
+          name: item.name,
+          description: item.description || item.damage || "",
+          category,
+          ap: item.ap ?? item.costAP ?? 0,
+          tags: item.qualities || item.tags || item.ammo_type || [],
+          batteryPowered: item.batteryPowered ?? false,
+        }).onConflictDoNothing();
+      }
     }
   }
 
