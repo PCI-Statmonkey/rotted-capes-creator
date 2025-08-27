@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useMemo } from "react";
 import { useCharacter } from "@/context/CharacterContext";
 import { useCharacterBuilder } from "@/lib/Stores/characterBuilder";
 import { Button } from "@/components/ui/button";
@@ -11,11 +11,45 @@ import { Check, Save, Shield, Heart, Target } from "lucide-react";
 import { apiRequest } from "@/lib/queryClient";
 import CharacterPdfButton from "@/components/CharacterPdfButton";
 import { parsePrerequisite, getMissingPrereqs, formatPrerequisite } from "@/utils/requirementValidator";
+import useCachedGameContent from "@/hooks/useCachedGameContent";
 
 export default function Step10_Summary() {
   const { character, updateCharacterField, saveCharacter } = useCharacter();
-  const { selectedSkillSets } = useCharacterBuilder();
+  const { selectedSkillSets, archetypeFeat } = useCharacterBuilder();
   const summaryRef = useRef<HTMLDivElement>(null);
+
+  // Gear data used to identify weapons
+  const { data: gearData = [] } = useCachedGameContent<any>("gear");
+
+  // Merge feats with any archetype bonus feat
+  const feats = useMemo(() => {
+    const list = [...character.feats];
+    if (typeof archetypeFeat === "string" && !list.some(f => f.name === archetypeFeat)) {
+      list.push({ name: archetypeFeat, source: "Archetype" });
+    }
+    return list;
+  }, [character.feats, archetypeFeat]);
+
+  // Determine weapons from gear list
+  const weaponNames = useMemo(() => {
+    const categories = ["firearms", "archaicWeapons", "meleeWeapons", "otherWeapons"];
+    return new Set(
+      (gearData as any[])
+        .filter(g => categories.includes(g.category))
+        .map(g => g.name)
+    );
+  }, [gearData]);
+
+  const weapons = useMemo(
+    () => character.gear.filter(g => weaponNames.has(g.description || g.name)),
+    [character.gear, weaponNames]
+  );
+
+  // Attack powers are powers with an attack or damage type
+  const attackPowers = useMemo(
+    () => character.powers.filter(p => (p as any).attack || p.damageType),
+    [character.powers]
+  );
 
   // Calculate derived stats
   const calculateDerivedStats = () => {
@@ -46,7 +80,7 @@ export default function Step10_Summary() {
     
     // Running pace is based on Dexterity modifier (min 1, max 5)
     // Quick feat grants an additional +1 to pace
-    const hasQuick = character.feats.some((f) => f.name === "Quick");
+    const hasQuick = feats.some((f) => f.name === "Quick");
     const runningPace = Math.min(Math.max(dexMod, 1), 5) + (hasQuick ? 1 : 0);
     
     return {
@@ -69,7 +103,7 @@ export default function Step10_Summary() {
     ),
     selectedSkills: [],
     startingSkills: [] as any[],
-    selectedFeats: character.feats,
+    selectedFeats: feats,
     selectedSkillSets,
     skillSets: [] as any[],
   };
@@ -94,7 +128,7 @@ export default function Step10_Summary() {
     const mockUserEmail = localStorage.getItem("mockUserEmail");
     const userId = 1; // TEMP: Replace with actual user lookup if needed
 
-    const { feats, powers, skills, gear, complications, ...base } = character;
+    const { powers, skills, gear, complications, ...base } = character;
 
     const payload = {
       userId,
@@ -395,7 +429,7 @@ export default function Step10_Summary() {
       </div>
       
       {/* Powers, Skill Sets, Gear */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
         {/* Powers Section */}
         <Card>
           <CardHeader className="py-3">
@@ -463,6 +497,49 @@ export default function Step10_Summary() {
           </CardContent>
         </Card>
         
+        {/* Attacks Section */}
+        <Card>
+          <CardHeader className="py-3">
+            <CardTitle className="flex items-center text-xl font-medium">
+              <span className="flex-1">Attacks</span>
+              <Badge variant="outline" className="ml-2">{weapons.length + attackPowers.length}</Badge>
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="max-h-96 overflow-y-auto">
+            {weapons.length > 0 && (
+              <div>
+                <Label className="text-xs text-gray-400">Weapons</Label>
+                <ul className="list-disc list-inside text-sm">
+                  {weapons.map((w, idx) => (
+                    <li key={idx}>{w.name}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
+            {attackPowers.length > 0 && (
+              <div className={weapons.length > 0 ? "mt-4" : ""}>
+                <Label className="text-xs text-gray-400">Powers</Label>
+                <ul className="list-disc list-inside text-sm">
+                  {attackPowers.map((p, idx) => (
+                    <li key={idx}>
+                      {p.name}
+                      {(p as any).attack && (
+                        <span className="text-xs text-gray-400"> ({(p as any).attack})</span>
+                      )}
+                      {!(p as any).attack && p.damageType && (
+                        <span className="text-xs text-gray-400"> ({p.damageType})</span>
+                      )}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+            {weapons.length === 0 && attackPowers.length === 0 && (
+              <div className="text-center py-6 text-gray-500">No attacks defined</div>
+            )}
+          </CardContent>
+        </Card>
+
         {/* Skill Sets and Gear */}
         <div className="space-y-6">
           <Card>
@@ -554,13 +631,13 @@ export default function Step10_Summary() {
           <CardHeader className="py-3">
             <CardTitle className="flex items-center text-xl font-medium">
               <span className="flex-1">Feats</span>
-              <Badge variant="outline" className="ml-2">{character.feats.length}</Badge>
+              <Badge variant="outline" className="ml-2">{feats.length}</Badge>
             </CardTitle>
           </CardHeader>
           <CardContent className="max-h-64 overflow-y-auto">
-            {character.feats.length > 0 ? (
+            {feats.length > 0 ? (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-                {character.feats.map((feat, index) => {
+                {feats.map((feat, index) => {
                   const prereqList = Array.isArray((feat as any).prerequisites)
                     ? (feat as any).prerequisites
                     : (feat as any).prerequisites
