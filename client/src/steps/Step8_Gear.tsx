@@ -151,9 +151,8 @@ export default function Step8_Gear() {
   const { selectedSkillSets, startingSkills, selectedSkills } = useCharacterBuilder();
   const { data: skillSets } = useCachedGameContent<any>('skill-sets');
 
-  const [currentTab, setCurrentTab] = useState("goBag");
+  const [currentTab, setCurrentTab] = useState("ranged");
   const [selectedGoBag, setSelectedGoBag] = useState<GoBagType | "">("");
-  const [hoveredGoBag, setHoveredGoBag] = useState<GoBagType | "">("");
   const [rangedWeapons, setRangedWeapons] = useState<Item[]>([]);
   const [firearms, setFirearms] = useState<Item[]>([]);
   const [archaicWeapons, setArchaicWeapons] = useState<Item[]>([]);
@@ -166,6 +165,137 @@ export default function Step8_Gear() {
   const [freeMeleeWeapon, setFreeMeleeWeapon] = useState<string>("");
   const [selectedMeleeExamples, setSelectedMeleeExamples] = useState<Record<string, string>>({});
   const [selectedAmmoTypes, setSelectedAmmoTypes] = useState<Record<string, string>>({});
+
+  const handleGoBagChange = (type: GoBagType | "") => {
+    if (!type) {
+      // remove any existing go-bag
+      const indices: number[] = [];
+      character.gear.forEach((item, idx) => {
+        if (item.starting && (item.name.startsWith("Go-Bag:") || item.description.includes("Go-Bag"))) {
+          indices.push(idx);
+        }
+      });
+      indices
+        .sort((a, b) => b - a)
+        .forEach((i) => removeGearItem(i));
+      setSelectedGoBag("");
+      return;
+    }
+
+    // clear previous bag and items
+    const indices: number[] = [];
+    character.gear.forEach((item, idx) => {
+      if (item.starting && item.name.startsWith("Go-Bag:")) indices.push(idx);
+      if (item.starting && item.description.includes("Go-Bag")) indices.push(idx);
+    });
+    Array.from(new Set(indices))
+      .sort((a, b) => b - a)
+      .forEach((i) => removeGearItem(i));
+
+    // add new bag
+    addGearItem({
+      name: `Go-Bag: ${goBags[type].name}`,
+      description: goBags[type].description,
+      starting: true,
+    });
+    goBags[type].items.forEach((it) =>
+      addGearItem({
+        name: it.name,
+        description: `Part of the ${goBags[type].name}`,
+        starting: true,
+        batteryPowered: it.batteryPowered,
+      })
+    );
+    setSelectedGoBag(type);
+  };
+
+  const handleRangedSelect = (name: string) => {
+    // remove old selection
+    if (freeRangedWeapon) {
+      const idx = character.gear.findIndex(
+        (g) => g.description === freeRangedWeapon && g.starting
+      );
+      if (idx !== -1) removeGearItem(idx);
+    }
+
+    if (!name) {
+      setFreeRangedWeapon("");
+      return;
+    }
+
+    const isFirearm = firearms.some((f) => f.name === name);
+    const item = (isFirearm ? firearms : archaicWeapons).find((i) => i.name === name);
+    if (!item) return;
+
+    const ammo = isFirearm
+      ? selectedAmmoTypes[name] || item.ammoType?.[0] || "varies"
+      : undefined;
+    if (isFirearm) {
+      setSelectedAmmoTypes((prev) => ({
+        ...prev,
+        [name]: ammo!,
+      }));
+    }
+
+    const displayName = isFirearm ? `${name} (${ammo})` : name;
+    addGearItem({
+      name: displayName,
+      description: name,
+      starting: true,
+      batteryPowered: item.batteryPowered,
+    });
+    setFreeRangedWeapon(name);
+  };
+
+  const handleMeleeSelect = (name: string) => {
+    // remove old selection
+    if (freeMeleeWeapon) {
+      const idx = character.gear.findIndex(
+        (g) => g.description === freeMeleeWeapon && g.starting
+      );
+      if (idx !== -1) removeGearItem(idx);
+    }
+
+    if (!name) {
+      setFreeMeleeWeapon("");
+      return;
+    }
+
+    const item = meleeWeapons.find((i) => i.name === name);
+    if (!item) return;
+
+    const example =
+      selectedMeleeExamples[name] || item.examples?.[0] || name;
+    setSelectedMeleeExamples((prev) => ({
+      ...prev,
+      [name]: example,
+    }));
+
+    addGearItem({
+      name: example,
+      description: name,
+      starting: true,
+      batteryPowered: item.batteryPowered,
+    });
+    setFreeMeleeWeapon(name);
+  };
+
+  const handleMeleeExampleChange = (name: string, example: string) => {
+    setSelectedMeleeExamples((prev) => ({ ...prev, [name]: example }));
+    const idx = character.gear.findIndex((g) => g.description === name);
+    if (idx !== -1) {
+      const starting = character.gear[idx].starting;
+      const item = meleeWeapons.find((m) => m.name === name);
+      removeGearItem(idx);
+      addGearItem({
+        name: example,
+        description: name,
+        starting,
+        ap: starting ? undefined : item?.ap,
+        batteryPowered: item?.batteryPowered,
+      });
+    }
+  };
 
   useEffect(() => {
     async function loadGear() {
@@ -284,54 +414,6 @@ export default function Step8_Gear() {
   const spentAp = Object.values(purchased).reduce((a, b) => a + b, 0);
   const remainingAp = baseAp + bonusAp - spentAp;
 
-  // -------- Starting Gear Handling --------
-  const toggleGoBag = (type: GoBagType) => {
-    if (selectedGoBag === type) {
-      // remove existing go-bag items
-      const indices: number[] = [];
-      character.gear.forEach((g, idx) => {
-        if (
-          g.starting &&
-          (g.name === `Go-Bag: ${goBags[type].name}` || g.description.includes(goBags[type].name))
-        ) {
-          indices.push(idx);
-        }
-      });
-      indices
-        .sort((a, b) => b - a)
-        .forEach((i) => removeGearItem(i));
-      setSelectedGoBag("");
-    } else {
-      // clear previous bag and its items
-      const indices: number[] = [];
-      character.gear.forEach((item, idx) => {
-        if (item.starting && item.name.startsWith("Go-Bag:")) indices.push(idx);
-        if (item.starting && item.description.includes("Go-Bag")) indices.push(idx);
-      });
-      Array.from(new Set(indices))
-        .sort((a, b) => b - a)
-        .forEach((i) => removeGearItem(i));
-
-      // add new bag
-      addGearItem({
-        name: `Go-Bag: ${goBags[type].name}`,
-        description: goBags[type].description,
-        starting: true,
-      });
-      goBags[type].items.forEach((it) =>
-        addGearItem({
-          name: it.name,
-          description: `Part of the ${goBags[type].name}`,
-          starting: true,
-          batteryPowered: it.batteryPowered,
-        })
-      );
-      setSelectedGoBag(type);
-    }
-  };
-
-
-
   // -------- Purchase Handling --------
   const togglePurchase = (collection: Item[], name: string) => {
     const item = collection.find((i) => i.name === name);
@@ -354,59 +436,91 @@ export default function Step8_Gear() {
     const item = collection.find((i) => i.name === name);
     if (!item) return;
 
+    if (isFirearm && !selectedAmmoTypes[name]) {
+      setSelectedAmmoTypes((prev) => ({
+        ...prev,
+        [name]: item.ammoType?.[0] || "varies",
+      }));
+    }
+
     const displayName = isFirearm
-      ? `${name} (${selectedAmmoTypes[name] || 'varies'})`
+      ? `${name} (${selectedAmmoTypes[name] || "varies"})`
       : name;
 
-    if (freeRangedWeapon === name) {
-      const idx = character.gear.findIndex((g) => g.description === name && g.starting);
-      if (idx !== -1) removeGearItem(idx);
-      setFreeRangedWeapon("");
-    } else if (purchased[name]) {
-      const idx = character.gear.findIndex((g) => g.description === name && !g.starting);
+    if (purchased[name]) {
+      const idx = character.gear.findIndex(
+        (g) => g.description === name && !g.starting
+      );
       if (idx !== -1) removeGearItem(idx);
       const newP = { ...purchased };
       delete newP[name];
       setPurchased(newP);
-    } else if (!freeRangedWeapon) {
-      addGearItem({ name: displayName, description: name, starting: true, batteryPowered: item.batteryPowered });
-      setFreeRangedWeapon(name);
     } else if (remainingAp >= item.ap) {
-      addGearItem({ name: displayName, description: name, ap: item.ap, batteryPowered: item.batteryPowered });
+      addGearItem({
+        name: displayName,
+        description: name,
+        ap: item.ap,
+        batteryPowered: item.batteryPowered,
+      });
       setPurchased({ ...purchased, [name]: item.ap });
     }
   };
 
   const handleAmmoChange = (name: string, ammo: string) => {
     setSelectedAmmoTypes((prev) => ({ ...prev, [name]: ammo }));
+    const idx = character.gear.findIndex((g) => g.description === name);
+    if (idx !== -1) {
+      const starting = character.gear[idx].starting;
+      const isFirearm = firearms.some((f) => f.name === name);
+      const item = (isFirearm ? firearms : archaicWeapons).find(
+        (i) => i.name === name
+      );
+      if (item) {
+        removeGearItem(idx);
+        addGearItem({
+          name: `${name} (${ammo})`,
+          description: name,
+          starting,
+          ap: starting ? undefined : item.ap,
+          batteryPowered: item.batteryPowered,
+        });
+      }
+    }
   };
 
   const toggleMelee = (name: string) => {
     const item = meleeWeapons.find((i) => i.name === name);
     if (!item) return;
-    const example = selectedMeleeExamples[name] || name;
+    const example = selectedMeleeExamples[name] || item.examples?.[0] || name;
 
-    if (freeMeleeWeapon === name) {
-      const idx = character.gear.findIndex((g) => g.description === name && g.starting);
-      if (idx !== -1) removeGearItem(idx);
-      setFreeMeleeWeapon("");
-    } else if (purchased[name]) {
-      const idx = character.gear.findIndex((g) => g.description === name && !g.starting);
+    if (purchased[name]) {
+      const idx = character.gear.findIndex(
+        (g) => g.description === name && !g.starting
+      );
       if (idx !== -1) removeGearItem(idx);
       const newP = { ...purchased };
       delete newP[name];
       setPurchased(newP);
-    } else if (!freeMeleeWeapon) {
-      addGearItem({ name: example, description: name, starting: true, batteryPowered: item.batteryPowered });
-      setFreeMeleeWeapon(name);
     } else if (remainingAp >= item.ap) {
-      addGearItem({ name: example, description: name, ap: item.ap, batteryPowered: item.batteryPowered });
+      setSelectedMeleeExamples((prev) => ({
+        ...prev,
+        [name]: example,
+      }));
+      addGearItem({
+        name: example,
+        description: name,
+        ap: item.ap,
+        batteryPowered: item.batteryPowered,
+      });
       setPurchased({ ...purchased, [name]: item.ap });
     }
   };
 
   const inventoryItems = character.gear;
   const hasBatteryItems = inventoryItems.some((it) => it.batteryPowered);
+
+  const selectedFirearm = firearms.find((f) => f.name === freeRangedWeapon);
+  const selectedMelee = meleeWeapons.find((m) => m.name === freeMeleeWeapon);
 
   const handleRemoveInventory = (index: number) => {
     const item = inventoryItems[index];
@@ -452,9 +566,114 @@ export default function Step8_Gear() {
         You may select one ranged weapon and one melee weapon for free along with a Go-Bag.
       </p>
 
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+        <div>
+          <label className="text-white text-sm mb-1 block">Go-Bag</label>
+          <Select value={selectedGoBag} onValueChange={(val) => handleGoBagChange(val as GoBagType | "")}>
+            <SelectTrigger className="w-full">
+              <SelectValue placeholder="Choose a Go-Bag" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="">None</SelectItem>
+              {Object.entries(goBags).map(([key, bag]) => (
+                <SelectItem key={key} value={key}>
+                  {bag.name}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+          {selectedGoBag && (
+            <div className="mt-2 text-xs text-gray-300 font-comic-light">
+              <p className="mb-1">{goBags[selectedGoBag].description}</p>
+              <ul className="list-disc pl-4">
+                {goBags[selectedGoBag].items.map((it) => (
+                  <li key={it.name}>
+                    {it.name}
+                    {it.batteryPowered && (
+                      <Battery className="inline w-4 h-4 text-yellow-400 ml-1" />
+                    )}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </div>
+
+        <div>
+          <label className="text-white text-sm mb-1 block">Ranged Weapon</label>
+          <Select value={freeRangedWeapon} onValueChange={handleRangedSelect}>
+            <SelectTrigger className="w-full">
+              <SelectValue placeholder="Choose a ranged weapon" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="">None</SelectItem>
+              {rangedWeapons.map((w) => (
+                <SelectItem key={w.name} value={w.name}>
+                  {w.name}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+          {selectedFirearm && selectedFirearm.ammoType && selectedFirearm.ammoType.length > 0 && (
+            <div className="mt-2">
+              <Select
+                value={selectedAmmoTypes[freeRangedWeapon]}
+                onValueChange={(val) => handleAmmoChange(freeRangedWeapon, val)}
+              >
+                <SelectTrigger className="w-full">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {selectedFirearm.ammoType.map((t) => (
+                    <SelectItem key={t} value={t}>
+                      {t}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          )}
+        </div>
+
+        <div>
+          <label className="text-white text-sm mb-1 block">Melee Weapon</label>
+          <Select value={freeMeleeWeapon} onValueChange={handleMeleeSelect}>
+            <SelectTrigger className="w-full">
+              <SelectValue placeholder="Choose a melee weapon" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="">None</SelectItem>
+              {meleeWeapons.map((m) => (
+                <SelectItem key={m.name} value={m.name}>
+                  {m.name}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+          {selectedMelee && selectedMelee.examples && selectedMelee.examples.length > 0 && (
+            <div className="mt-2">
+              <Select
+                value={selectedMeleeExamples[freeMeleeWeapon]}
+                onValueChange={(val) => handleMeleeExampleChange(freeMeleeWeapon, val)}
+              >
+                <SelectTrigger className="w-full">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {selectedMelee.examples.map((ex) => (
+                    <SelectItem key={ex} value={ex}>
+                      {ex}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          )}
+        </div>
+      </div>
+
       <Tabs value={currentTab} onValueChange={setCurrentTab} className="w-full">
         <TabsList className="mb-4 flex flex-wrap gap-2">
-          <TabsTrigger value="goBag">Go-Bag</TabsTrigger>
           <TabsTrigger value="ranged">Ranged Weapons</TabsTrigger>
           <TabsTrigger value="melee">Melee Weapons</TabsTrigger>
           <TabsTrigger value="other">Other Weapons</TabsTrigger>
@@ -462,52 +681,6 @@ export default function Step8_Gear() {
           <TabsTrigger value="gear">Gear</TabsTrigger>
           <TabsTrigger value="inventory">Inventory</TabsTrigger>
         </TabsList>
-
-        {/* Go-Bag */}
-        <TabsContent value="goBag">
-          <div className="flex gap-4">
-            <div className="w-1/2 space-y-2">
-              <h3 className="text-white text-md mb-2">Go-Bags</h3>
-              {Object.entries(goBags).map(([key, bag]) => (
-                <label
-                  key={key}
-                  className="flex items-start space-x-2 text-white cursor-pointer"
-                  onMouseEnter={() => setHoveredGoBag(key as GoBagType)}
-                  onMouseLeave={() => setHoveredGoBag("")}
-                >
-                  <input
-                    type="checkbox"
-                    className="w-5 h-5"
-                    checked={selectedGoBag === key}
-                    onChange={() => toggleGoBag(key as GoBagType)}
-                  />
-                  <span className="text-lg font-semibold">{bag.name}</span>
-                </label>
-              ))}
-            </div>
-            <div className="w-1/2">
-              {hoveredGoBag && (
-                <div className="bg-gray-700 p-3 rounded text-sm text-white">
-                  <p className="mb-1 font-semibold">{goBags[hoveredGoBag].name}</p>
-                  <p className="font-comic-light text-gray-300 mb-2">
-                    {goBags[hoveredGoBag].description}
-                  </p>
-                  <ul className="list-disc pl-4 text-gray-300 font-comic-light">
-                    {goBags[hoveredGoBag].items.map((it) => (
-                      <li key={it.name}>
-                        {it.name}
-                        {it.batteryPowered && (
-                          <Battery className="inline w-4 h-4 text-yellow-400 ml-1" />
-                        )}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              )}
-            </div>
-          </div>
-
-        </TabsContent>
 
         {/* Ranged Weapons */}
         <TabsContent value="ranged">
@@ -518,6 +691,7 @@ export default function Step8_Gear() {
                 <input
                   type="checkbox"
                   className="w-5 h-5"
+                  disabled={freeRangedWeapon === w.name}
                   checked={freeRangedWeapon === w.name || !!purchased[w.name]}
                   onChange={() => toggleRanged(w.name, true)}
                 />
@@ -554,6 +728,7 @@ export default function Step8_Gear() {
               <input
                 type="checkbox"
                 className="w-5 h-5"
+                disabled={freeRangedWeapon === w.name}
                 checked={freeRangedWeapon === w.name || !!purchased[w.name]}
                 onChange={() => toggleRanged(w.name)}
               />
@@ -576,6 +751,7 @@ export default function Step8_Gear() {
                 <input
                   type="checkbox"
                   className="w-5 h-5"
+                  disabled={freeMeleeWeapon === m.name}
                   checked={freeMeleeWeapon === m.name || !!purchased[m.name]}
                   onChange={() => toggleMelee(m.name)}
                 />
@@ -589,9 +765,7 @@ export default function Step8_Gear() {
               {(freeMeleeWeapon === m.name || !!purchased[m.name]) && m.examples && m.examples.length > 0 && (
                 <Select
                   value={selectedMeleeExamples[m.name]}
-                  onValueChange={(val) =>
-                    setSelectedMeleeExamples((prev) => ({ ...prev, [m.name]: val }))
-                  }
+                  onValueChange={(val) => handleMeleeExampleChange(m.name, val)}
                 >
                   <SelectTrigger className="bg-gray-700 w-32">
                     <SelectValue />
