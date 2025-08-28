@@ -16,6 +16,7 @@ import { getScoreData, formatModifier } from "@/lib/utils";
 import powersData from "@/rules/powers.json" with { type: "json" };
 import powerSetsData from "@/rules/powerSets.json" with { type: "json" };
 import powerModsData from "@/rules/powerMods.json" with { type: "json" };
+import archetypesData from "@/rules/archetypes.json" with { type: "json" };
 
 // Define the power sets
 interface PowerSet {
@@ -163,6 +164,12 @@ export default function Step5_Powers() {
   const [selectedPowers, setSelectedPowers] = useState<Power[]>([]);
   const [activeTab, setActiveTab] = useState<string>("powers");
 
+  const archetypeInfo = (archetypesData as any[]).find((a: any) => a.name === character.archetype);
+  const archetypeTypicalPowers: string[] = archetypeInfo?.typical_powers || [];
+  const archetypePowerBonusValue: number = archetypeInfo?.mechanics?.power_bonus?.value || 0;
+  const [archetypeBonusPower, setArchetypeBonusPower] = useState<string | null>(null);
+  const eligibleBonusPowers = selectedPowers.filter(p => archetypeTypicalPowers.includes(p.name));
+
   const totalBurnout = selectedPowers.reduce((sum, p) => sum + (p.burnout || 0) * (p.uses || 0), 0);
   useEffect(() => {
     updateCharacterField('currentBurnout', totalBurnout);
@@ -259,6 +266,15 @@ export default function Step5_Powers() {
       if (detectedSet) setSelectedPowerSet(detectedSet);
       if (detectedArray) setSelectedPowerArray(detectedArray);
       setActiveTab("powers");
+
+      if (archetypePowerBonusValue > 0) {
+        const bonusPower = loaded.find(p =>
+          archetypeTypicalPowers.includes(p.name) && p.finalScore === (p.score || 10) + archetypePowerBonusValue
+        );
+        if (bonusPower) {
+          setArchetypeBonusPower(bonusPower.name);
+        }
+      }
     }
   }, []);
   
@@ -419,13 +435,21 @@ export default function Step5_Powers() {
   const calculateFinalScore = (power: Power): number => {
     const flawBonus = power.flaws.reduce((total, flaw) => total + flaw.bonus, 0);
     const perkPenalty = power.perks.reduce((total, perk) => total + perk.bonus, 0);
-    
+    const bonus = power.name === archetypeBonusPower ? archetypePowerBonusValue : 0;
+
     const cap = getRankCap(character.rank);
-    const finalScore = Math.min(power.score + flawBonus + perkPenalty, cap);
-    
+    const finalScore = Math.min(power.score + flawBonus + perkPenalty + bonus, cap);
+
     // Ensure score doesn't go below 10
     return Math.max(finalScore, 10);
   };
+
+  useEffect(() => {
+    if (archetypeBonusPower && !selectedPowers.some(p => p.name === archetypeBonusPower)) {
+      setArchetypeBonusPower(null);
+    }
+    setSelectedPowers(prev => prev.map(p => ({ ...p, finalScore: calculateFinalScore(p) })));
+  }, [archetypeBonusPower, selectedPowers.length]);
 
   // Add a modifier to a power
   const togglePowerModifier = (powerIndex: number, modifierType: "flaws" | "perks", modifierName: string) => {
@@ -671,7 +695,11 @@ export default function Step5_Powers() {
     if (powerCreationMethod === "pointBuy" && calculatePointsSpent() > 32) {
       return false;
     }
-    
+
+    if (archetypePowerBonusValue > 0 && eligibleBonusPowers.length > 0 && !archetypeBonusPower) {
+      return false;
+    }
+
     return true;
   };
 
@@ -1564,8 +1592,31 @@ export default function Step5_Powers() {
           
         </Tabs>
 
+        {archetypePowerBonusValue > 0 && eligibleBonusPowers.length > 0 && (
+          <div className="mt-8 pt-4 border-t-2 border-gray-700">
+            <Label className="text-sm mb-2 block">
+              Archetype Power Bonus (+{archetypePowerBonusValue})
+            </Label>
+            <Select
+              value={archetypeBonusPower || ""}
+              onValueChange={(value) => setArchetypeBonusPower(value)}
+            >
+              <SelectTrigger className="w-[240px] bg-gray-800">
+                <SelectValue placeholder="Select a power" />
+              </SelectTrigger>
+              <SelectContent>
+                {eligibleBonusPowers.map(p => (
+                  <SelectItem key={p.name} value={p.name}>
+                    {p.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+        )}
+
         <div className="flex justify-between mt-8 pt-4 border-t-2 border-gray-700">
-          <Button 
+          <Button
             type="button"
             className="px-6 py-3 rounded-lg bg-gray-700 font-comic text-white hover:bg-gray-600 transition-colors"
             onClick={handlePrevious}
