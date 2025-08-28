@@ -32,8 +32,8 @@
     "batteryPowered": false
   },
   {
-    "name": "Handgun",
-    "description": "A reliable sidearm.",
+    "name": "Auto-Pistol",
+    "description": "Standard automatic handgun.",
     "category": "firearms",
     "ap": 2,
     "ammo_type": ["light"],
@@ -41,19 +41,211 @@
     "batteryPowered": false
   },
   {
-    "name": "Longbow",
-    "description": "Silent ranged weapon.",
-    "category": "archaicWeapons",
-    "ap": 2,
+    "name": "Revolver",
+    "description": "Reliable wheel gun.",
+    "category": "firearms",
+    "ap": 1,
+    "ammo_type": ["medium"],
     "tags": [],
     "batteryPowered": false
   },
   {
-    "name": "Machete",
-    "description": "Sturdy chopping blade.",
+    "name": "Semi-Auto",
+    "description": "Semi-automatic pistol.",
+    "category": "firearms",
+    "ap": 2,
+    "ammo_type": ["medium"],
+    "tags": [],
+    "batteryPowered": false
+  },
+  {
+    "name": "Heavy Revolver",
+    "description": "Large caliber revolver.",
+    "category": "firearms",
+    "ap": 2,
+    "ammo_type": ["heavy"],
+    "tags": [],
+    "batteryPowered": false
+  },
+  {
+    "name": "Heavy Semi-Auto",
+    "description": "High-powered semi-automatic handgun.",
+    "category": "firearms",
+    "ap": 4,
+    "ammo_type": ["heavy"],
+    "tags": [],
+    "batteryPowered": false
+  },
+  {
+    "name": "Hunting Rifle",
+    "description": "Standard hunting rifle.",
+    "category": "firearms",
+    "ap": 1,
+    "ammo_type": ["heavy"],
+    "tags": [],
+    "batteryPowered": false
+  },
+  {
+    "name": "Double Barrel Rifle",
+    "description": "Two-shot break-action rifle.",
+    "category": "firearms",
+    "ap": 2,
+    "ammo_type": ["medium"],
+    "tags": [],
+    "batteryPowered": false
+  },
+  {
+    "name": "Sniper Rifle",
+    "description": "Long-range precision rifle.",
+    "category": "firearms",
+    "ap": 4,
+    "ammo_type": ["heavy"],
+    "tags": [],
+    "batteryPowered": false
+  },
+  {
+    "name": "Assault Rifle",
+    "description": "Military style rifle.",
+    "category": "firearms",
+    "ap": 3,
+    "ammo_type": ["medium"],
+    "tags": [],
+    "batteryPowered": false
+  },
+  {
+    "name": "Light Machine Gun",
+    "description": "Portable squad automatic weapon.",
+    "category": "firearms",
+    "ap": 3,
+    "ammo_type": ["medium"],
+    "tags": [],
+    "batteryPowered": false
+  },
+  {
+    "name": "Heavy Machine Gun",
+    "description": "Crew served machine gun.",
+    "category": "firearms",
+    "ap": 4,
+    "ammo_type": ["heavy"],
+    "tags": [],
+    "batteryPowered": false
+  },
+  {
+    "name": "Double Barrel Shotgun",
+    "description": "Two-barrel shotgun.",
+    "category": "firearms",
+    "ap": 2,
+    "ammo_type": ["shells"],
+    "tags": [],
+    "batteryPowered": false
+  },
+  {
+    "name": "Hunting/Tactical Shotgun",
+    "description": "Pump or tactical shotgun.",
+    "category": "firearms",
+    "ap": 1,
+    "ammo_type": ["shells"],
+    "tags": [],
+    "batteryPowered": false
+  },
+  {
+    "name": "Assault Shotgun",
+    "description": "Automatic shotgun.",
+    "category": "firearms",
+    "ap": 3,
+    "ammo_type": ["shells"],
+    "tags": [],
+    "batteryPowered": false
+  },
+  {
+    "name": "Bow/Crossbow",
+    "description": "Simple ranged weapon.",
+    "category": "archaicWeapons",
+    "ap": 1,
+    "ammo_type": ["archaic"],
+    "tags": [],
+    "batteryPowered": false
+  },
+  {
+    "name": "Composite Bow",
+    "description": "Advanced bow design.",
+    "category": "archaicWeapons",
+    "ap": 2,
+    "ammo_type": ["archaic"],
+    "tags": [],
+    "batteryPowered": false
+  },
+  {
+    "name": "d4 Melee Weapon",
+    "description": "Light melee implements.",
     "category": "meleeWeapons",
     "ap": 1,
-    "examples": ["Machete", "Hatchet"],
+    "examples": [
+      "Pick/Screwdriver",
+      "Hunting Knife",
+      "Glass Shard",
+      "Shuriken",
+      "Throwing Knives"
+    ],
+    "tags": [],
+    "batteryPowered": false
+  },
+  {
+    "name": "d6 Melee Weapon",
+    "description": "One-handed melee weapons.",
+    "category": "meleeWeapons",
+    "ap": 1,
+    "examples": [
+      "Lead Pipe",
+      "Hammer",
+      "Hatchet",
+      "Ka-Bar",
+      "WW2 Trench Knife",
+      "Replica Katana"
+    ],
+    "tags": [],
+    "batteryPowered": false
+  },
+  {
+    "name": "d8 Melee Weapon",
+    "description": "Sturdy melee weapons.",
+    "category": "meleeWeapons",
+    "ap": 1,
+    "examples": [
+      "Bat",
+      "Fire Extinguisher",
+      "Ninja-To",
+      "Machete",
+      "Police Baton",
+      "Short Sword",
+      "Shovel",
+      "Spear",
+      "2x4",
+      "Authentic Katana"
+    ],
+    "tags": [],
+    "batteryPowered": false
+  },
+  {
+    "name": "d10 Melee Weapon",
+    "description": "Two-handed melee weapons.",
+    "category": "meleeWeapons",
+    "ap": 2,
+    "examples": [
+      "Claymore",
+      "Circular Saw",
+      "Fireman's Axe",
+      "Authentic Katana wielded with both hands"
+    ],
+    "tags": [],
+    "batteryPowered": false
+  },
+  {
+    "name": "d12 Melee Weapon",
+    "description": "Massive melee weapon.",
+    "category": "meleeWeapons",
+    "ap": 2,
+    "examples": ["Chainsaw (Running)"],
     "tags": [],
     "batteryPowered": false
   },
