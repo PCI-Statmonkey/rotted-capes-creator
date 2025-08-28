@@ -83,7 +83,7 @@ const ABILITIES = [
 ];
 
 export default function Step6_Weaknesses() {
-  const { character, updateCharacterField, updateAbilityScore, setCurrentStep, saveCharacter } = useCharacter();
+  const { character, updateCharacterField, updateAbilityScore, setCurrentStep } = useCharacter();
   const [selectedWeaknessType, setSelectedWeaknessType] = useState<WeaknessType | "">("");
   const [newWeakness, setNewWeakness] = useState<Weakness>({
     type: "Custom",
@@ -134,19 +134,17 @@ export default function Step6_Weaknesses() {
 
   // Handle going to previous step
   const handlePrevious = () => {
-    // Save progress and navigate to previous step - Powers
-    saveCharacter();
-    window.location.href = "/creator/powers";
+    // Navigate to previous step - Powers
+    setCurrentStep(5);
   };
 
   // Handle going to next step
   const handleContinue = () => {
     // Track the event in analytics
     trackEvent('complete_step', 'character_creation', 'weaknesses');
-    
-    // Save progress and navigate to next step - Skills & Feats
-    saveCharacter();
-    window.location.href = "/creator/skillsfeats";
+
+    // Navigate to next step - Skills & Feats
+    setCurrentStep(7);
   };
 
   // Add a weakness to the character
