@@ -569,12 +569,17 @@ export default function Step8_Gear() {
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
         <div>
           <label className="text-white text-sm mb-1 block">Go-Bag</label>
-          <Select value={selectedGoBag} onValueChange={(val) => handleGoBagChange(val as GoBagType | "")}>
+          <Select
+            value={selectedGoBag}
+            onValueChange={(val) =>
+              handleGoBagChange(val === "none" ? "" : (val as GoBagType))
+            }
+          >
             <SelectTrigger className="w-full">
               <SelectValue placeholder="Choose a Go-Bag" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="">None</SelectItem>
+              <SelectItem value="none">None</SelectItem>
               {Object.entries(goBags).map(([key, bag]) => (
                 <SelectItem key={key} value={key}>
                   {bag.name}
@@ -601,12 +606,15 @@ export default function Step8_Gear() {
 
         <div>
           <label className="text-white text-sm mb-1 block">Ranged Weapon</label>
-          <Select value={freeRangedWeapon} onValueChange={handleRangedSelect}>
+          <Select
+            value={freeRangedWeapon}
+            onValueChange={(val) => handleRangedSelect(val === "none" ? "" : val)}
+          >
             <SelectTrigger className="w-full">
               <SelectValue placeholder="Choose a ranged weapon" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="">None</SelectItem>
+              <SelectItem value="none">None</SelectItem>
               {rangedWeapons.map((w) => (
                 <SelectItem key={w.name} value={w.name}>
                   {w.name}
@@ -637,12 +645,15 @@ export default function Step8_Gear() {
 
         <div>
           <label className="text-white text-sm mb-1 block">Melee Weapon</label>
-          <Select value={freeMeleeWeapon} onValueChange={handleMeleeSelect}>
+          <Select
+            value={freeMeleeWeapon}
+            onValueChange={(val) => handleMeleeSelect(val === "none" ? "" : val)}
+          >
             <SelectTrigger className="w-full">
               <SelectValue placeholder="Choose a melee weapon" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="">None</SelectItem>
+              <SelectItem value="none">None</SelectItem>
               {meleeWeapons.map((m) => (
                 <SelectItem key={m.name} value={m.name}>
                   {m.name}
