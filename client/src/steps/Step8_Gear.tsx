@@ -1,7 +1,5 @@
 import { useState, useEffect } from "react";
 import { useCharacter } from "@/context/CharacterContext";
-import { useCharacterBuilder } from "@/lib/Stores/characterBuilder";
-import useCachedGameContent from "@/hooks/useCachedGameContent";
 import { Battery } from "lucide-react";
 import {
   Tabs,
@@ -148,8 +146,6 @@ const bonusApFeats = [
 
 export default function Step8_Gear() {
   const { character, addGearItem, removeGearItem } = useCharacter();
-  const { selectedSkillSets, startingSkills, selectedSkills } = useCharacterBuilder();
-  const { data: skillSets } = useCachedGameContent<any>('skill-sets');
 
   const [currentTab, setCurrentTab] = useState("ranged");
   const [selectedGoBag, setSelectedGoBag] = useState<GoBagType | "">("");
@@ -365,51 +361,8 @@ export default function Step8_Gear() {
     }, 0);
   };
 
-  // Helper to check if a skill is trained, falling back to builder state
-  const hasTrainedSkill = (name: string) => {
-    const lower = name.toLowerCase();
-    if (character.skills.some((s) => s.name.toLowerCase() === lower && s.trained)) {
-      return true;
-    }
-
-    const setSkills = selectedSkillSets.flatMap((setEntry) => {
-      const setName = typeof setEntry === 'string' ? setEntry : setEntry.name;
-      const found = skillSets.find((s) => s.name === setName);
-      return (
-        found?.skills?.map((sk: any) => (typeof sk === 'string' ? sk : sk.name)) || []
-      );
-    });
-
-    const builderSkills = [
-      ...startingSkills,
-      ...selectedSkills.map((s) => s.name),
-      ...setSkills,
-    ];
-
-    return builderSkills.map((s) => s.toLowerCase()).includes(lower);
-  };
-
-  // Determine starting AP based on trained skills
-  const calculateBaseAp = () => {
-    const scavengeEntry = character.skills.find(
-      (s) => s.name.toLowerCase() === 'scavenge' && s.trained
-    );
-    const urbanEntry = character.skills.find(
-      (s) => s.name.toLowerCase() === 'urban survival' && s.trained
-    );
-
-    const scavenge = hasTrainedSkill('scavenge');
-    const urban = hasTrainedSkill('urban survival');
-
-    const scavengeExpert = scavengeEntry && scavengeEntry.ranks >= 6;
-    const urbanExpert = urbanEntry && urbanEntry.ranks >= 6;
-
-    if ((scavenge && urban) || scavengeExpert || urbanExpert) return 6;
-    if (scavenge || urban) return 3;
-    return 0;
-  };
-
-  const baseAp = calculateBaseAp();
+  // Heroes start with a flat 4 AP for equipment
+  const baseAp = 4;
   const bonusAp = calculateBonusAp();
   const spentAp = Object.values(purchased).reduce((a, b) => a + b, 0);
   const remainingAp = baseAp + bonusAp - spentAp;
