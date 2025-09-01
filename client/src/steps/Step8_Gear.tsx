@@ -361,8 +361,8 @@ export default function Step8_Gear() {
     }, 0);
   };
 
-  // Heroes start with a flat 4 AP for equipment
-  const baseAp = 4;
+  // Heroes start with a flat 3 AP for equipment
+  const baseAp = 3;
   const bonusAp = calculateBonusAp();
   const spentAp = Object.values(purchased).reduce((a, b) => a + b, 0);
   const remainingAp = baseAp + bonusAp - spentAp;
