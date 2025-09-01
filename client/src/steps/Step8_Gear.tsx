@@ -575,7 +575,7 @@ export default function Step8_Gear() {
               ))}
             </SelectContent>
           </Select>
-          {selectedFirearm && selectedFirearm.ammoType && selectedFirearm.ammoType.length > 0 && (
+          {selectedFirearm && selectedFirearm.ammoType && selectedFirearm.ammoType.length > 1 && (
             <div className="mt-2">
               <Select
                 value={selectedAmmoTypes[freeRangedWeapon]}
@@ -614,7 +614,7 @@ export default function Step8_Gear() {
               ))}
             </SelectContent>
           </Select>
-          {selectedMelee && selectedMelee.examples && selectedMelee.examples.length > 0 && (
+          {selectedMelee && selectedMelee.examples && selectedMelee.examples.length > 1 && (
             <div className="mt-2">
               <Select
                 value={selectedMeleeExamples[freeMeleeWeapon]}
@@ -655,8 +655,7 @@ export default function Step8_Gear() {
                 <input
                   type="checkbox"
                   className="w-5 h-5"
-                  disabled={freeRangedWeapon === w.name}
-                  checked={freeRangedWeapon === w.name || !!purchased[w.name]}
+                  checked={!!purchased[w.name]}
                   onChange={() => toggleRanged(w.name, true)}
                 />
                 <span>
@@ -666,7 +665,7 @@ export default function Step8_Gear() {
                   )}
                 </span>
               </label>
-              {(freeRangedWeapon === w.name || !!purchased[w.name]) && w.ammoType && w.ammoType.length > 0 && (
+              {!!purchased[w.name] && w.ammoType && w.ammoType.length > 1 && (
                 <Select
                   value={selectedAmmoTypes[w.name]}
                   onValueChange={(val) => handleAmmoChange(w.name, val)}
@@ -692,8 +691,7 @@ export default function Step8_Gear() {
               <input
                 type="checkbox"
                 className="w-5 h-5"
-                disabled={freeRangedWeapon === w.name}
-                checked={freeRangedWeapon === w.name || !!purchased[w.name]}
+                checked={!!purchased[w.name]}
                 onChange={() => toggleRanged(w.name)}
               />
               <span>
@@ -715,8 +713,7 @@ export default function Step8_Gear() {
                 <input
                   type="checkbox"
                   className="w-5 h-5"
-                  disabled={freeMeleeWeapon === m.name}
-                  checked={freeMeleeWeapon === m.name || !!purchased[m.name]}
+                  checked={!!purchased[m.name]}
                   onChange={() => toggleMelee(m.name)}
                 />
                 <span>
@@ -726,7 +723,7 @@ export default function Step8_Gear() {
                   )}
                 </span>
               </label>
-              {(freeMeleeWeapon === m.name || !!purchased[m.name]) && m.examples && m.examples.length > 0 && (
+              {!!purchased[m.name] && m.examples && m.examples.length > 1 && (
                 <Select
                   value={selectedMeleeExamples[m.name]}
                   onValueChange={(val) => handleMeleeExampleChange(m.name, val)}
