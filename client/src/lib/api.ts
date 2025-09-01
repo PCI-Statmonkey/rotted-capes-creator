@@ -96,21 +96,23 @@ export const getAnalyticsSummary = async (): Promise<any> => {
 export const getGameContent = async (contentType: string): Promise<any[]> => {
   try {
     const response = await apiRequest('GET', `/api/game-content/${contentType}`);
-    
-    if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(errorData.message || `Failed to fetch ${contentType}`);
+    const data = await response.json();
+
+    // If the server returns no data, fall back to sample content
+    if (Array.isArray(data) && data.length === 0) {
+      usingFallbackData = true;
+      return getSampleData(contentType);
     }
 
     // Reset fallback flag if we successfully got data
     usingFallbackData = false;
-    return await response.json();
+    return data;
   } catch (error) {
     console.error(`Failed to fetch ${contentType}:`, error);
-    
+
     // Set flag so UI can show appropriate messaging
     usingFallbackData = true;
-    
+
     // Return sample data as fallback
     return getSampleData(contentType);
   }
