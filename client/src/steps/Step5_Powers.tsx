@@ -278,13 +278,16 @@ export default function Step5_Powers() {
     }
   }, []);
   
-  // Find eligible power sets based on character's archetype
-  const eligiblePowerSets = POWER_SETS.filter(set => 
-    !set.requiredArchetypes || set.requiredArchetypes.includes(character.archetype)
+  // Find power sets that match the character's archetype (case-insensitive)
+  const eligiblePowerSets = POWER_SETS.filter(set =>
+    !set.requiredArchetypes ||
+    set.requiredArchetypes.some(
+      a => a.toLowerCase() === character.archetype.toLowerCase()
+    )
   );
 
-  // We'll always have power sets available with the generic ones
-  const hasPowerSets = true;
+  // Determine if any power sets are available
+  const hasPowerSets = eligiblePowerSets.length > 0;
   
   // Update power creation method if current selection is invalid
   useEffect(() => {
