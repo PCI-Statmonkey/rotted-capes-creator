@@ -441,7 +441,6 @@ export const sampleGear = [
     batteryPowered: false,
   },
   {
-  {
     id: 22,
     name: "Ballistic Vest",
     description: "Standard Kevlar vest offering solid ballistic protection.",
