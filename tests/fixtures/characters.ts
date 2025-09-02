@@ -47,5 +47,5 @@ export const rankCapFixture = {
   rank: 2,
   rankBonus: 2,
   burnoutThreshold: 10,
-  powers: [{ name: 'Flight', rank: 50, burnout: 5, uses: 1 }]
+  powers: [{ name: 'Flight', rank: 50, burnout: 5 }]
 };

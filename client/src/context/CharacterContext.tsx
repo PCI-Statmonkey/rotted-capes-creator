@@ -37,7 +37,6 @@ export interface Power {
   ability?: string;
   linkedPowers?: string[];
   burnout?: number;
-  uses?: number;
   perks: string[];
   flaws: string[];
 }
