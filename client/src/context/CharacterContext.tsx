@@ -69,6 +69,7 @@ export interface Feat {
   abilityChoices?: (keyof Abilities)[];
   powerChoices?: string[];
   powerTrick?: string;
+  emulatedPower?: { parent: string; name: string };
 }
 
 export interface Maneuver {

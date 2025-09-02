@@ -677,6 +677,11 @@ export default function Step10_Summary() {
                         {feat.powerTrick && (
                           <span className="text-sm text-gray-400"> — {feat.powerTrick}</span>
                         )}
+                        {feat.emulatedPower && (
+                          <span className="text-sm text-gray-400">
+                            {" "}— {feat.emulatedPower.name}
+                          </span>
+                        )}
                       </div>
                       {feat.source && (
                         <div className="text-xs text-gray-400">Source: {feat.source}</div>

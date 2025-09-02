@@ -34,6 +34,7 @@
   {
     "name": "Power Trick: Copy Skill Set",
     "description": "**Power:** Adoptive Muscle Memory  **Action:** Enclave Interlude ** Cost:** +2 Burnout to recall  **Effect:** You may commit an entire Skill Set’s physical application to memory by studying it extensively. This counts as **2 memorized slots** toward your total.  \\</Side Bar\\>",
+    "tags": ["Adoptive Muscle Memory"],
     "hasDamageType": false,
     "hasTarget": false,
     "skillCompatible": false,
@@ -178,6 +179,7 @@
   {
     "name": "Power Trick: Reflection",
     "description": "**Powers:** Deflection  **Cost:** +5 Burnout  **Attack:** Avoidance  **Effect:** When you successfully deflect an incoming attack, you may reflect that damage to any creature within range of the attacking power with a successful attack roll.  \\</Side Bar\\>",
+    "tags": ["Deflection"],
     "hasDamageType": false,
     "hasTarget": false,
     "skillCompatible": false,
@@ -258,6 +260,7 @@
   {
     "name": "Power Trick: Energy Burst",
     "description": "**Powers:** Energy Blast, Energy Manipulation  **Cost:** +3 Burnout  **Effect:** A Hero can opt for a burst effect targeting everyone in a single area rather than a single target. Every person within the burst, friend, and foe, is affected by the burst as if they were personally attacked.",
+    "tags": ["Energy Blast", "Energy Manipulation"],
     "hasDamageType": false,
     "hasTarget": false,
     "skillCompatible": false,
@@ -266,6 +269,7 @@
   {
     "name": "Power Trick: Rapid Blast",
     "description": "**Powers:** Energy Blast  **Cost:** +4 Burnout  **Effect:** After attacking with your energy blast, you may make another attack against any target within range as a bonus action.  \\</sidebar\\>",
+    "tags": ["Energy Blast"],
     "hasDamageType": false,
     "hasTarget": false,
     "skillCompatible": false,
@@ -386,6 +390,7 @@
   {
     "name": "Power Trick: Thermal Updraft",
     "description": "**Powers:** Glide  **Cost:** 2 Burnout  **Effect:** While gliding, paying 2 Burnout, you can use your gliding ability to catch and ride thermal updrafts, gaining 1 area of altitude, allowing you to remain aloft for longer periods of time.  \\</Sidebar\\>",
+    "tags": ["Glide"],
     "hasDamageType": false,
     "hasTarget": false,
     "skillCompatible": false,
@@ -594,6 +599,7 @@
   {
     "name": "Power Trick: Psychic Scream",
     "description": "**Powers:** Psychic Attack  **Cost:** +3 Burnout  **Effect:** A Hero can attack all the minds in an adjacent area rather than attack a single mind.  \\</sidebar\\>",
+    "tags": ["Psychic Attack"],
     "hasDamageType": false,
     "hasTarget": false,
     "skillCompatible": false,
