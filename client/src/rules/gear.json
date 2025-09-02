@@ -250,10 +250,106 @@
     "batteryPowered": false
   },
   {
-    "name": "Grenade",
-    "description": "Explosive device.",
+    "name": "Grenade Launcher",
+    "description": "Shoulder-fired launcher for grenades.",
     "category": "otherModernWeapons",
-    "ap": 3,
+    "ap": 4,
+    "tags": [],
+    "batteryPowered": false
+  },
+  {
+    "name": "Flare Gun",
+    "description": "Signal pistol firing bright flares.",
+    "category": "otherModernWeapons",
+    "ap": 1,
+    "tags": [],
+    "batteryPowered": false
+  },
+  {
+    "name": "Flamethrower",
+    "description": "Projects a stream of ignited fuel.",
+    "category": "otherModernWeapons",
+    "ap": 4,
+    "tags": [],
+    "batteryPowered": false
+  },
+  {
+    "name": "Stun Gun/Taser",
+    "description": "Delivers an incapacitating electric shock.",
+    "category": "otherModernWeapons",
+    "ap": 1,
+    "tags": [],
+    "batteryPowered": false
+  },
+  {
+    "name": "Molotov Cocktail",
+    "description": "Improvised incendiary explosive.",
+    "category": "otherModernWeapons",
+    "ap": 1,
+    "tags": [],
+    "batteryPowered": false
+  },
+  {
+    "name": "Fragmentation Grenade",
+    "description": "Explosive that scatters shrapnel.",
+    "category": "otherModernWeapons",
+    "ap": 2,
+    "tags": [],
+    "batteryPowered": false
+  },
+  {
+    "name": "Flashbang Grenade",
+    "description": "Produces a blinding flash and deafening bang.",
+    "category": "otherModernWeapons",
+    "ap": 2,
+    "tags": [],
+    "batteryPowered": false
+  },
+  {
+    "name": "Concussion Grenade",
+    "description": "Creates a powerful shockwave on detonation.",
+    "category": "otherModernWeapons",
+    "ap": 2,
+    "tags": [],
+    "batteryPowered": false
+  },
+  {
+    "name": "Incendiary Grenade",
+    "description": "Grenade that spreads fire on detonation.",
+    "category": "otherModernWeapons",
+    "ap": 2,
+    "tags": [],
+    "batteryPowered": false
+  },
+  {
+    "name": "Tear-Gas Grenade",
+    "description": "Grenade dispersing irritant gas.",
+    "category": "otherModernWeapons",
+    "ap": 2,
+    "tags": [],
+    "batteryPowered": false
+  },
+  {
+    "name": "Knock-Out Gas Grenade",
+    "description": "Releases sleep-inducing gas.",
+    "category": "otherModernWeapons",
+    "ap": 2,
+    "tags": [],
+    "batteryPowered": false
+  },
+  {
+    "name": "Poison Gas Grenade",
+    "description": "Filled with lethal chemical agents.",
+    "category": "otherModernWeapons",
+    "ap": 2,
+    "tags": [],
+    "batteryPowered": false
+  },
+  {
+    "name": "Smoke Grenade",
+    "description": "Creates a thick smoke screen.",
+    "category": "otherModernWeapons",
+    "ap": 1,
     "tags": [],
     "batteryPowered": false
   },
