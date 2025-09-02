@@ -4,6 +4,7 @@ import { ArrowLeft, ArrowRight, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useCharacter } from "@/context/CharacterContext";
 import { useCharacterBuilder } from "@/lib/Stores/characterBuilder";
 import { trackEvent } from "@/lib/analytics";
@@ -24,12 +25,15 @@ export default function Step3_Archetype() {
   const { character, updateCharacterField, setCurrentStep } = useCharacter();
   const { setArchetypeFeat } = useCharacterBuilder();
   const [selectedArchetype, setSelectedArchetype] = useState<string>(character.archetype || "");
+  const [selectedFeatChoice, setSelectedFeatChoice] = useState<string>("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [featError, setFeatError] = useState<string | null>(null);
+
 
   const handleContinue = () => {
     if (selectedArchetype) {
-      const selectedData = archetypesData.find(a => a.name === selectedArchetype);
+      const selectedData = selectedArchetypeData;
 
       updateCharacterField('archetype', selectedArchetype);
 
@@ -44,8 +48,19 @@ export default function Step3_Archetype() {
           }
           setArchetypeFeat(selectedData.freeFeat);
         } else if (selectedData.featChoices) {
-          setArchetypeFeat(selectedData.featChoices);
+          if (!selectedFeatChoice) {
+            setFeatError('Please select a free feat option.');
+            return;
+          }
+          if (!character.feats.some(f => f.name === selectedFeatChoice)) {
+            updateCharacterField('feats', [
+              ...character.feats,
+              { name: selectedFeatChoice, source: 'Archetype' },
+            ]);
+          }
+          setArchetypeFeat(selectedFeatChoice);
         }
+        setFeatError(null);
       }
 
       // Track the selection in analytics
@@ -120,6 +135,9 @@ export default function Step3_Archetype() {
     }
   ];
 
+  const selectedArchetypeData = archetypesData.find(a => a.name === selectedArchetype);
+  const requiresFeatChoice = !!selectedArchetypeData?.featChoices?.length;
+
   return (
     <motion.div 
       className="bg-panel rounded-2xl p-6 comic-border overflow-hidden halftone-bg"
@@ -151,7 +169,11 @@ export default function Step3_Archetype() {
                   selectedArchetype === archetype.name ? "border-2 border-accent shadow-lg" : "",
                   selectedArchetype && selectedArchetype !== archetype.name ? "opacity-50" : ""
                 )}
-                onClick={() => setSelectedArchetype(archetype.name)}
+                onClick={() => {
+                  setSelectedArchetype(archetype.name);
+                  setSelectedFeatChoice("");
+                  setFeatError(null);
+                }}
               >
                 {/* Archetype Image */}
                 <div className="relative">
@@ -212,18 +234,33 @@ export default function Step3_Archetype() {
                     {/* Feat Choices */}
                     {archetype.featChoices && (
                       <div className="space-y-1">
-                        <h4 className="text-sm font-medium text-gray-300">Feat Options:</h4>
-                        <div className="flex flex-wrap gap-2">
-                          {archetype.featChoices.map((feat, index) => (
-                            <Badge
-                              key={index}
-                              variant={selectedArchetype === archetype.name ? "secondary" : "outline"}
-                              className="font-medium"
-                            >
-                              {feat}
-                            </Badge>
-                          ))}
-                        </div>
+                        <h4 className="text-sm font-medium text-gray-300">Free Feat:</h4>
+                        {selectedArchetype === archetype.name ? (
+                          <Select value={selectedFeatChoice} onValueChange={(v) => { setSelectedFeatChoice(v); setFeatError(null); }}>
+                            <SelectTrigger className="w-full">
+                              <SelectValue placeholder="Select feat" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              {archetype.featChoices.map((feat) => (
+                                <SelectItem key={feat} value={feat}>
+                                  {feat}
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                        ) : (
+                          <div className="flex flex-wrap gap-2">
+                            {archetype.featChoices.map((feat, index) => (
+                              <Badge
+                                key={index}
+                                variant={selectedArchetype === archetype.name ? "secondary" : "outline"}
+                                className="font-medium"
+                              >
+                                {feat}
+                              </Badge>
+                            ))}
+                          </div>
+                        )}
                       </div>
                     )}
                   </div>
@@ -232,6 +269,9 @@ export default function Step3_Archetype() {
             ))}
           </div>
 
+          {featError && (
+            <div className="text-red-500 text-center">{featError}</div>
+          )}
           <div className="flex justify-between mt-8 pt-4 border-t-2 border-gray-700">
             <Button 
               type="button"
@@ -240,11 +280,11 @@ export default function Step3_Archetype() {
             >
               <ArrowLeft className="mr-2 h-5 w-5" /> Previous
             </Button>
-            <Button 
+            <Button
               type="button"
               className="px-6 py-3 rounded-lg bg-accent font-comic text-white hover:bg-red-700 transition-colors shadow-lg"
               onClick={handleContinue}
-              disabled={!selectedArchetype}
+              disabled={!selectedArchetype || (requiresFeatChoice && !selectedFeatChoice)}
             >
               Next <ArrowRight className="ml-2 h-5 w-5" />
             </Button>
