@@ -324,22 +324,25 @@ const Step7_SkillsAndFeats = () => {
     // Remove previous ability and power score increases
     const abilities = { ...character.abilities } as Record<string, any>;
     const powers = character.powers.map((p) => ({ ...p }));
-    character.feats.forEach((f: any) => {
-      if (f.name === "Ability Score Increase" && f.abilityChoices) {
-        f.abilityChoices.forEach((ab: string) => {
-          abilities[ab].value -= 1;
-        });
-      }
-      if (f.name.startsWith("Power Score Increase") && f.powerChoices) {
-        f.powerChoices.forEach((pc: string) => {
-          const power = powers.find((p) => p.name === pc);
-          if (power) {
-            const score = power.finalScore ?? power.score ?? 10;
-            power.finalScore = Math.max(0, score - 1);
-          }
-        });
-      }
-    });
+    // Roll back previous Step 7 ability and power increases
+    character.feats
+      .filter((f: any) => !f.source)
+      .forEach((f: any) => {
+        if (f.name === "Ability Score Increase" && f.abilityChoices) {
+          f.abilityChoices.forEach((ab: string) => {
+            abilities[ab].value -= 1;
+          });
+        }
+        if (f.name.startsWith("Power Score Increase") && f.powerChoices) {
+          f.powerChoices.forEach((pc: string) => {
+            const power = powers.find((p) => p.name === pc);
+            if (power) {
+              const score = power.finalScore ?? power.score ?? 10;
+              power.finalScore = Math.max(0, score - 1);
+            }
+          });
+        }
+      });
 
     // Apply new ability and power score increases
     featsSelected.forEach((f) => {
@@ -368,7 +371,7 @@ const Step7_SkillsAndFeats = () => {
     setSelectedFeats(featsSelected as any);
     setSelectedManeuvers(maneuversSelected.map((m) => m.name));
     // Preserve existing feats (such as those from archetypes or weaknesses)
-    const mergedFeats = [...(character.feats as any[])];
+    const mergedFeats = (character.feats as any[]).filter((f) => f.source);
     (featsSelected as any[]).forEach((f) => {
       if (!mergedFeats.some((existing) => existing.name === f.name)) {
         mergedFeats.push(f);
