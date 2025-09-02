@@ -118,15 +118,18 @@ const POWER_COST_TABLE: { score: number; cost: number }[] = [
   { score: 20, cost: 18 }
 ];
 
-// Complete list of powers (excluding power tricks and stunts)
+// Complete list of powers (excluding tricks, stunts, perks, and flaws)
 const isPowerTrick = (name: string) => /power (trick|stunt)/i.test(name);
+const isValidPowerName = (name: string) =>
+  !isPowerTrick(name) && !/(perk|flaw|sidebar|editor)/i.test(name);
 const ALL_POWERS = (powersData as any[])
-  .filter((p: any) => !isPowerTrick(p.name))
-  .map((p: any) => p.name);
+  .map((p: any) => p.name)
+  .filter(isValidPowerName)
+  .sort((a: string, b: string) => a.localeCompare(b));
 
 const powerDataMap = new Map(
   (powersData as any[])
-    .filter((p: any) => !isPowerTrick(p.name))
+    .filter((p: any) => isValidPowerName(p.name))
     .map((p: any) => [p.name, p])
 );
 
@@ -1084,8 +1087,9 @@ export default function Step5_Powers() {
                                 </SelectTrigger>
                                 <SelectContent className="max-h-[300px]">
                                   {ALL_POWERS.map(powerName => (
-                                    <SelectItem key={powerName} value={powerName}>
-                                      <span className="text-red-500">{powerName}</span>{ALL_SKILL_COMPATIBLE.includes(powerName) && " (all skill capable)"}
+                                    <SelectItem key={powerName} value={powerName} className="text-white">
+                                      {powerName}
+                                      {ALL_SKILL_COMPATIBLE.includes(powerName) && " (all skill capable)"}
                                     </SelectItem>
                                   ))}
                                 </SelectContent>
