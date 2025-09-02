@@ -14,7 +14,7 @@ export default function InlineCharacterSheet() {
         {/* Left Column */}
         <div className="space-y-4">
           <div className="text-center pb-4 border-b-2 border-gray-300">
-            <h1 className="font-display text-4xl text-accent">{character.name || "Unnamed Character"}</h1>
+            <h1 className="font-display text-4xl text-red-500">{character.name || "Unnamed Character"}</h1>
             <p className="text-gray-700">
               {character.secretIdentity ? `Secret Identity: ${character.secretIdentity}` : "No secret identity"}
             </p>
