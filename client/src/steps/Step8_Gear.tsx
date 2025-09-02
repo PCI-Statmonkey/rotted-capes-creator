@@ -17,6 +17,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { getGameContent } from "@/lib/api";
+import { sampleGear } from "@/lib/fallbackData";
 import { trackEvent } from "@/lib/analytics";
 
 // Types
@@ -349,6 +350,7 @@ export default function Step8_Gear() {
     async function loadGear() {
       try {
         const all = await getGameContent('gear');
+        const source = all.some((g: any) => g.category === 'armor') ? all : sampleGear;
         const mapItem = (it: any): Item => ({
           name: it.name,
           description: it.description ?? '',
@@ -356,19 +358,19 @@ export default function Step8_Gear() {
           examples: it.examples ?? [],
           batteryPowered: it.batteryPowered ?? false,
         });
-        const firearmsList = all
+        const firearmsList = source
           .filter((g: any) => g.category === 'firearms')
           .map((it: any) => ({ ...mapItem(it), ammoType: it.ammo_type ?? [] }));
         setFirearms(firearmsList);
 
-        const archaic = all
+        const archaic = source
           .filter((g: any) => g.category === 'archaicWeapons')
           .map(mapItem);
         setArchaicWeapons(archaic);
 
         setRangedWeapons([...firearmsList, ...archaic]);
 
-        const melee = all
+        const melee = source
           .filter((g: any) => g.category === 'meleeWeapons')
           .map(mapItem);
         setMeleeWeapons(melee);
@@ -387,14 +389,14 @@ export default function Step8_Gear() {
         );
 
         setOtherWeapons(
-          all.filter((g: any) => g.category === 'otherModernWeapons').map(mapItem)
+          source.filter((g: any) => g.category === 'otherModernWeapons').map(mapItem)
         );
 
-        setArmors(all.filter((g: any) => g.category === 'armor').map(mapItem));
+        setArmors(source.filter((g: any) => g.category === 'armor').map(mapItem));
 
         const gearMap: Record<string, Item[]> = {};
         equipmentCategories.forEach((cat) => {
-          gearMap[cat] = all
+          gearMap[cat] = source
             .filter((g: any) => g.category === cat)
             .map(mapItem);
         });
@@ -715,7 +717,7 @@ export default function Step8_Gear() {
               <label className="flex items-center space-x-2 cursor-pointer">
                 <input
                   type="checkbox"
-                  className="w-5 h-5"
+                  className="w-5 h-5 accent-black"
                   checked={!!purchased[w.name]}
                   onChange={() => toggleRanged(w.name, true)}
                 />
@@ -751,7 +753,7 @@ export default function Step8_Gear() {
             <label key={w.name} className="flex items-start space-x-2 text-white cursor-pointer">
               <input
                 type="checkbox"
-                className="w-5 h-5"
+                className="w-5 h-5 accent-black"
                 checked={!!purchased[w.name]}
                 onChange={() => toggleRanged(w.name)}
               />
@@ -773,7 +775,7 @@ export default function Step8_Gear() {
               <label className="flex items-center space-x-2 cursor-pointer">
                 <input
                   type="checkbox"
-                  className="w-5 h-5"
+                  className="w-5 h-5 accent-black"
                   checked={!!purchased[m.name]}
                   onChange={() => toggleMelee(m.name)}
                 />
@@ -815,7 +817,7 @@ export default function Step8_Gear() {
             >
               <input
                 type="checkbox"
-                className="w-5 h-5"
+                className="w-5 h-5 accent-black"
                 checked={!!purchased[w.name]}
                 onChange={() => togglePurchase(otherWeapons, w.name)}
               />
@@ -839,7 +841,7 @@ export default function Step8_Gear() {
             >
               <input
                 type="checkbox"
-                className="w-5 h-5"
+                className="w-5 h-5 accent-black"
                 checked={!!purchased[a.name]}
                 onChange={() => togglePurchase(armors, a.name)}
               />
@@ -868,7 +870,7 @@ export default function Step8_Gear() {
                 >
                   <input
                     type="checkbox"
-                    className="w-5 h-5"
+                    className="w-5 h-5 accent-black"
                     checked={!!purchased[g.name]}
                     onChange={() => togglePurchase(gearItems[cat], g.name)}
                   />
