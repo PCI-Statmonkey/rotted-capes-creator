@@ -11,12 +11,23 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, Dialog
 import InlineCharacterSheet from "./InlineCharacterSheet";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
-import { formatModifier } from "@/lib/utils";
+import { getScoreData, formatModifier } from "@/lib/utils";
 import { getRankName } from "@/utils/rank";
 
 export default function CharacterSummary() {
   const { character } = useCharacter();
   const [isSheetOpen, setIsSheetOpen] = useState(false);
+
+  const getFinalPowerScore = (power: any) => {
+    const flaws = power.flaws?.map((f: string) => f.toLowerCase()) || [];
+    const isInborn = !flaws.some((f: string) =>
+      f.includes("external power source") ||
+      f.includes("all-skill") ||
+      f.includes("removable")
+    );
+    const baseScore = power.finalScore ?? power.score ?? 0;
+    return isInborn ? baseScore + 1 : baseScore;
+  };
 
   const formatOriginName = (origin: string | undefined): string => {
     if (!origin) return "Not Selected";
@@ -183,12 +194,18 @@ export default function CharacterSummary() {
           <div className="border-2 border-gray-700 rounded-lg p-3 bg-gray-800 text-sm">
             {character.powers && character.powers.length > 0 ? (
               <ul className="space-y-1">
-                {character.powers.map((power, index) => (
-                  <li key={index} className="flex justify-between">
-                    <span>{power.name}</span>
-                    <span className="text-gray-400">Rank {power.rank}</span>
-                  </li>
-                ))}
+                {character.powers.map((power, index) => {
+                  const score = getFinalPowerScore(power);
+                  const bonus = formatModifier(getScoreData(score).modifier);
+                  return (
+                    <li key={index} className="flex justify-between">
+                      <span>{power.name}</span>
+                      <span className="text-gray-400">
+                        {score} ({bonus})
+                      </span>
+                    </li>
+                  );
+                })}
               </ul>
             ) : (
               <p className="text-gray-400 italic">Powers will appear here once selected...</p>
