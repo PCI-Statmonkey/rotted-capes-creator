@@ -709,7 +709,7 @@ const Step7_SkillsAndFeats = () => {
       transition={{ duration: 0.3 }}
       className="p-6 bg-gray-800 rounded-lg shadow-lg"
     >
-      <h2 className="text-2xl font-bold mb-4">Step 7: Skills & Feats</h2>
+      <h2 className="text-2xl font-display font-bold text-red-500 mb-4">Step 7: Skills & Feats</h2>
       <p className="mb-4 text-sm text-gray-300">
         Pick skill sets and feats for your hero. The first row requires one of each;
         the following rows let you choose either a skill set or a feat.
