@@ -41,7 +41,6 @@ interface Power {
   target?: string;
   ability?: string;
   burnout?: number;
-  uses?: number;
   linkedPowers?: string[];
   flaws: PowerModifier[];
   perks: PowerModifier[];
@@ -177,7 +176,7 @@ export default function Step5_Powers() {
   const [archetypeBonusPower, setArchetypeBonusPower] = useState<string | null>(null);
   const eligibleBonusPowers = selectedPowers.filter(p => archetypeTypicalPowers.includes(p.name));
 
-  const totalBurnout = selectedPowers.reduce((sum, p) => sum + (p.burnout || 0) * (p.uses || 0), 0);
+  const totalBurnout = selectedPowers.reduce((sum, p) => sum + (p.burnout || 0), 0);
   useEffect(() => {
     updateCharacterField('currentBurnout', totalBurnout);
     const checks = totalBurnout > character.burnoutThreshold ? 1 : 0;
@@ -193,7 +192,6 @@ export default function Step5_Powers() {
         arrayIndex: undefined as number | undefined,
         description: p.description || powerDataMap.get(p.name)?.description,
         burnout: (p as any).burnout ?? (powerDataMap.get(p.name)?.burnout ? parseInt(powerDataMap.get(p.name)?.burnout) : undefined),
-        uses: (p as any).uses || 0,
         damageType: p.damageType,
         ability: p.ability,
         linkedPowers: (p as any).linkedPowers || [],
@@ -374,7 +372,6 @@ export default function Step5_Powers() {
       ability: getAbilityOptions(ALL_POWERS[0])[0],
       description: info?.description,
       burnout: info?.burnout ? parseInt(info.burnout) : undefined,
-      uses: 0,
       linkedPowers: [],
       flaws: [],
       perks: [],
@@ -423,7 +420,6 @@ export default function Step5_Powers() {
       const info: any = powerDataMap.get(value);
       newPowers[index].description = info?.description;
       newPowers[index].burnout = info?.burnout ? parseInt(info.burnout) : undefined;
-      newPowers[index].uses = 0;
 
       // Update linked references in other powers
       newPowers.forEach((p, idx) => {
@@ -516,13 +512,6 @@ export default function Step5_Powers() {
     setSelectedPowers(newPowers);
   };
 
-  const changeUses = (index: number, delta: number) => {
-    const newPowers = [...selectedPowers];
-    const p = newPowers[index];
-    p.uses = Math.max(0, (p.uses || 0) + delta);
-    setSelectedPowers(newPowers);
-  };
-
   // Handle power set selection
   const handlePowerSetSelection = (powerSetName: string) => {
     setSelectedPowerSet(powerSetName);
@@ -542,7 +531,6 @@ export default function Step5_Powers() {
         ability: getAbilityOptions(power.name)[0],
         description: info?.description,
         burnout: info?.burnout ? parseInt(info.burnout) : undefined,
-        uses: 0,
         linkedPowers: [],
         flaws: [],
         perks: [],
@@ -575,7 +563,6 @@ export default function Step5_Powers() {
       ability: getAbilityOptions(ALL_POWERS[0])[0],
       description: info?.description,
       burnout: info?.burnout ? parseInt(info.burnout) : undefined,
-      uses: 0,
       linkedPowers: [],
       flaws: [],
       perks: [],
@@ -660,7 +647,6 @@ export default function Step5_Powers() {
       score: power.score,
       finalScore: power.finalScore,
       burnout: power.burnout,
-      uses: power.uses || 0,
       flaws: power.flaws.map(f => f.name),
       perks: power.perks.map(p => p.name),
       linkedPowers: power.linkedPowers || []
@@ -985,16 +971,7 @@ export default function Step5_Powers() {
                       </div>
                     )}
 
-                    <div className="mt-2 flex items-center space-x-2">
-                      <span className="text-sm text-gray-400">Burnout {power.burnout ?? 0}</span>
-                      <Button variant="outline" size="sm" onClick={() => changeUses(index, -1)} disabled={(power.uses || 0) <= 0}>
-                        <Minus className="h-4 w-4" />
-                      </Button>
-                      <span>{power.uses || 0}</span>
-                      <Button variant="outline" size="sm" onClick={() => changeUses(index, 1)}>
-                        <Plus className="h-4 w-4" />
-                      </Button>
-                    </div>
+                    <div className="mt-2 text-sm text-gray-400">Burnout {power.burnout ?? 0}</div>
                     
                     {/* Display applied modifiers */}
                     {(power.flaws.length > 0 || power.perks.length > 0) && (
