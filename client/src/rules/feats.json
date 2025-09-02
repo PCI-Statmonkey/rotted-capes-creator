@@ -729,6 +729,16 @@
     "input_label": null
   },
   {
+    "name": "Learn Power Stunt",
+    "description": "*You expand your mastery by developing a new application of an existing power.*  **Benefit:** Choose one of your powers and learn either an associated power trick or an emulated power it can perform.",
+    "prerequisites": [],
+    "type": "normal",
+    "repeatable": false,
+    "tags": [],
+    "notes": "",
+    "input_label": null
+  },
+  {
     "name": "Master Emulated Power \\[power feat\\]",
     "description": "*After emulating a power for some time, you begin to master it on your own.*  **Restriction:** You must have successfully used an emulated power you wish to master 10 times. See Mastering Power Stunts pg XX.  **Benefit:** Choose one of your emulated powers; its power score increased by 2, and it is now an independent power.",
     "prerequisites": [],

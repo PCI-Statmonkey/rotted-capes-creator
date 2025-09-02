@@ -36,6 +36,7 @@ export type Character = {
     abilityChoices?: string[];
     powerChoices?: string[];
     powerTrick?: string;
+    emulatedPower?: { parent: string; name: string };
   }[];
   selectedSkillSets: { name: string; edges: string[]; source?: string; deepCutNotes?: string }[];
   selectedManeuvers: string[];
@@ -62,6 +63,7 @@ export const useCharacterBuilder = () => {
     abilityChoices?: string[];
     powerChoices?: string[];
     powerTrick?: string;
+    emulatedPower?: { parent: string; name: string };
   }[]>(saved?.selectedFeats || []);
   const initialSkillSets = (saved?.selectedSkillSets || []).map((s: any) =>
     typeof s === 'string'
