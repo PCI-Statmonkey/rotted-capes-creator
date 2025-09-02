@@ -175,7 +175,15 @@ export default function Step8_Gear() {
     const exampleState: Record<string, string> = {};
 
     character.gear.forEach((item) => {
-      const base = item.description || item.name;
+      // Use the item's description as the key only when it represents the
+      // original name of a weapon. Otherwise, fall back to the actual name so
+      // that purchased items can be accurately tracked and removed.
+      const base =
+        firearms.some((f) => f.name === item.description) ||
+        archaicWeapons.some((a) => a.name === item.description) ||
+        meleeWeapons.some((m) => m.name === item.description)
+          ? (item.description as string)
+          : item.name;
       if (item.starting) {
         const bagEntry = Object.entries(goBags).find(
           ([, bag]) => `Go-Bag: ${bag.name}` === item.name
