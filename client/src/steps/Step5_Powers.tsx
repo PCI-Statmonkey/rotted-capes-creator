@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import { ArrowLeft, ArrowRight, Info, Check, Plus, Minus, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -40,7 +40,6 @@ interface Power {
   damageType?: string;
   target?: string;
   ability?: string;
-  burnout?: number;
   linkedPowers?: string[];
   flaws: PowerModifier[];
   perks: PowerModifier[];
@@ -175,13 +174,14 @@ export default function Step5_Powers() {
   const archetypePowerBonusValue: number = archetypeInfo?.mechanics?.power_bonus?.value || 0;
   const [archetypeBonusPower, setArchetypeBonusPower] = useState<string | null>(null);
   const eligibleBonusPowers = selectedPowers.filter(p => archetypeTypicalPowers.includes(p.name));
+  const archetypeBonusRef = useRef<HTMLDivElement>(null);
+  const [highlightBonus, setHighlightBonus] = useState(false);
 
-  const totalBurnout = selectedPowers.reduce((sum, p) => sum + (p.burnout || 0), 0);
   useEffect(() => {
-    updateCharacterField('currentBurnout', totalBurnout);
-    const checks = totalBurnout > character.burnoutThreshold ? 1 : 0;
-    updateCharacterField('burnoutChecks', checks);
-  }, [totalBurnout, updateCharacterField, character.burnoutThreshold]);
+    if (archetypeBonusPower) {
+      setHighlightBonus(false);
+    }
+  }, [archetypeBonusPower]);
 
   // Load powers from character when component mounts
   useEffect(() => {
@@ -191,7 +191,6 @@ export default function Step5_Powers() {
         score: p.score || 10,
         arrayIndex: undefined as number | undefined,
         description: p.description || powerDataMap.get(p.name)?.description,
-        burnout: (p as any).burnout ?? (powerDataMap.get(p.name)?.burnout ? parseInt(powerDataMap.get(p.name)?.burnout) : undefined),
         damageType: p.damageType,
         ability: p.ability,
         linkedPowers: (p as any).linkedPowers || [],
@@ -371,7 +370,6 @@ export default function Step5_Powers() {
       arrayIndex: undefined,
       ability: getAbilityOptions(ALL_POWERS[0])[0],
       description: info?.description,
-      burnout: info?.burnout ? parseInt(info.burnout) : undefined,
       linkedPowers: [],
       flaws: [],
       perks: [],
@@ -419,7 +417,6 @@ export default function Step5_Powers() {
 
       const info: any = powerDataMap.get(value);
       newPowers[index].description = info?.description;
-      newPowers[index].burnout = info?.burnout ? parseInt(info.burnout) : undefined;
 
       // Update linked references in other powers
       newPowers.forEach((p, idx) => {
@@ -530,7 +527,6 @@ export default function Step5_Powers() {
         arrayIndex: undefined,
         ability: getAbilityOptions(power.name)[0],
         description: info?.description,
-        burnout: info?.burnout ? parseInt(info.burnout) : undefined,
         linkedPowers: [],
         flaws: [],
         perks: [],
@@ -562,7 +558,6 @@ export default function Step5_Powers() {
       arrayIndex: undefined,
       ability: getAbilityOptions(ALL_POWERS[0])[0],
       description: info?.description,
-      burnout: info?.burnout ? parseInt(info.burnout) : undefined,
       linkedPowers: [],
       flaws: [],
       perks: [],
@@ -638,6 +633,13 @@ export default function Step5_Powers() {
 
   // Handle going to next step
   const handleContinue = () => {
+    if (archetypePowerBonusValue > 0 && eligibleBonusPowers.length > 0 && !archetypeBonusPower) {
+      setHighlightBonus(true);
+      archetypeBonusRef.current?.scrollIntoView({ behavior: "smooth" });
+      setTimeout(() => setHighlightBonus(false), 3000);
+      return;
+    }
+
     // Convert the selected powers to the format expected by CharacterContext
     const finalPowers = selectedPowers.map(power => ({
       name: power.name,
@@ -646,21 +648,20 @@ export default function Step5_Powers() {
       ability: power.ability,
       score: power.score,
       finalScore: power.finalScore,
-      burnout: power.burnout,
       flaws: power.flaws.map(f => f.name),
       perks: power.perks.map(p => p.name),
       linkedPowers: power.linkedPowers || []
     }));
-    
+
     // Update character field with selections
     updateCharacterField('powers', finalPowers);
     updateDerivedStats();
-    
+
     // Track event in analytics
-    trackEvent('powers_selected', 'character', 
+    trackEvent('powers_selected', 'character',
       `Powers: ${finalPowers.length}, Method: ${powerCreationMethod}`
     );
-    
+
     // Move to the next step
     setCurrentStep(6);
   };
@@ -689,10 +690,6 @@ export default function Step5_Powers() {
     
     // In point buy mode, must be within point budget
     if (powerCreationMethod === "pointBuy" && calculatePointsSpent() > 32) {
-      return false;
-    }
-
-    if (archetypePowerBonusValue > 0 && eligibleBonusPowers.length > 0 && !archetypeBonusPower) {
       return false;
     }
 
@@ -971,8 +968,6 @@ export default function Step5_Powers() {
                       </div>
                     )}
 
-                    <div className="mt-2 text-sm text-gray-400">Burnout {power.burnout ?? 0}</div>
-                    
                     {/* Display applied modifiers */}
                     {(power.flaws.length > 0 || power.perks.length > 0) && (
                       <div className="mt-3 pt-3 border-t border-gray-600">
@@ -1031,7 +1026,6 @@ export default function Step5_Powers() {
                   </div>
                     );})}
                 </div>
-                <div className="mt-4 text-sm">Total Burnout: {totalBurnout} / {character.burnoutThreshold}</div>
               </>
             )}
             
@@ -1580,7 +1574,10 @@ export default function Step5_Powers() {
         </Tabs>
 
         {archetypePowerBonusValue > 0 && eligibleBonusPowers.length > 0 && (
-          <div className="mt-8 pt-4 border-t-2 border-gray-700">
+          <div
+            ref={archetypeBonusRef}
+            className={`mt-8 pt-4 border-t-2 border-gray-700 ${highlightBonus ? 'ring-2 ring-red-500 animate-pulse' : ''}`}
+          >
             <Label className="text-sm mb-2 block">
               Archetype Power Bonus (+{archetypePowerBonusValue})
             </Label>
