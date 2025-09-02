@@ -176,13 +176,6 @@ export default function Step5_Powers() {
   const [archetypeBonusPower, setArchetypeBonusPower] = useState<string | null>(null);
   const eligibleBonusPowers = selectedPowers.filter(p => archetypeTypicalPowers.includes(p.name));
 
-  const totalBurnout = selectedPowers.reduce((sum, p) => sum + (p.burnout || 0), 0);
-  useEffect(() => {
-    updateCharacterField('currentBurnout', totalBurnout);
-    const checks = totalBurnout > character.burnoutThreshold ? 1 : 0;
-    updateCharacterField('burnoutChecks', checks);
-  }, [totalBurnout, updateCharacterField, character.burnoutThreshold]);
-
   // Load powers from character when component mounts
   useEffect(() => {
     if (character.powers && character.powers.length > 0) {
@@ -1031,7 +1024,6 @@ export default function Step5_Powers() {
                   </div>
                     );})}
                 </div>
-                <div className="mt-4 text-sm">Total Burnout: {totalBurnout} / {character.burnoutThreshold}</div>
               </>
             )}
             
