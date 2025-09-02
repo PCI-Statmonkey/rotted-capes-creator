@@ -1,5 +1,4 @@
 @import url('https://fonts.googleapis.com/css2?family=Bangers&family=Comic+Neue:wght@300;400;700&display=swap');
-@import "@fontsource/inter";
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -36,7 +35,7 @@
 }
 
 /* Global text defaults for UI readability */
-body, select, input, textarea, button, label {
+select, input, textarea, button, label {
   font-family: 'Comic Neue', sans-serif;
   font-weight: 400;
   font-size: 0.95rem;
@@ -76,12 +75,19 @@ select, select option {
 
 body {
   @apply font-sans bg-black text-white;
-  font-family: 'Bangers', cursive;
+  font-weight: 400;
+  font-size: 0.95rem;
+  letter-spacing: 0.02em;
+  line-height: 1.4;
   background-color: hsl(var(--background));
   color: hsl(var(--foreground));
   background-image: url('/textures/grunge-bg.png'); /* Optional texture */
   background-size: cover;
   background-blend-mode: overlay;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  @apply font-display;
 }
 
 .card {

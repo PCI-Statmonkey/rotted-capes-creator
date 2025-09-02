@@ -16,7 +16,7 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-      sans: ['Inter', 'system-ui', 'sans-serif'],
+      sans: ['"Comic Neue"', 'sans-serif'],
       display: ['"Bangers"', 'cursive'], // or another display font you're using
     },
       borderRadius: {
