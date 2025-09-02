@@ -30,7 +30,7 @@ export default function Home() {
         transition={{ duration: 0.5 }}
         className="text-center mb-12 mt-8"
       >
-        <h1 className="font-display text-4xl md:text-5xl lg:text-6xl text-accent tracking-wide mb-4">
+        <h1 className="font-display text-4xl md:text-5xl lg:text-6xl text-red-500 tracking-wide mb-4">
           Rotted Capes 2.0
         </h1>
         <p className="text-xl max-w-2xl mx-auto opacity-90">

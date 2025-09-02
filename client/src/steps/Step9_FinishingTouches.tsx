@@ -95,7 +95,7 @@ export default function Step9_FinishingTouches() {
       
       <Card className="mb-6">
         <CardHeader>
-          <CardTitle>Define Your Character's Core</CardTitle>
+          <CardTitle className="font-display text-red-500">Define Your Character's Core</CardTitle>
           <CardDescription>
             Add the final defining elements that make your character unique and memorable
           </CardDescription>

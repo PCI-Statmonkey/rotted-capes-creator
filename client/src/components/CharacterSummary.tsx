@@ -86,7 +86,7 @@ export default function CharacterSummary() {
 
       <div className="space-y-4">
         <div className="text-center mb-4">
-          <h4 className="font-display text-2xl text-accent">
+          <h4 className="font-display text-2xl text-red-500">
             {character.name || "Unnamed Character"}
           </h4>
           <div className="text-sm text-gray-400 italic">
