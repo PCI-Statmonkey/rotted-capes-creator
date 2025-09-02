@@ -120,10 +120,17 @@ const POWER_COST_TABLE: { score: number; cost: number }[] = [
   { score: 20, cost: 18 }
 ];
 
-// Complete list of powers
-const ALL_POWERS = (powersData as any[]).map((p: any) => p.name);
+// Complete list of powers (excluding power tricks)
+const isPowerTrick = (name: string) => /power trick/i.test(name);
+const ALL_POWERS = (powersData as any[])
+  .filter((p: any) => !isPowerTrick(p.name))
+  .map((p: any) => p.name);
 
-const powerDataMap = new Map((powersData as any[]).map((p: any) => [p.name, p]));
+const powerDataMap = new Map(
+  (powersData as any[])
+    .filter((p: any) => !isPowerTrick(p.name))
+    .map((p: any) => [p.name, p])
+);
 
 // Powers compatible with the All Skill power modifier
 const ALL_SKILL_COMPATIBLE = [
