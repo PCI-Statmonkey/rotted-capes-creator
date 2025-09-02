@@ -47,10 +47,11 @@ const Step7_SkillsAndFeats = () => {
     "charisma",
   ];
 
+  // Available power tricks and stunts for the "Learn Power Trick" feat
   const POWER_TRICKS = useMemo(
     () =>
       (powersData as any[])
-        .filter((p: any) => /power trick/i.test(p.name))
+        .filter((p: any) => /power (trick|stunt)/i.test(p.name))
         .map((p: any) => p.name),
     []
   );

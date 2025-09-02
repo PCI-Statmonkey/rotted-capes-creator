@@ -118,8 +118,8 @@ const POWER_COST_TABLE: { score: number; cost: number }[] = [
   { score: 20, cost: 18 }
 ];
 
-// Complete list of powers (excluding power tricks)
-const isPowerTrick = (name: string) => /power trick/i.test(name);
+// Complete list of powers (excluding power tricks and stunts)
+const isPowerTrick = (name: string) => /power (trick|stunt)/i.test(name);
 const ALL_POWERS = (powersData as any[])
   .filter((p: any) => !isPowerTrick(p.name))
   .map((p: any) => p.name);
