@@ -35,6 +35,7 @@ export type Character = {
     usesPerScene?: number;
     abilityChoices?: string[];
     powerChoices?: string[];
+    powerTrick?: string;
   }[];
   selectedSkillSets: { name: string; edges: string[]; source?: string; deepCutNotes?: string }[];
   selectedManeuvers: string[];
@@ -60,6 +61,7 @@ export const useCharacterBuilder = () => {
     usesPerScene?: number;
     abilityChoices?: string[];
     powerChoices?: string[];
+    powerTrick?: string;
   }[]>(saved?.selectedFeats || []);
   const initialSkillSets = (saved?.selectedSkillSets || []).map((s: any) =>
     typeof s === 'string'

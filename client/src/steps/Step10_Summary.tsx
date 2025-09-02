@@ -672,7 +672,12 @@ export default function Step10_Summary() {
                   );
                   return (
                     <div key={index} className="border border-gray-700 rounded-lg p-2">
-                      <div className="font-semibold">{displayFeatName(feat.name)}</div>
+                      <div className="font-semibold">
+                        {displayFeatName(feat.name)}
+                        {feat.powerTrick && (
+                          <span className="text-sm text-gray-400"> — {feat.powerTrick}</span>
+                        )}
+                      </div>
                       {feat.source && (
                         <div className="text-xs text-gray-400">Source: {feat.source}</div>
                       )}
