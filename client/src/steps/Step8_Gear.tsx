@@ -16,6 +16,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Input } from "@/components/ui/input";
 import { getGameContent } from "@/lib/api";
 import { sampleGear } from "@/lib/fallbackData";
 import { trackEvent } from "@/lib/analytics";
@@ -685,23 +686,57 @@ export default function Step8_Gear() {
               ))}
             </SelectContent>
           </Select>
-          {selectedMelee && selectedMelee.examples && selectedMelee.examples.length > 1 && (
-            <div className="mt-2">
-              <Select
-                value={selectedMeleeExamples[freeMeleeWeapon]}
-                onValueChange={(val) => handleMeleeExampleChange(freeMeleeWeapon, val)}
-              >
-                <SelectTrigger className="w-full">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  {selectedMelee.examples.map((ex) => (
-                    <SelectItem key={ex} value={ex}>
-                      {ex}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+          {selectedMelee && (
+            <div className="mt-2 space-y-2">
+              {selectedMelee.examples && selectedMelee.examples.length > 0 && (
+                <Select
+                  value={
+                    selectedMelee.examples.includes(
+                      selectedMeleeExamples[freeMeleeWeapon]
+                    )
+                      ? selectedMeleeExamples[freeMeleeWeapon]
+                      : "custom"
+                  }
+                  onValueChange={(val) => {
+                    if (val === "custom") {
+                      handleMeleeExampleChange(
+                        freeMeleeWeapon,
+                        selectedMeleeExamples[freeMeleeWeapon] || selectedMelee.name
+                      );
+                    } else {
+                      handleMeleeExampleChange(freeMeleeWeapon, val);
+                    }
+                  }}
+                >
+                  <SelectTrigger className="w-full">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {selectedMelee.examples.map((ex) => (
+                      <SelectItem key={ex} value={ex}>
+                        {ex}
+                      </SelectItem>
+                    ))}
+                    <SelectItem value="custom">Custom...</SelectItem>
+                  </SelectContent>
+                </Select>
+              )}
+              {(!selectedMelee.examples ||
+                selectedMelee.examples.length === 0 ||
+                !selectedMelee.examples.includes(
+                  selectedMeleeExamples[freeMeleeWeapon]
+                )) && (
+                <Input
+                  placeholder="Enter weapon name"
+                  value={selectedMeleeExamples[freeMeleeWeapon] || ""}
+                  onChange={(e) =>
+                    handleMeleeExampleChange(
+                      freeMeleeWeapon,
+                      e.target.value
+                    )
+                  }
+                />
+              )}
             </div>
           )}
         </div>
@@ -794,22 +829,52 @@ export default function Step8_Gear() {
                   )}
                 </span>
               </label>
-              {!!purchased[m.name] && m.examples && m.examples.length > 1 && (
-                <Select
-                  value={selectedMeleeExamples[m.name]}
-                  onValueChange={(val) => handleMeleeExampleChange(m.name, val)}
-                >
-                  <SelectTrigger className="bg-gray-700 w-32">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {m.examples.map((ex) => (
-                      <SelectItem key={ex} value={ex}>
-                        {ex}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+              {!!purchased[m.name] && (
+                <div className="space-y-2">
+                  {m.examples && m.examples.length > 0 && (
+                    <Select
+                      value={
+                        m.examples.includes(selectedMeleeExamples[m.name])
+                          ? selectedMeleeExamples[m.name]
+                          : "custom"
+                      }
+                      onValueChange={(val) => {
+                        if (val === "custom") {
+                          handleMeleeExampleChange(
+                            m.name,
+                            selectedMeleeExamples[m.name] || m.name
+                          );
+                        } else {
+                          handleMeleeExampleChange(m.name, val);
+                        }
+                      }}
+                    >
+                      <SelectTrigger className="bg-gray-700 w-32">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {m.examples.map((ex) => (
+                          <SelectItem key={ex} value={ex}>
+                            {ex}
+                          </SelectItem>
+                        ))}
+                        <SelectItem value="custom">Custom...</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  )}
+                  {(!m.examples ||
+                    m.examples.length === 0 ||
+                    !m.examples.includes(selectedMeleeExamples[m.name])) && (
+                    <Input
+                      className="bg-gray-700 w-32"
+                      placeholder="Enter weapon name"
+                      value={selectedMeleeExamples[m.name] || ""}
+                      onChange={(e) =>
+                        handleMeleeExampleChange(m.name, e.target.value)
+                      }
+                    />
+                  )}
+                </div>
               )}
             </div>
           ))}
