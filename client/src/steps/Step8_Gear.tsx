@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useCharacter } from "@/context/CharacterContext";
-import { Battery } from "lucide-react";
+import { Battery, ArrowLeft, ArrowRight } from "lucide-react";
 import {
   Tabs,
   TabsContent,
@@ -17,6 +17,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { getGameContent } from "@/lib/api";
+import { trackEvent } from "@/lib/analytics";
 
 // Types
 type GoBagType = "survivalist" | "infiltrator" | "technician" | "medic" | "bystander";
@@ -145,7 +146,7 @@ const bonusApFeats = [
 ];
 
 export default function Step8_Gear() {
-  const { character, addGearItem, removeGearItem } = useCharacter();
+  const { character, addGearItem, removeGearItem, setCurrentStep } = useCharacter();
 
   const [currentTab, setCurrentTab] = useState("ranged");
   const [selectedGoBag, setSelectedGoBag] = useState<GoBagType | "">("");
@@ -161,6 +162,57 @@ export default function Step8_Gear() {
   const [freeMeleeWeapon, setFreeMeleeWeapon] = useState<string>("");
   const [selectedMeleeExamples, setSelectedMeleeExamples] = useState<Record<string, string>>({});
   const [selectedAmmoTypes, setSelectedAmmoTypes] = useState<Record<string, string>>({});
+
+  useEffect(() => {
+    if (firearms.length === 0 && archaicWeapons.length === 0 && meleeWeapons.length === 0) return;
+
+    const purchasedState: Record<string, number> = {};
+    let freeRanged = "";
+    let freeMelee = "";
+    let goBag: GoBagType | "" = "";
+    const ammoState: Record<string, string> = {};
+    const exampleState: Record<string, string> = {};
+
+    character.gear.forEach((item) => {
+      const base = item.description || item.name;
+      if (item.starting) {
+        const bagEntry = Object.entries(goBags).find(
+          ([, bag]) => `Go-Bag: ${bag.name}` === item.name
+        );
+        if (bagEntry) {
+          goBag = bagEntry[0] as GoBagType;
+        } else if (
+          firearms.some((f) => f.name === base) ||
+          archaicWeapons.some((a) => a.name === base)
+        ) {
+          freeRanged = base;
+          if (firearms.some((f) => f.name === base)) {
+            const match = item.name.match(/\(([^)]+)\)/);
+            if (match) ammoState[base] = match[1];
+          }
+        } else if (meleeWeapons.some((m) => m.name === base)) {
+          freeMelee = base;
+          if (item.name !== base) exampleState[base] = item.name;
+        }
+      } else {
+        purchasedState[base] = item.ap || 0;
+        if (firearms.some((f) => f.name === base)) {
+          const match = item.name.match(/\(([^)]+)\)/);
+          if (match) ammoState[base] = match[1];
+        }
+        if (meleeWeapons.some((m) => m.name === base) && item.name !== base) {
+          exampleState[base] = item.name;
+        }
+      }
+    });
+
+    setPurchased(purchasedState);
+    setFreeRangedWeapon(freeRanged);
+    setFreeMeleeWeapon(freeMelee);
+    setSelectedGoBag(goBag);
+    setSelectedAmmoTypes((prev) => ({ ...prev, ...ammoState }));
+    setSelectedMeleeExamples((prev) => ({ ...prev, ...exampleState }));
+  }, [character.gear, firearms, archaicWeapons, meleeWeapons]);
 
   const handleGoBagChange = (type: GoBagType | "") => {
     if (!type) {
@@ -502,6 +554,15 @@ export default function Step8_Gear() {
         if (freeRangedWeapon === item.description) setFreeRangedWeapon("");
       }
     }
+  };
+
+  const handlePrevious = () => {
+    setCurrentStep(7);
+  };
+
+  const handleContinue = () => {
+    trackEvent('complete_step', 'character_creation', 'gear');
+    setCurrentStep(9);
   };
 
   return (
@@ -853,6 +914,22 @@ export default function Step8_Gear() {
           )}
         </TabsContent>
       </Tabs>
+      <div className="flex justify-between mt-8">
+        <Button
+          type="button"
+          className="px-6 py-3 rounded-lg bg-gray-700 font-comic text-white hover:bg-gray-600 transition-colors"
+          onClick={handlePrevious}
+        >
+          <ArrowLeft className="mr-2 h-5 w-5" /> Previous
+        </Button>
+        <Button
+          type="button"
+          className="px-6 py-3 rounded-lg bg-accent font-comic text-white hover:bg-red-700 transition-colors shadow-lg"
+          onClick={handleContinue}
+        >
+          Next <ArrowRight className="ml-2 h-5 w-5" />
+        </Button>
+      </div>
     </div>
   );
 }
