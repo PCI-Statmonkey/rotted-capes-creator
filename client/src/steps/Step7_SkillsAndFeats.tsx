@@ -513,8 +513,12 @@ const Step7_SkillsAndFeats = () => {
         {includeNone && <SelectItem value="none">None</SelectItem>}
         {feats.map((f: any) => {
           const missing = getMissingPrereqs(f, prereqCharacter);
-          const disabled = missing.hard.length > 0;
+          const alreadyHas = character.feats.some(
+            (cf: any) => cf.name === f.name && cf.source
+          );
+          const disabled = missing.hard.length > 0 || alreadyHas;
           const titleParts = [] as string[];
+          if (alreadyHas) titleParts.push("Already have this feat");
           if (missing.hard.length > 0)
             titleParts.push(
               `Requires ${missing.hard
@@ -536,6 +540,9 @@ const Step7_SkillsAndFeats = () => {
               title={title}
             >
               {displayFeatName(f.name)}
+              {alreadyHas && (
+                <span className="text-xs text-gray-400 ml-1">(taken)</span>
+              )}
             </SelectItem>
           );
         })}
