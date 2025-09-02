@@ -47,14 +47,70 @@ const Step7_SkillsAndFeats = () => {
     "charisma",
   ];
 
-  // Available power tricks and stunts for the "Learn Power Trick" feat
-  const POWER_TRICKS = useMemo(
-    () =>
-      (powersData as any[])
-        .filter((p: any) => /power (trick|stunt)/i.test(p.name))
-        .map((p: any) => p.name),
-    []
+  // Mappings for power tricks and emulated powers derived from rules data
+  const powerTrickMap = useMemo(() => {
+    const map: Record<string, string[]> = {};
+    (powersData as any[]).forEach((p: any) => {
+      if (/^Power Trick:/i.test(p.name)) {
+        const match = p.description.match(/\*\*Power[s]?:\*\*\s*([^*]+)/i);
+        if (match) {
+          map[p.name] = match[1]
+            .split(/,|\n/)
+            .map((s: string) => s.trim())
+            .filter(Boolean);
+        } else {
+          map[p.name] = [];
+        }
+      }
+    });
+    return map;
+  }, []);
+
+  const emulatedPowerMap = useMemo(() => {
+    const map: Record<string, string[]> = {};
+    (powersData as any[]).forEach((p: any) => {
+      if (!/^Power Trick:/i.test(p.name)) {
+        const match = p.description.match(/\*Emulated Powers:\*([^*]+)/i);
+        if (match) {
+          let listText = match[1];
+          const end = listText.indexOf("*Power");
+          if (end !== -1) listText = listText.slice(0, end);
+          const list = listText
+            .split(/,|\n/)
+            .map((s: string) => s.replace(/\\\*.*$/, "").trim())
+            .filter(Boolean);
+          if (list.length) map[p.name] = list;
+        }
+      }
+    });
+    return map;
+  }, []);
+
+  const characterPowerNames = useMemo(
+    () => character.powers.map((p) => p.name),
+    [character.powers]
   );
+
+  const availablePowerTricks = useMemo(
+    () =>
+      Object.entries(powerTrickMap)
+        .filter(([_, reqs]) =>
+          reqs.every((r) => characterPowerNames.includes(r))
+        )
+        .map(([name]) => name),
+    [powerTrickMap, characterPowerNames]
+  );
+
+  const availableEmulatedParents = useMemo(
+    () =>
+      characterPowerNames.filter((p) =>
+        Array.isArray(emulatedPowerMap[p]) && emulatedPowerMap[p].length > 0
+      ),
+    [characterPowerNames, emulatedPowerMap]
+  );
+
+  const isPowerStuntFeat = (name: string) =>
+    name === "Learn Power Stunt" || name === "Learn Power Trick";
 
   const [row1SkillSet, setRow1SkillSet] = useState<string>("");
   const [row1CustomSkill, setRow1CustomSkill] = useState<string>("");
@@ -88,6 +144,15 @@ const Step7_SkillsAndFeats = () => {
   const [row2CustomPowerTrick, setRow2CustomPowerTrick] = useState<string>("");
   const [row3PowerTrick, setRow3PowerTrick] = useState<string>("");
   const [row3CustomPowerTrick, setRow3CustomPowerTrick] = useState<string>("");
+  const [row1StuntType, setRow1StuntType] = useState<string>("");
+  const [row1EmulatedParent, setRow1EmulatedParent] = useState<string>("");
+  const [row1EmulatedPower, setRow1EmulatedPower] = useState<string>("");
+  const [row2StuntType, setRow2StuntType] = useState<string>("");
+  const [row2EmulatedParent, setRow2EmulatedParent] = useState<string>("");
+  const [row2EmulatedPower, setRow2EmulatedPower] = useState<string>("");
+  const [row3StuntType, setRow3StuntType] = useState<string>("");
+  const [row3EmulatedParent, setRow3EmulatedParent] = useState<string>("");
+  const [row3EmulatedPower, setRow3EmulatedPower] = useState<string>("");
 
   useEffect(() => {
     if (selectedSkillSets[0]) {
@@ -119,63 +184,81 @@ const Step7_SkillsAndFeats = () => {
     }
 
     if (selectedFeats[0]) {
-      setRow1Feat(selectedFeats[0].name);
-      if (selectedFeats[0].abilityChoices) {
-        setRow1Ability1(selectedFeats[0].abilityChoices[0] || "");
-        setRow1Ability2(selectedFeats[0].abilityChoices[1] || "");
+      const f0 = selectedFeats[0];
+      setRow1Feat(f0.name);
+      if (f0.abilityChoices) {
+        setRow1Ability1(f0.abilityChoices[0] || "");
+        setRow1Ability2(f0.abilityChoices[1] || "");
       }
-      if (selectedFeats[0].powerChoices) {
-        setRow1Power1(selectedFeats[0].powerChoices[0] || "");
-        setRow1Power2(selectedFeats[0].powerChoices[1] || "");
+      if (f0.powerChoices) {
+        setRow1Power1(f0.powerChoices[0] || "");
+        setRow1Power2(f0.powerChoices[1] || "");
       }
-      if (selectedFeats[0].powerTrick) {
-        const trick = selectedFeats[0].powerTrick;
-        if (POWER_TRICKS.includes(trick)) {
+      if (f0.powerTrick) {
+        setRow1StuntType("trick");
+        const trick = f0.powerTrick;
+        if (availablePowerTricks.includes(trick)) {
           setRow1PowerTrick(trick);
         } else {
           setRow1PowerTrick("custom");
           setRow1CustomPowerTrick(trick);
         }
+      } else if (f0.emulatedPower) {
+        setRow1StuntType("emulated");
+        setRow1EmulatedParent(f0.emulatedFrom || "");
+        setRow1EmulatedPower(f0.emulatedPower);
       }
     }
     if (selectedFeats[1]) {
-      setRow2Feat(selectedFeats[1].name);
-      if (selectedFeats[1].abilityChoices) {
-        setRow2Ability1(selectedFeats[1].abilityChoices[0] || "");
-        setRow2Ability2(selectedFeats[1].abilityChoices[1] || "");
+      const f1 = selectedFeats[1];
+      setRow2Feat(f1.name);
+      if (f1.abilityChoices) {
+        setRow2Ability1(f1.abilityChoices[0] || "");
+        setRow2Ability2(f1.abilityChoices[1] || "");
       }
-      if (selectedFeats[1].powerChoices) {
-        setRow2Power1(selectedFeats[1].powerChoices[0] || "");
-        setRow2Power2(selectedFeats[1].powerChoices[1] || "");
+      if (f1.powerChoices) {
+        setRow2Power1(f1.powerChoices[0] || "");
+        setRow2Power2(f1.powerChoices[1] || "");
       }
-      if (selectedFeats[1].powerTrick) {
-        const trick = selectedFeats[1].powerTrick;
-        if (POWER_TRICKS.includes(trick)) {
+      if (f1.powerTrick) {
+        setRow2StuntType("trick");
+        const trick = f1.powerTrick;
+        if (availablePowerTricks.includes(trick)) {
           setRow2PowerTrick(trick);
         } else {
           setRow2PowerTrick("custom");
           setRow2CustomPowerTrick(trick);
         }
+      } else if (f1.emulatedPower) {
+        setRow2StuntType("emulated");
+        setRow2EmulatedParent(f1.emulatedFrom || "");
+        setRow2EmulatedPower(f1.emulatedPower);
       }
     }
     if (isSkillBased && selectedFeats[2]) {
-      setRow3Feat(selectedFeats[2].name);
-      if (selectedFeats[2].abilityChoices) {
-        setRow3Ability1(selectedFeats[2].abilityChoices[0] || "");
-        setRow3Ability2(selectedFeats[2].abilityChoices[1] || "");
+      const f2 = selectedFeats[2];
+      setRow3Feat(f2.name);
+      if (f2.abilityChoices) {
+        setRow3Ability1(f2.abilityChoices[0] || "");
+        setRow3Ability2(f2.abilityChoices[1] || "");
       }
-      if (selectedFeats[2].powerChoices) {
-        setRow3Power1(selectedFeats[2].powerChoices[0] || "");
-        setRow3Power2(selectedFeats[2].powerChoices[1] || "");
+      if (f2.powerChoices) {
+        setRow3Power1(f2.powerChoices[0] || "");
+        setRow3Power2(f2.powerChoices[1] || "");
       }
-      if (selectedFeats[2].powerTrick) {
-        const trick = selectedFeats[2].powerTrick;
-        if (POWER_TRICKS.includes(trick)) {
+      if (f2.powerTrick) {
+        setRow3StuntType("trick");
+        const trick = f2.powerTrick;
+        if (availablePowerTricks.includes(trick)) {
           setRow3PowerTrick(trick);
         } else {
           setRow3PowerTrick("custom");
           setRow3CustomPowerTrick(trick);
         }
+      } else if (f2.emulatedPower) {
+        setRow3StuntType("emulated");
+        setRow3EmulatedParent(f2.emulatedFrom || "");
+        setRow3EmulatedPower(f2.emulatedPower);
       }
     }
     if (selectedFeats[0]?.name === "Learn Combat Maneuver" && selectedManeuvers[0]) {
@@ -243,9 +326,13 @@ const Step7_SkillsAndFeats = () => {
       ? abilityIncreaseValid(row1Ability1, row1Ability2)
       : row1Feat.startsWith("Power Score Increase")
       ? powerIncreaseValid(row1Power1)
-      : row1Feat === "Learn Power Trick"
-      ? row1PowerTrick !== "" &&
-        (row1PowerTrick !== "custom" || row1CustomPowerTrick.trim() !== "")
+      : isPowerStuntFeat(row1Feat)
+      ? row1StuntType === "trick"
+        ? row1PowerTrick !== "" &&
+          (row1PowerTrick !== "custom" || row1CustomPowerTrick.trim() !== "")
+        : row1StuntType === "emulated"
+        ? row1EmulatedParent !== "" && row1EmulatedPower !== ""
+        : false
       : true);
   const row2Valid = row2SkillSet
     ? row2SkillSet === "custom"
@@ -258,9 +345,13 @@ const Step7_SkillsAndFeats = () => {
         ? abilityIncreaseValid(row2Ability1, row2Ability2)
         : row2Feat.startsWith("Power Score Increase")
         ? powerIncreaseValid(row2Power1)
-        : row2Feat === "Learn Power Trick"
-        ? row2PowerTrick !== "" &&
-          (row2PowerTrick !== "custom" || row2CustomPowerTrick.trim() !== "")
+        : isPowerStuntFeat(row2Feat)
+        ? row2StuntType === "trick"
+          ? row2PowerTrick !== "" &&
+            (row2PowerTrick !== "custom" || row2CustomPowerTrick.trim() !== "")
+          : row2StuntType === "emulated"
+          ? row2EmulatedParent !== "" && row2EmulatedPower !== ""
+          : false
         : true);
   const row3Valid = !isSkillBased
     ? true
@@ -275,9 +366,13 @@ const Step7_SkillsAndFeats = () => {
         ? abilityIncreaseValid(row3Ability1, row3Ability2)
         : row3Feat.startsWith("Power Score Increase")
         ? powerIncreaseValid(row3Power1)
-        : row3Feat === "Learn Power Trick"
-        ? row3PowerTrick !== "" &&
-          (row3PowerTrick !== "custom" || row3CustomPowerTrick.trim() !== "")
+        : isPowerStuntFeat(row3Feat)
+        ? row3StuntType === "trick"
+          ? row3PowerTrick !== "" &&
+            (row3PowerTrick !== "custom" || row3CustomPowerTrick.trim() !== "")
+          : row3StuntType === "emulated"
+          ? row3EmulatedParent !== "" && row3EmulatedPower !== ""
+          : false
         : true);
 
   const canContinue = firstSkillValid && row1FeatValid && row2Valid && row3Valid;
@@ -295,6 +390,8 @@ const Step7_SkillsAndFeats = () => {
       abilityChoices?: string[];
       powerChoices?: string[];
       powerTrick?: string;
+      emulatedFrom?: string;
+      emulatedPower?: string;
     }[] = [];
     const maneuversSelected: { name: string }[] = [];
     pushSkill(row1SkillSet, row1CustomSkill, skills);
@@ -307,6 +404,8 @@ const Step7_SkillsAndFeats = () => {
         abilityChoices?: string[];
         powerChoices?: string[];
         powerTrick?: string;
+        emulatedFrom?: string;
+        emulatedPower?: string;
       } = {
         name: row1Feat,
       };
@@ -322,9 +421,14 @@ const Step7_SkillsAndFeats = () => {
       ) {
         feat.powerChoices = [row1Power1, row1Power2 || row1Power1];
       }
-      if (row1Feat === "Learn Power Trick") {
-        feat.powerTrick =
-          row1PowerTrick === "custom" ? row1CustomPowerTrick : row1PowerTrick;
+      if (isPowerStuntFeat(row1Feat)) {
+        if (row1StuntType === "trick") {
+          feat.powerTrick =
+            row1PowerTrick === "custom" ? row1CustomPowerTrick : row1PowerTrick;
+        } else if (row1StuntType === "emulated") {
+          feat.emulatedFrom = row1EmulatedParent;
+          feat.emulatedPower = row1EmulatedPower;
+        }
       }
       featsSelected.push(feat);
       if (row1Feat === "Learn Combat Maneuver" && row1Maneuver)
@@ -336,6 +440,8 @@ const Step7_SkillsAndFeats = () => {
         abilityChoices?: string[];
         powerChoices?: string[];
         powerTrick?: string;
+        emulatedFrom?: string;
+        emulatedPower?: string;
       } = {
         name: row2Feat,
       };
@@ -351,9 +457,14 @@ const Step7_SkillsAndFeats = () => {
       ) {
         feat.powerChoices = [row2Power1, row2Power2 || row2Power1];
       }
-      if (row2Feat === "Learn Power Trick") {
-        feat.powerTrick =
-          row2PowerTrick === "custom" ? row2CustomPowerTrick : row2PowerTrick;
+      if (isPowerStuntFeat(row2Feat)) {
+        if (row2StuntType === "trick") {
+          feat.powerTrick =
+            row2PowerTrick === "custom" ? row2CustomPowerTrick : row2PowerTrick;
+        } else if (row2StuntType === "emulated") {
+          feat.emulatedFrom = row2EmulatedParent;
+          feat.emulatedPower = row2EmulatedPower;
+        }
       }
       featsSelected.push(feat);
       if (row2Feat === "Learn Combat Maneuver" && row2Maneuver)
@@ -365,6 +476,8 @@ const Step7_SkillsAndFeats = () => {
         abilityChoices?: string[];
         powerChoices?: string[];
         powerTrick?: string;
+        emulatedFrom?: string;
+        emulatedPower?: string;
       } = {
         name: row3Feat,
       };
@@ -380,9 +493,14 @@ const Step7_SkillsAndFeats = () => {
       ) {
         feat.powerChoices = [row3Power1, row3Power2 || row3Power1];
       }
-      if (row3Feat === "Learn Power Trick") {
-        feat.powerTrick =
-          row3PowerTrick === "custom" ? row3CustomPowerTrick : row3PowerTrick;
+      if (isPowerStuntFeat(row3Feat)) {
+        if (row3StuntType === "trick") {
+          feat.powerTrick =
+            row3PowerTrick === "custom" ? row3CustomPowerTrick : row3PowerTrick;
+        } else if (row3StuntType === "emulated") {
+          feat.emulatedFrom = row3EmulatedParent;
+          feat.emulatedPower = row3EmulatedPower;
+        }
       }
       featsSelected.push(feat);
       if (row3Feat === "Learn Combat Maneuver" && row3Maneuver)
@@ -683,7 +801,7 @@ const Step7_SkillsAndFeats = () => {
           <SelectValue placeholder="Select power trick" />
         </SelectTrigger>
         <SelectContent>
-          {POWER_TRICKS.map((t) => (
+          {availablePowerTricks.map((t) => (
             <SelectItem key={t} value={t}>
               {t}
             </SelectItem>
@@ -698,6 +816,70 @@ const Step7_SkillsAndFeats = () => {
           value={custom}
           onChange={(e) => setCustom(e.target.value)}
         />
+      )}
+    </div>
+  );
+
+  const renderStuntTypeSelect = (
+    value: string,
+    setValue: (v: string) => void
+  ) => (
+    <div className="mt-2">
+      <Select
+        value={value}
+        onValueChange={(v) => {
+          setValue(v);
+        }}
+      >
+        <SelectTrigger className="w-full">
+          <SelectValue placeholder="Select stunt type" />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectItem value="trick">Power Trick</SelectItem>
+          <SelectItem value="emulated">Emulated Power</SelectItem>
+        </SelectContent>
+      </Select>
+    </div>
+  );
+
+  const renderEmulatedSelect = (
+    parent: string,
+    setParent: (v: string) => void,
+    child: string,
+    setChild: (v: string) => void
+  ) => (
+    <div className="mt-2 space-y-2">
+      <Select
+        value={parent}
+        onValueChange={(v) => {
+          setParent(v);
+          setChild("");
+        }}
+      >
+        <SelectTrigger className="w-full">
+          <SelectValue placeholder="Select power" />
+        </SelectTrigger>
+        <SelectContent>
+          {availableEmulatedParents.map((p) => (
+            <SelectItem key={p} value={p}>
+              {p}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
+      {parent && (
+        <Select value={child} onValueChange={setChild}>
+          <SelectTrigger className="w-full">
+            <SelectValue placeholder="Select emulated power" />
+          </SelectTrigger>
+          <SelectContent>
+            {(emulatedPowerMap[parent] || []).map((ep) => (
+              <SelectItem key={ep} value={ep}>
+                {ep}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
       )}
     </div>
   );
@@ -728,6 +910,9 @@ const Step7_SkillsAndFeats = () => {
               setRow1Power2("");
               setRow1PowerTrick("");
               setRow1CustomPowerTrick("");
+              setRow1StuntType("");
+              setRow1EmulatedParent("");
+              setRow1EmulatedPower("");
             })}
             {row1Feat === "Learn Combat Maneuver" &&
               renderManeuverSelect(row1Maneuver, setRow1Maneuver)}
@@ -745,13 +930,31 @@ const Step7_SkillsAndFeats = () => {
                 row1Power2,
                 setRow1Power2
               )}
-            {row1Feat === "Learn Power Trick" &&
-              renderPowerTrickSelect(
-                row1PowerTrick,
-                setRow1PowerTrick,
-                row1CustomPowerTrick,
-                setRow1CustomPowerTrick
-              )}
+            {isPowerStuntFeat(row1Feat) && (
+              <>
+                {renderStuntTypeSelect(row1StuntType, (v) => {
+                  setRow1StuntType(v);
+                  setRow1PowerTrick("");
+                  setRow1CustomPowerTrick("");
+                  setRow1EmulatedParent("");
+                  setRow1EmulatedPower("");
+                })}
+                {row1StuntType === "trick" &&
+                  renderPowerTrickSelect(
+                    row1PowerTrick,
+                    setRow1PowerTrick,
+                    row1CustomPowerTrick,
+                    setRow1CustomPowerTrick
+                  )}
+                {row1StuntType === "emulated" &&
+                  renderEmulatedSelect(
+                    row1EmulatedParent,
+                    setRow1EmulatedParent,
+                    row1EmulatedPower,
+                    setRow1EmulatedPower
+                  )}
+              </>
+            )}
           </div>
         </div>
         <div className="grid md:grid-cols-2 gap-4">
@@ -768,6 +971,9 @@ const Step7_SkillsAndFeats = () => {
                 setRow2Power2("");
                 setRow2PowerTrick("");
                 setRow2CustomPowerTrick("");
+                setRow2StuntType("");
+                setRow2EmulatedParent("");
+                setRow2EmulatedPower("");
               }
             },
             row2CustomSkill,
@@ -790,6 +996,9 @@ const Step7_SkillsAndFeats = () => {
                   setRow2Power2("");
                   setRow2PowerTrick("");
                   setRow2CustomPowerTrick("");
+                  setRow2StuntType("");
+                  setRow2EmulatedParent("");
+                  setRow2EmulatedPower("");
                 }
               },
               !!row2SkillSet,
@@ -811,13 +1020,31 @@ const Step7_SkillsAndFeats = () => {
                 row2Power2,
                 setRow2Power2
               )}
-            {row2Feat === "Learn Power Trick" &&
-              renderPowerTrickSelect(
-                row2PowerTrick,
-                setRow2PowerTrick,
-                row2CustomPowerTrick,
-                setRow2CustomPowerTrick
-              )}
+            {isPowerStuntFeat(row2Feat) && (
+              <>
+                {renderStuntTypeSelect(row2StuntType, (v) => {
+                  setRow2StuntType(v);
+                  setRow2PowerTrick("");
+                  setRow2CustomPowerTrick("");
+                  setRow2EmulatedParent("");
+                  setRow2EmulatedPower("");
+                })}
+                {row2StuntType === "trick" &&
+                  renderPowerTrickSelect(
+                    row2PowerTrick,
+                    setRow2PowerTrick,
+                    row2CustomPowerTrick,
+                    setRow2CustomPowerTrick
+                  )}
+                {row2StuntType === "emulated" &&
+                  renderEmulatedSelect(
+                    row2EmulatedParent,
+                    setRow2EmulatedParent,
+                    row2EmulatedPower,
+                    setRow2EmulatedPower
+                  )}
+              </>
+            )}
           </div>
         </div>
         {isSkillBased && (
@@ -835,6 +1062,9 @@ const Step7_SkillsAndFeats = () => {
                   setRow3Power2("");
                   setRow3PowerTrick("");
                   setRow3CustomPowerTrick("");
+                  setRow3StuntType("");
+                  setRow3EmulatedParent("");
+                  setRow3EmulatedPower("");
                 }
               },
               row3CustomSkill,
@@ -857,6 +1087,9 @@ const Step7_SkillsAndFeats = () => {
                     setRow3Power2("");
                     setRow3PowerTrick("");
                     setRow3CustomPowerTrick("");
+                    setRow3StuntType("");
+                    setRow3EmulatedParent("");
+                    setRow3EmulatedPower("");
                   }
                 },
                 !!row3SkillSet,
@@ -878,13 +1111,31 @@ const Step7_SkillsAndFeats = () => {
                   row3Power2,
                   setRow3Power2
                 )}
-              {row3Feat === "Learn Power Trick" &&
-                renderPowerTrickSelect(
-                  row3PowerTrick,
-                  setRow3PowerTrick,
-                  row3CustomPowerTrick,
-                  setRow3CustomPowerTrick
-                )}
+              {isPowerStuntFeat(row3Feat) && (
+                <>
+                  {renderStuntTypeSelect(row3StuntType, (v) => {
+                    setRow3StuntType(v);
+                    setRow3PowerTrick("");
+                    setRow3CustomPowerTrick("");
+                    setRow3EmulatedParent("");
+                    setRow3EmulatedPower("");
+                  })}
+                  {row3StuntType === "trick" &&
+                    renderPowerTrickSelect(
+                      row3PowerTrick,
+                      setRow3PowerTrick,
+                      row3CustomPowerTrick,
+                      setRow3CustomPowerTrick
+                    )}
+                  {row3StuntType === "emulated" &&
+                    renderEmulatedSelect(
+                      row3EmulatedParent,
+                      setRow3EmulatedParent,
+                      row3EmulatedPower,
+                      setRow3EmulatedPower
+                    )}
+                </>
+              )}
             </div>
           </div>
         )}
