@@ -233,7 +233,7 @@ export default function Step10_Summary() {
   return (
     <div className="container mx-auto px-4 py-6 font-comic" ref={summaryRef}>
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold text-red-500">Step 10: Character Sheet</h1>
+        <h1 className="text-3xl font-bold text-red-500 font-comic">Step 10: Character Sheet</h1>
         <div className="flex gap-2">
           <Button 
             onClick={handleSaveCharacter} 
@@ -260,7 +260,7 @@ export default function Step10_Summary() {
             <div className="space-y-4">
               <div>
                 <Label className="text-sm text-gray-400">Name</Label>
-                <h2 className="text-2xl font-bold">{character.name || "Unnamed Hero"}</h2>
+                <h2 className="text-2xl font-bold font-display">{character.name || "Unnamed Hero"}</h2>
                 <p className="text-gray-400 text-sm">{character.secretIdentity ? `Secret Identity: ${character.secretIdentity}` : ""}</p>
               </div>
               

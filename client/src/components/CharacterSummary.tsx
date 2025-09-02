@@ -76,7 +76,7 @@ export default function CharacterSummary() {
   };
 
   return (
-    <div className="lg:w-1/3 bg-panel rounded-2xl p-5 comic-border h-min sticky top-24 hidden lg:block">
+    <div className="lg:w-1/3 bg-panel rounded-2xl p-5 comic-border h-min sticky top-24 hidden lg:block font-comic">
       <div className="border-b-2 border-gray-700 pb-3 mb-4">
         <h3 className="font-comic text-2xl flex items-center">
           <User className="mr-2 h-5 w-5 text-accent" />
@@ -86,7 +86,7 @@ export default function CharacterSummary() {
 
       <div className="space-y-4">
         <div className="text-center mb-4">
-          <h4 className="font-comic text-2xl text-accent">
+          <h4 className="font-display text-2xl text-accent">
             {character.name || "Unnamed Character"}
           </h4>
           <div className="text-sm text-gray-400 italic">

@@ -7,14 +7,14 @@ export default function InlineCharacterSheet() {
   return (
     <div
       id="character-sheet"
-      className="bg-white text-black p-6 w-[210mm] mx-auto"
+      className="bg-white text-black p-6 w-[210mm] mx-auto font-comic"
     >
       {/* Two column grid matching the reference PDF */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {/* Left Column */}
         <div className="space-y-4">
           <div className="text-center pb-4 border-b-2 border-gray-300">
-            <h1 className="font-comic text-4xl text-accent">{character.name || "Unnamed Character"}</h1>
+            <h1 className="font-display text-4xl text-accent">{character.name || "Unnamed Character"}</h1>
             <p className="text-gray-700">
               {character.secretIdentity ? `Secret Identity: ${character.secretIdentity}` : "No secret identity"}
             </p>

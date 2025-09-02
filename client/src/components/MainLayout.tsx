@@ -324,7 +324,7 @@ export default function MainLayout({ children }: MainLayoutProps) {
             <div className="p-4">
               {/* On mobile we'd import and use CharacterSummary here */}
               <div className="text-center">
-                <h3 className="font-comic text-lg">{character.name || "Unnamed Character"}</h3>
+                <h3 className="font-display text-lg">{character.name || "Unnamed Character"}</h3>
                 <p className="text-sm text-muted-foreground">
                   {character.origin || "No Origin"} • {character.archetype || "No Archetype"}
                 </p>
