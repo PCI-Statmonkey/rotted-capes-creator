@@ -109,14 +109,6 @@ export default function CharacterSummary() {
             <span className="text-gray-400">Grit:</span>
             <span>+{character.grit}</span>
           </div>
-          <div className="flex items-center justify-between">
-            <span className="text-gray-400">Burnout:</span>
-            <span>{character.currentBurnout} / {character.burnoutThreshold}</span>
-          </div>
-          <div className="flex items-center justify-between">
-            <span className="text-gray-400">Next Burnout Check DC:</span>
-            <span>{10 + 5 * character.burnoutChecks}</span>
-          </div>
         </div>
 
         <div className="border-2 border-gray-700 rounded-lg p-3 bg-gray-800 mb-4 space-y-2">
