@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { motion } from "framer-motion";
 import { ArrowLeft, ArrowRight, Plus, X, Info } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -28,6 +28,7 @@ import {
 import skillSetsData from "@/rules/skills.json";
 import featsData from "@/rules/feats.json";
 import weaknessesData from "@/rules/weaknesses.json";
+import powersData from "@/rules/powers.json";
 import { displayFeatName } from "@/lib/utils";
 
 // Define weakness types
@@ -108,6 +109,12 @@ export default function Step6_Weaknesses() {
   const [tenPointAbility2, setTenPointAbility2] = useState("");
   const [tenPointPower1, setTenPointPower1] = useState("");
   const [tenPointPower2, setTenPointPower2] = useState("");
+  const [tenPointPowerTrick, setTenPointPowerTrick] = useState("");
+  const [tenPointCustomPowerTrick, setTenPointCustomPowerTrick] = useState("");
+  const [tenPointEmulatedParent, setTenPointEmulatedParent] = useState("");
+  const [tenPointEmulatedPower, setTenPointEmulatedPower] = useState("");
+  const [tenPointCustomEmulatedPower, setTenPointCustomEmulatedPower] = useState("");
+  const [tenPointNewPower, setTenPointNewPower] = useState("");
   const [fifteenPointAbility, setFifteenPointAbility] = useState("");
 
   // Calculate total weakness points
@@ -146,6 +153,75 @@ export default function Step6_Weaknesses() {
     // Navigate to next step - Skills & Feats
     setCurrentStep(7);
   };
+
+  const powerTrickMap = useMemo(() => {
+    const map: Record<string, string[]> = {};
+    (powersData as any[]).forEach((p: any) => {
+      if (/^Power Trick:/i.test(p.name)) {
+        const match = p.description.match(/\*\*Power[s]?:\*\*\s*([^*]+)/i);
+        if (match) {
+          map[p.name] = match[1]
+            .split(/,|\n/)
+            .map((s: string) => s.trim())
+            .filter(Boolean);
+        } else {
+          map[p.name] = [];
+        }
+      }
+    });
+    return map;
+  }, []);
+
+  const emulatedPowerMap = useMemo(() => {
+    const map: Record<string, string[]> = {};
+    (powersData as any[]).forEach((p: any) => {
+      if (!/^Power Trick:/i.test(p.name)) {
+        const match = p.description.match(/\*Emulated Powers:\*([^*]+)/i);
+        if (match) {
+          let listText = match[1];
+          const end = listText.indexOf("*Power");
+          if (end !== -1) listText = listText.slice(0, end);
+          const list = listText
+            .split(/,|\n/)
+            .map((s: string) => s.replace(/\\\*.*$/, "").trim())
+            .filter(Boolean);
+          if (list.length) map[p.name] = list;
+        }
+      }
+    });
+    return map;
+  }, []);
+
+  const characterPowerNames = useMemo(
+    () => character.powers.map((p) => p.name),
+    [character.powers]
+  );
+
+  const availablePowerTricks = useMemo(
+    () =>
+      Object.entries(powerTrickMap)
+        .filter(([_, reqs]) =>
+          reqs.every((r) => characterPowerNames.includes(r))
+        )
+        .map(([name]) => name),
+    [powerTrickMap, characterPowerNames]
+  );
+
+  const availableEmulatedParents = useMemo(
+    () =>
+      characterPowerNames.filter((p) =>
+        Array.isArray(emulatedPowerMap[p]) && emulatedPowerMap[p].length > 0
+      ),
+    [characterPowerNames, emulatedPowerMap]
+  );
+
+  const availableNewPowers = useMemo(
+    () =>
+      (powersData as any[])
+        .map((p: any) => p.name)
+        .filter((n: string) => !characterPowerNames.includes(n)),
+    [characterPowerNames]
+  );
 
   // Add a weakness to the character
   const addWeakness = () => {
@@ -334,6 +410,73 @@ export default function Step6_Weaknesses() {
         setTenPointFeat('');
         setTenPointPower1('');
         setTenPointPower2('');
+        setTenPointPowerTrick('');
+        setTenPointCustomPowerTrick('');
+        setTenPointEmulatedParent('');
+        setTenPointEmulatedPower('');
+        setTenPointCustomEmulatedPower('');
+        setTenPointNewPower('');
+      } else if (tenPointFeat.startsWith('Acquire New Power')) {
+        if (!tenPointNewPower) return;
+        const featObj = {
+          name: tenPointFeat,
+          acquiredPower: tenPointNewPower,
+          source: 'Weakness',
+        } as any;
+        if (!character.feats.some(f => f.name === tenPointFeat)) {
+          updateCharacterField('feats', [...character.feats, featObj]);
+        }
+        const newPower = { name: tenPointNewPower, score: 12, finalScore: 12 } as any;
+        updateCharacterField('powers', [...character.powers, newPower]);
+        updateAllocations([...allocations, { type: '10-feat', target: tenPointFeat, amount: 10 }]);
+        setTenPointFeat('');
+        setTenPointPower1('');
+        setTenPointPower2('');
+        setTenPointNewPower('');
+      } else if (tenPointFeat.startsWith('Master Power Trick')) {
+        const trick =
+          tenPointPowerTrick === 'custom'
+            ? tenPointCustomPowerTrick
+            : tenPointPowerTrick;
+        if (!trick) return;
+        const featObj = {
+          name: tenPointFeat,
+          powerTrick: trick,
+          source: 'Weakness',
+        };
+        if (!character.feats.some(f => f.name === tenPointFeat)) {
+          updateCharacterField('feats', [...character.feats, featObj]);
+        }
+        updateAllocations([...allocations, { type: '10-feat', target: tenPointFeat, amount: 10 }]);
+        setTenPointFeat('');
+        setTenPointPowerTrick('');
+        setTenPointCustomPowerTrick('');
+      } else if (tenPointFeat.startsWith('Master Emulated Power')) {
+        if (!tenPointEmulatedParent) return;
+        const emuPower =
+          tenPointEmulatedPower === 'custom'
+            ? tenPointCustomEmulatedPower
+            : tenPointEmulatedPower;
+        if (!emuPower) return;
+        const featObj = {
+          name: tenPointFeat,
+          emulatedFrom: tenPointEmulatedParent,
+          emulatedPower: emuPower,
+          source: 'Weakness',
+        } as any;
+        if (!character.feats.some(f => f.name === tenPointFeat)) {
+          updateCharacterField('feats', [...character.feats, featObj]);
+        }
+        const parent = character.powers.find(p => p.name === tenPointEmulatedParent);
+        const base = parent ? (parent.finalScore ?? parent.score ?? 10) + 2 : 12;
+        const finalScore = Math.min(25, base);
+        const newPower = { name: emuPower, score: finalScore, finalScore } as any;
+        updateCharacterField('powers', [...character.powers, newPower]);
+        updateAllocations([...allocations, { type: '10-feat', target: tenPointFeat, amount: 10 }]);
+        setTenPointFeat('');
+        setTenPointEmulatedParent('');
+        setTenPointEmulatedPower('');
+        setTenPointCustomEmulatedPower('');
       } else {
         if (!character.feats.some(f => f.name === tenPointFeat)) {
           updateCharacterField('feats', [...character.feats, { name: tenPointFeat, source: 'Weakness' }]);
@@ -342,6 +485,12 @@ export default function Step6_Weaknesses() {
         setTenPointFeat('');
         setTenPointPower1('');
         setTenPointPower2('');
+        setTenPointPowerTrick('');
+        setTenPointCustomPowerTrick('');
+        setTenPointEmulatedParent('');
+        setTenPointEmulatedPower('');
+        setTenPointCustomEmulatedPower('');
+        setTenPointNewPower('');
       }
     } else {
       if (!tenPointAbility1 || !tenPointAbility2) return;
@@ -387,6 +536,126 @@ export default function Step6_Weaknesses() {
     // Weaknesses are optional, so we can always proceed
     return true;
   };
+
+  const renderPowerTrickSelect = (
+    value: string,
+    setValue: (v: string) => void,
+    custom: string,
+    setCustom: (v: string) => void
+  ) => (
+    <div className="mt-2">
+      <Select
+        value={value}
+        onValueChange={(v) => {
+          setValue(v);
+          if (v !== "custom") setCustom("");
+        }}
+      >
+        <SelectTrigger className="bg-gray-700">
+          <SelectValue placeholder="Select power trick" />
+        </SelectTrigger>
+        <SelectContent>
+          {availablePowerTricks.map((t) => (
+            <SelectItem key={t} value={t}>
+              {t}
+            </SelectItem>
+          ))}
+          <SelectItem value="custom">Custom...</SelectItem>
+        </SelectContent>
+      </Select>
+      {value === "custom" && (
+        <Input
+          className="mt-2 bg-gray-700"
+          placeholder="Enter power trick"
+          value={custom}
+          onChange={(e) => setCustom(e.target.value)}
+        />
+      )}
+    </div>
+  );
+
+  const renderEmulatedSelect = (
+    parent: string,
+    setParent: (v: string) => void,
+    child: string,
+    setChild: (v: string) => void,
+    custom: string,
+    setCustom: (v: string) => void,
+    allowCustom = false
+  ) => (
+    <div className="mt-2 space-y-2">
+      <Select
+        value={parent}
+        onValueChange={(v) => {
+          setParent(v);
+          setChild("");
+          if (allowCustom) setCustom("");
+        }}
+      >
+        <SelectTrigger className="bg-gray-700">
+          <SelectValue placeholder="Select power" />
+        </SelectTrigger>
+        <SelectContent>
+          {availableEmulatedParents.map((p) => (
+            <SelectItem key={p} value={p}>
+              {p}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
+      {parent && (
+        <>
+          <Select
+            value={child}
+            onValueChange={(v) => {
+              setChild(v);
+              if (allowCustom && v !== "custom") setCustom("");
+            }}
+          >
+            <SelectTrigger className="bg-gray-700">
+              <SelectValue placeholder="Select emulated power" />
+            </SelectTrigger>
+            <SelectContent>
+              {(emulatedPowerMap[parent] || []).map((ep) => (
+                <SelectItem key={ep} value={ep}>
+                  {ep}
+                </SelectItem>
+              ))}
+              {allowCustom && <SelectItem value="custom">Custom...</SelectItem>}
+            </SelectContent>
+          </Select>
+          {allowCustom && child === "custom" && (
+            <Input
+              className="mt-2 bg-gray-700"
+              placeholder="Enter emulated power"
+              value={custom}
+              onChange={(e) => setCustom(e.target.value)}
+            />
+          )}
+        </>
+      )}
+    </div>
+  );
+
+  const renderNewPowerSelect = (
+    value: string,
+    setValue: (v: string) => void
+  ) => (
+    <div className="mt-2">
+      <Select value={value} onValueChange={setValue}>
+        <SelectTrigger className="bg-gray-700">
+          <SelectValue placeholder="Select power" />
+        </SelectTrigger>
+        <SelectContent>
+          {availableNewPowers.map((p) => (
+            <SelectItem key={p} value={p}>
+              {p}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
+    </div>
+  );
 
   return (
     <motion.div
@@ -950,6 +1219,12 @@ export default function Step6_Weaknesses() {
                             setTenPointFeat(v);
                             setTenPointPower1('');
                             setTenPointPower2('');
+                            setTenPointPowerTrick('');
+                            setTenPointCustomPowerTrick('');
+                            setTenPointEmulatedParent('');
+                            setTenPointEmulatedPower('');
+                            setTenPointCustomEmulatedPower('');
+                            setTenPointNewPower('');
                           }}
                         >
                           <SelectTrigger className="bg-gray-700">
@@ -1009,6 +1284,26 @@ export default function Step6_Weaknesses() {
                             </div>
                           </div>
                         )}
+                        {tenPointFeat.startsWith('Acquire New Power') && (
+                          renderNewPowerSelect(tenPointNewPower, setTenPointNewPower)
+                        )}
+                        {tenPointFeat.startsWith('Master Power Trick') &&
+                          renderPowerTrickSelect(
+                            tenPointPowerTrick,
+                            setTenPointPowerTrick,
+                            tenPointCustomPowerTrick,
+                            setTenPointCustomPowerTrick
+                          )}
+                        {tenPointFeat.startsWith('Master Emulated Power') &&
+                          renderEmulatedSelect(
+                            tenPointEmulatedParent,
+                            setTenPointEmulatedParent,
+                            tenPointEmulatedPower,
+                            setTenPointEmulatedPower,
+                            tenPointCustomEmulatedPower,
+                            setTenPointCustomEmulatedPower,
+                            true
+                          )}
                       </div>
                     ) : (
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
@@ -1050,7 +1345,16 @@ export default function Step6_Weaknesses() {
                       onClick={handleAllocate10}
                       disabled={
                         tenPointMode === 'feat'
-                          ? !tenPointFeat || (tenPointFeat.startsWith('Power Score Increase') && !tenPointPower1) || remainingWeaknessPoints < 10
+                          ? !tenPointFeat ||
+                            (tenPointFeat.startsWith('Power Score Increase') && !tenPointPower1) ||
+                            (tenPointFeat.startsWith('Acquire New Power') && !tenPointNewPower) ||
+                            (tenPointFeat.startsWith('Master Power Trick') &&
+                              (!tenPointPowerTrick ||
+                                (tenPointPowerTrick === 'custom' && !tenPointCustomPowerTrick.trim()))) ||
+                            (tenPointFeat.startsWith('Master Emulated Power') &&
+                              (!tenPointEmulatedParent || !tenPointEmulatedPower ||
+                                (tenPointEmulatedPower === 'custom' && !tenPointCustomEmulatedPower.trim()))) ||
+                            remainingWeaknessPoints < 10
                           : !tenPointAbility1 || !tenPointAbility2 || remainingWeaknessPoints < 10
                       }
                       className="w-full"

@@ -75,16 +75,19 @@ export default function Step10_Summary() {
     const avoidance = 10 + Math.max(dexMod, intMod) + character.rankBonus;
 
     // Fortitude uses the better of Strength or Constitution plus rank bonus
-    const fortitude = 10 + Math.max(strMod, conMod) + character.rankBonus;
+    let fortitude = 10 + Math.max(strMod, conMod) + character.rankBonus;
 
     // Willpower uses the better of Charisma or Wisdom plus rank bonus
     const willpower = 10 + Math.max(chaMod, wisMod) + character.rankBonus;
-    
+
+    const toughnessCount = feats.filter((f) => f.name === "Toughness").length;
+    if (toughnessCount > 0) fortitude += 1;
+
     // Stamina calculation
-    const stamina = avoidance + fortitude + willpower;
-    
+    const stamina = avoidance + fortitude + willpower + toughnessCount * 10;
+
     // Wounds calculation
-    const wounds = Math.max(3, Math.ceil(conMod / 2));
+    const wounds = Math.max(3, Math.ceil(conMod / 2)) + (toughnessCount > 1 ? 1 : 0);
     
     // Initiative calculation
     const initiative = dexMod;
