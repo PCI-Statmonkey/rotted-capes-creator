@@ -250,6 +250,21 @@ export default function Step4_Abilities() {
     return assignedStandardScores[ability];
   };
 
+  const handleUnassignStandardScore = (ability: string) => {
+    if (assignmentMethod !== "standardArray") return;
+    const currentScore = assignedStandardScores[ability];
+    if (currentScore === null) return;
+    const newAssignedScores = { ...assignedStandardScores, [ability]: null };
+    setAssignedStandardScores(newAssignedScores);
+    const newAbilities = { ...localAbilities };
+    newAbilities[ability as keyof typeof localAbilities] = {
+      value: 8,
+      ...getScoreData(8)
+    };
+    setLocalAbilities(newAbilities);
+    setSelectedStandardScore(currentScore);
+  };
+
   const resetStandardArray = () => {
     setAssignedStandardScores({
       strength: null,
@@ -528,17 +543,20 @@ const handleContinue = () => {
                 key={ability}
                 className={`
                   bg-gray-800 rounded-lg p-4 border-2 border-gray-700 flex flex-col
-                  ${assignmentMethod === 'standardArray' && !getSelectedStandardScore(ability) ? 
-                    'cursor-pointer hover:border-accent' : ''}
+                  ${assignmentMethod === 'standardArray' ? 'cursor-pointer hover:border-accent' : ''}
                 `}
                 onClick={() => {
-                  if (
-                    assignmentMethod === 'standardArray' &&
-                    selectedStandardScore !== null &&
-                    !isStandardScoreSelected(selectedStandardScore)
-                  ) {
-                    handleSelectStandardScore(ability, selectedStandardScore);
-                    setSelectedStandardScore(null);
+                  if (assignmentMethod !== 'standardArray') return;
+                  const currentAssigned = getSelectedStandardScore(ability);
+                  if (selectedStandardScore === null) {
+                    if (currentAssigned !== null) {
+                      handleUnassignStandardScore(ability);
+                    }
+                  } else {
+                    if (!isStandardScoreSelected(selectedStandardScore)) {
+                      handleSelectStandardScore(ability, selectedStandardScore);
+                      setSelectedStandardScore(null);
+                    }
                   }
                 }}
               >
