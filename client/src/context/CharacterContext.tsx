@@ -71,6 +71,7 @@ export interface Feat {
   powerTrick?: string;
   emulatedFrom?: string;
   emulatedPower?: string;
+  acquiredPower?: string;
 }
 
 export interface Maneuver {
