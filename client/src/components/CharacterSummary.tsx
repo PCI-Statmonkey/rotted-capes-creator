@@ -95,11 +95,12 @@ export default function CharacterSummary() {
         </div>
 
         <div className="border-2 border-gray-700 rounded-lg p-3 bg-gray-800 mb-4 space-y-2">
-          <div className="flex items-center justify-between">
+          <div className="flex items-start justify-between">
             <span className="text-gray-400">Rank/Level:</span>
-            <span>
-              Rank {character.rank} ({getRankName(character.rank)}) / Level {character.level}
-            </span>
+            <div className="text-right leading-tight">
+              <div>Rank {character.rank} ({getRankName(character.rank)})</div>
+              <div>Level {character.level}</div>
+            </div>
           </div>
           <div className="flex items-center justify-between">
             <span className="text-gray-400">Rank Bonus:</span>
