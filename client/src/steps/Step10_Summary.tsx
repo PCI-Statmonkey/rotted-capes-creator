@@ -462,6 +462,9 @@ export default function Step10_Summary() {
                 {character.powers.map((power, index) => {
                   const score = getFinalPowerScore(power);
                   const data = getScoreData(score);
+                  // Some legacy data may omit perks or flaws arrays. Default to empty arrays
+                  const perks = power.perks ?? [];
+                  const flaws = power.flaws ?? [];
                   return (
                     <div key={index} className="border border-gray-700 rounded-lg p-3">
                       <div className="flex justify-between items-start">
@@ -481,24 +484,24 @@ export default function Step10_Summary() {
                         </div>
                       )}
 
-                      {(power.perks.length > 0 || power.flaws.length > 0) && (
+                      {(perks.length > 0 || flaws.length > 0) && (
                         <div className="grid grid-cols-2 gap-2 mt-2">
-                          {power.perks.length > 0 && (
+                          {perks.length > 0 && (
                             <div>
                               <Label className="text-xs text-gray-400">Perks</Label>
                               <ul className="text-xs ml-4 list-disc">
-                                {power.perks.map((perk, idx) => (
+                                {perks.map((perk, idx) => (
                                   <li key={idx}>{perk}</li>
                                 ))}
                               </ul>
                             </div>
                           )}
 
-                          {power.flaws.length > 0 && (
+                          {flaws.length > 0 && (
                             <div>
                               <Label className="text-xs text-gray-400">Flaws</Label>
                               <ul className="text-xs ml-4 list-disc">
-                                {power.flaws.map((flaw, idx) => (
+                                {flaws.map((flaw, idx) => (
                                   <li key={idx}>{flaw}</li>
                                 ))}
                               </ul>
