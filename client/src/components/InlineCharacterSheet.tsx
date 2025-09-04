@@ -9,7 +9,13 @@ export default function InlineCharacterSheet() {
   const { data: attackData = [] } = useCachedGameContent<any>("attacks");
 
   const weaponNames = useMemo(() => {
-    const categories = ["firearms", "archaicWeapons", "meleeWeapons", "otherWeapons"];
+    const categories = [
+      "firearms",
+      "archaicWeapons",
+      "meleeWeapons",
+      "otherWeapons",
+      "otherModernWeapons",
+    ];
     return new Set(
       (gearData as any[])
         .filter((g) => categories.includes(g.category))
@@ -24,7 +30,10 @@ export default function InlineCharacterSheet() {
 
   const weaponAttacks = useMemo(() => {
     const map = new Map(attackData.map((a: any) => [a.name, a]));
-    return weapons.map((w) => ({ ...w, attack: map.get(w.name) }));
+    return weapons.map((w) => ({
+      ...w,
+      attack: map.get(w.description || w.name),
+    }));
   }, [attackData, weapons]);
 
   const attackPowers = useMemo(
