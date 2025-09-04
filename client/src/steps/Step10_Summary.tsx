@@ -33,7 +33,13 @@ export default function Step10_Summary() {
 
   // Determine weapons from gear list and map to attack data
   const weaponNames = useMemo(() => {
-    const categories = ["firearms", "archaicWeapons", "meleeWeapons", "otherWeapons"];
+    const categories = [
+      "firearms",
+      "archaicWeapons",
+      "meleeWeapons",
+      "otherWeapons",
+      "otherModernWeapons",
+    ];
     return new Set(
       (gearData as any[])
         .filter(g => categories.includes(g.category))
@@ -94,7 +100,12 @@ export default function Step10_Summary() {
   };
 
   const weaponAttackLines = useMemo(() => {
-    const rangedCategories = ["firearms", "archaicWeapons", "otherWeapons"];
+    const rangedCategories = [
+      "firearms",
+      "archaicWeapons",
+      "otherWeapons",
+      "otherModernWeapons",
+    ];
     return weaponAttacks.map((w) => {
       const isRanged = rangedCategories.includes(w.category);
       const abilityMod = isRanged
