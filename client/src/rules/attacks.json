@@ -38,5 +38,20 @@
     "damage": "1d6",
     "damageType": "piercing",
     "ammoType": "A"
+  },
+  {
+    "name": "Heavy Revolver",
+    "bonus": 0,
+    "range": 5,
+    "damage": "1d10",
+    "damageType": "ballistic",
+    "ammoType": "H"
+  },
+  {
+    "name": "Machete",
+    "bonus": 0,
+    "range": 1,
+    "damage": "1d8",
+    "damageType": "slashing"
   }
 ]
