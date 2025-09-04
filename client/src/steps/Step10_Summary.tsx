@@ -18,8 +18,9 @@ export default function Step10_Summary() {
   const { selectedSkillSets, archetypeFeat } = useCharacterBuilder();
   const summaryRef = useRef<HTMLDivElement>(null);
 
-  // Gear data used to identify weapons
+  // Game content for gear and attacks
   const { data: gearData = [] } = useCachedGameContent<any>("gear");
+  const { data: attackData = [] } = useCachedGameContent<any>("attacks");
 
   // Merge feats with any archetype bonus feat
   const feats = useMemo(() => {
@@ -30,7 +31,7 @@ export default function Step10_Summary() {
     return list;
   }, [character.feats, archetypeFeat]);
 
-  // Determine weapons from gear list
+  // Determine weapons from gear list and map to attack data
   const weaponNames = useMemo(() => {
     const categories = ["firearms", "archaicWeapons", "meleeWeapons", "otherWeapons"];
     return new Set(
@@ -40,9 +41,23 @@ export default function Step10_Summary() {
     );
   }, [gearData]);
 
-  const weapons = useMemo(
-    () => character.gear.filter(g => weaponNames.has(g.description || g.name)),
-    [character.gear, weaponNames]
+  const gearMap = useMemo(() => new Map((gearData as any[]).map((g: any) => [g.name, g])), [gearData]);
+  const attackMap = useMemo(() => new Map((attackData as any[]).map((a: any) => [a.name, a])), [attackData]);
+
+  const weaponAttacks = useMemo(
+    () =>
+      character.gear
+        .filter(g => weaponNames.has(g.description || g.name))
+        .map(g => {
+          const name = g.description || g.name;
+          const gearInfo = gearMap.get(name);
+          return {
+            name,
+            category: gearInfo?.category,
+            attack: attackMap.get(name),
+          };
+        }),
+    [character.gear, weaponNames, gearMap, attackMap]
   );
 
   // Attack powers are powers with an attack or damage type
@@ -77,6 +92,41 @@ export default function Step10_Summary() {
     const baseScore = power.finalScore ?? power.score ?? 0;
     return isInborn ? baseScore + 1 : baseScore;
   };
+
+  const weaponAttackLines = useMemo(() => {
+    const rangedCategories = ["firearms", "archaicWeapons", "otherWeapons"];
+    return weaponAttacks.map((w) => {
+      const isRanged = rangedCategories.includes(w.category);
+      const abilityMod = isRanged
+        ? character.abilities.dexterity.modifier
+        : character.abilities.strength.modifier;
+      const bonus = attackBonuses.get(w.name) || { attack: 0, damage: 0 };
+      const toHit = abilityMod + character.rankBonus + (w.attack?.bonus || 0) + bonus.attack;
+      const damageBonus = abilityMod + bonus.damage;
+      const baseDamage = w.attack?.damage || "";
+      const damage = baseDamage + (damageBonus ? formatModifier(damageBonus) : "");
+      const damageType = w.attack?.damageType ? w.attack.damageType[0] : "";
+      const range = w.attack ? (w.attack.range > 1 ? w.attack.range : "Melee") : "";
+      return `${w.name} ${formatModifier(toHit)}, ${damage}${damageType ? `(${damageType})` : ""}, Range: ${range}`;
+    });
+  }, [weaponAttacks, character.abilities, character.rankBonus, attackBonuses]);
+
+  const powerAttackLines = useMemo(() => {
+    return attackPowers.map((p: any) => {
+      const abilityKey = p.ability as keyof typeof character.abilities;
+      const abilityMod = abilityKey ? character.abilities[abilityKey].modifier : 0;
+      const finalScore = getFinalPowerScore(p);
+      const bonus = attackBonuses.get(p.name) || { attack: 0, damage: 0 };
+      const toHit = abilityMod + character.rankBonus + bonus.attack;
+      const damageBonus = abilityMod + bonus.damage;
+      const damage = `1d${finalScore}${damageBonus ? formatModifier(damageBonus) : ""}`;
+      const damageType = p.damageType ? p.damageType[0] : "";
+      const range = getScoreData(finalScore).powerRange;
+      return `${p.name}${p.damageType ? ` (${p.damageType})` : ""} ${formatModifier(toHit)} to hit, ${damage}${damageType ? `(${damageType})` : ""}, Range: ${range}`;
+    });
+  }, [attackPowers, character.abilities, character.rankBonus, attackBonuses]);
+
+  const attackLines = useMemo(() => [...weaponAttackLines, ...powerAttackLines], [weaponAttackLines, powerAttackLines]);
 
   // Calculate derived stats with breakdown of sources
   const calculateDerivedStats = () => {
@@ -581,57 +631,17 @@ export default function Step10_Summary() {
           <CardHeader className="py-3">
             <CardTitle className="flex items-center text-xl font-medium">
               <span className="flex-1">Attacks</span>
-              <Badge variant="outline" className="ml-2">{weapons.length + attackPowers.length}</Badge>
+              <Badge variant="outline" className="ml-2">{weaponAttacks.length + attackPowers.length}</Badge>
             </CardTitle>
           </CardHeader>
           <CardContent className="max-h-96 overflow-y-auto">
-            {weapons.length > 0 && (
-              <div>
-                <Label className="text-xs text-gray-400">Weapons</Label>
-                <ul className="list-disc list-inside text-sm">
-                  {weapons.map((w, idx) => {
-                    const bonus = attackBonuses.get(w.name);
-                    return (
-                      <li key={idx}>
-                        {w.name}
-                        {bonus && (
-                          <span className="text-xs text-gray-400">
-                            {" "}(+{bonus.attack} atk/+{bonus.damage} dmg from {bonus.sources.join(", ")})
-                          </span>
-                        )}
-                      </li>
-                    );
-                  })}
-                </ul>
-              </div>
-            )}
-            {attackPowers.length > 0 && (
-              <div className={weapons.length > 0 ? "mt-4" : ""}>
-                <Label className="text-xs text-gray-400">Powers</Label>
-                <ul className="list-disc list-inside text-sm">
-                  {attackPowers.map((p, idx) => {
-                    const bonus = attackBonuses.get(p.name);
-                    return (
-                      <li key={idx}>
-                        {p.name}
-                        {(p as any).attack && (
-                          <span className="text-xs text-gray-400"> ({(p as any).attack})</span>
-                        )}
-                        {!(p as any).attack && p.damageType && (
-                          <span className="text-xs text-gray-400"> ({p.damageType})</span>
-                        )}
-                        {bonus && (
-                          <span className="text-xs text-gray-400">
-                            {" "}(+{bonus.attack} atk/+{bonus.damage} dmg from {bonus.sources.join(", ")})
-                          </span>
-                        )}
-                      </li>
-                    );
-                  })}
-                </ul>
-              </div>
-            )}
-            {weapons.length === 0 && attackPowers.length === 0 && (
+            {attackLines.length > 0 ? (
+              <ul className="list-disc list-inside text-sm">
+                {attackLines.map((line, idx) => (
+                  <li key={idx}>{line}</li>
+                ))}
+              </ul>
+            ) : (
               <div className="text-center py-6 text-gray-500">No attacks defined</div>
             )}
           </CardContent>
