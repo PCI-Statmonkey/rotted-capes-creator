@@ -195,6 +195,7 @@ export default function InlineCharacterSheet() {
             </table>
           </div>
         </div>
+        </div>
 
         {/* Right Column */}
         <div className="space-y-4">
