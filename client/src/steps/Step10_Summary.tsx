@@ -53,20 +53,32 @@ export default function Step10_Summary() {
   const weaponAttacks = useMemo(
     () =>
       character.gear
-        .filter((g) => weaponNames.has(g.name) || weaponNames.has(g.description))
-        .map((g) => {
+        .map((g, index) => ({ g, index }))
+        .filter(({ g }) => weaponNames.has(g.name) || weaponNames.has(g.description))
+        .map(({ g, index }) => {
           const name = weaponNames.has(g.name)
             ? g.name
             : g.description || g.name;
           const gearInfo = gearMap.get(name);
           return {
+            index,
             name,
             category: gearInfo?.category,
             attack: attackMap.get(name),
+            ability: (g as any).ability as "strength" | "dexterity" | undefined,
           };
         }),
     [character.gear, weaponNames, gearMap, attackMap]
   );
+
+  const updateWeaponAbility = (
+    index: number,
+    ability: "strength" | "dexterity"
+  ) => {
+    const newGear = [...character.gear];
+    (newGear[index] as any).ability = ability;
+    updateCharacterField("gear", newGear);
+  };
 
   // Attack powers are powers with an attack or damage type
   const attackPowers = useMemo(
@@ -101,45 +113,86 @@ export default function Step10_Summary() {
     return isInborn ? baseScore + 1 : baseScore;
   };
 
-  const weaponAttackLines = useMemo(() => {
+  const weaponAttackStats = useMemo(() => {
     const rangedCategories = [
       "firearms",
       "archaicWeapons",
       "otherWeapons",
       "otherModernWeapons",
     ];
+
+    const parseDie = (die: string) => {
+      const match = die.match(/\d+d(\d+)/i);
+      return match ? parseInt(match[1], 10) : 0;
+    };
+
     return weaponAttacks.map((w) => {
       const isRanged = rangedCategories.includes(w.category);
-      const abilityMod = isRanged
-        ? character.abilities.dexterity.modifier
-        : character.abilities.strength.modifier;
+      const baseDamageDie = w.attack?.damage ? parseDie(w.attack.damage) : 0;
+      const canChooseAbility =
+        !isRanged &&
+        w.attack?.damage &&
+        baseDamageDie < 8 &&
+        ["slashing", "piercing"].includes(
+          (w.attack.damageType || "").toLowerCase()
+        );
+
+      const abilityKey: "strength" | "dexterity" = isRanged
+        ? "dexterity"
+        : canChooseAbility
+        ? w.ability || "strength"
+        : "strength";
+
+      const abilityMod = character.abilities[abilityKey].modifier;
       const bonus = attackBonuses.get(w.name) || { attack: 0, damage: 0 };
-      const toHit = abilityMod + character.rankBonus + (w.attack?.bonus || 0) + bonus.attack;
+      const toHit =
+        abilityMod + character.rankBonus + (w.attack?.bonus || 0) + bonus.attack;
       const damageBonus = abilityMod + bonus.damage;
       const baseDamage = w.attack?.damage || "";
       const damage = baseDamage + (damageBonus ? formatModifier(damageBonus) : "");
-      const damageType = w.attack?.damageType ? w.attack.damageType[0] : "";
-      const range = w.attack ? (w.attack.range > 1 ? w.attack.range : "Melee") : "";
-      return `${w.name} ${formatModifier(toHit)}, ${damage}${damageType ? `(${damageType})` : ""}, Range: ${range}`;
+      const damageType = w.attack?.damageType || "";
+      const range = w.attack
+        ? w.attack.range > 1
+          ? w.attack.range
+          : "Melee"
+        : "";
+
+      return {
+        index: w.index,
+        name: w.name,
+        line: `${w.name} ${formatModifier(toHit)}, ${damage}${damageType ? `(${damageType})` : ""}, Range: ${range}`,
+        ability: abilityKey,
+        canChooseAbility,
+      };
     });
   }, [weaponAttacks, character.abilities, character.rankBonus, attackBonuses]);
 
   const powerAttackLines = useMemo(() => {
     return attackPowers.map((p: any) => {
-      const abilityKey = p.ability as keyof typeof character.abilities;
+      const abilityKey = p.ability
+        ? (p.ability.toLowerCase() as keyof typeof character.abilities)
+        : undefined;
       const abilityMod = abilityKey ? character.abilities[abilityKey].modifier : 0;
       const finalScore = getFinalPowerScore(p);
+      const scoreData = getScoreData(finalScore);
+      const baseDie = scoreData.baseDie.startsWith("d")
+        ? `1${scoreData.baseDie}`
+        : scoreData.baseDie;
       const bonus = attackBonuses.get(p.name) || { attack: 0, damage: 0 };
       const toHit = abilityMod + character.rankBonus + bonus.attack;
       const damageBonus = abilityMod + bonus.damage;
-      const damage = `1d${finalScore}${damageBonus ? formatModifier(damageBonus) : ""}`;
-      const damageType = p.damageType ? p.damageType[0] : "";
-      const range = getScoreData(finalScore).powerRange;
-      return `${p.name}${p.damageType ? ` (${p.damageType})` : ""} ${formatModifier(toHit)} to hit, ${damage}${damageType ? `(${damageType})` : ""}, Range: ${range}`;
+      const damage = baseDie + (damageBonus ? formatModifier(damageBonus) : "");
+      const damageType = p.damageType || "";
+      const range = scoreData.powerRange;
+      return `${p.name}${
+        p.damageType ? ` (${p.damageType})` : ""
+      } ${formatModifier(toHit)} to hit, ${damage}${
+        damageType ? `(${damageType})` : ""
+      }, Range: ${range}`;
     });
   }, [attackPowers, character.abilities, character.rankBonus, attackBonuses]);
 
-  const attackLines = useMemo(() => [...weaponAttackLines, ...powerAttackLines], [weaponAttackLines, powerAttackLines]);
+  const attackCount = weaponAttackStats.length + powerAttackLines.length;
 
   // Calculate derived stats with breakdown of sources
   const calculateDerivedStats = () => {
@@ -644,14 +697,37 @@ export default function Step10_Summary() {
           <CardHeader className="py-3">
             <CardTitle className="flex items-center text-xl font-medium">
               <span className="flex-1">Attacks</span>
-              <Badge variant="outline" className="ml-2">{weaponAttacks.length + attackPowers.length}</Badge>
+              <Badge variant="outline" className="ml-2">{attackCount}</Badge>
             </CardTitle>
           </CardHeader>
           <CardContent className="max-h-96 overflow-y-auto">
-            {attackLines.length > 0 ? (
-              <ul className="list-disc list-inside text-sm">
-                {attackLines.map((line, idx) => (
-                  <li key={idx}>{line}</li>
+            {attackCount > 0 ? (
+              <ul className="list-disc list-inside text-sm space-y-1">
+                {weaponAttackStats.map((w) => (
+                  <li
+                    key={`weapon-${w.index}`}
+                    className="flex items-center gap-2"
+                  >
+                    <span>{w.line}</span>
+                    {w.canChooseAbility && (
+                      <select
+                        className="ml-2 bg-gray-800 text-xs border border-gray-600 rounded"
+                        value={w.ability}
+                        onChange={(e) =>
+                          updateWeaponAbility(
+                            w.index,
+                            e.target.value as "strength" | "dexterity"
+                          )
+                        }
+                      >
+                        <option value="strength">STR</option>
+                        <option value="dexterity">DEX</option>
+                      </select>
+                    )}
+                  </li>
+                ))}
+                {powerAttackLines.map((line, idx) => (
+                  <li key={`power-${idx}`}>{line}</li>
                 ))}
               </ul>
             ) : (
