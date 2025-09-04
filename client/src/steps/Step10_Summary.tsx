@@ -12,15 +12,20 @@ import { apiRequest } from "@/lib/queryClient";
 import CharacterPdfButton from "@/components/CharacterPdfButton";
 import { parsePrerequisite, getMissingPrereqs, formatPrerequisite } from "@/utils/requirementValidator";
 import useCachedGameContent from "@/hooks/useCachedGameContent";
+import gearRules from "@/rules/gear.json" with { type: "json" };
+import attackRules from "@/rules/attacks.json" with { type: "json" };
+import powerRules from "@/rules/powers.json" with { type: "json" };
 
 export default function Step10_Summary() {
   const { character, updateCharacterField, saveCharacter } = useCharacter();
   const { selectedSkillSets, archetypeFeat } = useCharacterBuilder();
   const summaryRef = useRef<HTMLDivElement>(null);
 
-  // Game content for gear and attacks
-  const { data: gearData = [] } = useCachedGameContent<any>("gear");
-  const { data: attackData = [] } = useCachedGameContent<any>("attacks");
+  // Game content for gear and attacks with local fallbacks
+  const gearContent = useCachedGameContent<any>("gear");
+  const attackContent = useCachedGameContent<any>("attacks");
+  const gearData = gearContent.data.length ? gearContent.data : (gearRules as any[]);
+  const attackData = attackContent.data.length ? attackContent.data : (attackRules as any[]);
 
   // Merge feats with any archetype bonus feat
   const feats = useMemo(() => {
@@ -49,6 +54,10 @@ export default function Step10_Summary() {
 
   const gearMap = useMemo(() => new Map((gearData as any[]).map((g: any) => [g.name, g])), [gearData]);
   const attackMap = useMemo(() => new Map((attackData as any[]).map((a: any) => [a.name, a])), [attackData]);
+  const powerDataMap = useMemo(
+    () => new Map((powerRules as any[]).map((p: any) => [p.name, p])),
+    []
+  );
 
   const weaponAttacks = useMemo(
     () =>
@@ -113,6 +122,23 @@ export default function Step10_Summary() {
     return isInborn ? baseScore + 1 : baseScore;
   };
 
+  const getPowerAbility = (
+    power: any
+  ): keyof typeof character.abilities | undefined => {
+    if (power.ability) {
+      const key = power.ability.toLowerCase();
+      if (key in character.abilities) return key as keyof typeof character.abilities;
+    }
+    const desc = powerDataMap.get(power.name)?.description || "";
+    const match = desc.match(/Primary Ability:\s*([^*\n]+)/i);
+    if (!match) return undefined;
+    const ability = match[1]
+      .split(/,|or/)
+      .map((o: string) => o.trim().toLowerCase())
+      .find((a: string) => a in character.abilities);
+    return ability as keyof typeof character.abilities | undefined;
+  };
+
   const weaponAttackStats = useMemo(() => {
     const rangedCategories = [
       "firearms",
@@ -169,9 +195,7 @@ export default function Step10_Summary() {
 
   const powerAttackLines = useMemo(() => {
     return attackPowers.map((p: any) => {
-      const abilityKey = p.ability
-        ? (p.ability.toLowerCase() as keyof typeof character.abilities)
-        : undefined;
+      const abilityKey = getPowerAbility(p);
       const abilityMod = abilityKey ? character.abilities[abilityKey].modifier : 0;
       const finalScore = getFinalPowerScore(p);
       const scoreData = getScoreData(finalScore);

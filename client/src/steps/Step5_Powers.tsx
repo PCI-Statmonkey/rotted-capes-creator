@@ -81,14 +81,25 @@ const ABILITIES = [
 ];
 
 const getAbilityOptions = (powerName: string): string[] => {
-  const match = powerName.match(/Enhanced Ability Score(?: \(([^)]+)\))?/i);
+  // Special handling for Enhanced Ability Score where choices appear in the name
+  const enhancedMatch = powerName.match(/Enhanced Ability Score(?: \(([^)]+)\))?/i);
+  if (enhancedMatch) {
+    const options = enhancedMatch[1];
+    if (!options) return ABILITIES;
+    return options
+      .split(/,|or/)
+      .map((o: string) => o.trim())
+      .filter((o: string) => ABILITIES.some((a) => a.toLowerCase() === o.toLowerCase()));
+  }
+
+  // Otherwise, attempt to parse the primary ability from the power description
+  const desc = powerDataMap.get(powerName)?.description || "";
+  const match = desc.match(/Primary Ability:\s*([^*\n]+)/i);
   if (!match) return [];
-  const options = match[1];
-  if (!options) return ABILITIES;
-  return options
+  return match[1]
     .split(/,|or/)
-    .map((o) => o.trim())
-    .filter((o) => ABILITIES.some((a) => a.toLowerCase() === o.toLowerCase()));
+    .map((o: string) => o.trim())
+    .filter((o: string) => ABILITIES.some((a) => a.toLowerCase() === o.toLowerCase()));
 };
 
 // Define the available power sets based on the rulebook
@@ -195,7 +206,7 @@ export default function Step5_Powers() {
         arrayIndex: undefined as number | undefined,
         description: p.description || powerDataMap.get(p.name)?.description,
         damageType: p.damageType,
-        ability: p.ability,
+        ability: p.ability || getAbilityOptions(p.name)[0],
         linkedPowers: (p as any).linkedPowers || [],
         flaws: p.flaws.map(f => POWER_FLAWS.find(ff => ff.name === f)).filter(Boolean) as PowerModifier[],
         perks: p.perks.map(perk => POWER_PERKS.find(pp => pp.name === perk)).filter(Boolean) as PowerModifier[],
