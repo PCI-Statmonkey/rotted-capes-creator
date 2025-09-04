@@ -121,8 +121,8 @@ export default function Creator() {
             </AnimatePresence>
           </motion.div>
 
-          {/* Character Summary Sidebar */}
-          <CharacterSummary />
+          {/* Character Summary Sidebar - hidden on final summary step */}
+          {currentStep !== 10 && <CharacterSummary />}
         </div>
       </div>
     </div>

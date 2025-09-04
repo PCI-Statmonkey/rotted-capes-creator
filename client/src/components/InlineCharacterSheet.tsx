@@ -1,8 +1,30 @@
 import { useCharacter } from "@/context/CharacterContext";
 import { formatModifier } from "@/lib/utils";
+import { useMemo } from "react";
+import useCachedGameContent from "@/hooks/useCachedGameContent";
 
 export default function InlineCharacterSheet() {
   const { character } = useCharacter();
+  const { data: gearData = [] } = useCachedGameContent<any>("gear");
+
+  const weaponNames = useMemo(() => {
+    const categories = ["firearms", "archaicWeapons", "meleeWeapons", "otherWeapons"];
+    return new Set(
+      (gearData as any[])
+        .filter((g) => categories.includes(g.category))
+        .map((g) => g.name)
+    );
+  }, [gearData]);
+
+  const weapons = useMemo(
+    () => character.gear.filter((g) => weaponNames.has(g.description || g.name)),
+    [character.gear, weaponNames]
+  );
+
+  const attackPowers = useMemo(
+    () => character.powers.filter((p) => (p as any).attack || p.damageType),
+    [character.powers]
+  );
   
   return (
     <div
@@ -130,15 +152,54 @@ export default function InlineCharacterSheet() {
                 <div className="text-xl font-comic">{character.reflex}</div>
               </div>
               <div className="border border-gray-300 rounded p-2 text-center">
-                <div className="font-bold">Willpower</div>
-                <div className="text-xl font-comic">{character.willpower}</div>
-              </div>
+              <div className="font-bold">Willpower</div>
+              <div className="text-xl font-comic">{character.willpower}</div>
             </div>
           </div>
+          <div className="border-2 border-gray-800 rounded-lg p-4">
+            <h3 className="font-comic text-xl mb-2 text-center border-b border-gray-400 pb-1 uppercase">
+              Attacks
+            </h3>
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="border-b border-gray-300">
+                  <th className="text-left">Attack</th>
+                  <th className="text-center">To Hit</th>
+                  <th className="text-center">Damage</th>
+                  <th className="text-left">Notes</th>
+                </tr>
+              </thead>
+              <tbody>
+                {weapons.map((w, idx) => (
+                  <tr key={`weapon-${idx}`} className="border-b border-gray-200 last:border-b-0">
+                    <td>{w.name}</td>
+                    <td className="text-center"></td>
+                    <td className="text-center"></td>
+                    <td></td>
+                  </tr>
+                ))}
+                {attackPowers.map((p, idx) => (
+                  <tr key={`power-${idx}`} className="border-b border-gray-200 last:border-b-0">
+                    <td>{p.name}</td>
+                    <td className="text-center"></td>
+                    <td className="text-center"></td>
+                    <td></td>
+                  </tr>
+                ))}
+                {weapons.length === 0 && attackPowers.length === 0 && (
+                  <tr>
+                    <td colSpan={4} className="text-center italic text-gray-600">No attacks defined</td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
         </div>
-        
+
         {/* Right Column */}
         <div className="space-y-4">
+          {/* Portrait placeholder */}
+          <div className="border-2 border-gray-800 rounded-lg h-48"></div>
           <div className="border-2 border-gray-800 rounded-lg p-4">
             <h3 className="font-comic text-xl mb-2 text-center border-b border-gray-400 pb-1 uppercase">
               Skills
