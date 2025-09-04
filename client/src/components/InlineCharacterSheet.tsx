@@ -6,6 +6,7 @@ import useCachedGameContent from "@/hooks/useCachedGameContent";
 export default function InlineCharacterSheet() {
   const { character } = useCharacter();
   const { data: gearData = [] } = useCachedGameContent<any>("gear");
+  const { data: attackData = [] } = useCachedGameContent<any>("attacks");
 
   const weaponNames = useMemo(() => {
     const categories = ["firearms", "archaicWeapons", "meleeWeapons", "otherWeapons"];
@@ -20,6 +21,11 @@ export default function InlineCharacterSheet() {
     () => character.gear.filter((g) => weaponNames.has(g.description || g.name)),
     [character.gear, weaponNames]
   );
+
+  const weaponAttacks = useMemo(() => {
+    const map = new Map(attackData.map((a: any) => [a.name, a]));
+    return weapons.map((w) => ({ ...w, attack: map.get(w.name) }));
+  }, [attackData, weapons]);
 
   const attackPowers = useMemo(
     () => character.powers.filter((p) => (p as any).attack || p.damageType),
@@ -165,17 +171,31 @@ export default function InlineCharacterSheet() {
                 <tr className="border-b border-gray-300">
                   <th className="text-left">Attack</th>
                   <th className="text-center">To Hit</th>
+                  <th className="text-center">Range</th>
                   <th className="text-center">Damage</th>
-                  <th className="text-left">Notes</th>
+                  <th className="text-center">Type</th>
+                  <th className="text-center">Ammo</th>
                 </tr>
               </thead>
               <tbody>
-                {weapons.map((w, idx) => (
+                {weaponAttacks.map((w, idx) => (
                   <tr key={`weapon-${idx}`} className="border-b border-gray-200 last:border-b-0">
                     <td>{w.name}</td>
-                    <td className="text-center"></td>
-                    <td className="text-center"></td>
-                    <td></td>
+                    <td className="text-center">
+                      {w.attack ? formatModifier(w.attack.bonus) : ""}
+                    </td>
+                    <td className="text-center">
+                      {w.attack ? w.attack.range : ""}
+                    </td>
+                    <td className="text-center">
+                      {w.attack ? w.attack.damage : ""}
+                    </td>
+                    <td className="text-center">
+                      {w.attack ? w.attack.damageType : ""}
+                    </td>
+                    <td className="text-center">
+                      {w.attack ? w.attack.ammoType || "" : ""}
+                    </td>
                   </tr>
                 ))}
                 {attackPowers.map((p, idx) => (
@@ -183,12 +203,14 @@ export default function InlineCharacterSheet() {
                     <td>{p.name}</td>
                     <td className="text-center"></td>
                     <td className="text-center"></td>
-                    <td></td>
+                    <td className="text-center"></td>
+                    <td className="text-center"></td>
+                    <td className="text-center"></td>
                   </tr>
                 ))}
-                {weapons.length === 0 && attackPowers.length === 0 && (
+                {weaponAttacks.length === 0 && attackPowers.length === 0 && (
                   <tr>
-                    <td colSpan={4} className="text-center italic text-gray-600">No attacks defined</td>
+                    <td colSpan={6} className="text-center italic text-gray-600">No attacks defined</td>
                   </tr>
                 )}
               </tbody>

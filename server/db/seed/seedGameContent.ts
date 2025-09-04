@@ -11,6 +11,7 @@ import {
   feats,
   skillSets,
   maneuvers,
+  attacks,
   originFeatures,
   gear,
 } from "../../../shared/schema";
@@ -23,6 +24,7 @@ import powerSetsData from "../../../client/src/rules/powerSets.json" with { type
 import powerModifiersData from "../../../client/src/rules/powerMods.json" with { type: "json" };
 import originFeaturesData from "../../../client/src/rules/origin_features.json" with { type: "json" };
 import maneuversData from "../../../client/src/rules/maneuvers.json" with { type: "json" };
+import attacksData from "../../../client/src/rules/attacks.json" with { type: "json" };
 import gearData from "../../../client/src/rules/gear.json" with { type: "json" };
 import weaknessesData from "../../../client/src/rules/weaknesses.json" with { type: "json" };
 
@@ -138,6 +140,18 @@ async function runSeed() {
       name: wk.name,
       description: wk.description || "",
       baseCost: wk.baseCost ?? 0,
+    }).onConflictDoNothing();
+  }
+
+  console.log("🌱 Seeding attacks...");
+  for (const atk of attacksData as any[]) {
+    await db.insert(attacks).values({
+      name: atk.name,
+      bonus: atk.bonus ?? 0,
+      range: String(atk.range ?? ""),
+      damage: atk.damage || "",
+      damageType: atk.damageType || "",
+      ammoType: atk.ammoType || null,
     }).onConflictDoNothing();
   }
 

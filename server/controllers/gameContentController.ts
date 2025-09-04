@@ -13,7 +13,8 @@ import {
   insertPowerModifierSchema,
   insertWeaknessSchema,
   insertOriginFeatureSchema,
-  insertGearSchema
+  insertGearSchema,
+  insertAttackSchema
 } from "@shared/schema";
 import { z } from "zod";
 import { maneuvers } from "@shared/schema";
@@ -197,6 +198,15 @@ export const {
   update: updateGear,
   remove: deleteGear
 } = makeCrudHandlers("Gear", insertGearSchema);
+
+// Attack
+export const {
+  getAll: getAllAttacks,
+  getOne: getAttackById,
+  create: createAttack,
+  update: updateAttack,
+  remove: deleteAttack,
+} = makeCrudHandlers("Attack", insertAttackSchema);
 
 // Get all maneuvers
 export async function getAllManeuvers(req: Request, res: Response) {
