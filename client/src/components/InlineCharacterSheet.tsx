@@ -23,18 +23,30 @@ export default function InlineCharacterSheet() {
     );
   }, [gearData]);
 
-  const weapons = useMemo(
-    () => character.gear.filter((g) => weaponNames.has(g.description || g.name)),
-    [character.gear, weaponNames]
+  const attackMap = useMemo(
+    () => new Map(attackData.map((a: any) => [a.name, a])),
+    [attackData]
   );
 
-  const weaponAttacks = useMemo(() => {
-    const map = new Map(attackData.map((a: any) => [a.name, a]));
-    return weapons.map((w) => ({
-      ...w,
-      attack: map.get(w.description || w.name),
-    }));
-  }, [attackData, weapons]);
+  const weapons = useMemo(
+    () =>
+      character.gear.filter(
+        (g) =>
+          weaponNames.has(g.description || g.name) ||
+          attackMap.has(g.name) ||
+          attackMap.has(g.description as string)
+      ),
+    [character.gear, weaponNames, attackMap]
+  );
+
+  const weaponAttacks = useMemo(
+    () =>
+      weapons.map((w) => ({
+        ...w,
+        attack: attackMap.get(w.description as string) || attackMap.get(w.name),
+      })),
+    [attackMap, weapons]
+  );
 
   const attackPowers = useMemo(
     () => character.powers.filter((p) => (p as any).attack || p.damageType),
@@ -191,7 +203,15 @@ export default function InlineCharacterSheet() {
                   <tr key={`weapon-${idx}`} className="border-b border-gray-200 last:border-b-0">
                     <td>{w.name}</td>
                     <td className="text-center">
-                      {w.attack ? formatModifier(w.attack.bonus) : ""}
+                      {w.attack
+                        ? formatModifier(
+                            (w.attack.range > 1
+                              ? character.abilities.dexterity.modifier
+                              : character.abilities.strength.modifier) +
+                              character.rankBonus +
+                              (w.attack.bonus || 0)
+                          )
+                        : ""}
                     </td>
                     <td className="text-center">
                       {w.attack ? w.attack.range : ""}
