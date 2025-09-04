@@ -167,6 +167,9 @@ const Step7_SkillsAndFeats = () => {
   const [row1CustomEmulatedPower, setRow1CustomEmulatedPower] = useState<string>("");
   const [row2CustomEmulatedPower, setRow2CustomEmulatedPower] = useState<string>("");
   const [row3CustomEmulatedPower, setRow3CustomEmulatedPower] = useState<string>("");
+  const [row1FeatInput, setRow1FeatInput] = useState<string>("");
+  const [row2FeatInput, setRow2FeatInput] = useState<string>("");
+  const [row3FeatInput, setRow3FeatInput] = useState<string>("");
 
   useEffect(() => {
     if (selectedSkillSets[0]) {
@@ -208,6 +211,9 @@ const Step7_SkillsAndFeats = () => {
         setRow1Power1(f0.powerChoices[0] || "");
         setRow1Power2(f0.powerChoices[1] || "");
       }
+      if (f0.input) {
+        setRow1FeatInput(f0.input);
+      }
       if (f0.powerTrick) {
         setRow1StuntType("trick");
         const trick = f0.powerTrick;
@@ -236,6 +242,9 @@ const Step7_SkillsAndFeats = () => {
         setRow2Power1(f1.powerChoices[0] || "");
         setRow2Power2(f1.powerChoices[1] || "");
       }
+      if (f1.input) {
+        setRow2FeatInput(f1.input);
+      }
       if (f1.powerTrick) {
         setRow2StuntType("trick");
         const trick = f1.powerTrick;
@@ -263,6 +272,9 @@ const Step7_SkillsAndFeats = () => {
       if (f2.powerChoices) {
         setRow3Power1(f2.powerChoices[0] || "");
         setRow3Power2(f2.powerChoices[1] || "");
+      }
+      if (f2.input) {
+        setRow3FeatInput(f2.input);
       }
       if (f2.powerTrick) {
         setRow3StuntType("trick");
@@ -363,6 +375,8 @@ const Step7_SkillsAndFeats = () => {
         : row1StuntType === "emulated"
         ? row1EmulatedParent !== "" && row1EmulatedPower !== ""
         : false
+      : row1Feat === "Attack Focus"
+      ? row1FeatInput.trim() !== ""
       : true);
   const row2Valid = row2SkillSet
     ? row2SkillSet === "custom"
@@ -393,6 +407,8 @@ const Step7_SkillsAndFeats = () => {
           : row2StuntType === "emulated"
           ? row2EmulatedParent !== "" && row2EmulatedPower !== ""
           : false
+        : row2Feat === "Attack Focus"
+        ? row2FeatInput.trim() !== ""
         : true);
   const row3Valid = !isSkillBased
     ? true
@@ -425,6 +441,8 @@ const Step7_SkillsAndFeats = () => {
           : row3StuntType === "emulated"
           ? row3EmulatedParent !== "" && row3EmulatedPower !== ""
           : false
+        : row3Feat === "Attack Focus"
+        ? row3FeatInput.trim() !== ""
         : true);
 
   const canContinue = firstSkillValid && row1FeatValid && row2Valid && row3Valid;
@@ -445,6 +463,7 @@ const Step7_SkillsAndFeats = () => {
       emulatedFrom?: string;
       emulatedPower?: string;
       acquiredPower?: string;
+      input?: string;
     }[] = [];
     const maneuversSelected: { name: string }[] = [];
     pushSkill(row1SkillSet, row1CustomSkill, skills);
@@ -460,6 +479,7 @@ const Step7_SkillsAndFeats = () => {
         emulatedFrom?: string;
         emulatedPower?: string;
         acquiredPower?: string;
+        input?: string;
       } = {
         name: row1Feat,
       };
@@ -498,6 +518,9 @@ const Step7_SkillsAndFeats = () => {
           feat.emulatedPower = row1EmulatedPower;
         }
       }
+      if (row1Feat === "Attack Focus" && row1FeatInput) {
+        (feat as any).input = row1FeatInput;
+      }
       featsSelected.push(feat);
       if (row1Feat === "Learn Combat Maneuver" && row1Maneuver)
         maneuversSelected.push({ name: row1Maneuver });
@@ -511,6 +534,7 @@ const Step7_SkillsAndFeats = () => {
         emulatedFrom?: string;
         emulatedPower?: string;
         acquiredPower?: string;
+        input?: string;
       } = {
         name: row2Feat,
       };
@@ -549,6 +573,9 @@ const Step7_SkillsAndFeats = () => {
           feat.emulatedPower = row2EmulatedPower;
         }
       }
+      if (row2Feat === "Attack Focus" && row2FeatInput) {
+        (feat as any).input = row2FeatInput;
+      }
       featsSelected.push(feat);
       if (row2Feat === "Learn Combat Maneuver" && row2Maneuver)
         maneuversSelected.push({ name: row2Maneuver });
@@ -562,6 +589,7 @@ const Step7_SkillsAndFeats = () => {
         emulatedFrom?: string;
         emulatedPower?: string;
         acquiredPower?: string;
+        input?: string;
       } = {
         name: row3Feat,
       };
@@ -599,6 +627,9 @@ const Step7_SkillsAndFeats = () => {
           feat.emulatedFrom = row3EmulatedParent;
           feat.emulatedPower = row3EmulatedPower;
         }
+      }
+      if (row3Feat === "Attack Focus" && row3FeatInput) {
+        (feat as any).input = row3FeatInput;
       }
       featsSelected.push(feat);
       if (row3Feat === "Learn Combat Maneuver" && row3Maneuver)
@@ -1061,6 +1092,7 @@ const Step7_SkillsAndFeats = () => {
           <div>
             {renderFeatSelect(row1Feat, (v) => {
               setRow1Feat(v);
+              setRow1FeatInput("");
               setRow1Maneuver("");
               setRow1Ability1("");
               setRow1Ability2("");
@@ -1074,6 +1106,14 @@ const Step7_SkillsAndFeats = () => {
               setRow1NewPower("");
               setRow1CustomEmulatedPower("");
             })}
+            {row1Feat === "Attack Focus" && (
+              <Input
+                className="mt-2"
+                placeholder="Target attack or power"
+                value={row1FeatInput}
+                onChange={(e) => setRow1FeatInput(e.target.value)}
+              />
+            )}
             {row1Feat === "Learn Combat Maneuver" &&
               renderManeuverSelect(row1Maneuver, setRow1Maneuver)}
             {row1Feat === "Ability Score Increase" &&
@@ -1169,6 +1209,7 @@ const Step7_SkillsAndFeats = () => {
               row2Feat,
               (v) => {
                 setRow2Feat(v);
+                setRow2FeatInput("");
                 setRow2Maneuver("");
                 if (v) {
                   setRow2SkillSet("");
@@ -1188,6 +1229,14 @@ const Step7_SkillsAndFeats = () => {
               },
               !!row2SkillSet,
               true
+            )}
+            {row2Feat === "Attack Focus" && (
+              <Input
+                className="mt-2"
+                placeholder="Target attack or power"
+                value={row2FeatInput}
+                onChange={(e) => setRow2FeatInput(e.target.value)}
+              />
             )}
             {row2Feat === "Learn Combat Maneuver" &&
               renderManeuverSelect(row2Maneuver, setRow2Maneuver)}
@@ -1281,32 +1330,41 @@ const Step7_SkillsAndFeats = () => {
             true
           )}
             <div>
-              {renderFeatSelect(
-                row3Feat,
-                (v) => {
-                  setRow3Feat(v);
-                  setRow3Maneuver("");
-                  if (v) {
-                    setRow3SkillSet("");
-                    setRow3CustomSkill("");
-                    setRow3Ability1("");
-                    setRow3Ability2("");
-                    setRow3Power1("");
-                    setRow3Power2("");
-                    setRow3PowerTrick("");
-                    setRow3CustomPowerTrick("");
-                    setRow3StuntType("");
-                    setRow3EmulatedParent("");
-                    setRow3EmulatedPower("");
-                    setRow3NewPower("");
-                    setRow3CustomEmulatedPower("");
-                  }
-                },
-                !!row3SkillSet,
-                true
-              )}
-              {row3Feat === "Learn Combat Maneuver" &&
-                renderManeuverSelect(row3Maneuver, setRow3Maneuver)}
+            {renderFeatSelect(
+              row3Feat,
+              (v) => {
+                setRow3Feat(v);
+                setRow3FeatInput("");
+                setRow3Maneuver("");
+                if (v) {
+                  setRow3SkillSet("");
+                  setRow3CustomSkill("");
+                  setRow3Ability1("");
+                  setRow3Ability2("");
+                  setRow3Power1("");
+                  setRow3Power2("");
+                  setRow3PowerTrick("");
+                  setRow3CustomPowerTrick("");
+                  setRow3StuntType("");
+                  setRow3EmulatedParent("");
+                  setRow3EmulatedPower("");
+                  setRow3NewPower("");
+                  setRow3CustomEmulatedPower("");
+                }
+              },
+              !!row3SkillSet,
+              true
+            )}
+            {row3Feat === "Attack Focus" && (
+              <Input
+                className="mt-2"
+                placeholder="Target attack or power"
+                value={row3FeatInput}
+                onChange={(e) => setRow3FeatInput(e.target.value)}
+              />
+            )}
+            {row3Feat === "Learn Combat Maneuver" &&
+              renderManeuverSelect(row3Maneuver, setRow3Maneuver)}
               {row3Feat === "Ability Score Increase" &&
                 renderAbilitySelects(
                   row3Ability1,

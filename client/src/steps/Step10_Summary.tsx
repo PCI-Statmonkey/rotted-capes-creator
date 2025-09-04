@@ -51,6 +51,22 @@ export default function Step10_Summary() {
     [character.powers]
   );
 
+  // Map of attack and damage bonuses from feats like Attack Focus
+  const attackBonuses = useMemo(() => {
+    const map = new Map<string, { attack: number; damage: number; sources: string[] }>();
+    feats.forEach((f: any) => {
+      if (f.name === "Attack Focus" && typeof f.input === "string") {
+        const target = f.input;
+        const entry = map.get(target) || { attack: 0, damage: 0, sources: [] };
+        entry.attack += 1;
+        entry.damage += 2;
+        entry.sources.push("Attack Focus");
+        map.set(target, entry);
+      }
+    });
+    return map;
+  }, [feats]);
+
   const getFinalPowerScore = (power: any) => {
     const flaws = power.flaws?.map((f: string) => f.toLowerCase()) || [];
     const isInborn = !flaws.some((f: string) =>
@@ -62,7 +78,7 @@ export default function Step10_Summary() {
     return isInborn ? baseScore + 1 : baseScore;
   };
 
-  // Calculate derived stats
+  // Calculate derived stats with breakdown of sources
   const calculateDerivedStats = () => {
     const strMod = getScoreData(character.abilities.strength.value).modifier;
     const dexMod = getScoreData(character.abilities.dexterity.value).modifier;
@@ -70,33 +86,61 @@ export default function Step10_Summary() {
     const intMod = getScoreData(character.abilities.intelligence.value).modifier;
     const wisMod = getScoreData(character.abilities.wisdom.value).modifier;
     const chaMod = getScoreData(character.abilities.charisma.value).modifier;
-    
-    // Avoidance uses the better of Dexterity or Intelligence plus rank bonus
-    const avoidance = 10 + Math.max(dexMod, intMod) + character.rankBonus;
-
-    // Fortitude uses the better of Strength or Constitution plus rank bonus
-    let fortitude = 10 + Math.max(strMod, conMod) + character.rankBonus;
-
-    // Willpower uses the better of Charisma or Wisdom plus rank bonus
-    const willpower = 10 + Math.max(chaMod, wisMod) + character.rankBonus;
 
     const toughnessCount = feats.filter((f) => f.name === "Toughness").length;
-    if (toughnessCount > 0) fortitude += 1;
-
-    // Stamina calculation
-    const stamina = avoidance + fortitude + willpower + toughnessCount * 10;
-
-    // Wounds calculation
-    const wounds = Math.max(3, Math.ceil(conMod / 2)) + (toughnessCount > 1 ? 1 : 0);
-    
-    // Initiative calculation
-    const initiative = dexMod;
-    
-    // Running pace is based on Dexterity modifier (min 1, max 4)
-    // Quick feat grants an additional +1 to pace
     const hasQuick = feats.some((f) => f.name === "Quick");
-    const runningPace = Math.min(Math.max(dexMod, 1), 4) + (hasQuick ? 1 : 0);
-    
+    const disciplinedCount = feats.filter((f) => f.name === "Disciplined").length;
+
+    const avoidanceBreakdown = [
+      { source: "Base", value: 10 },
+      { source: dexMod >= intMod ? "DEX mod" : "INT mod", value: Math.max(dexMod, intMod) },
+      { source: "Rank", value: character.rankBonus },
+    ];
+    if (hasQuick) avoidanceBreakdown.push({ source: "Quick", value: 1 });
+    const avoidance = avoidanceBreakdown.reduce((s, b) => s + b.value, 0);
+
+    const fortitudeBreakdown = [
+      { source: "Base", value: 10 },
+      { source: strMod >= conMod ? "STR mod" : "CON mod", value: Math.max(strMod, conMod) },
+      { source: "Rank", value: character.rankBonus },
+    ];
+    if (toughnessCount > 0) fortitudeBreakdown.push({ source: "Toughness", value: toughnessCount });
+    const fortitude = fortitudeBreakdown.reduce((s, b) => s + b.value, 0);
+
+    const willpowerBreakdown = [
+      { source: "Base", value: 10 },
+      { source: chaMod >= wisMod ? "CHA mod" : "WIS mod", value: Math.max(chaMod, wisMod) },
+      { source: "Rank", value: character.rankBonus },
+    ];
+    if (disciplinedCount > 0)
+      willpowerBreakdown.push({ source: "Disciplined", value: disciplinedCount });
+    const willpower = willpowerBreakdown.reduce((s, b) => s + b.value, 0);
+
+    const staminaBreakdown = [
+      { source: "Avoidance", value: avoidance },
+      { source: "Fortitude", value: fortitude },
+      { source: "Willpower", value: willpower },
+    ];
+    if (toughnessCount > 0)
+      staminaBreakdown.push({ source: "Toughness", value: toughnessCount * 10 });
+    const stamina = staminaBreakdown.reduce((s, b) => s + b.value, 0);
+
+    const woundsBreakdown = [
+      { source: "Base", value: Math.max(3, Math.ceil(conMod / 2)) },
+    ];
+    if (toughnessCount > 1) woundsBreakdown.push({ source: "Toughness", value: 1 });
+    const wounds = woundsBreakdown.reduce((s, b) => s + b.value, 0);
+
+    const initiativeBreakdown = [{ source: "DEX mod", value: dexMod }];
+    const initiative = dexMod;
+
+    const runningPaceBreakdown = [{ source: "DEX mod", value: Math.min(Math.max(dexMod, 1), 4) }];
+    let runningPace = Math.min(Math.max(dexMod, 1), 4);
+    if (hasQuick) {
+      runningPace += 1;
+      runningPaceBreakdown.push({ source: "Quick", value: 1 });
+    }
+
     return {
       avoidance,
       fortitude,
@@ -104,12 +148,24 @@ export default function Step10_Summary() {
       stamina,
       wounds,
       initiative,
-      runningPace
+      runningPace,
+      breakdown: {
+        avoidance: avoidanceBreakdown,
+        fortitude: fortitudeBreakdown,
+        willpower: willpowerBreakdown,
+        stamina: staminaBreakdown,
+        wounds: woundsBreakdown,
+        initiative: initiativeBreakdown,
+        runningPace: runningPaceBreakdown,
+      },
     };
   };
 
   // Derived stats are calculated on the fly
   const derivedStats = calculateDerivedStats();
+
+  const formatBreakdown = (items: { source: string; value: number }[]) =>
+    items.map((item, index) => `${index ? '+ ' : ''}${item.source} ${item.value}`).join(' ');
 
   const prereqCharacterData = {
     abilityScores: Object.fromEntries(
@@ -305,6 +361,7 @@ export default function Step10_Summary() {
               <div>
                 <Label className="text-sm text-gray-400">Running Pace</Label>
                 <p className="font-semibold">{derivedStats.runningPace} areas</p>
+                <p className="text-xs text-gray-400">{formatBreakdown(derivedStats.breakdown.runningPace)}</p>
               </div>
             </div>
           </div>
@@ -384,25 +441,25 @@ export default function Step10_Summary() {
                   <Shield className="h-5 w-5 text-blue-400" />
                   {derivedStats.avoidance}
                 </div>
-                <p className="text-xs text-gray-400 mt-1">DEX or INT bonus + rank bonus + 10</p>
+                <p className="text-xs text-gray-400 mt-1">{formatBreakdown(derivedStats.breakdown.avoidance)}</p>
               </div>
-              
+
               <div className="text-center p-3 bg-gray-800 rounded-lg">
                 <Label className="text-xs text-gray-400 uppercase">Fortitude</Label>
                 <div className="text-3xl font-bold flex items-center justify-center gap-2">
                   <Shield className="h-5 w-5 text-red-400" />
                   {derivedStats.fortitude}
                 </div>
-                <p className="text-xs text-gray-400 mt-1">STR or CON bonus + rank bonus + 10</p>
+                <p className="text-xs text-gray-400 mt-1">{formatBreakdown(derivedStats.breakdown.fortitude)}</p>
               </div>
-              
+
               <div className="text-center p-3 bg-gray-800 rounded-lg">
                 <Label className="text-xs text-gray-400 uppercase">Willpower</Label>
                 <div className="text-3xl font-bold flex items-center justify-center gap-2">
                   <Shield className="h-5 w-5 text-purple-400" />
                   {derivedStats.willpower}
                 </div>
-                <p className="text-xs text-gray-400 mt-1">WIS or CHA bonus + rank bonus + 10</p>
+                <p className="text-xs text-gray-400 mt-1">{formatBreakdown(derivedStats.breakdown.willpower)}</p>
               </div>
             </div>
           </CardContent>
@@ -421,25 +478,25 @@ export default function Step10_Summary() {
                   <Heart className="h-5 w-5 text-green-400" />
                   {derivedStats.stamina}
                 </div>
-                <p className="text-xs text-gray-400 mt-1">AVOID + FORT + WILL</p>
+                <p className="text-xs text-gray-400 mt-1">{formatBreakdown(derivedStats.breakdown.stamina)}</p>
               </div>
-              
+
               <div className="text-center p-3 bg-gray-800 rounded-lg">
                 <Label className="text-xs text-gray-400 uppercase">Wounds</Label>
                 <div className="text-3xl font-bold flex items-center justify-center gap-2">
                   <Heart className="h-5 w-5 text-red-400" />
                   {derivedStats.wounds}
                 </div>
-                <p className="text-xs text-gray-400 mt-1">Half CON Bonus (min 3)</p>
+                <p className="text-xs text-gray-400 mt-1">{formatBreakdown(derivedStats.breakdown.wounds)}</p>
               </div>
-              
+
               <div className="text-center p-3 bg-gray-800 rounded-lg">
                 <Label className="text-xs text-gray-400 uppercase">Initiative</Label>
                 <div className="text-3xl font-bold flex items-center justify-center gap-2">
                   <Target className="h-5 w-5 text-yellow-400" />
                   {formatModifier(derivedStats.initiative)}
                 </div>
-                <p className="text-xs text-gray-400 mt-1">DEX Bonus</p>
+                <p className="text-xs text-gray-400 mt-1">{formatBreakdown(derivedStats.breakdown.initiative)}</p>
               </div>
             </div>
           </CardContent>
@@ -532,9 +589,19 @@ export default function Step10_Summary() {
               <div>
                 <Label className="text-xs text-gray-400">Weapons</Label>
                 <ul className="list-disc list-inside text-sm">
-                  {weapons.map((w, idx) => (
-                    <li key={idx}>{w.name}</li>
-                  ))}
+                  {weapons.map((w, idx) => {
+                    const bonus = attackBonuses.get(w.name);
+                    return (
+                      <li key={idx}>
+                        {w.name}
+                        {bonus && (
+                          <span className="text-xs text-gray-400">
+                            {" "}(+{bonus.attack} atk/+{bonus.damage} dmg from {bonus.sources.join(", ")})
+                          </span>
+                        )}
+                      </li>
+                    );
+                  })}
                 </ul>
               </div>
             )}
@@ -542,17 +609,25 @@ export default function Step10_Summary() {
               <div className={weapons.length > 0 ? "mt-4" : ""}>
                 <Label className="text-xs text-gray-400">Powers</Label>
                 <ul className="list-disc list-inside text-sm">
-                  {attackPowers.map((p, idx) => (
-                    <li key={idx}>
-                      {p.name}
-                      {(p as any).attack && (
-                        <span className="text-xs text-gray-400"> ({(p as any).attack})</span>
-                      )}
-                      {!(p as any).attack && p.damageType && (
-                        <span className="text-xs text-gray-400"> ({p.damageType})</span>
-                      )}
-                    </li>
-                  ))}
+                  {attackPowers.map((p, idx) => {
+                    const bonus = attackBonuses.get(p.name);
+                    return (
+                      <li key={idx}>
+                        {p.name}
+                        {(p as any).attack && (
+                          <span className="text-xs text-gray-400"> ({(p as any).attack})</span>
+                        )}
+                        {!(p as any).attack && p.damageType && (
+                          <span className="text-xs text-gray-400"> ({p.damageType})</span>
+                        )}
+                        {bonus && (
+                          <span className="text-xs text-gray-400">
+                            {" "}(+{bonus.attack} atk/+{bonus.damage} dmg from {bonus.sources.join(", ")})
+                          </span>
+                        )}
+                      </li>
+                    );
+                  })}
                 </ul>
               </div>
             )}

@@ -72,6 +72,8 @@ export interface Feat {
   emulatedFrom?: string;
   emulatedPower?: string;
   acquiredPower?: string;
+  /** Optional user input for feats like Attack Focus */
+  input?: string | string[];
 }
 
 export interface Maneuver {
