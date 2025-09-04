@@ -53,9 +53,11 @@ export default function Step10_Summary() {
   const weaponAttacks = useMemo(
     () =>
       character.gear
-        .filter(g => weaponNames.has(g.description || g.name))
-        .map(g => {
-          const name = g.description || g.name;
+        .filter((g) => weaponNames.has(g.name) || weaponNames.has(g.description))
+        .map((g) => {
+          const name = weaponNames.has(g.name)
+            ? g.name
+            : g.description || g.name;
           const gearInfo = gearMap.get(name);
           return {
             name,
