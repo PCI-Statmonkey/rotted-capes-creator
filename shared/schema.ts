@@ -299,6 +299,19 @@ export const characterDataSchema = z.object({
   createdAt: z.string().datetime(),
   updatedAt: z.string().datetime(),
 });
+// Attacks table
+export const attacks = pgTable("attacks", {
+  id: serial("id").primaryKey(),
+  name: text("name").notNull().unique(),
+  bonus: integer("bonus").notNull(),
+  range: text("range").notNull(),
+  damage: text("damage").notNull(),
+  damageType: text("damage_type").notNull(),
+  ammoType: text("ammo_type"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
 // Maneuvers table
 export const maneuvers = pgTable("maneuvers", {
   id: serial("id").primaryKey(),
@@ -395,6 +408,14 @@ export const characterComplications = pgTable("character_complications", {
   description: text("description").notNull(),
 });
 
+export const insertAttackSchema = createInsertSchema(attacks);
+
+export const attackSchema = insertAttackSchema.extend({
+  id: z.number(),
+  createdAt: z.string().datetime(),
+  updatedAt: z.string().datetime(),
+});
+
 export const insertManeuverSchema = createInsertSchema(maneuvers);
 
 export const maneuverSchema = insertManeuverSchema.extend({
@@ -470,6 +491,8 @@ export const insertCharacterComplicationSchema = createInsertSchema(characterCom
   description: true,
 });
 
+export type Attack = z.infer<typeof attackSchema>;
+export type NewAttack = z.infer<typeof insertAttackSchema>;
 export type Maneuver = z.infer<typeof maneuverSchema>;
 export type NewManeuver = z.infer<typeof insertManeuverSchema>;
 export type CharacterData = z.infer<typeof characterDataSchema>;

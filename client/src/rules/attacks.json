@@ -1,0 +1,42 @@
+[
+  {
+    "name": "Auto-Pistol",
+    "bonus": 0,
+    "range": 4,
+    "damage": "1d6",
+    "damageType": "ballistic",
+    "ammoType": "L"
+  },
+  {
+    "name": "Revolver",
+    "bonus": 0,
+    "range": 5,
+    "damage": "1d8",
+    "damageType": "ballistic",
+    "ammoType": "M"
+  },
+  {
+    "name": "Assault Rifle",
+    "bonus": 0,
+    "range": 10,
+    "damage": "1d10",
+    "damageType": "ballistic",
+    "ammoType": "M"
+  },
+  {
+    "name": "Sniper Rifle",
+    "bonus": 0,
+    "range": 15,
+    "damage": "2d8",
+    "damageType": "ballistic",
+    "ammoType": "H"
+  },
+  {
+    "name": "Bow / Crossbow",
+    "bonus": 0,
+    "range": 4,
+    "damage": "1d6",
+    "damageType": "piercing",
+    "ammoType": "A"
+  }
+]

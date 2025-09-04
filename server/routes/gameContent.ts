@@ -55,6 +55,11 @@ import {
   createGear,
   updateGear,
   deleteGear,
+  getAllAttacks,
+  getAttackById,
+  createAttack,
+  updateAttack,
+  deleteAttack,
   verifyAdmin,
 } from "../controllers/gameContentController";
 
@@ -118,6 +123,10 @@ router.get("/gear/:id", getGearById);
 // Maneuvers
 router.get("/maneuvers", getAllManeuvers);
 
+// Attacks
+router.get("/attacks", getAllAttacks);
+router.get("/attacks/:id", getAttackById);
+
 // ---------------- ADMIN ROUTES (POST / PATCH / DELETE) ----------------
 router.use(authenticateFirebaseToken);
 
@@ -175,5 +184,10 @@ router.delete("/gear/:id", ensureAdmin, deleteGear);
 router.post("/maneuvers", verifyAdmin, createManeuver);
 router.put("/maneuvers/:id", verifyAdmin, updateManeuver);
 router.delete("/maneuvers/:id", verifyAdmin, deleteManeuver);
+
+// Attacks
+router.post("/attacks", ensureAdmin, createAttack);
+router.patch("/attacks/:id", ensureAdmin, updateAttack);
+router.delete("/attacks/:id", ensureAdmin, deleteAttack);
 
 export default router;

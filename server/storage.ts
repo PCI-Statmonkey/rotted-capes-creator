@@ -10,6 +10,7 @@ import {
   weaknesses,
   originFeatures,
   maneuvers,
+  attacks,
   gear,
   characters,
   InsertSkillSet,
@@ -98,6 +99,13 @@ export const storage = {
   createOriginFeature: (data: any) => db.insert(originFeatures).values(data).returning().then(r => r[0]),
   updateOriginFeature: (id: number, data: any) => db.update(originFeatures).set(data).where(eq(originFeatures.id, id)).returning().then(r => r[0]),
   deleteOriginFeature: (id: number) => db.delete(originFeatures).where(eq(originFeatures.id, id)),
+
+  // ATTACK
+  getAllAttack: () => db.select().from(attacks),
+  getAttackById: (id: number) => db.query.attacks.findFirst({ where: eq(attacks.id, id) }),
+  createAttack: (data: any) => db.insert(attacks).values(data).returning().then(r => r[0]),
+  updateAttack: (id: number, data: any) => db.update(attacks).set(data).where(eq(attacks.id, id)).returning().then(r => r[0]),
+  deleteAttack: (id: number) => db.delete(attacks).where(eq(attacks.id, id)),
 
   // MANEUVERS
   getAllManeuver: () => db.select().from(maneuvers),
