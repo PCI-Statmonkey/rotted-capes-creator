@@ -318,7 +318,7 @@ export default function Step10_Summary() {
       { source: dexMod >= intMod ? "DEX mod" : "INT mod", value: Math.max(dexMod, intMod) },
       { source: "Rank", value: character.rankBonus },
     ];
-    if (hasQuick) avoidanceBreakdown.push({ source: "Quick", value: 1 });
+    if (hasQuick) avoidanceBreakdown.push({ source: "Quick (feat)", value: 1 });
     const armorBulk = character.gear.reduce((total, g) => {
       const baseName = gearMap.has(g.name) ? g.name : g.description || g.name;
       const info = gearMap.get(baseName);
@@ -327,7 +327,7 @@ export default function Step10_Summary() {
       }
       return total;
     }, 0);
-    if (armorBulk > 0) avoidanceBreakdown.push({ source: "Bulk", value: -armorBulk });
+    if (armorBulk > 0) avoidanceBreakdown.push({ source: "Armor Bulk", value: -armorBulk });
     const avoidance = avoidanceBreakdown.reduce((s, b) => s + b.value, 0);
 
     const fortitudeBreakdown = [
@@ -335,7 +335,7 @@ export default function Step10_Summary() {
       { source: strMod >= conMod ? "STR mod" : "CON mod", value: Math.max(strMod, conMod) },
       { source: "Rank", value: character.rankBonus },
     ];
-    if (toughnessCount > 0) fortitudeBreakdown.push({ source: "Toughness", value: toughnessCount });
+    if (toughnessCount > 0) fortitudeBreakdown.push({ source: "Toughness (feat)", value: toughnessCount });
     const fortitude = fortitudeBreakdown.reduce((s, b) => s + b.value, 0);
 
     const willpowerBreakdown = [
@@ -344,7 +344,7 @@ export default function Step10_Summary() {
       { source: "Rank", value: character.rankBonus },
     ];
     if (disciplinedCount > 0)
-      willpowerBreakdown.push({ source: "Disciplined", value: disciplinedCount });
+      willpowerBreakdown.push({ source: "Disciplined (feat)", value: disciplinedCount });
     const willpower = willpowerBreakdown.reduce((s, b) => s + b.value, 0);
 
     const staminaBreakdown = [
@@ -353,13 +353,14 @@ export default function Step10_Summary() {
       { source: "Willpower", value: willpower },
     ];
     if (toughnessCount > 0)
-      staminaBreakdown.push({ source: "Toughness", value: toughnessCount * 10 });
+      staminaBreakdown.push({ source: "Toughness (feat)", value: toughnessCount * 10 });
     const stamina = staminaBreakdown.reduce((s, b) => s + b.value, 0);
 
     const woundsBreakdown = [
       { source: "Base", value: Math.max(3, Math.ceil(conMod / 2)) },
     ];
-    if (toughnessCount > 1) woundsBreakdown.push({ source: "Toughness", value: 1 });
+    if (toughnessCount > 1)
+      woundsBreakdown.push({ source: "Toughness (feat)", value: 1 });
     const wounds = woundsBreakdown.reduce((s, b) => s + b.value, 0);
 
     const initiativeBreakdown = [{ source: "DEX mod", value: dexMod }];
@@ -369,7 +370,7 @@ export default function Step10_Summary() {
     let runningPace = Math.min(Math.max(dexMod, 1), 4);
     if (hasQuick) {
       runningPace += 1;
-      runningPaceBreakdown.push({ source: "Quick", value: 1 });
+      runningPaceBreakdown.push({ source: "Quick (feat)", value: 1 });
     }
 
     return {
@@ -396,7 +397,12 @@ export default function Step10_Summary() {
   const derivedStats = calculateDerivedStats();
 
   const formatBreakdown = (items: { source: string; value: number }[]) =>
-    items.map((item, index) => `${index ? '+ ' : ''}${item.source} ${item.value}`).join(' ');
+    items
+      .map((item, index) => {
+        const sign = item.value < 0 ? '' : index === 0 ? '' : '+';
+        return `${item.source} ${sign}${item.value}`;
+      })
+      .join(', ');
 
   const prereqCharacterData = {
     abilityScores: Object.fromEntries(
