@@ -784,28 +784,6 @@ export default function Step10_Summary() {
         </Card>
       </div>
 
-      {/* Burnout Threshold */}
-      <Card className="mb-6">
-        <CardHeader className="py-3">
-          <CardTitle className="text-center text-xl font-medium">
-            Burnout Threshold
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="p-4 pt-0">
-          <div className="text-center p-3 bg-gray-800 rounded-lg">
-            <div className="text-3xl font-bold flex items-center justify-center gap-2">
-              <Zap className="h-5 w-5 text-blue-400" />
-              {character.burnoutThreshold}
-            </div>
-            {hasExternalPowerSource && externalBurnoutThreshold !== null && (
-              <p className="text-xs text-gray-400 mt-1">
-                External Source: {externalBurnoutThreshold}
-              </p>
-            )}
-          </div>
-        </CardContent>
-      </Card>
-
       {/* Powers, Skill Sets, Gear */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
         {/* Powers Section */}
@@ -817,6 +795,35 @@ export default function Step10_Summary() {
             </CardTitle>
           </CardHeader>
           <CardContent className="max-h-96 overflow-y-auto">
+            <div className="mb-4">
+              <table className="w-full">
+                <thead>
+                  <tr className="text-xs uppercase text-gray-400">
+                    <th className="text-left py-2">
+                      Burnout Threshold{hasExternalPowerSource ? "s" : ""}
+                    </th>
+                    <th className="text-center py-2">Value</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr className="border-b border-gray-700">
+                    <td className="py-2">Base</td>
+                    <td className="text-center py-2 font-semibold">
+                      {character.burnoutThreshold}
+                    </td>
+                  </tr>
+                  {hasExternalPowerSource &&
+                    externalBurnoutThreshold !== null && (
+                      <tr>
+                        <td className="py-2">External</td>
+                        <td className="text-center py-2 font-semibold">
+                          {externalBurnoutThreshold}
+                        </td>
+                      </tr>
+                    )}
+                </tbody>
+              </table>
+            </div>
             {character.powers.length > 0 ? (
               <div className="space-y-4">
                 {character.powers.map((power, index) => {
