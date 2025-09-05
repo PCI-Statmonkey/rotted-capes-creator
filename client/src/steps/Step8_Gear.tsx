@@ -71,7 +71,6 @@ const goBags: Record<GoBagType, GoBag> = {
       { name: "Night scope and scope mount OR Laser sight and mount OR Pocket Lock Pick Set" },
       { name: "Water Resistant Night Vision Binoculars" },
       { name: "Tactical Holster Vest OR Tactical Sheath Utility Belt" },
-      { name: "1 clip/magazine of ammo OR 2 Hand Grenades" },
       { name: "Climbing Kit" },
       { name: "Gas Mask" },
       { name: "2- Throat communicators with 1- 2-way radio/walkie-talkie", batteryPowered: true },
