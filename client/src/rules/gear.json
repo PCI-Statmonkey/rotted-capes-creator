@@ -358,6 +358,7 @@
     "description": "Standard Kevlar vest offering solid ballistic protection.",
     "category": "armor",
     "ap": 1,
+    "bulk": 0,
     "tags": [],
     "batteryPowered": false
   },
@@ -366,6 +367,7 @@
     "description": "Full tactical suit with ballistic plates and padding.",
     "category": "armor",
     "ap": 3,
+    "bulk": 1,
     "tags": [],
     "batteryPowered": false
   },
@@ -374,6 +376,7 @@
     "description": "Durable everyday wear with protective lining.",
     "category": "armor",
     "ap": 1,
+    "bulk": 0,
     "tags": [],
     "batteryPowered": false
   },
@@ -382,6 +385,7 @@
     "description": "Molded leather plates hardened for protection.",
     "category": "armor",
     "ap": 2,
+    "bulk": 1,
     "tags": [],
     "batteryPowered": false
   },
@@ -390,6 +394,7 @@
     "description": "Linked metal rings for solid melee defense.",
     "category": "armor",
     "ap": 3,
+    "bulk": 2,
     "tags": [],
     "batteryPowered": false
   },
@@ -398,6 +403,7 @@
     "description": "Layered clothing or sports pads offering minor defense.",
     "category": "armor",
     "ap": 1,
+    "bulk": 0,
     "tags": [],
     "batteryPowered": false
   },
@@ -406,6 +412,7 @@
     "description": "Large shield designed to deflect attacks.",
     "category": "armor",
     "ap": 2,
+    "bulk": 2,
     "tags": [],
     "batteryPowered": false
   },
@@ -414,6 +421,7 @@
     "description": "Basic protective shield.",
     "category": "armor",
     "ap": 1,
+    "bulk": 1,
     "tags": [],
     "batteryPowered": false
   },
