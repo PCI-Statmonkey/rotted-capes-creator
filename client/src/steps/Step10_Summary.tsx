@@ -995,17 +995,50 @@ export default function Step10_Summary() {
                   const missing = [...missingObj.hard, ...missingObj.soft].map(
                     formatReq
                   );
+                  const details: string[] = [];
+                  if (feat.powerTrick) details.push(`Power Trick: ${feat.powerTrick}`);
+                  if (feat.emulatedPower)
+                    details.push(`Emulated Power: ${feat.emulatedPower}`);
+                  if ((feat as any).acquiredPower)
+                    details.push(`Power: ${(feat as any).acquiredPower}`);
+                  if (
+                    Array.isArray((feat as any).powerChoices) &&
+                    (feat as any).powerChoices.length
+                  )
+                    details.push(
+                      `Power Bonus: ${(feat as any).powerChoices.join(", ")}`
+                    );
+                  if (
+                    Array.isArray((feat as any).abilityChoices) &&
+                    (feat as any).abilityChoices.length
+                  )
+                    details.push(
+                      `Ability Bonus: ${(feat as any).abilityChoices.join(", ")}`
+                    );
+                  if ((feat as any).input) {
+                    const input = (feat as any).input;
+                    const text = Array.isArray(input) ? input.join(", ") : input;
+                    if (
+                      feat.name === "Learn Combat Maneuver" ||
+                      feat.name === "Natural Born Leader"
+                    ) {
+                      const label =
+                        Array.isArray(input) && input.length > 1
+                          ? "Maneuvers"
+                          : "Maneuver";
+                      details.push(`${label}: ${text}`);
+                    } else if (feat.name === "Attack Focus") {
+                      details.push(`Bonus: ${text}`);
+                    }
+                  }
                   return (
                     <div key={index} className="border border-gray-700 rounded-lg p-2">
-                      <div className="font-semibold">
-                        {displayFeatName(feat.name)}
-                        {feat.powerTrick && (
-                          <span className="text-sm text-gray-400"> — {feat.powerTrick}</span>
-                        )}
-                        {feat.emulatedPower && (
-                          <span className="text-sm text-gray-400"> — {feat.emulatedPower}</span>
-                        )}
-                      </div>
+                      <div className="font-semibold">{displayFeatName(feat.name)}</div>
+                      {details.map((d, i) => (
+                        <div key={i} className="text-sm text-gray-400">
+                          {d}
+                        </div>
+                      ))}
                       {feat.source && (
                         <div className="text-xs text-gray-400">Source: {feat.source}</div>
                       )}
