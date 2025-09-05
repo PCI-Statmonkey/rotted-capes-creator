@@ -441,6 +441,15 @@ export default function Step10_Summary() {
       { source: "Rank", value: character.rankBonus },
     ];
     if (hasQuick) avoidanceBreakdown.push({ source: "Quick", value: 1 });
+    const armorBulk = character.gear.reduce((total, g) => {
+      const baseName = gearMap.has(g.name) ? g.name : g.description || g.name;
+      const info = gearMap.get(baseName);
+      if (info?.category === "armor") {
+        return total + (info.bulk ?? 0);
+      }
+      return total;
+    }, 0);
+    if (armorBulk > 0) avoidanceBreakdown.push({ source: "Bulk", value: -armorBulk });
     const avoidance = avoidanceBreakdown.reduce((s, b) => s + b.value, 0);
 
     const fortitudeBreakdown = [
