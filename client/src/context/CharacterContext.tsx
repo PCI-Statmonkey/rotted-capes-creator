@@ -35,6 +35,7 @@ export interface Power {
   score?: number; // New field for power score
   finalScore?: number; // New field for final power score after modifiers
   damageType?: string; // Optional damage type
+  attackType?: string; // For Enhanced Melee Attack mode
   ability?: string;
   sense?: string;
   linkedPowers?: string[];

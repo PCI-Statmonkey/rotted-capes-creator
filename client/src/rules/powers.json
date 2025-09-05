@@ -314,7 +314,7 @@
   {
     "name": "Enhanced Melee Attack",
     "description": "Continuous, damaging (special, see below), Melee, *or* Weapon  **Primary Ability:** Strength, Dexterity, *or* Wisdom  **Action:** None/Bonus (if applicable)  *Your melee attacks hit harder, whether it’s claws, crackling fists, or a weapon that burns on Impact.*  **Effect:  ** You enhance either your unarmed strikes or a specific melee weapon with deadly force or elemental energy. This power can be taken multiple times for different energy types or weapon setups, but effects do not stack, and each instance of this power is tracked separately.**  **  - *Enhanced Unarmed Melee Attack:*  Choose a damage type and whether the effect is always active or can be turned on/off. If it can be concealed (e.g., retractable claws, flaming fists), it requires a Bonus Action to activate or deactivate. Your unarmed melee attacks deal: Power Score Die + Power Modifier + Primary Attribute Modifier in damage.  - *Enhanced Melee Weapon Attack:*  Choose a specific melee weapon and damage type. If the effect is something like electrifying or igniting the weapon, it also takes a Bonus Action to activate/deactivate. While active, your attacks with that weapon deal extra damage equal to your Power Score Die of the chosen type.",
-    "hasDamageType": false,
+    "hasDamageType": true,
     "hasTarget": false,
     "skillCompatible": false,
     "burnout": null

@@ -290,9 +290,10 @@ export default function Step10_Summary() {
       const damage = baseDie + (damageBonus ? formatModifier(damageBonus) : "");
       const damageType = p.damageType || "";
       const range = scoreData.powerRange;
+      const attackType = p.attackType ? ` [${p.attackType}]` : "";
       return `${p.name}${
         p.damageType ? ` (${p.damageType})` : ""
-      } ${formatModifier(toHit)} to hit, ${damage}${
+      }${attackType} ${formatModifier(toHit)} to hit, ${damage}${
         damageType ? `(${damageType})` : ""
       }, Range: ${range}`;
     });
