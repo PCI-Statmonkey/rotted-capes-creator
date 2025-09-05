@@ -29,6 +29,7 @@ import skillSetsData from "@/rules/skills.json";
 import featsData from "@/rules/feats.json";
 import weaknessesData from "@/rules/weaknesses.json";
 import powersData from "@/rules/powers.json";
+import maneuversData from "@/rules/maneuvers.json";
 import { displayFeatName } from "@/lib/utils";
 
 // Define weakness types
@@ -115,6 +116,8 @@ export default function Step6_Weaknesses() {
   const [tenPointEmulatedPower, setTenPointEmulatedPower] = useState("");
   const [tenPointCustomEmulatedPower, setTenPointCustomEmulatedPower] = useState("");
   const [tenPointNewPower, setTenPointNewPower] = useState("");
+  const [tenPointLeadership1, setTenPointLeadership1] = useState("");
+  const [tenPointLeadership2, setTenPointLeadership2] = useState("");
   const [fifteenPointAbility, setFifteenPointAbility] = useState("");
 
   // Calculate total weakness points
@@ -221,6 +224,14 @@ export default function Step6_Weaknesses() {
         .map((p: any) => p.name)
         .filter((n: string) => !characterPowerNames.includes(n)),
     [characterPowerNames]
+  );
+
+  const leadershipManeuvers = useMemo(
+    () =>
+      (maneuversData as any[]).filter((m: any) =>
+        (m.type || "").toLowerCase().includes("leadership")
+      ),
+    []
   );
 
   // Add a weakness to the character
@@ -416,6 +427,8 @@ export default function Step6_Weaknesses() {
         setTenPointEmulatedPower('');
         setTenPointCustomEmulatedPower('');
         setTenPointNewPower('');
+        setTenPointLeadership1('');
+        setTenPointLeadership2('');
       } else if (tenPointFeat.startsWith('Acquire New Power')) {
         if (!tenPointNewPower) return;
         const featObj = {
@@ -433,6 +446,8 @@ export default function Step6_Weaknesses() {
         setTenPointPower1('');
         setTenPointPower2('');
         setTenPointNewPower('');
+        setTenPointLeadership1('');
+        setTenPointLeadership2('');
       } else if (tenPointFeat.startsWith('Master Power Trick')) {
         const trick =
           tenPointPowerTrick === 'custom'
@@ -451,6 +466,8 @@ export default function Step6_Weaknesses() {
         setTenPointFeat('');
         setTenPointPowerTrick('');
         setTenPointCustomPowerTrick('');
+        setTenPointLeadership1('');
+        setTenPointLeadership2('');
       } else if (tenPointFeat.startsWith('Master Emulated Power')) {
         if (!tenPointEmulatedParent) return;
         const emuPower =
@@ -477,6 +494,23 @@ export default function Step6_Weaknesses() {
         setTenPointEmulatedParent('');
         setTenPointEmulatedPower('');
         setTenPointCustomEmulatedPower('');
+        setTenPointLeadership1('');
+        setTenPointLeadership2('');
+      } else if (tenPointFeat === 'Natural Born Leader') {
+        if (!tenPointLeadership1 || !tenPointLeadership2) return;
+        const featObj = { name: tenPointFeat, source: 'Weakness' };
+        if (!character.feats.some(f => f.name === tenPointFeat)) {
+          updateCharacterField('feats', [...character.feats, featObj]);
+        }
+        updateCharacterField('maneuvers', [
+          ...(character.maneuvers || []),
+          { name: tenPointLeadership1 },
+          { name: tenPointLeadership2 },
+        ]);
+        updateAllocations([...allocations, { type: '10-feat', target: tenPointFeat, amount: 10 }]);
+        setTenPointFeat('');
+        setTenPointLeadership1('');
+        setTenPointLeadership2('');
       } else {
         if (!character.feats.some(f => f.name === tenPointFeat)) {
           updateCharacterField('feats', [...character.feats, { name: tenPointFeat, source: 'Weakness' }]);
@@ -491,6 +525,8 @@ export default function Step6_Weaknesses() {
         setTenPointEmulatedPower('');
         setTenPointCustomEmulatedPower('');
         setTenPointNewPower('');
+        setTenPointLeadership1('');
+        setTenPointLeadership2('');
       }
     } else {
       if (!tenPointAbility1 || !tenPointAbility2) return;
@@ -634,6 +670,28 @@ export default function Step6_Weaknesses() {
           )}
         </>
       )}
+    </div>
+  );
+
+  const renderLeadershipSelect = (
+    label: string,
+    value: string,
+    setValue: (v: string) => void
+  ) => (
+    <div>
+      <label className="block text-sm mb-1">{label}</label>
+      <Select value={value} onValueChange={setValue}>
+        <SelectTrigger className="bg-gray-700">
+          <SelectValue placeholder="Select maneuver" />
+        </SelectTrigger>
+        <SelectContent>
+          {leadershipManeuvers.map((m) => (
+            <SelectItem key={m.name} value={m.name}>
+              {m.name}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
     </div>
   );
 
@@ -1225,6 +1283,8 @@ export default function Step6_Weaknesses() {
                             setTenPointEmulatedPower('');
                             setTenPointCustomEmulatedPower('');
                             setTenPointNewPower('');
+                            setTenPointLeadership1('');
+                            setTenPointLeadership2('');
                           }}
                         >
                           <SelectTrigger className="bg-gray-700">
@@ -1304,6 +1364,12 @@ export default function Step6_Weaknesses() {
                             setTenPointCustomEmulatedPower,
                             true
                           )}
+                        {tenPointFeat === 'Natural Born Leader' && (
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mt-2">
+                            {renderLeadershipSelect('Maneuver 1', tenPointLeadership1, setTenPointLeadership1)}
+                            {renderLeadershipSelect('Maneuver 2', tenPointLeadership2, setTenPointLeadership2)}
+                          </div>
+                        )}
                       </div>
                     ) : (
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
@@ -1354,6 +1420,8 @@ export default function Step6_Weaknesses() {
                             (tenPointFeat.startsWith('Master Emulated Power') &&
                               (!tenPointEmulatedParent || !tenPointEmulatedPower ||
                                 (tenPointEmulatedPower === 'custom' && !tenPointCustomEmulatedPower.trim()))) ||
+                            (tenPointFeat === 'Natural Born Leader' &&
+                              (!tenPointLeadership1 || !tenPointLeadership2)) ||
                             remainingWeaknessPoints < 10
                           : !tenPointAbility1 || !tenPointAbility2 || remainingWeaknessPoints < 10
                       }
