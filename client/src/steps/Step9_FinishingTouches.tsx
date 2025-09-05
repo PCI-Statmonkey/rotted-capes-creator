@@ -23,23 +23,38 @@ export default function Step9_FinishingTouches() {
     }
   }, [character, updateCharacterField]);
   
-  // Personality flaws for superhero characters
+  // Personality flaws drawn from the character creation rules
   const personalityFlaws = [
-    "Arrogant - Believes they are superior to others",
-    "Reckless - Acts without thinking of consequences",
-    "Vengeful - Unable to let go of past wrongs",
-    "Distrustful - Has difficulty trusting others",
-    "Stubborn - Refuses to change their mind or approach",
-    "Impulsive - Acts on emotion rather than reason",
-    "Overprotective - Tries to shield others to unhealthy degrees",
-    "Indecisive - Unable to make quick decisions under pressure",
-    "Obsessive - Fixates on goals to the exclusion of all else",
-    "Insecure - Doubts their own abilities and worth",
-    "Perfectionist - Cannot accept anything less than perfection",
-    "Guilt-Ridden - Carries unbearable guilt for past actions",
-    "Temperamental - Prone to emotional outbursts",
-    "Paranoid - Sees threats and conspiracies everywhere",
-    "Secretive - Keeps important information from allies"
+    "Always a Sidekick - Prefers following to leading",
+    "Berserker - Fights until no one is left standing",
+    "Bloodthirsty - Enjoys beating foes and looks for excuses",
+    "Chilling Presence - Unnerves and distances others",
+    "Clumsy - Frequently drops or breaks things",
+    "Combat Paralysis - Freezes under stress",
+    "Craven - Avoids conflict at all costs",
+    "Darwinist - Will sacrifice a few to save many",
+    "Greedy - Hoards supplies and resources",
+    "Gremlins - Technology fails around them",
+    "Haunted by Nightmares - Plagued by zombie dreams",
+    "The Hero's Code - Rigidly adheres to pre-Z-Day ideals",
+    "Hero Worship - Idolizes a specific hero or villain",
+    "Impatient - Can't stand waiting or planning",
+    "Lone Wolf - Prefers to act alone",
+    "Lying Eyes - Difficult to trust or convince others",
+    "Megalomania - Desires to rule and control",
+    "Nihilistic - Sees no hopeful future",
+    "Oblivious - Misses obvious dangers",
+    "Post-Traumatic Stress Disorder - On edge and easily triggered",
+    "Revolutionary - Opposes enclave leadership",
+    "Ruthless - Lacks compassion despite good intentions",
+    "Survivor's Guilt - Haunted by someone they let die",
+    "Too Much of a Good Thing - Attractive but underestimated",
+    "Unlucky - Misfortune follows them",
+    "Unattractive - Considered repulsive by others",
+    "Villainous Past - Can't escape former misdeeds",
+    "Young Gun - Reckless youth seeking respect",
+    "Xenophobia - Distrusts outsiders",
+    "Zealot - Fanatically devoted to faith or cause",
   ];
 
   const handleSaveCharacter = () => {
