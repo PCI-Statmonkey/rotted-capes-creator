@@ -195,7 +195,7 @@ export default function Step2_Origin() {
         { ability: "Any", bonus: 1, selectable: true },
         { ability: "Any", bonus: 1, selectable: true }
       ],
-      uniqueAdvantage: "My knowledge is my power: You gain 10 additional points to buy skills or feats. Also, unlike other Heroes, you may purchase up to three skill sets.",
+      uniqueAdvantage: "My knowledge is my power: You gain an additional skill set or feat in step 7.",
       uniqueDisadvantage: "Only Human: You are ultimately only human; you may never increase your physical attributes beyond 20. You do not possess any inborn powers.",
       image: "https://placehold.co/400x225/b45309/ffffff?text=Highly+Trained"
     },
