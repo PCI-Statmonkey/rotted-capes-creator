@@ -36,6 +36,8 @@ export interface Power {
   finalScore?: number; // New field for final power score after modifiers
   damageType?: string; // Optional damage type
   attackType?: string; // For Enhanced Melee Attack mode
+  weapon?: string; // Selected melee weapon for Enhanced Melee Attack
+  canTurnOff?: boolean; // Whether unarmed attack can be toggled
   ability?: string;
   sense?: string;
   linkedPowers?: string[];
