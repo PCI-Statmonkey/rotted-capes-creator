@@ -17,6 +17,7 @@ import powersData from "@/rules/powers.json" with { type: "json" };
 import powerSetsData from "@/rules/powerSets.json" with { type: "json" };
 import powerModsData from "@/rules/powerMods.json" with { type: "json" };
 import archetypesData from "@/rules/archetypes.json" with { type: "json" };
+import gearData from "@/rules/gear.json" with { type: "json" };
 
 // Define the power sets
 interface PowerSet {
@@ -39,6 +40,8 @@ interface Power {
   description?: string;
   damageType?: string;
   attackType?: string;
+  weapon?: string;
+  canTurnOff?: boolean;
   target?: string;
   ability?: string;
   sense?: string;
@@ -179,9 +182,13 @@ const POWER_PERKS: PowerModifier[] = RAW_MODIFIERS
 
 // Available damage types
 const DAMAGE_TYPES = [
-  "Kinetic", "Fire", "Cold", "Electrical", "Acid", "Sonic", 
+  "Kinetic", "Fire", "Cold", "Electrical", "Acid", "Sonic",
   "Light", "Radiation", "Dark", "Force", "Psychic"
 ];
+
+const MELEE_WEAPONS = (gearData as any[])
+  .filter((g: any) => g.category === "meleeWeapons")
+  .map((g: any) => g.name);
 
 export default function Step5_Powers() {
   const { character, updateCharacterField, setCurrentStep, updateDerivedStats } = useCharacter();
@@ -215,6 +222,9 @@ export default function Step5_Powers() {
         arrayIndex: undefined as number | undefined,
         description: p.description || powerDataMap.get(p.name)?.description,
         damageType: p.damageType,
+        attackType: (p as any).attackType,
+        weapon: (p as any).weapon,
+        canTurnOff: (p as any).canTurnOff,
         ability: p.ability || getAbilityOptions(p.name)[0],
         sense: (p as any).sense || getSenseOptions(p.name)[0],
         linkedPowers: (p as any).linkedPowers || [],
@@ -437,8 +447,12 @@ export default function Step5_Powers() {
       // Handle Enhanced Melee Attack specific options
       if (value === 'Enhanced Melee Attack') {
         newPowers[index].attackType = 'Unarmed';
+        newPowers[index].weapon = undefined;
+        newPowers[index].canTurnOff = false;
       } else {
         newPowers[index].attackType = undefined;
+        newPowers[index].weapon = undefined;
+        newPowers[index].canTurnOff = undefined;
       }
 
       const abilityOpts = getAbilityOptions(value);
@@ -464,6 +478,18 @@ export default function Step5_Powers() {
           p.linkedPowers = p.linkedPowers.map(lp => (lp === oldName ? value : lp));
         }
       });
+    }
+
+    if (field === 'attackType' && newPowers[index].name === 'Enhanced Melee Attack') {
+      if (value === 'Weapon') {
+        newPowers[index].weapon = MELEE_WEAPONS[0];
+        newPowers[index].damageType = undefined;
+        newPowers[index].canTurnOff = undefined;
+      } else {
+        newPowers[index].weapon = undefined;
+        newPowers[index].damageType = newPowers[index].damageType || DAMAGE_TYPES[0];
+        newPowers[index].canTurnOff = false;
+      }
     }
     
     // Recalculate final score if needed
@@ -568,12 +594,16 @@ export default function Step5_Powers() {
         ability: getAbilityOptions(power.name)[0],
         sense: getSenseOptions(power.name)[0],
         attackType: power.name === 'Enhanced Melee Attack' ? 'Unarmed' : undefined,
+        weapon: undefined,
+        canTurnOff: power.name === 'Enhanced Melee Attack' ? false : undefined,
         description: info?.description,
         linkedPowers: [],
         flaws: [],
         perks: [],
         finalScore: power.score,
-        damageType: powerUsesDamageType(power.name) ? DAMAGE_TYPES[0] : undefined
+        damageType: power.name === 'Enhanced Melee Attack'
+          ? DAMAGE_TYPES[0]
+          : powerUsesDamageType(power.name) ? DAMAGE_TYPES[0] : undefined
       };
     });
     
@@ -601,11 +631,14 @@ export default function Step5_Powers() {
       ability: getAbilityOptions(ALL_POWERS[0])[0],
       sense: getSenseOptions(ALL_POWERS[0])[0],
       attackType: undefined,
+      weapon: undefined,
+      canTurnOff: undefined,
       description: info?.description,
       linkedPowers: [],
       flaws: [],
       perks: [],
-      finalScore: 0
+      finalScore: 0,
+      damageType: powerUsesDamageType(ALL_POWERS[0]) ? DAMAGE_TYPES[0] : undefined
     };
     
     setSelectedPowers([...selectedPowers, newPower]);
@@ -690,6 +723,8 @@ export default function Step5_Powers() {
       description: power.description || "",
       damageType: power.damageType,
       attackType: power.attackType,
+      weapon: power.weapon,
+      canTurnOff: power.canTurnOff,
       ability: power.ability,
       sense: power.sense,
       score: power.score,
@@ -987,14 +1022,61 @@ export default function Step5_Powers() {
                             <SelectValue placeholder="Select attack type" />
                           </SelectTrigger>
                           <SelectContent>
-                            <SelectItem value="Unarmed">Unarmed</SelectItem>
-                            <SelectItem value="Weapon">Weapon</SelectItem>
+                            <SelectItem value="Unarmed">Unarmed Melee Attack</SelectItem>
+                            <SelectItem value="Weapon">Enhanced Melee Weapon Attack</SelectItem>
                           </SelectContent>
                         </Select>
                       </div>
                     )}
 
-                    {power.damageType !== undefined && (
+                    {power.name === 'Enhanced Melee Attack' && power.attackType === 'Weapon' && (
+                      <div className="mt-2">
+                        <Label className="text-sm">Melee Weapon</Label>
+                        <Select
+                          value={power.weapon}
+                          onValueChange={(value) => updatePower(index, 'weapon', value)}
+                        >
+                          <SelectTrigger className="bg-gray-800">
+                            <SelectValue placeholder="Select weapon" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {MELEE_WEAPONS.map(w => (
+                              <SelectItem key={w} value={w}>{w}</SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </div>
+                    )}
+
+                    {power.name === 'Enhanced Melee Attack' && power.attackType === 'Unarmed' && (
+                      <>
+                        <div className="mt-2">
+                          <Label className="text-sm">Damage Type</Label>
+                          <Select
+                            value={power.damageType}
+                            onValueChange={(value) => updatePower(index, 'damageType', value)}
+                          >
+                            <SelectTrigger className="bg-gray-800">
+                              <SelectValue placeholder="Select damage type" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              {DAMAGE_TYPES.map(type => (
+                                <SelectItem key={type} value={type}>{type}</SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                        </div>
+                        <div className="mt-2 flex items-center space-x-2">
+                          <Switch
+                            checked={power.canTurnOff}
+                            onCheckedChange={(checked) => updatePower(index, 'canTurnOff', checked)}
+                          />
+                          <Label className="text-sm">Can be turned on/off</Label>
+                        </div>
+                      </>
+                    )}
+
+                    {power.name !== 'Enhanced Melee Attack' && power.damageType !== undefined && (
                       <div className="mt-2">
                         <Label className="text-sm">Damage Type</Label>
                         <Select
@@ -1257,15 +1339,62 @@ export default function Step5_Powers() {
                                     <SelectValue placeholder="Select type" />
                                   </SelectTrigger>
                                   <SelectContent>
-                                    <SelectItem value="Unarmed">Unarmed</SelectItem>
-                                    <SelectItem value="Weapon">Weapon</SelectItem>
+                                    <SelectItem value="Unarmed">Unarmed Melee Attack</SelectItem>
+                                    <SelectItem value="Weapon">Enhanced Melee Weapon Attack</SelectItem>
                                   </SelectContent>
                                 </Select>
                               </div>
                             )}
 
-                            {/* Only show damage type selector for powers that need it */}
-                            {powerUsesDamageType(power.name) && (
+                            {power.name === 'Enhanced Melee Attack' && power.attackType === 'Weapon' && (
+                              <div className="flex-1">
+                                <Label className="text-xs mb-1 block">Melee Weapon</Label>
+                                <Select
+                                  value={power.weapon}
+                                  onValueChange={(value) => updatePower(index, 'weapon', value)}
+                                >
+                                  <SelectTrigger className="bg-gray-800">
+                                    <SelectValue placeholder="Select weapon" />
+                                  </SelectTrigger>
+                                  <SelectContent>
+                                    {MELEE_WEAPONS.map(w => (
+                                      <SelectItem key={`weapon-${w}`} value={w}>{w}</SelectItem>
+                                    ))}
+                                  </SelectContent>
+                                </Select>
+                              </div>
+                            )}
+
+                            {power.name === 'Enhanced Melee Attack' && power.attackType === 'Unarmed' && (
+                              <>
+                                <div className="flex-1">
+                                  <Label className="text-xs mb-1 block">Damage Type</Label>
+                                  <Select
+                                    value={power.damageType || "none"}
+                                    onValueChange={(value) => updatePower(index, 'damageType', value)}
+                                  >
+                                    <SelectTrigger className="bg-gray-800">
+                                      <SelectValue placeholder="Select type" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                      {DAMAGE_TYPES.map(type => (
+                                        <SelectItem key={`damage-${type}`} value={type}>{type}</SelectItem>
+                                      ))}
+                                    </SelectContent>
+                                  </Select>
+                                </div>
+                                <div className="flex items-center space-x-2 mt-6">
+                                  <Switch
+                                    checked={power.canTurnOff}
+                                    onCheckedChange={(checked) => updatePower(index, 'canTurnOff', checked)}
+                                  />
+                                  <Label className="text-xs">Can be turned on/off</Label>
+                                </div>
+                              </>
+                            )}
+
+                            {/* Only show damage type selector for other powers that need it */}
+                            {power.name !== 'Enhanced Melee Attack' && powerUsesDamageType(power.name) && (
                               <div className="flex-1">
                                 <Label className="text-xs mb-1 block">Damage Type</Label>
                                 <Select
@@ -1552,14 +1681,61 @@ export default function Step5_Powers() {
                                   <SelectValue placeholder="Select type" />
                                 </SelectTrigger>
                                 <SelectContent>
-                                  <SelectItem value="Unarmed">Unarmed</SelectItem>
-                                  <SelectItem value="Weapon">Weapon</SelectItem>
+                                  <SelectItem value="Unarmed">Unarmed Melee Attack</SelectItem>
+                                  <SelectItem value="Weapon">Enhanced Melee Weapon Attack</SelectItem>
                                 </SelectContent>
                               </Select>
                             </div>
                           )}
 
-                          {powerUsesDamageType(power.name) && (
+                          {power.name === 'Enhanced Melee Attack' && power.attackType === 'Weapon' && (
+                            <div className="flex-1">
+                              <Label className="text-xs mb-1 block">Melee Weapon</Label>
+                              <Select
+                                value={power.weapon}
+                                onValueChange={(value) => updatePower(index, 'weapon', value)}
+                              >
+                                <SelectTrigger className="bg-gray-800">
+                                  <SelectValue placeholder="Select weapon" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  {MELEE_WEAPONS.map(w => (
+                                    <SelectItem key={`pb-weapon-${w}`} value={w}>{w}</SelectItem>
+                                  ))}
+                                </SelectContent>
+                              </Select>
+                            </div>
+                          )}
+
+                          {power.name === 'Enhanced Melee Attack' && power.attackType === 'Unarmed' && (
+                            <>
+                              <div className="flex-1">
+                                <Label className="text-xs mb-1 block">Damage Type</Label>
+                                <Select
+                                  value={power.damageType || "none"}
+                                  onValueChange={(value) => updatePower(index, 'damageType', value)}
+                                >
+                                  <SelectTrigger className="bg-gray-800">
+                                    <SelectValue placeholder="Select type" />
+                                  </SelectTrigger>
+                                  <SelectContent>
+                                    {DAMAGE_TYPES.map(type => (
+                                      <SelectItem key={`pb-damage-${type}`} value={type}>{type}</SelectItem>
+                                    ))}
+                                  </SelectContent>
+                                </Select>
+                              </div>
+                              <div className="flex items-center space-x-2 mt-6">
+                                <Switch
+                                  checked={power.canTurnOff}
+                                  onCheckedChange={(checked) => updatePower(index, 'canTurnOff', checked)}
+                                />
+                                <Label className="text-xs">Can be turned on/off</Label>
+                              </div>
+                            </>
+                          )}
+
+                          {power.name !== 'Enhanced Melee Attack' && powerUsesDamageType(power.name) && (
                             <div className="flex-1">
                               <Label className="text-xs mb-1 block">Damage Type</Label>
                               <Select

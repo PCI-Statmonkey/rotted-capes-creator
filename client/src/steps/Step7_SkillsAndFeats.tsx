@@ -4,6 +4,8 @@ import { ArrowLeft, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Switch } from "@/components/ui/switch";
 import useCachedGameContent from "@/hooks/useCachedGameContent";
 import { useCharacterBuilder } from "@/lib/Stores/characterBuilder";
 import { useCharacter } from "@/context/CharacterContext";
@@ -13,6 +15,16 @@ import { getMissingPrereqs, formatPrerequisite } from "@/utils/requirementValida
 import maneuversData from "@/rules/maneuvers.json";
 import featsFallback from "@/rules/feats.json";
 import powersData from "@/rules/powers.json";
+import gearData from "@/rules/gear.json" with { type: "json" };
+
+const DAMAGE_TYPES = [
+  "Kinetic", "Fire", "Cold", "Electrical", "Acid", "Sonic",
+  "Light", "Radiation", "Dark", "Force", "Psychic"
+];
+
+const MELEE_WEAPONS = (gearData as any[])
+  .filter((g: any) => g.category === "meleeWeapons")
+  .map((g: any) => g.name);
 
 const Step7_SkillsAndFeats = () => {
   const {
@@ -182,6 +194,18 @@ const Step7_SkillsAndFeats = () => {
   const [row1FeatInput, setRow1FeatInput] = useState<string>("");
   const [row2FeatInput, setRow2FeatInput] = useState<string>("");
   const [row3FeatInput, setRow3FeatInput] = useState<string>("");
+  const [row1AttackType, setRow1AttackType] = useState<string>('Unarmed');
+  const [row1Weapon, setRow1Weapon] = useState<string>(MELEE_WEAPONS[0]);
+  const [row1DamageType, setRow1DamageType] = useState<string>(DAMAGE_TYPES[0]);
+  const [row1CanTurnOff, setRow1CanTurnOff] = useState<boolean>(false);
+  const [row2AttackType, setRow2AttackType] = useState<string>('Unarmed');
+  const [row2Weapon, setRow2Weapon] = useState<string>(MELEE_WEAPONS[0]);
+  const [row2DamageType, setRow2DamageType] = useState<string>(DAMAGE_TYPES[0]);
+  const [row2CanTurnOff, setRow2CanTurnOff] = useState<boolean>(false);
+  const [row3AttackType, setRow3AttackType] = useState<string>('Unarmed');
+  const [row3Weapon, setRow3Weapon] = useState<string>(MELEE_WEAPONS[0]);
+  const [row3DamageType, setRow3DamageType] = useState<string>(DAMAGE_TYPES[0]);
+  const [row3CanTurnOff, setRow3CanTurnOff] = useState<boolean>(false);
 
   useEffect(() => {
     // Skill sets
@@ -253,6 +277,12 @@ const Step7_SkillsAndFeats = () => {
         setRow1EmulatedPower(f0.emulatedPower);
       } else if (f0.acquiredPower) {
         setRow1NewPower(f0.acquiredPower);
+        if (f0.acquiredPower === 'Enhanced Melee Attack') {
+          setRow1AttackType(f0.attackType || 'Unarmed');
+          setRow1Weapon(f0.weapon || MELEE_WEAPONS[0]);
+          setRow1DamageType(f0.damageType || DAMAGE_TYPES[0]);
+          setRow1CanTurnOff(!!f0.canTurnOff);
+        }
       }
     } else {
       setRow1Feat("");
@@ -268,6 +298,10 @@ const Step7_SkillsAndFeats = () => {
       setRow1EmulatedPower("");
       setRow1NewPower("");
       setRow1CustomEmulatedPower("");
+      setRow1AttackType('Unarmed');
+      setRow1Weapon(MELEE_WEAPONS[0]);
+      setRow1DamageType(DAMAGE_TYPES[0]);
+      setRow1CanTurnOff(false);
     }
 
     const f1 = featByRow(1);
@@ -301,6 +335,12 @@ const Step7_SkillsAndFeats = () => {
         setRow2EmulatedPower(f1.emulatedPower);
       } else if (f1.acquiredPower) {
         setRow2NewPower(f1.acquiredPower);
+        if (f1.acquiredPower === 'Enhanced Melee Attack') {
+          setRow2AttackType(f1.attackType || 'Unarmed');
+          setRow2Weapon(f1.weapon || MELEE_WEAPONS[0]);
+          setRow2DamageType(f1.damageType || DAMAGE_TYPES[0]);
+          setRow2CanTurnOff(!!f1.canTurnOff);
+        }
       }
     } else {
       setRow2Feat("");
@@ -316,6 +356,10 @@ const Step7_SkillsAndFeats = () => {
       setRow2EmulatedPower("");
       setRow2NewPower("");
       setRow2CustomEmulatedPower("");
+      setRow2AttackType('Unarmed');
+      setRow2Weapon(MELEE_WEAPONS[0]);
+      setRow2DamageType(DAMAGE_TYPES[0]);
+      setRow2CanTurnOff(false);
     }
 
     const f2 = isSkillBased ? featByRow(2) : undefined;
@@ -349,6 +393,12 @@ const Step7_SkillsAndFeats = () => {
         setRow3EmulatedPower(f2.emulatedPower);
       } else if (f2.acquiredPower) {
         setRow3NewPower(f2.acquiredPower);
+        if (f2.acquiredPower === 'Enhanced Melee Attack') {
+          setRow3AttackType(f2.attackType || 'Unarmed');
+          setRow3Weapon(f2.weapon || MELEE_WEAPONS[0]);
+          setRow3DamageType(f2.damageType || DAMAGE_TYPES[0]);
+          setRow3CanTurnOff(!!f2.canTurnOff);
+        }
       }
     } else if (isSkillBased) {
       setRow3Feat("");
@@ -364,6 +414,10 @@ const Step7_SkillsAndFeats = () => {
       setRow3EmulatedPower("");
       setRow3NewPower("");
       setRow3CustomEmulatedPower("");
+      setRow3AttackType('Unarmed');
+      setRow3Weapon(MELEE_WEAPONS[0]);
+      setRow3DamageType(DAMAGE_TYPES[0]);
+      setRow3CanTurnOff(false);
     }
 
     // Populate maneuver selections for feats that grant maneuvers
@@ -590,6 +644,10 @@ const Step7_SkillsAndFeats = () => {
       emulatedFrom?: string;
       emulatedPower?: string;
       acquiredPower?: string;
+      attackType?: string;
+      weapon?: string;
+      damageType?: string;
+      canTurnOff?: boolean;
       input?: string | string[];
       row: number;
     }[] = [];
@@ -625,6 +683,15 @@ const Step7_SkillsAndFeats = () => {
       }
       if (row1Feat.startsWith("Acquire New Power") && row1NewPower) {
         feat.acquiredPower = row1NewPower;
+        if (row1NewPower === 'Enhanced Melee Attack') {
+          (feat as any).attackType = row1AttackType;
+          if (row1AttackType === 'Weapon') {
+            (feat as any).weapon = row1Weapon;
+          } else {
+            (feat as any).damageType = row1DamageType;
+            (feat as any).canTurnOff = row1CanTurnOff;
+          }
+        }
       }
       if (row1Feat.startsWith("Master Power Trick")) {
         feat.powerTrick =
@@ -694,6 +761,15 @@ const Step7_SkillsAndFeats = () => {
       }
       if (row2Feat.startsWith("Acquire New Power") && row2NewPower) {
         feat.acquiredPower = row2NewPower;
+        if (row2NewPower === 'Enhanced Melee Attack') {
+          (feat as any).attackType = row2AttackType;
+          if (row2AttackType === 'Weapon') {
+            (feat as any).weapon = row2Weapon;
+          } else {
+            (feat as any).damageType = row2DamageType;
+            (feat as any).canTurnOff = row2CanTurnOff;
+          }
+        }
       }
       if (row2Feat.startsWith("Master Power Trick")) {
         feat.powerTrick =
@@ -763,6 +839,15 @@ const Step7_SkillsAndFeats = () => {
       }
       if (row3Feat.startsWith("Acquire New Power") && row3NewPower) {
         feat.acquiredPower = row3NewPower;
+        if (row3NewPower === 'Enhanced Melee Attack') {
+          (feat as any).attackType = row3AttackType;
+          if (row3AttackType === 'Weapon') {
+            (feat as any).weapon = row3Weapon;
+          } else {
+            (feat as any).damageType = row3DamageType;
+            (feat as any).canTurnOff = row3CanTurnOff;
+          }
+        }
       }
       if (row3Feat.startsWith("Master Power Trick")) {
         feat.powerTrick =
@@ -846,11 +931,21 @@ const Step7_SkillsAndFeats = () => {
         });
       }
       if (f.name.startsWith("Acquire New Power") && f.acquiredPower) {
-        powers.push({
+        const newPower: any = {
           name: f.acquiredPower,
           score: 12,
           finalScore: 12,
-        } as any);
+        };
+        if (f.acquiredPower === 'Enhanced Melee Attack') {
+          newPower.attackType = (f as any).attackType || 'Unarmed';
+          if (newPower.attackType === 'Weapon') {
+            newPower.weapon = (f as any).weapon;
+          } else {
+            newPower.damageType = (f as any).damageType;
+            newPower.canTurnOff = (f as any).canTurnOff;
+          }
+        }
+        powers.push(newPower);
       }
       if (f.name.startsWith("Master Emulated Power") && f.emulatedPower) {
         const parent = powers.find((p) => p.name === f.emulatedFrom);
@@ -1192,10 +1287,29 @@ const Step7_SkillsAndFeats = () => {
 
   const renderNewPowerSelect = (
     value: string,
-    setValue: (v: string) => void
+    setValue: (v: string) => void,
+    attackType: string,
+    setAttackType: (v: string) => void,
+    weapon: string,
+    setWeapon: (v: string) => void,
+    damageType: string,
+    setDamageType: (v: string) => void,
+    canTurnOff: boolean,
+    setCanTurnOff: (v: boolean) => void
   ) => (
-    <div className="mt-2">
-      <Select value={value} onValueChange={setValue}>
+    <div className="mt-2 space-y-2">
+      <Select
+        value={value}
+        onValueChange={(v) => {
+          setValue(v);
+          if (v === 'Enhanced Melee Attack') {
+            setAttackType('Unarmed');
+            setWeapon(MELEE_WEAPONS[0]);
+            setDamageType(DAMAGE_TYPES[0]);
+            setCanTurnOff(false);
+          }
+        }}
+      >
         <SelectTrigger className="w-full">
           <SelectValue placeholder="Select power" />
         </SelectTrigger>
@@ -1207,6 +1321,61 @@ const Step7_SkillsAndFeats = () => {
           ))}
         </SelectContent>
       </Select>
+      {value === 'Enhanced Melee Attack' && (
+        <div className="space-y-2">
+          <div>
+            <Label className="text-sm">Attack Type</Label>
+            <Select value={attackType} onValueChange={setAttackType}>
+              <SelectTrigger className="w-full">
+                <SelectValue placeholder="Select attack type" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="Unarmed">Unarmed Melee Attack</SelectItem>
+                <SelectItem value="Weapon">Enhanced Melee Weapon Attack</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+          {attackType === 'Weapon' ? (
+            <div>
+              <Label className="text-sm">Melee Weapon</Label>
+              <Select value={weapon} onValueChange={setWeapon}>
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder="Select weapon" />
+                </SelectTrigger>
+                <SelectContent>
+                  {MELEE_WEAPONS.map((w) => (
+                    <SelectItem key={w} value={w}>
+                      {w}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          ) : (
+            <>
+              <div>
+                <Label className="text-sm">Damage Type</Label>
+                <Select value={damageType} onValueChange={setDamageType}>
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="Select damage type" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {DAMAGE_TYPES.map((d) => (
+                      <SelectItem key={d} value={d}>
+                        {d}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="flex items-center space-x-2">
+                <Switch checked={canTurnOff} onCheckedChange={setCanTurnOff} />
+                <Label className="text-sm">Can be turned on/off</Label>
+              </div>
+            </>
+          )}
+        </div>
+      )}
     </div>
   );
 
@@ -1329,6 +1498,10 @@ const Step7_SkillsAndFeats = () => {
               setRow1EmulatedPower("");
               setRow1NewPower("");
               setRow1CustomEmulatedPower("");
+              setRow1AttackType('Unarmed');
+              setRow1Weapon(MELEE_WEAPONS[0]);
+              setRow1DamageType(DAMAGE_TYPES[0]);
+              setRow1CanTurnOff(false);
             })}
             {row1Feat === "Attack Focus" && (
               <Input
@@ -1367,7 +1540,18 @@ const Step7_SkillsAndFeats = () => {
                 setRow1Power2
               )}
             {row1Feat.startsWith("Acquire New Power") &&
-              renderNewPowerSelect(row1NewPower, setRow1NewPower)}
+              renderNewPowerSelect(
+                row1NewPower,
+                setRow1NewPower,
+                row1AttackType,
+                setRow1AttackType,
+                row1Weapon,
+                setRow1Weapon,
+                row1DamageType,
+                setRow1DamageType,
+                row1CanTurnOff,
+                setRow1CanTurnOff
+              )}
             {row1Feat.startsWith("Master Power Trick") &&
               renderPowerTrickSelect(
                 row1PowerTrick,
@@ -1435,6 +1619,10 @@ const Step7_SkillsAndFeats = () => {
                 setRow2EmulatedPower("");
                 setRow2NewPower("");
                 setRow2CustomEmulatedPower("");
+                setRow2AttackType('Unarmed');
+                setRow2Weapon(MELEE_WEAPONS[0]);
+                setRow2DamageType(DAMAGE_TYPES[0]);
+                setRow2CanTurnOff(false);
               }
             },
             row2CustomSkill,
@@ -1451,6 +1639,10 @@ const Step7_SkillsAndFeats = () => {
                 setRow2Maneuver("");
                 setRow2Leadership1("");
                 setRow2Leadership2("");
+                setRow2AttackType('Unarmed');
+                setRow2Weapon(MELEE_WEAPONS[0]);
+                setRow2DamageType(DAMAGE_TYPES[0]);
+                setRow2CanTurnOff(false);
                 if (v) {
                   setRow2SkillSet("");
                   setRow2CustomSkill("");
@@ -1509,7 +1701,18 @@ const Step7_SkillsAndFeats = () => {
                 setRow2Power2
               )}
             {row2Feat.startsWith("Acquire New Power") &&
-              renderNewPowerSelect(row2NewPower, setRow2NewPower)}
+              renderNewPowerSelect(
+                row2NewPower,
+                setRow2NewPower,
+                row2AttackType,
+                setRow2AttackType,
+                row2Weapon,
+                setRow2Weapon,
+                row2DamageType,
+                setRow2DamageType,
+                row2CanTurnOff,
+                setRow2CanTurnOff
+              )}
             {row2Feat.startsWith("Master Power Trick") &&
               renderPowerTrickSelect(
                 row2PowerTrick,
@@ -1578,6 +1781,10 @@ const Step7_SkillsAndFeats = () => {
                 setRow3EmulatedPower("");
                 setRow3NewPower("");
                 setRow3CustomEmulatedPower("");
+                setRow3AttackType('Unarmed');
+                setRow3Weapon(MELEE_WEAPONS[0]);
+                setRow3DamageType(DAMAGE_TYPES[0]);
+                setRow3CanTurnOff(false);
               }
             },
             row3CustomSkill,
@@ -1594,6 +1801,10 @@ const Step7_SkillsAndFeats = () => {
                 setRow3Maneuver("");
                 setRow3Leadership1("");
                 setRow3Leadership2("");
+                setRow3AttackType('Unarmed');
+                setRow3Weapon(MELEE_WEAPONS[0]);
+                setRow3DamageType(DAMAGE_TYPES[0]);
+                setRow3CanTurnOff(false);
                 if (v) {
                   setRow3SkillSet("");
                   setRow3CustomSkill("");
@@ -1610,6 +1821,10 @@ const Step7_SkillsAndFeats = () => {
                   setRow3CustomEmulatedPower("");
                   setRow3Leadership1("");
                   setRow3Leadership2("");
+                  setRow3AttackType('Unarmed');
+                  setRow3Weapon(MELEE_WEAPONS[0]);
+                  setRow3DamageType(DAMAGE_TYPES[0]);
+                  setRow3CanTurnOff(false);
                 }
               },
               !!row3SkillSet,
@@ -1652,7 +1867,18 @@ const Step7_SkillsAndFeats = () => {
                   setRow3Power2
                 )}
               {row3Feat.startsWith("Acquire New Power") &&
-                renderNewPowerSelect(row3NewPower, setRow3NewPower)}
+                renderNewPowerSelect(
+                  row3NewPower,
+                  setRow3NewPower,
+                  row3AttackType,
+                  setRow3AttackType,
+                  row3Weapon,
+                  setRow3Weapon,
+                  row3DamageType,
+                  setRow3DamageType,
+                  row3CanTurnOff,
+                  setRow3CanTurnOff
+                )}
               {row3Feat.startsWith("Master Power Trick") &&
                 renderPowerTrickSelect(
                   row3PowerTrick,
