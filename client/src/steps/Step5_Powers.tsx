@@ -38,6 +38,7 @@ interface Power {
   arrayIndex?: number;
   description?: string;
   damageType?: string;
+  attackType?: string;
   target?: string;
   ability?: string;
   sense?: string;
@@ -64,7 +65,8 @@ const DAMAGE_TYPE_POWERS = [
   "Energy Sheath",
   "Damaging Form",
   "Darkness",
-  "Psychic Attack"
+  "Psychic Attack",
+  "Enhanced Melee Attack"
 ];
 
 // Helper function to check if a power uses damage type
@@ -392,6 +394,7 @@ export default function Step5_Powers() {
       arrayIndex: undefined,
       ability: getAbilityOptions(ALL_POWERS[0])[0],
       sense: getSenseOptions(ALL_POWERS[0])[0],
+      attackType: undefined,
       description: info?.description,
       linkedPowers: [],
       flaws: [],
@@ -429,6 +432,13 @@ export default function Step5_Powers() {
       // If the power doesn't use damage type, clear any existing damage type
       else if (!powerUsesDamageType(value)) {
         newPowers[index].damageType = undefined;
+      }
+
+      // Handle Enhanced Melee Attack specific options
+      if (value === 'Enhanced Melee Attack') {
+        newPowers[index].attackType = 'Unarmed';
+      } else {
+        newPowers[index].attackType = undefined;
       }
 
       const abilityOpts = getAbilityOptions(value);
@@ -557,6 +567,7 @@ export default function Step5_Powers() {
         arrayIndex: undefined,
         ability: getAbilityOptions(power.name)[0],
         sense: getSenseOptions(power.name)[0],
+        attackType: power.name === 'Enhanced Melee Attack' ? 'Unarmed' : undefined,
         description: info?.description,
         linkedPowers: [],
         flaws: [],
@@ -589,6 +600,7 @@ export default function Step5_Powers() {
       arrayIndex: undefined,
       ability: getAbilityOptions(ALL_POWERS[0])[0],
       sense: getSenseOptions(ALL_POWERS[0])[0],
+      attackType: undefined,
       description: info?.description,
       linkedPowers: [],
       flaws: [],
@@ -677,6 +689,7 @@ export default function Step5_Powers() {
       name: power.name,
       description: power.description || "",
       damageType: power.damageType,
+      attackType: power.attackType,
       ability: power.ability,
       sense: power.sense,
       score: power.score,
@@ -963,6 +976,24 @@ export default function Step5_Powers() {
                         </div>
                       </div>
                     
+                    {power.name === 'Enhanced Melee Attack' && (
+                      <div className="mt-2">
+                        <Label className="text-sm">Attack Type</Label>
+                        <Select
+                          value={power.attackType}
+                          onValueChange={(value) => updatePower(index, 'attackType', value)}
+                        >
+                          <SelectTrigger className="bg-gray-800">
+                            <SelectValue placeholder="Select attack type" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="Unarmed">Unarmed</SelectItem>
+                            <SelectItem value="Weapon">Weapon</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                    )}
+
                     {power.damageType !== undefined && (
                       <div className="mt-2">
                         <Label className="text-sm">Damage Type</Label>
@@ -1210,6 +1241,24 @@ export default function Step5_Powers() {
                                     {getSenseOptions(power.name).map(opt => (
                                       <SelectItem key={`sense-${opt}`} value={opt}>{opt}</SelectItem>
                                     ))}
+                                  </SelectContent>
+                                </Select>
+                              </div>
+                            )}
+
+                            {power.name === 'Enhanced Melee Attack' && (
+                              <div className="flex-1">
+                                <Label className="text-xs mb-1 block">Attack Type</Label>
+                                <Select
+                                  value={power.attackType}
+                                  onValueChange={(value) => updatePower(index, 'attackType', value)}
+                                >
+                                  <SelectTrigger className="bg-gray-800">
+                                    <SelectValue placeholder="Select type" />
+                                  </SelectTrigger>
+                                  <SelectContent>
+                                    <SelectItem value="Unarmed">Unarmed</SelectItem>
+                                    <SelectItem value="Weapon">Weapon</SelectItem>
                                   </SelectContent>
                                 </Select>
                               </div>
@@ -1487,6 +1536,24 @@ export default function Step5_Powers() {
                                   {getSenseOptions(power.name).map(opt => (
                                     <SelectItem key={`pb-sense-${opt}`} value={opt}>{opt}</SelectItem>
                                   ))}
+                                </SelectContent>
+                              </Select>
+                            </div>
+                          )}
+
+                          {power.name === 'Enhanced Melee Attack' && (
+                            <div className="flex-1">
+                              <Label className="text-xs mb-1 block">Attack Type</Label>
+                              <Select
+                                value={power.attackType}
+                                onValueChange={(value) => updatePower(index, 'attackType', value)}
+                              >
+                                <SelectTrigger className="bg-gray-800">
+                                  <SelectValue placeholder="Select type" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  <SelectItem value="Unarmed">Unarmed</SelectItem>
+                                  <SelectItem value="Weapon">Weapon</SelectItem>
                                 </SelectContent>
                               </Select>
                             </div>
