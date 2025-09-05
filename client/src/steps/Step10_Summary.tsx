@@ -65,15 +65,17 @@ export default function Step10_Summary() {
         .map((g, index) => ({ g, index }))
         .filter(({ g }) => weaponNames.has(g.name) || weaponNames.has(g.description))
         .map(({ g, index }) => {
-          const name = weaponNames.has(g.name)
+          const baseName = weaponNames.has(g.name)
             ? g.name
             : g.description || g.name;
-          const gearInfo = gearMap.get(name);
+          const gearInfo = gearMap.get(baseName);
           return {
             index,
-            name,
+            // Display the selected weapon name (example) while using the
+            // base item name for lookup data like category and attacks
+            name: g.name,
             category: gearInfo?.category,
-            attack: attackMap.get(name),
+            attack: attackMap.get(baseName),
             ability: (g as any).ability as "strength" | "dexterity" | undefined,
           };
         }),
@@ -177,16 +179,19 @@ export default function Step10_Summary() {
       const baseDamage = w.attack?.damage || "";
       const damage = baseDamage + (damageBonus ? formatModifier(damageBonus) : "");
       const damageType = w.attack?.damageType || "";
-      const range = w.attack
+      const rangeValue = w.attack
         ? w.attack.range > 1
           ? w.attack.range
           : "Melee"
         : "";
+      const rangeText = isRanged ? `Range: ${rangeValue}` : "Melee";
 
       return {
         index: w.index,
         name: w.name,
-        line: `${w.name} ${formatModifier(toHit)}, ${damage}${damageType ? `(${damageType})` : ""}, Range: ${range}`,
+        line: `${w.name} ${formatModifier(toHit)}, ${damage}${
+          damageType ? `(${damageType})` : ""
+        }, ${rangeText}`,
         ability: abilityKey,
         canChooseAbility,
       };
