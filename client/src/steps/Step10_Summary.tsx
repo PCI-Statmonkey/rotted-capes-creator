@@ -256,26 +256,28 @@ export default function Step10_Summary() {
       const baseDamage = w.attack?.damage || "";
       const damage = baseDamage + (damageBonus ? formatModifier(damageBonus) : "");
       const damageType = w.attack?.damageType || "";
-      const rangeValue = w.attack
+      const range = w.attack
         ? w.attack.range > 1
-          ? w.attack.range
+          ? w.attack.range.toString()
           : "Melee"
         : "";
-      const rangeText = isRanged ? `Range: ${rangeValue}` : "Melee";
 
       return {
         index: w.index,
         name: w.name,
-        line: `${w.name} ${formatModifier(toHit)}, ${damage}${
-          damageType ? `(${damageType})` : ""
-        }, ${rangeText}`,
+        toHit,
+        defense: w.attack?.defense || "",
+        damage,
+        damageType,
+        range,
+        ammo: w.attack?.ammo || "",
         ability: abilityKey,
         canChooseAbility,
       };
     });
   }, [weaponAttacks, effectiveAbilities, character.rankBonus, attackBonuses]);
 
-  const powerAttackLines = useMemo(() => {
+  const powerAttackStats = useMemo(() => {
     return attackPowers.map((p: any) => {
       const abilityKey = getPowerAbility(p);
       const abilityMod = abilityKey ? effectiveAbilities[abilityKey].modifier : 0;
@@ -289,21 +291,20 @@ export default function Step10_Summary() {
       const damageBonus = abilityMod + bonus.damage;
       const damage = baseDie + (damageBonus ? formatModifier(damageBonus) : "");
       const damageType = p.damageType || "";
-      const range = scoreData.powerRange;
-      const attackType = p.attackType
-        ? p.attackType === 'Weapon' && p.weapon
-          ? ` [Weapon: ${p.weapon}]`
-          : ` [${p.attackType}]`
-        : "";
-      return `${p.name}${
-        p.damageType ? ` (${p.damageType})` : ""
-      }${attackType} ${formatModifier(toHit)} to hit, ${damage}${
-        damageType ? `(${damageType})` : ""
-      }, Range: ${range}`;
+      const rangeValue = scoreData.powerRange;
+      return {
+        name: p.name,
+        toHit,
+        defense: p.attackType === "Weapon" ? "" : p.attackType || "",
+        damage,
+        damageType,
+        range: rangeValue > 0 ? rangeValue.toString() : "Melee",
+        ammo: "",
+      };
     });
   }, [attackPowers, effectiveAbilities, character.rankBonus, attackBonuses]);
 
-  const attackCount = weaponAttackStats.length + powerAttackLines.length;
+  const attackCount = weaponAttackStats.length + powerAttackStats.length;
 
   // Calculate derived stats with breakdown of sources
   const calculateDerivedStats = () => {
@@ -788,6 +789,82 @@ export default function Step10_Summary() {
         </Card>
       </div>
 
+      {/* Attacks Section */}
+      <Card>
+        <CardHeader className="py-3">
+          <CardTitle className="flex items-center text-xl font-medium">
+            <span className="flex-1">Attacks</span>
+            <Badge variant="outline" className="ml-2">{attackCount}</Badge>
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="max-h-96 overflow-y-auto">
+          {attackCount > 0 ? (
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="text-xs uppercase text-gray-400">
+                  <th className="text-left py-2">Attack</th>
+                  <th className="text-center py-2">Hit/Defense</th>
+                  <th className="text-center py-2">Damage</th>
+                  <th className="text-center py-2">Range</th>
+                  <th className="text-center py-2">Ammo</th>
+                </tr>
+              </thead>
+              <tbody>
+                {weaponAttackStats.map((w) => (
+                  <tr key={`weapon-${w.index}`} className="border-b border-gray-700">
+                    <td className="py-1">{w.name}</td>
+                    <td className="text-center py-1">
+                      <div className="flex items-center justify-center gap-1">
+                        <span>{formatModifier(w.toHit)}</span>
+                        {w.canChooseAbility && (
+                          <select
+                            className="bg-gray-800 text-xs border border-gray-600 rounded"
+                            value={w.ability}
+                            onChange={(e) =>
+                              updateWeaponAbility(
+                                w.index,
+                                e.target.value as "strength" | "dexterity"
+                              )
+                            }
+                          >
+                            <option value="strength">STR</option>
+                            <option value="dexterity">DEX</option>
+                          </select>
+                        )}
+                        {w.defense && <span>/{w.defense}</span>}
+                      </div>
+                    </td>
+                    <td className="text-center py-1">
+                      {w.damage}
+                      {w.damageType && ` (${w.damageType})`}
+                    </td>
+                    <td className="text-center py-1">{w.range}</td>
+                    <td className="text-center py-1">{w.ammo}</td>
+                  </tr>
+                ))}
+                {powerAttackStats.map((p, idx) => (
+                  <tr key={`power-${idx}`} className="border-b border-gray-700">
+                    <td className="py-1">{p.name}</td>
+                    <td className="text-center py-1">
+                      {formatModifier(p.toHit)}
+                      {p.defense && `/${p.defense}`}
+                    </td>
+                    <td className="text-center py-1">
+                      {p.damage}
+                      {p.damageType && ` (${p.damageType})`}
+                    </td>
+                    <td className="text-center py-1">{p.range}</td>
+                    <td className="text-center py-1">{p.ammo}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          ) : (
+            <div className="text-center py-6 text-gray-500">No attacks defined</div>
+          )}
+        </CardContent>
+      </Card>
+
       {/* Powers, Skill Sets, Gear */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
         {/* Powers Section */}
@@ -889,104 +966,58 @@ export default function Step10_Summary() {
             )}
           </CardContent>
         </Card>
-        
-        {/* Attacks Section */}
+
+        {/* Skill Sets Section */}
         <Card>
           <CardHeader className="py-3">
             <CardTitle className="flex items-center text-xl font-medium">
-              <span className="flex-1">Attacks</span>
-              <Badge variant="outline" className="ml-2">{attackCount}</Badge>
+              <span className="flex-1">Skill Sets</span>
+              <Badge variant="outline" className="ml-2">{selectedSkillSets.length}</Badge>
             </CardTitle>
           </CardHeader>
-          <CardContent className="max-h-96 overflow-y-auto">
-            {attackCount > 0 ? (
-              <ul className="list-disc list-inside text-sm space-y-1">
-                {weaponAttackStats.map((w) => (
-                  <li
-                    key={`weapon-${w.index}`}
-                    className="flex items-center gap-2"
-                  >
-                    <span>{w.line}</span>
-                    {w.canChooseAbility && (
-                      <select
-                        className="ml-2 bg-gray-800 text-xs border border-gray-600 rounded"
-                        value={w.ability}
-                        onChange={(e) =>
-                          updateWeaponAbility(
-                            w.index,
-                            e.target.value as "strength" | "dexterity"
-                          )
-                        }
-                      >
-                        <option value="strength">STR</option>
-                        <option value="dexterity">DEX</option>
-                      </select>
+          <CardContent className="max-h-52 overflow-y-auto">
+            {selectedSkillSets.length > 0 ? (
+              <ul className="list-disc list-inside text-sm">
+                {selectedSkillSets.map((s, idx) => (
+                  <li key={idx}>
+                    <span className="font-semibold">{s.name}</span>
+                    {s.edges && s.edges.length > 0 && (
+                      <span>: {s.edges.join(', ')}</span>
                     )}
                   </li>
                 ))}
-                {powerAttackLines.map((line, idx) => (
-                  <li key={`power-${idx}`}>{line}</li>
-                ))}
               </ul>
             ) : (
-              <div className="text-center py-6 text-gray-500">No attacks defined</div>
+              <div className="text-center py-6 text-gray-500">No skill sets selected</div>
             )}
           </CardContent>
         </Card>
 
-        {/* Skill Sets and Gear */}
-        <div className="space-y-6">
-          <Card>
-            <CardHeader className="py-3">
-              <CardTitle className="flex items-center text-xl font-medium">
-                <span className="flex-1">Skill Sets</span>
-                <Badge variant="outline" className="ml-2">{selectedSkillSets.length}</Badge>
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="max-h-52 overflow-y-auto">
-              {selectedSkillSets.length > 0 ? (
-                <ul className="list-disc list-inside text-sm">
-                  {selectedSkillSets.map((s, idx) => (
-                    <li key={idx}>
-                      <span className="font-semibold">{s.name}</span>
-                      {s.edges && s.edges.length > 0 && (
-                        <span>: {s.edges.join(', ')}</span>
-                      )}
-                    </li>
-                  ))}
-                </ul>
-              ) : (
-                <div className="text-center py-6 text-gray-500">No skill sets selected</div>
-              )}
-            </CardContent>
-          </Card>
-
-          {/* Gear Section */}
-          <Card>
-            <CardHeader className="py-3">
-              <CardTitle className="flex items-center text-xl font-medium">
-                <span className="flex-1">Gear</span>
-                <Badge variant="outline" className="ml-2">{character.gear.length}</Badge>
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="max-h-52 overflow-y-auto">
-              {character.gear.length > 0 ? (
-                <div className="space-y-2">
-                  {character.gear.map((item, index) => (
-                    <div key={index} className="border-b border-gray-700 pb-2 last:border-0">
-                      <div className="font-semibold">{item.name}</div>
-                      {item.description && (
-                        <p className="text-sm text-gray-400">{item.description}</p>
-                      )}
-                    </div>
-                  ))}
-                </div>
-              ) : (
-                <div className="text-center py-6 text-gray-500">No gear acquired</div>
-              )}
-            </CardContent>
-          </Card>
-        </div>
+        {/* Gear Section */}
+        <Card>
+          <CardHeader className="py-3">
+            <CardTitle className="flex items-center text-xl font-medium">
+              <span className="flex-1">Gear</span>
+              <Badge variant="outline" className="ml-2">{character.gear.length}</Badge>
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="max-h-52 overflow-y-auto">
+            {character.gear.length > 0 ? (
+              <div className="space-y-2">
+                {character.gear.map((item, index) => (
+                  <div key={index} className="border-b border-gray-700 pb-2 last:border-0">
+                    <div className="font-semibold">{item.name}</div>
+                    {item.description && (
+                      <p className="text-sm text-gray-400">{item.description}</p>
+                    )}
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="text-center py-6 text-gray-500">No gear acquired</div>
+            )}
+          </CardContent>
+        </Card>
       </div>
       
       {/* Complications and Feats */}
