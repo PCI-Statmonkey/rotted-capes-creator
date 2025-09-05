@@ -39,19 +39,56 @@ const STANDARD_ARRAY = [16, 15, 14, 13, 12, 11];
 export default function Step4_Abilities() {
   const { character, updateAbilityScore, setCurrentStep, updateDerivedStats } = useCharacter();
   // Set Ability Scores in Character Builder Context
-  const { setAbilityScores } = useCharacterBuilder();
+  const { setAbilityScores, abilityMethod, setAbilityMethod } = useCharacterBuilder();
   const [pointsSpent, setPointsSpent] = useState(0);
   const [localAbilities, setLocalAbilities] = useState({ ...character.abilities });
-  const [assignmentMethod, setAssignmentMethod] = useState<"pointBuy" | "standardArray">("pointBuy");
-  const [assignedStandardScores, setAssignedStandardScores] = useState<Record<string, number | null>>({
-    strength: null,
-    dexterity: null, 
-    constitution: null,
-    intelligence: null,
-    wisdom: null,
-    charisma: null
-  });
+
+  const getAssignedFromAbilities = () => {
+    const used = new Set<number>();
+    const initial: Record<string, number | null> = {
+      strength: null,
+      dexterity: null,
+      constitution: null,
+      intelligence: null,
+      wisdom: null,
+      charisma: null
+    };
+    Object.keys(character.abilities).forEach((key) => {
+      const abilityKey = key as keyof typeof character.abilities;
+      const value = character.abilities[abilityKey].value;
+      if (STANDARD_ARRAY.includes(value) && !used.has(value)) {
+        initial[key] = value;
+        used.add(value);
+      }
+    });
+    return initial;
+  };
+
+  const [assignmentMethod, setAssignmentMethod] = useState<"pointBuy" | "standardArray">(abilityMethod);
+  const [assignedStandardScores, setAssignedStandardScores] = useState<Record<string, number | null>>(
+    abilityMethod === "standardArray"
+      ? getAssignedFromAbilities()
+      : {
+          strength: null,
+          dexterity: null,
+          constitution: null,
+          intelligence: null,
+          wisdom: null,
+          charisma: null
+        }
+  );
   const [selectedStandardScore, setSelectedStandardScore] = useState<number | null>(null);
+
+  useEffect(() => {
+    setAbilityMethod(assignmentMethod);
+  }, [assignmentMethod, setAbilityMethod]);
+
+  useEffect(() => {
+    if (assignmentMethod === "standardArray") {
+      setAssignedStandardScores(getAssignedFromAbilities());
+    }
+    setLocalAbilities({ ...character.abilities });
+  }, [assignmentMethod]);
 
   // --- RESET ALL FUNCTION ---
   const handleResetAll = () => {

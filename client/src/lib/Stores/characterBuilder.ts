@@ -45,6 +45,7 @@ export type Character = {
   skillsTab: string;
   currentStep: number;
   archetypeFeat?: string | string[] | null;
+  abilityMethod?: "pointBuy" | "standardArray";
 };
 
 export const useCharacterBuilder = () => {
@@ -91,6 +92,9 @@ export const useCharacterBuilder = () => {
   const [level, setLevel] = useState<number>(saved?.level || 1);
   const [rankBonus, setRankBonus] = useState<number>(saved?.rankBonus || 2);
   const [grit, setGrit] = useState<number>(saved?.grit || 2);
+  const [abilityMethod, setAbilityMethod] = useState<"pointBuy" | "standardArray">(
+    saved?.abilityMethod || "pointBuy"
+  );
 
   const resetBuilder = () => {
     localStorage.removeItem(BUILDER_STORAGE_KEY);
@@ -114,6 +118,7 @@ export const useCharacterBuilder = () => {
     setRankBonus(2);
     setGrit(2);
     setCurrentStep(1);
+    setAbilityMethod("pointBuy");
   };
 
   useEffect(() => {
@@ -127,12 +132,13 @@ export const useCharacterBuilder = () => {
       skillsTab,
       currentStep,
       archetypeFeat,
+      abilityMethod,
       rank,
       level,
       rankBonus,
       grit,
     });
-  }, [abilityScores, startingSkills, selectedSkills, selectedFeats, selectedSkillSets, selectedManeuvers, skillsTab, currentStep, archetypeFeat, rank, level, rankBonus, grit]);
+  }, [abilityScores, startingSkills, selectedSkills, selectedFeats, selectedSkillSets, selectedManeuvers, skillsTab, currentStep, archetypeFeat, abilityMethod, rank, level, rankBonus, grit]);
 
   return {
     abilityScores,
@@ -161,6 +167,8 @@ export const useCharacterBuilder = () => {
     setRankBonus,
     grit,
     setGrit,
+    abilityMethod,
+    setAbilityMethod,
     resetBuilder,
   };
 };
