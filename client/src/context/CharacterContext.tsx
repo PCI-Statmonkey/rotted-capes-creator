@@ -3,6 +3,7 @@ import { STORAGE_KEY, saveToLocalStorage, loadFromLocalStorage, getScoreData } f
 import type { MasterValue } from "@shared/masterValues";
 import { trackCharacterEvent, trackEvent } from "@/lib/analytics";
 import { RANK_CAPS, getRankCap } from "../utils/rank";
+import { getOriginAbilityBonus, getArchetypeAbilityBonus } from "@/utils/abilityBonuses";
 const DEFAULT_RANK_BONUS = 2; // Starting rank bonus
 
 export interface Ability extends Omit<MasterValue, "min" | "max"> {
@@ -433,144 +434,6 @@ export const CharacterProvider = ({ children }: { children: ReactNode }) => {
 
   const updateDerivedStats = () => {
     // Get ability bonuses from origin and archetype
-    const getOriginBonus = (ability: string): number => {
-      const abilityLower = ability.toLowerCase();
-      // No origin selected yet
-      if (!character.origin) return 0;
-      
-      // For newer origin formats that include type in parentheses
-      const originName = character.origin.split('(')[0].trim();
-      
-      // Handle special cases for Highly Trained with custom ability bonuses
-      if (originName === "Highly Trained" && character.origin.includes("Bonuses:")) {
-        const bonusText = character.origin.match(/Bonuses: (.*)\)/)?.[1] || "";
-        if (bonusText.includes(`+1 ${ability.charAt(0).toUpperCase() + ability.slice(1)}`)) {
-          return 1;
-        }
-        return 0;
-      }
-      
-      // Handle special cases for Mystic with subtypes
-      if (originName === "Mystic" && character.origin.includes("(")) {
-        // If it's in the format "Mystic (Subtype: bonuses)"
-        if (character.origin.includes(":")) {
-          const mysticType = character.origin.match(/Mystic \(([^:]+):/)?.[1]?.trim();
-          
-          if (mysticType === "Practitioner") {
-            if (abilityLower === "wisdom") return 2;
-            if (abilityLower === "charisma") return 1;
-          } else if (mysticType === "The Chosen") {
-            if (abilityLower === "wisdom") return 2;
-            if (abilityLower === "constitution") return 1;
-          } else if (mysticType === "Enchanter") {
-            if (abilityLower === "wisdom") return 2;
-            if (abilityLower === "intelligence") return 1;
-          }
-        } else {
-          // Default fallback for older "Mystic" format
-          if (abilityLower === "wisdom") return 2;
-          if (abilityLower === "charisma") return 1;
-        }
-        
-        return 0;
-      }
-      
-      // Handle specific origins from the rulebook
-      switch(originName) {
-        case "Alien":
-          if (abilityLower === "strength") return 2;
-          break;
-        case "Android":
-          if (abilityLower === "intelligence") return 2;
-          break;
-        case "Cosmic":
-          if (abilityLower === "constitution") return 1;
-          // Second ability is user-selected, handled at character creation
-          break;
-        case "Demigod":
-          // Ability is user-selected, handled at character creation
-          break;
-        case "Super-Human":
-          if (abilityLower === "constitution") return 2;
-          break;
-        case "Tech Hero":
-          if (abilityLower === "intelligence") return 2;
-          break;
-      }
-      
-      return 0;
-    };
-    
-    const getArchetypeBonus = (ability: string): number => {
-      const abilityLower = ability.toLowerCase();
-      // No archetype selected yet
-      if (!character.archetype) return 0;
-      
-      // Get just the archetype name without any additional info
-      const archetypeName = character.archetype.split('(')[0].trim();
-      
-      // Use the exact archetypes from the rulebook
-      switch(archetypeName) {
-        case "Andromorph":
-          if (abilityLower === "strength") return 1;
-          if (abilityLower === "dexterity") return 1;
-          break;
-        case "Blaster":
-          if (abilityLower === "dexterity") return 1;
-          if (abilityLower === "charisma") return 1;
-          break;
-        case "Brawler":
-          if (abilityLower === "strength") return 1;
-          if (abilityLower === "dexterity") return 1;
-          if (abilityLower === "constitution") return 1;
-          break;
-        case "Controller":
-          if (abilityLower === "wisdom") return 1;
-          if (abilityLower === "charisma") return 1;
-          break;
-        case "Heavy":
-          if (abilityLower === "constitution") return 1;
-          if (abilityLower === "strength") return 1;
-          break;
-        case "Infiltrator":
-          if (abilityLower === "dexterity") return 1;
-          if (abilityLower === "intelligence") return 1;
-          break;
-        case "Transporter":
-          if (abilityLower === "dexterity") return 1;
-          if (abilityLower === "wisdom") return 1;
-          break;
-        // Legacy archetypes for backward compatibility
-        case "Bruiser":
-          if (abilityLower === "strength") return 1;
-          if (abilityLower === "constitution") return 1;
-          break;
-        case "Speedster":
-          if (abilityLower === "dexterity") return 2;
-          break;
-        case "Defender":
-          if (abilityLower === "constitution") return 2;
-          break;
-        case "Gadgeteer":
-          if (abilityLower === "intelligence") return 2;
-          break;
-        case "Mentalist":
-          if (abilityLower === "wisdom") return 1;
-          if (abilityLower === "intelligence") return 1;
-          break;
-        case "Mastermind":
-          if (abilityLower === "intelligence") return 1;
-          if (abilityLower === "charisma") return 1;
-          break;
-        case "Shapeshifter":
-          if (abilityLower === "constitution") return 1;
-          if (abilityLower === "dexterity") return 1;
-          break;
-      }
-      
-      return 0;
-    };
-    
     const getPowerBonus = (ability: string): number => {
       return character.powers.reduce((total, p) => {
         if (p.name.startsWith('Enhanced Ability Score')) {
@@ -587,7 +450,11 @@ export const CharacterProvider = ({ children }: { children: ReactNode }) => {
 
     // Calculate total bonuses including origin, archetype and powers
     const getTotalBonus = (ability: string): number => {
-      return getOriginBonus(ability) + getArchetypeBonus(ability) + getPowerBonus(ability);
+      return (
+        getOriginAbilityBonus(character, ability) +
+        getArchetypeAbilityBonus(character, ability) +
+        getPowerBonus(ability)
+      );
     };
     
     // Calculate effective ability scores with bonuses capped by rank
