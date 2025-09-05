@@ -52,7 +52,10 @@ export default function InlineCharacterSheet() {
     () => character.powers.filter((p) => (p as any).attack || p.damageType),
     [character.powers]
   );
-  
+
+  const intMod = character.abilities.intelligence.modifier ?? 0;
+  const externalBurnoutThreshold = character.burnoutThreshold + intMod;
+
   return (
     <div
       id="character-sheet"
@@ -181,6 +184,21 @@ export default function InlineCharacterSheet() {
               <div className="border border-gray-300 rounded p-2 text-center">
               <div className="font-bold">Willpower</div>
               <div className="text-xl font-comic">{character.willpower}</div>
+            </div>
+          </div>
+          <div className="border-2 border-gray-800 rounded-lg p-4">
+            <h3 className="font-comic text-xl mb-2 text-center border-b border-gray-400 pb-1 uppercase">
+              Burnout Threshold
+            </h3>
+            <div className="grid grid-cols-2 gap-3">
+              <div className="border border-gray-300 rounded p-2 text-center">
+                <div className="font-bold">Hero</div>
+                <div className="text-xl font-comic">{character.burnoutThreshold}</div>
+              </div>
+              <div className="border border-gray-300 rounded p-2 text-center">
+                <div className="font-bold">External Sources</div>
+                <div className="text-xl font-comic">{externalBurnoutThreshold}</div>
+              </div>
             </div>
           </div>
           <div className="border-2 border-gray-800 rounded-lg p-4">
