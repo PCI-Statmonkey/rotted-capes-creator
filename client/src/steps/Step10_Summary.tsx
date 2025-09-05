@@ -7,7 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "@/hooks/use-toast";
 import { getScoreData, formatModifier, displayFeatName } from "@/lib/utils";
-import { Check, Save, Shield, Heart, Target } from "lucide-react";
+import { Check, Save, Shield, Heart, Target, Zap } from "lucide-react";
 import { apiRequest } from "@/lib/queryClient";
 import CharacterPdfButton from "@/components/CharacterPdfButton";
 import { parsePrerequisite, getMissingPrereqs, formatPrerequisite } from "@/utils/requirementValidator";
@@ -15,6 +15,7 @@ import useCachedGameContent from "@/hooks/useCachedGameContent";
 import gearRules from "@/rules/gear.json" with { type: "json" };
 import attackRules from "@/rules/attacks.json" with { type: "json" };
 import powerRules from "@/rules/powers.json" with { type: "json" };
+import { getRankCap } from "@/utils/rank";
 
 export default function Step10_Summary() {
   const { character, updateCharacterField, saveCharacter } = useCharacter();
@@ -113,6 +114,159 @@ export default function Step10_Summary() {
     return map;
   }, [feats]);
 
+  const getOriginBonus = (ability: string): number => {
+    const abilityLower = ability.toLowerCase();
+    if (!character.origin) return 0;
+    const originName = character.origin.split("(")[0].trim();
+    if (originName === "Highly Trained" && character.origin.includes("Bonuses:")) {
+      const bonusText = character.origin.match(/Bonuses: (.*)\)/)?.[1] || "";
+      if (bonusText.includes(`+1 ${ability.charAt(0).toUpperCase() + ability.slice(1)}`)) {
+        return 1;
+      }
+      return 0;
+    }
+    if (originName === "Mystic" && character.origin.includes("(")) {
+      if (character.origin.includes(":")) {
+        const mysticType = character.origin.match(/Mystic \(([^:]+):/)?.[1]?.trim();
+        if (mysticType === "Practitioner") {
+          if (abilityLower === "wisdom") return 2;
+          if (abilityLower === "charisma") return 1;
+        } else if (mysticType === "The Chosen") {
+          if (abilityLower === "wisdom") return 2;
+          if (abilityLower === "constitution") return 1;
+        } else if (mysticType === "Enchanter") {
+          if (abilityLower === "wisdom") return 2;
+          if (abilityLower === "intelligence") return 1;
+        }
+      } else {
+        if (abilityLower === "wisdom") return 2;
+        if (abilityLower === "charisma") return 1;
+      }
+      return 0;
+    }
+    if ((originName === "Cosmic" || originName === "Demigod") && character.origin.includes("(")) {
+      const matches = Array.from(character.origin.matchAll(/\+(\d+) ([A-Za-z]+)/g));
+      for (const m of matches) {
+        const value = parseInt(m[1], 10);
+        const abil = m[2].toLowerCase();
+        if (abilityLower === abil) return value;
+      }
+      if (originName === "Cosmic" && abilityLower === "constitution") return 1;
+      return 0;
+    }
+    switch (originName) {
+      case "Alien":
+        if (abilityLower === "strength") return 2;
+        break;
+      case "Android":
+        if (abilityLower === "intelligence") return 2;
+        break;
+      case "Cosmic":
+        if (abilityLower === "constitution") return 1;
+        break;
+      case "Super-Human":
+        if (abilityLower === "constitution") return 2;
+        break;
+      case "Tech Hero":
+        if (abilityLower === "intelligence") return 2;
+        break;
+    }
+    return 0;
+  };
+
+  const getArchetypeBonus = (ability: string): number => {
+    const abilityLower = ability.toLowerCase();
+    if (!character.archetype) return 0;
+    const archetypeName = character.archetype.split("(")[0].trim();
+    switch (archetypeName) {
+      case "Andromorph":
+        if (abilityLower === "strength") return 1;
+        if (abilityLower === "dexterity") return 1;
+        break;
+      case "Blaster":
+        if (abilityLower === "dexterity") return 1;
+        if (abilityLower === "charisma") return 1;
+        break;
+      case "Brawler":
+        if (abilityLower === "strength") return 1;
+        if (abilityLower === "dexterity") return 1;
+        if (abilityLower === "constitution") return 1;
+        break;
+      case "Controller":
+        if (abilityLower === "wisdom") return 1;
+        if (abilityLower === "charisma") return 1;
+        break;
+      case "Heavy":
+        if (abilityLower === "constitution") return 1;
+        if (abilityLower === "strength") return 1;
+        break;
+      case "Infiltrator":
+        if (abilityLower === "dexterity") return 1;
+        if (abilityLower === "intelligence") return 1;
+        break;
+      case "Transporter":
+        if (abilityLower === "dexterity") return 1;
+        if (abilityLower === "wisdom") return 1;
+        break;
+      case "Bruiser":
+        if (abilityLower === "strength") return 1;
+        if (abilityLower === "constitution") return 1;
+        break;
+      case "Speedster":
+        if (abilityLower === "dexterity") return 2;
+        break;
+      case "Defender":
+        if (abilityLower === "constitution") return 2;
+        break;
+      case "Gadgeteer":
+        if (abilityLower === "intelligence") return 2;
+        break;
+      case "Mentalist":
+        if (abilityLower === "wisdom") return 1;
+        if (abilityLower === "intelligence") return 1;
+        break;
+      case "Mastermind":
+        if (abilityLower === "intelligence") return 1;
+        if (abilityLower === "charisma") return 1;
+        break;
+      case "Shapeshifter":
+        if (abilityLower === "constitution") return 1;
+        if (abilityLower === "dexterity") return 1;
+        break;
+    }
+    return 0;
+  };
+
+  const getPowerBonus = (ability: string): number => {
+    return character.powers.reduce((total, p) => {
+      if (p.name.startsWith("Enhanced Ability Score")) {
+        const target = p.ability || p.name.match(/\(([^)]+)\)/)?.[1];
+        if (target && target.toLowerCase().includes(ability.toLowerCase())) {
+          const score = (p as any).finalScore ?? p.score ?? 10;
+          const mod = Math.max(1, getScoreData(score).modifier);
+          return total + mod;
+        }
+      }
+      return total;
+    }, 0);
+  };
+
+  const getTotalBonus = (ability: string): number => {
+    return getOriginBonus(ability) + getArchetypeBonus(ability) + getPowerBonus(ability);
+  };
+
+  const cap = getRankCap(character.rank);
+  const effectiveAbilities = useMemo(() => {
+    const result: any = {};
+    (Object.keys(character.abilities) as (keyof typeof character.abilities)[]).forEach((ab) => {
+      const base = character.abilities[ab].value;
+      const bonus = getTotalBonus(ab);
+      const value = Math.min(base + bonus, cap);
+      result[ab] = { ...getScoreData(value), value, powerBonus: getPowerBonus(ab) };
+    });
+    return result;
+  }, [character, cap]);
+
   const getFinalPowerScore = (power: any) => {
     const flaws = power.flaws?.map((f: string) => f.toLowerCase()) || [];
     const isInborn = !flaws.some((f: string) =>
@@ -171,7 +325,7 @@ export default function Step10_Summary() {
         ? w.ability || "strength"
         : "strength";
 
-      const abilityMod = character.abilities[abilityKey].modifier;
+      const abilityMod = effectiveAbilities[abilityKey].modifier;
       const bonus = attackBonuses.get(w.name) || { attack: 0, damage: 0 };
       const toHit =
         abilityMod + character.rankBonus + (w.attack?.bonus || 0) + bonus.attack;
@@ -196,12 +350,12 @@ export default function Step10_Summary() {
         canChooseAbility,
       };
     });
-  }, [weaponAttacks, character.abilities, character.rankBonus, attackBonuses]);
+  }, [weaponAttacks, effectiveAbilities, character.rankBonus, attackBonuses]);
 
   const powerAttackLines = useMemo(() => {
     return attackPowers.map((p: any) => {
       const abilityKey = getPowerAbility(p);
-      const abilityMod = abilityKey ? character.abilities[abilityKey].modifier : 0;
+      const abilityMod = abilityKey ? effectiveAbilities[abilityKey].modifier : 0;
       const finalScore = getFinalPowerScore(p);
       const scoreData = getScoreData(finalScore);
       const baseDie = scoreData.baseDie.startsWith("d")
@@ -219,18 +373,18 @@ export default function Step10_Summary() {
         damageType ? `(${damageType})` : ""
       }, Range: ${range}`;
     });
-  }, [attackPowers, character.abilities, character.rankBonus, attackBonuses]);
+  }, [attackPowers, effectiveAbilities, character.rankBonus, attackBonuses]);
 
   const attackCount = weaponAttackStats.length + powerAttackLines.length;
 
   // Calculate derived stats with breakdown of sources
   const calculateDerivedStats = () => {
-    const strMod = getScoreData(character.abilities.strength.value).modifier;
-    const dexMod = getScoreData(character.abilities.dexterity.value).modifier;
-    const conMod = getScoreData(character.abilities.constitution.value).modifier;
-    const intMod = getScoreData(character.abilities.intelligence.value).modifier;
-    const wisMod = getScoreData(character.abilities.wisdom.value).modifier;
-    const chaMod = getScoreData(character.abilities.charisma.value).modifier;
+    const strMod = effectiveAbilities.strength.modifier;
+    const dexMod = effectiveAbilities.dexterity.modifier;
+    const conMod = effectiveAbilities.constitution.modifier;
+    const intMod = effectiveAbilities.intelligence.modifier;
+    const wisMod = effectiveAbilities.wisdom.modifier;
+    const chaMod = effectiveAbilities.charisma.modifier;
 
     const toughnessCount = feats.filter((f) => f.name === "Toughness").length;
     const hasQuick = feats.some((f) => f.name === "Quick");
@@ -314,7 +468,7 @@ export default function Step10_Summary() {
 
   const prereqCharacterData = {
     abilityScores: Object.fromEntries(
-      Object.entries(character.abilities).map(([k, v]) => [k, (v as any).value])
+      Object.entries(effectiveAbilities).map(([k, v]) => [k, (v as any).value])
     ),
     selectedSkills: [],
     startingSkills: [] as any[],
@@ -329,7 +483,7 @@ export default function Step10_Summary() {
     updateCharacterField('fortitude', derivedStats.fortitude);
     updateCharacterField('willpower', derivedStats.willpower);
     updateCharacterField('initiative', derivedStats.initiative);
-  }, [character.abilities, updateCharacterField]);
+  }, [derivedStats, updateCharacterField]);
 
   const handleSaveCharacter = () => {
     saveCharacter();
@@ -533,43 +687,73 @@ export default function Step10_Summary() {
               <tbody>
                 <tr className="border-b border-gray-700">
                   <td className="py-2">Strength</td>
-                  <td className="text-center py-2 font-semibold">{character.abilities.strength.value}</td>
-                  <td className="text-center py-2 font-semibold">{formatModifier(character.abilities.strength.modifier)}</td>
-                  <td className="text-center py-2 font-semibold">{character.abilities.strength.baseDie || '-'}</td>
+                  <td className="text-center py-2 font-semibold">
+                    {effectiveAbilities.strength.value}
+                    {effectiveAbilities.strength.powerBonus > 0 && (
+                      <Zap className="inline w-4 h-4 text-yellow-400 ml-1" />
+                    )}
+                  </td>
+                  <td className="text-center py-2 font-semibold">{formatModifier(effectiveAbilities.strength.modifier)}</td>
+                  <td className="text-center py-2 font-semibold">{effectiveAbilities.strength.baseDie || '-'}</td>
                 </tr>
                 <tr className="border-b border-gray-700">
                   <td className="py-2">Dexterity</td>
-                  <td className="text-center py-2 font-semibold">{character.abilities.dexterity.value}</td>
-                  <td className="text-center py-2 font-semibold">{formatModifier(character.abilities.dexterity.modifier)}</td>
-                  <td className="text-center py-2 font-semibold">{character.abilities.dexterity.baseDie || '-'}</td>
+                  <td className="text-center py-2 font-semibold">
+                    {effectiveAbilities.dexterity.value}
+                    {effectiveAbilities.dexterity.powerBonus > 0 && (
+                      <Zap className="inline w-4 h-4 text-yellow-400 ml-1" />
+                    )}
+                  </td>
+                  <td className="text-center py-2 font-semibold">{formatModifier(effectiveAbilities.dexterity.modifier)}</td>
+                  <td className="text-center py-2 font-semibold">{effectiveAbilities.dexterity.baseDie || '-'}</td>
                 </tr>
                 <tr className="border-b border-gray-700">
                   <td className="py-2">Constitution</td>
-                  <td className="text-center py-2 font-semibold">{character.abilities.constitution.value}</td>
-                  <td className="text-center py-2 font-semibold">{formatModifier(character.abilities.constitution.modifier)}</td>
-                  <td className="text-center py-2 font-semibold">{character.abilities.constitution.baseDie || '-'}</td>
+                  <td className="text-center py-2 font-semibold">
+                    {effectiveAbilities.constitution.value}
+                    {effectiveAbilities.constitution.powerBonus > 0 && (
+                      <Zap className="inline w-4 h-4 text-yellow-400 ml-1" />
+                    )}
+                  </td>
+                  <td className="text-center py-2 font-semibold">{formatModifier(effectiveAbilities.constitution.modifier)}</td>
+                  <td className="text-center py-2 font-semibold">{effectiveAbilities.constitution.baseDie || '-'}</td>
                 </tr>
                 <tr className="border-b border-gray-700">
                   <td className="py-2">Intelligence</td>
-                  <td className="text-center py-2 font-semibold">{character.abilities.intelligence.value}</td>
-                  <td className="text-center py-2 font-semibold">{formatModifier(character.abilities.intelligence.modifier)}</td>
-                  <td className="text-center py-2 font-semibold">{character.abilities.intelligence.baseDie || '-'}</td>
+                  <td className="text-center py-2 font-semibold">
+                    {effectiveAbilities.intelligence.value}
+                    {effectiveAbilities.intelligence.powerBonus > 0 && (
+                      <Zap className="inline w-4 h-4 text-yellow-400 ml-1" />
+                    )}
+                  </td>
+                  <td className="text-center py-2 font-semibold">{formatModifier(effectiveAbilities.intelligence.modifier)}</td>
+                  <td className="text-center py-2 font-semibold">{effectiveAbilities.intelligence.baseDie || '-'}</td>
                 </tr>
                 <tr className="border-b border-gray-700">
                   <td className="py-2">Wisdom</td>
-                  <td className="text-center py-2 font-semibold">{character.abilities.wisdom.value}</td>
-                  <td className="text-center py-2 font-semibold">{formatModifier(character.abilities.wisdom.modifier)}</td>
-                  <td className="text-center py-2 font-semibold">{character.abilities.wisdom.baseDie || '-'}</td>
+                  <td className="text-center py-2 font-semibold">
+                    {effectiveAbilities.wisdom.value}
+                    {effectiveAbilities.wisdom.powerBonus > 0 && (
+                      <Zap className="inline w-4 h-4 text-yellow-400 ml-1" />
+                    )}
+                  </td>
+                  <td className="text-center py-2 font-semibold">{formatModifier(effectiveAbilities.wisdom.modifier)}</td>
+                  <td className="text-center py-2 font-semibold">{effectiveAbilities.wisdom.baseDie || '-'}</td>
                 </tr>
                 <tr>
                   <td className="py-2">Charisma</td>
-                  <td className="text-center py-2 font-semibold">{character.abilities.charisma.value}</td>
-                  <td className="text-center py-2 font-semibold">{formatModifier(character.abilities.charisma.modifier)}</td>
-                  <td className="text-center py-2 font-semibold">{character.abilities.charisma.baseDie || '-'}</td>
+                  <td className="text-center py-2 font-semibold">
+                    {effectiveAbilities.charisma.value}
+                    {effectiveAbilities.charisma.powerBonus > 0 && (
+                      <Zap className="inline w-4 h-4 text-yellow-400 ml-1" />
+                    )}
+                  </td>
+                  <td className="text-center py-2 font-semibold">{formatModifier(effectiveAbilities.charisma.modifier)}</td>
+                  <td className="text-center py-2 font-semibold">{effectiveAbilities.charisma.baseDie || '-'}</td>
                 </tr>
               </tbody>
             </table>
-            <p className="text-xs text-gray-400 mt-2">Max Lift: {character.abilities.strength.maxLift} (Push/Drag {character.abilities.strength.maxPushDrag})</p>
+            <p className="text-xs text-gray-400 mt-2">Max Lift: {effectiveAbilities.strength.maxLift} (Push/Drag {effectiveAbilities.strength.maxPushDrag})</p>
           </CardContent>
         </Card>
         
