@@ -397,14 +397,18 @@ export default function Step10_Summary() {
   // Derived stats are calculated on the fly
   const derivedStats = calculateDerivedStats();
 
-  const externalBurnoutBreakdown = [
-    { source: "Base", value: character.burnoutThreshold },
-    { source: "INT mod", value: effectiveAbilities.intelligence.modifier },
-  ];
-  const externalBurnoutThreshold = externalBurnoutBreakdown.reduce(
-    (s, b) => s + b.value,
-    0
+  const hasExternalPowerSource = useMemo(
+    () =>
+      character.powers.some((p) =>
+        (p.flaws || []).some((f: string) =>
+          f.toLowerCase().includes("external power source")
+        )
+      ),
+    [character.powers]
   );
+  const externalBurnoutThreshold = hasExternalPowerSource
+    ? effectiveAbilities.intelligence.value
+    : null;
 
   const formatBreakdown = (items: { source: string; value: number }[]) =>
     items
@@ -768,18 +772,6 @@ export default function Step10_Summary() {
               </div>
 
               <div className="text-center p-3 bg-gray-800 rounded-lg">
-                <Label className="text-xs text-gray-400 uppercase">Burnout Threshold</Label>
-                <div className="text-3xl font-bold flex items-center justify-center gap-2">
-                  <Zap className="h-5 w-5 text-blue-400" />
-                  {character.burnoutThreshold}
-                </div>
-                <p className="text-xs text-gray-400 mt-1">
-                  External Sources: {externalBurnoutThreshold} (
-                  {formatBreakdown(externalBurnoutBreakdown)})
-                </p>
-              </div>
-
-              <div className="text-center p-3 bg-gray-800 rounded-lg">
                 <Label className="text-xs text-gray-400 uppercase">Initiative</Label>
                 <div className="text-3xl font-bold flex items-center justify-center gap-2">
                   <Target className="h-5 w-5 text-yellow-400" />
@@ -791,7 +783,29 @@ export default function Step10_Summary() {
           </CardContent>
         </Card>
       </div>
-      
+
+      {/* Burnout Threshold */}
+      <Card className="mb-6">
+        <CardHeader className="py-3">
+          <CardTitle className="text-center text-xl font-medium">
+            Burnout Threshold
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="p-4 pt-0">
+          <div className="text-center p-3 bg-gray-800 rounded-lg">
+            <div className="text-3xl font-bold flex items-center justify-center gap-2">
+              <Zap className="h-5 w-5 text-blue-400" />
+              {character.burnoutThreshold}
+            </div>
+            {hasExternalPowerSource && externalBurnoutThreshold !== null && (
+              <p className="text-xs text-gray-400 mt-1">
+                External Source: {externalBurnoutThreshold}
+              </p>
+            )}
+          </div>
+        </CardContent>
+      </Card>
+
       {/* Powers, Skill Sets, Gear */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
         {/* Powers Section */}

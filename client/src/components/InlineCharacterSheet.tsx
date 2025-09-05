@@ -53,8 +53,14 @@ export default function InlineCharacterSheet() {
     [character.powers]
   );
 
-  const intMod = character.abilities.intelligence.modifier ?? 0;
-  const externalBurnoutThreshold = character.burnoutThreshold + intMod;
+  const hasExternalPowerSource = character.powers.some((p) =>
+    (p.flaws || []).some((f: string) =>
+      f.toLowerCase().includes("external power source")
+    )
+  );
+  const externalBurnoutThreshold = hasExternalPowerSource
+    ? character.abilities.intelligence.value
+    : null;
 
   return (
     <div
@@ -190,15 +196,21 @@ export default function InlineCharacterSheet() {
             <h3 className="font-comic text-xl mb-2 text-center border-b border-gray-400 pb-1 uppercase">
               Burnout Threshold
             </h3>
-            <div className="grid grid-cols-2 gap-3">
+            <div
+              className={`grid gap-3 ${
+                hasExternalPowerSource ? "grid-cols-2" : "grid-cols-1"
+              }`}
+            >
               <div className="border border-gray-300 rounded p-2 text-center">
                 <div className="font-bold">Hero</div>
                 <div className="text-xl font-comic">{character.burnoutThreshold}</div>
               </div>
-              <div className="border border-gray-300 rounded p-2 text-center">
-                <div className="font-bold">External Sources</div>
-                <div className="text-xl font-comic">{externalBurnoutThreshold}</div>
-              </div>
+              {hasExternalPowerSource && externalBurnoutThreshold !== null && (
+                <div className="border border-gray-300 rounded p-2 text-center">
+                  <div className="font-bold">External Sources</div>
+                  <div className="text-xl font-comic">{externalBurnoutThreshold}</div>
+                </div>
+              )}
             </div>
           </div>
           <div className="border-2 border-gray-800 rounded-lg p-4">
