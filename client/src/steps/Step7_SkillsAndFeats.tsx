@@ -172,6 +172,7 @@ const Step7_SkillsAndFeats = () => {
   const [row3FeatInput, setRow3FeatInput] = useState<string>("");
 
   useEffect(() => {
+    // Skill sets
     if (selectedSkillSets[0]) {
       const name = selectedSkillSets[0].name;
       if (skillSetOptions.includes(name)) {
@@ -189,6 +190,9 @@ const Step7_SkillsAndFeats = () => {
         setRow2SkillSet("custom");
         setRow2CustomSkill(name);
       }
+    } else {
+      setRow2SkillSet("");
+      setRow2CustomSkill("");
     }
     if (isSkillBased && selectedSkillSets[2]) {
       const name = selectedSkillSets[2].name;
@@ -198,10 +202,16 @@ const Step7_SkillsAndFeats = () => {
         setRow3SkillSet("custom");
         setRow3CustomSkill(name);
       }
+    } else if (isSkillBased) {
+      setRow3SkillSet("");
+      setRow3CustomSkill("");
     }
 
-    if (selectedFeats[0]) {
-      const f0 = selectedFeats[0] as any;
+    const featByRow = (row: number) =>
+      (selectedFeats as any[]).find((f) => (f as any).row === row);
+
+    const f0 = featByRow(0);
+    if (f0) {
       setRow1Feat(f0.name);
       if (f0.abilityChoices) {
         setRow1Ability1(f0.abilityChoices[0] || "");
@@ -230,9 +240,24 @@ const Step7_SkillsAndFeats = () => {
       } else if (f0.acquiredPower) {
         setRow1NewPower(f0.acquiredPower);
       }
+    } else {
+      setRow1Feat("");
+      setRow1Ability1("");
+      setRow1Ability2("");
+      setRow1Power1("");
+      setRow1Power2("");
+      setRow1FeatInput("");
+      setRow1StuntType("");
+      setRow1PowerTrick("");
+      setRow1CustomPowerTrick("");
+      setRow1EmulatedParent("");
+      setRow1EmulatedPower("");
+      setRow1NewPower("");
+      setRow1CustomEmulatedPower("");
     }
-    if (selectedFeats[1]) {
-      const f1 = selectedFeats[1] as any;
+
+    const f1 = featByRow(1);
+    if (f1) {
       setRow2Feat(f1.name);
       if (f1.abilityChoices) {
         setRow2Ability1(f1.abilityChoices[0] || "");
@@ -261,9 +286,24 @@ const Step7_SkillsAndFeats = () => {
       } else if (f1.acquiredPower) {
         setRow2NewPower(f1.acquiredPower);
       }
+    } else {
+      setRow2Feat("");
+      setRow2Ability1("");
+      setRow2Ability2("");
+      setRow2Power1("");
+      setRow2Power2("");
+      setRow2FeatInput("");
+      setRow2StuntType("");
+      setRow2PowerTrick("");
+      setRow2CustomPowerTrick("");
+      setRow2EmulatedParent("");
+      setRow2EmulatedPower("");
+      setRow2NewPower("");
+      setRow2CustomEmulatedPower("");
     }
-    if (isSkillBased && selectedFeats[2]) {
-      const f2 = selectedFeats[2] as any;
+
+    const f2 = isSkillBased ? featByRow(2) : undefined;
+    if (isSkillBased && f2) {
       setRow3Feat(f2.name);
       if (f2.abilityChoices) {
         setRow3Ability1(f2.abilityChoices[0] || "");
@@ -292,17 +332,37 @@ const Step7_SkillsAndFeats = () => {
       } else if (f2.acquiredPower) {
         setRow3NewPower(f2.acquiredPower);
       }
+    } else if (isSkillBased) {
+      setRow3Feat("");
+      setRow3Ability1("");
+      setRow3Ability2("");
+      setRow3Power1("");
+      setRow3Power2("");
+      setRow3FeatInput("");
+      setRow3StuntType("");
+      setRow3PowerTrick("");
+      setRow3CustomPowerTrick("");
+      setRow3EmulatedParent("");
+      setRow3EmulatedPower("");
+      setRow3NewPower("");
+      setRow3CustomEmulatedPower("");
     }
-    if (selectedFeats[0]?.name === "Learn Combat Maneuver" && selectedManeuvers[0]) {
-      setRow1Maneuver(selectedManeuvers[0]);
+
+    // Map maneuvers to rows based on feat order
+    let maneuverIndex = 0;
+    if (f0?.name === "Learn Combat Maneuver" && selectedManeuvers[maneuverIndex]) {
+      setRow1Maneuver(selectedManeuvers[maneuverIndex]);
+      maneuverIndex++;
     }
-    if (selectedFeats[1]?.name === "Learn Combat Maneuver" && selectedManeuvers[1]) {
-      setRow2Maneuver(selectedManeuvers[1]);
+    if (f1?.name === "Learn Combat Maneuver" && selectedManeuvers[maneuverIndex]) {
+      setRow2Maneuver(selectedManeuvers[maneuverIndex]);
+      maneuverIndex++;
     }
-    if (isSkillBased && selectedFeats[2]?.name === "Learn Combat Maneuver" && selectedManeuvers[2]) {
-      setRow3Maneuver(selectedManeuvers[2]);
+    if (isSkillBased && f2?.name === "Learn Combat Maneuver" && selectedManeuvers[maneuverIndex]) {
+      setRow3Maneuver(selectedManeuvers[maneuverIndex]);
+      maneuverIndex++;
     }
-  }, [isSkillBased, selectedSkillSets, selectedFeats, selectedManeuvers]);
+  }, [isSkillBased, selectedSkillSets, selectedFeats, selectedManeuvers, availablePowerTricks]);
 
   const maneuversSet = useMemo(() => {
     return new Set(allManeuvers.map((m: any) => m.name));
@@ -464,6 +524,7 @@ const Step7_SkillsAndFeats = () => {
       emulatedPower?: string;
       acquiredPower?: string;
       input?: string;
+      row: number;
     }[] = [];
     const maneuversSelected: { name: string }[] = [];
     pushSkill(row1SkillSet, row1CustomSkill, skills);
@@ -521,7 +582,7 @@ const Step7_SkillsAndFeats = () => {
       if (row1Feat === "Attack Focus" && row1FeatInput) {
         (feat as any).input = row1FeatInput;
       }
-      featsSelected.push(feat);
+      featsSelected.push({ ...feat, row: 0 });
       if (row1Feat === "Learn Combat Maneuver" && row1Maneuver)
         maneuversSelected.push({ name: row1Maneuver });
     }
@@ -576,7 +637,7 @@ const Step7_SkillsAndFeats = () => {
       if (row2Feat === "Attack Focus" && row2FeatInput) {
         (feat as any).input = row2FeatInput;
       }
-      featsSelected.push(feat);
+      featsSelected.push({ ...feat, row: 1 });
       if (row2Feat === "Learn Combat Maneuver" && row2Maneuver)
         maneuversSelected.push({ name: row2Maneuver });
     }
@@ -631,7 +692,7 @@ const Step7_SkillsAndFeats = () => {
       if (row3Feat === "Attack Focus" && row3FeatInput) {
         (feat as any).input = row3FeatInput;
       }
-      featsSelected.push(feat);
+      featsSelected.push({ ...feat, row: 2 });
       if (row3Feat === "Learn Combat Maneuver" && row3Maneuver)
         maneuversSelected.push({ name: row3Maneuver });
     }
@@ -707,8 +768,9 @@ const Step7_SkillsAndFeats = () => {
     // Preserve existing feats (such as those from archetypes or weaknesses)
     const mergedFeats = (character.feats as any[]).filter((f) => f.source);
     (featsSelected as any[]).forEach((f) => {
-      if (!mergedFeats.some((existing) => existing.name === f.name)) {
-        mergedFeats.push(f);
+      const { row, ...feat } = f;
+      if (!mergedFeats.some((existing) => existing.name === feat.name)) {
+        mergedFeats.push(feat);
       }
     });
     updateCharacterField("feats", mergedFeats as any);
