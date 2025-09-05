@@ -397,6 +397,15 @@ export default function Step10_Summary() {
   // Derived stats are calculated on the fly
   const derivedStats = calculateDerivedStats();
 
+  const externalBurnoutBreakdown = [
+    { source: "Base", value: character.burnoutThreshold },
+    { source: "INT mod", value: effectiveAbilities.intelligence.modifier },
+  ];
+  const externalBurnoutThreshold = externalBurnoutBreakdown.reduce(
+    (s, b) => s + b.value,
+    0
+  );
+
   const formatBreakdown = (items: { source: string; value: number }[]) =>
     items
       .map((item, index) => {
@@ -756,6 +765,18 @@ export default function Step10_Summary() {
                   {derivedStats.wounds}
                 </div>
                 <p className="text-xs text-gray-400 mt-1">{formatBreakdown(derivedStats.breakdown.wounds)}</p>
+              </div>
+
+              <div className="text-center p-3 bg-gray-800 rounded-lg">
+                <Label className="text-xs text-gray-400 uppercase">Burnout Threshold</Label>
+                <div className="text-3xl font-bold flex items-center justify-center gap-2">
+                  <Zap className="h-5 w-5 text-blue-400" />
+                  {character.burnoutThreshold}
+                </div>
+                <p className="text-xs text-gray-400 mt-1">
+                  External Sources: {externalBurnoutThreshold} (
+                  {formatBreakdown(externalBurnoutBreakdown)})
+                </p>
               </div>
 
               <div className="text-center p-3 bg-gray-800 rounded-lg">
