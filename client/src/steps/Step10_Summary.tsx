@@ -15,6 +15,7 @@ import useCachedGameContent from "@/hooks/useCachedGameContent";
 import gearRules from "@/rules/gear.json" with { type: "json" };
 import attackRules from "@/rules/attacks.json" with { type: "json" };
 import powerRules from "@/rules/powers.json" with { type: "json" };
+import featRules from "@/rules/feats.json" with { type: "json" };
 import { getRankCap } from "@/utils/rank";
 
 export default function Step10_Summary() {
@@ -25,8 +26,11 @@ export default function Step10_Summary() {
   // Game content for gear and attacks with local fallbacks
   const gearContent = useCachedGameContent<any>("gear");
   const attackContent = useCachedGameContent<any>("attacks");
+  const featContent = useCachedGameContent<any>("feats");
   const gearData = gearContent.data.length ? gearContent.data : (gearRules as any[]);
   const attackData = attackContent.data.length ? attackContent.data : (attackRules as any[]);
+  const featData = featContent.data.length ? featContent.data : (featRules as any[]);
+  const featMap = useMemo(() => new Map((featData as any[]).map((f: any) => [f.name, f])), [featData]);
 
   // Merge feats with any archetype bonus feat
   const feats = useMemo(() => {
@@ -113,6 +117,42 @@ export default function Step10_Summary() {
     });
     return map;
   }, [feats]);
+
+  const featAbilityBonuses = useMemo(() => {
+    const bonuses: Record<string, number> = {
+      strength: 0,
+      dexterity: 0,
+      constitution: 0,
+      intelligence: 0,
+      wisdom: 0,
+      charisma: 0,
+    };
+    feats.forEach((f: any) => {
+      if (f.name === "Ability Score Increase") return;
+      if (Array.isArray(f.abilityChoices)) {
+        f.abilityChoices.forEach((ab: string) => {
+          const key = ab.toLowerCase();
+          if (key in bonuses) bonuses[key] += 1;
+        });
+        return;
+      }
+      const desc = (featMap.get(f.name)?.description || "").toLowerCase();
+      (Object.keys(bonuses) as string[]).forEach((ab) => {
+        const regex = new RegExp(`increase[^.]*${ab}[^.]*score[^.]*by\\s*\\+?(\\d+)`);
+        const match = desc.match(regex);
+        if (match) {
+          const val = parseInt(match[1], 10);
+          bonuses[ab] += isNaN(val) ? 1 : val;
+        }
+      });
+    });
+    return bonuses;
+  }, [feats, featMap]);
+
+  const getFeatBonus = (ability: string): number => {
+    const key = ability.toLowerCase();
+    return featAbilityBonuses[key] || 0;
+  };
 
   const getOriginBonus = (ability: string): number => {
     const abilityLower = ability.toLowerCase();
@@ -252,7 +292,12 @@ export default function Step10_Summary() {
   };
 
   const getTotalBonus = (ability: string): number => {
-    return getOriginBonus(ability) + getArchetypeBonus(ability) + getPowerBonus(ability);
+    return (
+      getOriginBonus(ability) +
+      getArchetypeBonus(ability) +
+      getFeatBonus(ability) +
+      getPowerBonus(ability)
+    );
   };
 
   const cap = getRankCap(character.rank);
@@ -265,7 +310,7 @@ export default function Step10_Summary() {
       result[ab] = { ...getScoreData(value), value, powerBonus: getPowerBonus(ab) };
     });
     return result;
-  }, [character, cap]);
+  }, [character, cap, featAbilityBonuses]);
 
   const getFinalPowerScore = (power: any) => {
     const flaws = power.flaws?.map((f: string) => f.toLowerCase()) || [];
