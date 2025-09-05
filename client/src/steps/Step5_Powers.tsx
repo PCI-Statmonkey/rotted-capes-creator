@@ -40,6 +40,7 @@ interface Power {
   damageType?: string;
   target?: string;
   ability?: string;
+  sense?: string;
   linkedPowers?: string[];
   flaws: PowerModifier[];
   perks: PowerModifier[];
@@ -99,7 +100,13 @@ const getAbilityOptions = (powerName: string): string[] => {
   return match[1]
     .split(/,|or/)
     .map((o: string) => o.trim())
-    .filter((o: string) => ABILITIES.some((a) => a.toLowerCase() === o.toLowerCase()));
+  .filter((o: string) => ABILITIES.some((a) => a.toLowerCase() === o.toLowerCase()));
+};
+
+const SENSES = ["Sight", "Hearing", "Smell", "Taste", "Touch"];
+
+const getSenseOptions = (powerName: string): string[] => {
+  return powerName === "Enhanced Sense" ? SENSES : [];
 };
 
 // Define the available power sets based on the rulebook
@@ -207,6 +214,7 @@ export default function Step5_Powers() {
         description: p.description || powerDataMap.get(p.name)?.description,
         damageType: p.damageType,
         ability: p.ability || getAbilityOptions(p.name)[0],
+        sense: (p as any).sense || getSenseOptions(p.name)[0],
         linkedPowers: (p as any).linkedPowers || [],
         flaws: p.flaws.map(f => POWER_FLAWS.find(ff => ff.name === f)).filter(Boolean) as PowerModifier[],
         perks: p.perks.map(perk => POWER_PERKS.find(pp => pp.name === perk)).filter(Boolean) as PowerModifier[],
@@ -383,6 +391,7 @@ export default function Step5_Powers() {
       score: 10,
       arrayIndex: undefined,
       ability: getAbilityOptions(ALL_POWERS[0])[0],
+      sense: getSenseOptions(ALL_POWERS[0])[0],
       description: info?.description,
       linkedPowers: [],
       flaws: [],
@@ -427,6 +436,13 @@ export default function Step5_Powers() {
         newPowers[index].ability = abilityOpts[0];
       } else {
         newPowers[index].ability = undefined;
+      }
+
+      const senseOpts = getSenseOptions(value);
+      if (senseOpts.length > 0) {
+        newPowers[index].sense = senseOpts[0];
+      } else {
+        newPowers[index].sense = undefined;
       }
 
       const info: any = powerDataMap.get(value);
@@ -540,6 +556,7 @@ export default function Step5_Powers() {
         score: power.score,
         arrayIndex: undefined,
         ability: getAbilityOptions(power.name)[0],
+        sense: getSenseOptions(power.name)[0],
         description: info?.description,
         linkedPowers: [],
         flaws: [],
@@ -571,6 +588,7 @@ export default function Step5_Powers() {
       score: 0, // This will be assigned from the array later
       arrayIndex: undefined,
       ability: getAbilityOptions(ALL_POWERS[0])[0],
+      sense: getSenseOptions(ALL_POWERS[0])[0],
       description: info?.description,
       linkedPowers: [],
       flaws: [],
@@ -660,6 +678,7 @@ export default function Step5_Powers() {
       description: power.description || "",
       damageType: power.damageType,
       ability: power.ability,
+      sense: power.sense,
       score: power.score,
       finalScore: power.finalScore,
       flaws: power.flaws.map(f => f.name),
@@ -963,6 +982,25 @@ export default function Step5_Powers() {
                       </div>
                     )}
 
+                    {getSenseOptions(power.name).length > 0 && (
+                      <div className="mt-2">
+                        <Label className="text-sm">Sense</Label>
+                        <Select
+                          value={power.sense}
+                          onValueChange={(value) => updatePower(index, 'sense', value)}
+                        >
+                          <SelectTrigger className="bg-gray-800">
+                            <SelectValue placeholder="Select sense" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {getSenseOptions(power.name).map(opt => (
+                              <SelectItem key={opt} value={opt}>{opt}</SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </div>
+                    )}
+
                     {getAbilityOptions(power.name).length > 0 && (
                       <div className="mt-2">
                         <Label className="text-sm">Ability</Label>
@@ -1157,7 +1195,26 @@ export default function Step5_Powers() {
                                 </Select>
                               </div>
                             )}
-                            
+
+                            {getSenseOptions(power.name).length > 0 && (
+                              <div className="flex-1">
+                                <Label className="text-xs mb-1 block">Sense</Label>
+                                <Select
+                                  value={power.sense}
+                                  onValueChange={(value) => updatePower(index, 'sense', value)}
+                                >
+                                  <SelectTrigger className="bg-gray-800">
+                                    <SelectValue placeholder="Select sense" />
+                                  </SelectTrigger>
+                                  <SelectContent>
+                                    {getSenseOptions(power.name).map(opt => (
+                                      <SelectItem key={`sense-${opt}`} value={opt}>{opt}</SelectItem>
+                                    ))}
+                                  </SelectContent>
+                                </Select>
+                              </div>
+                            )}
+
                             {/* Only show damage type selector for powers that need it */}
                             {powerUsesDamageType(power.name) && (
                               <div className="flex-1">
@@ -1415,7 +1472,26 @@ export default function Step5_Powers() {
                               </Select>
                             </div>
                           )}
-                          
+
+                          {getSenseOptions(power.name).length > 0 && (
+                            <div className="flex-1">
+                              <Label className="text-xs mb-1 block">Sense</Label>
+                              <Select
+                                value={power.sense}
+                                onValueChange={(value) => updatePower(index, 'sense', value)}
+                              >
+                                <SelectTrigger className="bg-gray-800">
+                                  <SelectValue placeholder="Select sense" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  {getSenseOptions(power.name).map(opt => (
+                                    <SelectItem key={`pb-sense-${opt}`} value={opt}>{opt}</SelectItem>
+                                  ))}
+                                </SelectContent>
+                              </Select>
+                            </div>
+                          )}
+
                           {powerUsesDamageType(power.name) && (
                             <div className="flex-1">
                               <Label className="text-xs mb-1 block">Damage Type</Label>

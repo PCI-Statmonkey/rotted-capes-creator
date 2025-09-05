@@ -35,6 +35,7 @@ export interface Power {
   finalScore?: number; // New field for final power score after modifiers
   damageType?: string; // Optional damage type
   ability?: string;
+  sense?: string;
   linkedPowers?: string[];
   burnout?: number;
   perks: string[];
