@@ -18,7 +18,6 @@ const Step7_SkillsAndFeats = () => {
   const {
     selectedSkillSets,
     selectedFeats,
-    selectedManeuvers,
     setSelectedSkillSets,
     setSelectedFeats,
     setSelectedManeuvers,
@@ -234,8 +233,10 @@ const Step7_SkillsAndFeats = () => {
         setRow1Power1(f0.powerChoices[0] || "");
         setRow1Power2(f0.powerChoices[1] || "");
       }
-      if (f0.input) {
+      if (f0.name === "Attack Focus" && typeof f0.input === "string") {
         setRow1FeatInput(f0.input);
+      } else {
+        setRow1FeatInput("");
       }
       if (f0.powerTrick) {
         setRow1StuntType("trick");
@@ -280,8 +281,10 @@ const Step7_SkillsAndFeats = () => {
         setRow2Power1(f1.powerChoices[0] || "");
         setRow2Power2(f1.powerChoices[1] || "");
       }
-      if (f1.input) {
+      if (f1.name === "Attack Focus" && typeof f1.input === "string") {
         setRow2FeatInput(f1.input);
+      } else {
+        setRow2FeatInput("");
       }
       if (f1.powerTrick) {
         setRow2StuntType("trick");
@@ -326,8 +329,10 @@ const Step7_SkillsAndFeats = () => {
         setRow3Power1(f2.powerChoices[0] || "");
         setRow3Power2(f2.powerChoices[1] || "");
       }
-      if (f2.input) {
+      if (f2.input && f2.name === "Attack Focus" && typeof f2.input === "string") {
         setRow3FeatInput(f2.input);
+      } else {
+        setRow3FeatInput("");
       }
       if (f2.powerTrick) {
         setRow3StuntType("trick");
@@ -361,42 +366,46 @@ const Step7_SkillsAndFeats = () => {
       setRow3CustomEmulatedPower("");
     }
 
-    // Map maneuvers to rows based on feat order
-    let maneuverIndex = 0;
-    if (f0?.name === "Learn Combat Maneuver" && selectedManeuvers[maneuverIndex]) {
-      setRow1Maneuver(selectedManeuvers[maneuverIndex]);
-      maneuverIndex++;
+    // Populate maneuver selections for feats that grant maneuvers
+    if (f0?.name === "Learn Combat Maneuver") {
+      setRow1Maneuver(typeof f0.input === "string" ? f0.input : "");
+      setRow1Leadership1("");
+      setRow1Leadership2("");
     } else if (f0?.name === "Natural Born Leader") {
-      setRow1Leadership1(selectedManeuvers[maneuverIndex] || "");
-      setRow1Leadership2(selectedManeuvers[maneuverIndex + 1] || "");
-      maneuverIndex += 2;
+      const inputs = Array.isArray(f0.input) ? f0.input : [];
+      setRow1Leadership1(inputs[0] || "");
+      setRow1Leadership2(inputs[1] || "");
+      setRow1Maneuver("");
     } else {
+      setRow1Maneuver("");
       setRow1Leadership1("");
       setRow1Leadership2("");
     }
-    if (f1?.name === "Learn Combat Maneuver" && selectedManeuvers[maneuverIndex]) {
-      setRow2Maneuver(selectedManeuvers[maneuverIndex]);
-      maneuverIndex++;
+    if (f1?.name === "Learn Combat Maneuver") {
+      setRow2Maneuver(typeof f1.input === "string" ? f1.input : "");
+      setRow2Leadership1("");
+      setRow2Leadership2("");
     } else if (f1?.name === "Natural Born Leader") {
-      setRow2Leadership1(selectedManeuvers[maneuverIndex] || "");
-      setRow2Leadership2(selectedManeuvers[maneuverIndex + 1] || "");
-      maneuverIndex += 2;
+      const inputs = Array.isArray(f1.input) ? f1.input : [];
+      setRow2Leadership1(inputs[0] || "");
+      setRow2Leadership2(inputs[1] || "");
+      setRow2Maneuver("");
     } else {
+      setRow2Maneuver("");
       setRow2Leadership1("");
       setRow2Leadership2("");
     }
-    if (
-      isSkillBased &&
-      f2?.name === "Learn Combat Maneuver" &&
-      selectedManeuvers[maneuverIndex]
-    ) {
-      setRow3Maneuver(selectedManeuvers[maneuverIndex]);
-      maneuverIndex++;
+    if (isSkillBased && f2?.name === "Learn Combat Maneuver") {
+      setRow3Maneuver(typeof f2.input === "string" ? f2.input : "");
+      setRow3Leadership1("");
+      setRow3Leadership2("");
     } else if (isSkillBased && f2?.name === "Natural Born Leader") {
-      setRow3Leadership1(selectedManeuvers[maneuverIndex] || "");
-      setRow3Leadership2(selectedManeuvers[maneuverIndex + 1] || "");
-      maneuverIndex += 2;
+      const inputs = Array.isArray(f2.input) ? f2.input : [];
+      setRow3Leadership1(inputs[0] || "");
+      setRow3Leadership2(inputs[1] || "");
+      setRow3Maneuver("");
     } else if (isSkillBased) {
+      setRow3Maneuver("");
       setRow3Leadership1("");
       setRow3Leadership2("");
     }
@@ -404,7 +413,6 @@ const Step7_SkillsAndFeats = () => {
     isSkillBased,
     selectedSkillSets,
     selectedFeats,
-    selectedManeuvers,
     availablePowerTricks,
   ]);
 
@@ -582,7 +590,7 @@ const Step7_SkillsAndFeats = () => {
       emulatedFrom?: string;
       emulatedPower?: string;
       acquiredPower?: string;
-      input?: string;
+      input?: string | string[];
       row: number;
     }[] = [];
     const maneuversSelected: { name: string }[] = [];
@@ -599,7 +607,7 @@ const Step7_SkillsAndFeats = () => {
         emulatedFrom?: string;
         emulatedPower?: string;
         acquiredPower?: string;
-        input?: string;
+        input?: string | string[];
       } = {
         name: row1Feat,
       };
@@ -641,13 +649,23 @@ const Step7_SkillsAndFeats = () => {
       if (row1Feat === "Attack Focus" && row1FeatInput) {
         (feat as any).input = row1FeatInput;
       }
-      featsSelected.push({ ...feat, row: 0 });
-      if (row1Feat === "Learn Combat Maneuver" && row1Maneuver)
+      if (row1Feat === "Learn Combat Maneuver" && row1Maneuver) {
+        feat.input = row1Maneuver;
         maneuversSelected.push({ name: row1Maneuver });
-      if (row1Feat === "Natural Born Leader") {
-        if (row1Leadership1) maneuversSelected.push({ name: row1Leadership1 });
-        if (row1Leadership2) maneuversSelected.push({ name: row1Leadership2 });
       }
+      if (row1Feat === "Natural Born Leader") {
+        const inputs: string[] = [];
+        if (row1Leadership1) {
+          inputs.push(row1Leadership1);
+          maneuversSelected.push({ name: row1Leadership1 });
+        }
+        if (row1Leadership2) {
+          inputs.push(row1Leadership2);
+          maneuversSelected.push({ name: row1Leadership2 });
+        }
+        if (inputs.length > 0) feat.input = inputs;
+      }
+      featsSelected.push({ ...feat, row: 0 });
     }
     if (row2Feat) {
       const feat: {
@@ -658,7 +676,7 @@ const Step7_SkillsAndFeats = () => {
         emulatedFrom?: string;
         emulatedPower?: string;
         acquiredPower?: string;
-        input?: string;
+        input?: string | string[];
       } = {
         name: row2Feat,
       };
@@ -700,13 +718,23 @@ const Step7_SkillsAndFeats = () => {
       if (row2Feat === "Attack Focus" && row2FeatInput) {
         (feat as any).input = row2FeatInput;
       }
-      featsSelected.push({ ...feat, row: 1 });
-      if (row2Feat === "Learn Combat Maneuver" && row2Maneuver)
+      if (row2Feat === "Learn Combat Maneuver" && row2Maneuver) {
+        feat.input = row2Maneuver;
         maneuversSelected.push({ name: row2Maneuver });
-      if (row2Feat === "Natural Born Leader") {
-        if (row2Leadership1) maneuversSelected.push({ name: row2Leadership1 });
-        if (row2Leadership2) maneuversSelected.push({ name: row2Leadership2 });
       }
+      if (row2Feat === "Natural Born Leader") {
+        const inputs: string[] = [];
+        if (row2Leadership1) {
+          inputs.push(row2Leadership1);
+          maneuversSelected.push({ name: row2Leadership1 });
+        }
+        if (row2Leadership2) {
+          inputs.push(row2Leadership2);
+          maneuversSelected.push({ name: row2Leadership2 });
+        }
+        if (inputs.length > 0) feat.input = inputs;
+      }
+      featsSelected.push({ ...feat, row: 1 });
     }
     if (isSkillBased && row3Feat) {
       const feat: {
@@ -717,7 +745,7 @@ const Step7_SkillsAndFeats = () => {
         emulatedFrom?: string;
         emulatedPower?: string;
         acquiredPower?: string;
-        input?: string;
+        input?: string | string[];
       } = {
         name: row3Feat,
       };
@@ -759,13 +787,23 @@ const Step7_SkillsAndFeats = () => {
       if (row3Feat === "Attack Focus" && row3FeatInput) {
         (feat as any).input = row3FeatInput;
       }
-      featsSelected.push({ ...feat, row: 2 });
-      if (row3Feat === "Learn Combat Maneuver" && row3Maneuver)
+      if (row3Feat === "Learn Combat Maneuver" && row3Maneuver) {
+        feat.input = row3Maneuver;
         maneuversSelected.push({ name: row3Maneuver });
-      if (row3Feat === "Natural Born Leader") {
-        if (row3Leadership1) maneuversSelected.push({ name: row3Leadership1 });
-        if (row3Leadership2) maneuversSelected.push({ name: row3Leadership2 });
       }
+      if (row3Feat === "Natural Born Leader") {
+        const inputs: string[] = [];
+        if (row3Leadership1) {
+          inputs.push(row3Leadership1);
+          maneuversSelected.push({ name: row3Leadership1 });
+        }
+        if (row3Leadership2) {
+          inputs.push(row3Leadership2);
+          maneuversSelected.push({ name: row3Leadership2 });
+        }
+        if (inputs.length > 0) feat.input = inputs;
+      }
+      featsSelected.push({ ...feat, row: 2 });
     }
 
     // Remove previous ability and power score increases
