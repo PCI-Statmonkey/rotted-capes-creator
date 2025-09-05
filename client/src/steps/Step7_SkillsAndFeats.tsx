@@ -38,6 +38,13 @@ const Step7_SkillsAndFeats = () => {
 
   // Use static maneuvers data as a fallback in case the API does not return any.
   const allManeuvers = maneuvers.length > 0 ? maneuvers : maneuversData;
+  const leadershipManeuvers = useMemo(
+    () =>
+      allManeuvers.filter((m: any) =>
+        (m.type || "").toLowerCase().includes("leadership")
+      ),
+    [allManeuvers]
+  );
   const abilityOptions = [
     "strength",
     "dexterity",
@@ -146,6 +153,12 @@ const Step7_SkillsAndFeats = () => {
   const [row1Maneuver, setRow1Maneuver] = useState<string>("");
   const [row2Maneuver, setRow2Maneuver] = useState<string>("");
   const [row3Maneuver, setRow3Maneuver] = useState<string>("");
+  const [row1Leadership1, setRow1Leadership1] = useState<string>("");
+  const [row1Leadership2, setRow1Leadership2] = useState<string>("");
+  const [row2Leadership1, setRow2Leadership1] = useState<string>("");
+  const [row2Leadership2, setRow2Leadership2] = useState<string>("");
+  const [row3Leadership1, setRow3Leadership1] = useState<string>("");
+  const [row3Leadership2, setRow3Leadership2] = useState<string>("");
   const [row1PowerTrick, setRow1PowerTrick] = useState<string>("");
   const [row1CustomPowerTrick, setRow1CustomPowerTrick] = useState<string>("");
   const [row2PowerTrick, setRow2PowerTrick] = useState<string>("");
@@ -353,16 +366,47 @@ const Step7_SkillsAndFeats = () => {
     if (f0?.name === "Learn Combat Maneuver" && selectedManeuvers[maneuverIndex]) {
       setRow1Maneuver(selectedManeuvers[maneuverIndex]);
       maneuverIndex++;
+    } else if (f0?.name === "Natural Born Leader") {
+      setRow1Leadership1(selectedManeuvers[maneuverIndex] || "");
+      setRow1Leadership2(selectedManeuvers[maneuverIndex + 1] || "");
+      maneuverIndex += 2;
+    } else {
+      setRow1Leadership1("");
+      setRow1Leadership2("");
     }
     if (f1?.name === "Learn Combat Maneuver" && selectedManeuvers[maneuverIndex]) {
       setRow2Maneuver(selectedManeuvers[maneuverIndex]);
       maneuverIndex++;
+    } else if (f1?.name === "Natural Born Leader") {
+      setRow2Leadership1(selectedManeuvers[maneuverIndex] || "");
+      setRow2Leadership2(selectedManeuvers[maneuverIndex + 1] || "");
+      maneuverIndex += 2;
+    } else {
+      setRow2Leadership1("");
+      setRow2Leadership2("");
     }
-    if (isSkillBased && f2?.name === "Learn Combat Maneuver" && selectedManeuvers[maneuverIndex]) {
+    if (
+      isSkillBased &&
+      f2?.name === "Learn Combat Maneuver" &&
+      selectedManeuvers[maneuverIndex]
+    ) {
       setRow3Maneuver(selectedManeuvers[maneuverIndex]);
       maneuverIndex++;
+    } else if (isSkillBased && f2?.name === "Natural Born Leader") {
+      setRow3Leadership1(selectedManeuvers[maneuverIndex] || "");
+      setRow3Leadership2(selectedManeuvers[maneuverIndex + 1] || "");
+      maneuverIndex += 2;
+    } else if (isSkillBased) {
+      setRow3Leadership1("");
+      setRow3Leadership2("");
     }
-  }, [isSkillBased, selectedSkillSets, selectedFeats, selectedManeuvers, availablePowerTricks]);
+  }, [
+    isSkillBased,
+    selectedSkillSets,
+    selectedFeats,
+    selectedManeuvers,
+    availablePowerTricks,
+  ]);
 
   const maneuversSet = useMemo(() => {
     return new Set(allManeuvers.map((m: any) => m.name));
@@ -414,6 +458,11 @@ const Step7_SkillsAndFeats = () => {
     row1Feat !== "" &&
     (row1Feat === "Learn Combat Maneuver"
       ? row1Maneuver !== "" && maneuverMeetsReqs(row1Maneuver)
+      : row1Feat === "Natural Born Leader"
+      ? row1Leadership1 !== "" &&
+        row1Leadership2 !== "" &&
+        maneuverMeetsReqs(row1Leadership1) &&
+        maneuverMeetsReqs(row1Leadership2)
       : row1Feat === "Ability Score Increase"
       ? abilityIncreaseValid(row1Ability1, row1Ability2)
       : row1Feat.startsWith("Power Score Increase")
@@ -445,6 +494,11 @@ const Step7_SkillsAndFeats = () => {
     : row2Feat !== "" &&
       (row2Feat === "Learn Combat Maneuver"
         ? row2Maneuver !== "" && maneuverMeetsReqs(row2Maneuver)
+        : row2Feat === "Natural Born Leader"
+        ? row2Leadership1 !== "" &&
+          row2Leadership2 !== "" &&
+          maneuverMeetsReqs(row2Leadership1) &&
+          maneuverMeetsReqs(row2Leadership2)
         : row2Feat === "Ability Score Increase"
         ? abilityIncreaseValid(row2Ability1, row2Ability2)
         : row2Feat.startsWith("Power Score Increase")
@@ -479,6 +533,11 @@ const Step7_SkillsAndFeats = () => {
     : row3Feat !== "" &&
       (row3Feat === "Learn Combat Maneuver"
         ? row3Maneuver !== "" && maneuverMeetsReqs(row3Maneuver)
+        : row3Feat === "Natural Born Leader"
+        ? row3Leadership1 !== "" &&
+          row3Leadership2 !== "" &&
+          maneuverMeetsReqs(row3Leadership1) &&
+          maneuverMeetsReqs(row3Leadership2)
         : row3Feat === "Ability Score Increase"
         ? abilityIncreaseValid(row3Ability1, row3Ability2)
         : row3Feat.startsWith("Power Score Increase")
@@ -585,6 +644,10 @@ const Step7_SkillsAndFeats = () => {
       featsSelected.push({ ...feat, row: 0 });
       if (row1Feat === "Learn Combat Maneuver" && row1Maneuver)
         maneuversSelected.push({ name: row1Maneuver });
+      if (row1Feat === "Natural Born Leader") {
+        if (row1Leadership1) maneuversSelected.push({ name: row1Leadership1 });
+        if (row1Leadership2) maneuversSelected.push({ name: row1Leadership2 });
+      }
     }
     if (row2Feat) {
       const feat: {
@@ -640,6 +703,10 @@ const Step7_SkillsAndFeats = () => {
       featsSelected.push({ ...feat, row: 1 });
       if (row2Feat === "Learn Combat Maneuver" && row2Maneuver)
         maneuversSelected.push({ name: row2Maneuver });
+      if (row2Feat === "Natural Born Leader") {
+        if (row2Leadership1) maneuversSelected.push({ name: row2Leadership1 });
+        if (row2Leadership2) maneuversSelected.push({ name: row2Leadership2 });
+      }
     }
     if (isSkillBased && row3Feat) {
       const feat: {
@@ -695,6 +762,10 @@ const Step7_SkillsAndFeats = () => {
       featsSelected.push({ ...feat, row: 2 });
       if (row3Feat === "Learn Combat Maneuver" && row3Maneuver)
         maneuversSelected.push({ name: row3Maneuver });
+      if (row3Feat === "Natural Born Leader") {
+        if (row3Leadership1) maneuversSelected.push({ name: row3Leadership1 });
+        if (row3Leadership2) maneuversSelected.push({ name: row3Leadership2 });
+      }
     }
 
     // Remove previous ability and power score increases
@@ -774,7 +845,14 @@ const Step7_SkillsAndFeats = () => {
       }
     });
     updateCharacterField("feats", mergedFeats as any);
-    updateCharacterField("maneuvers", maneuversSelected as any);
+    const existingManeuvers = character.maneuvers || [];
+    const mergedManeuvers = [
+      ...existingManeuvers.filter(
+        (m: any) => !maneuversSelected.some((n) => n.name === m.name)
+      ),
+      ...maneuversSelected,
+    ];
+    updateCharacterField("maneuvers", mergedManeuvers as any);
     setCurrentStep(8);
   };
 
@@ -889,6 +967,50 @@ const Step7_SkillsAndFeats = () => {
       </SelectTrigger>
       <SelectContent>
         {allManeuvers.map((m: any) => {
+          const missing = getMissingPrereqs(
+            { prerequisites: m.requirements || [] },
+            prereqCharacter
+          );
+          const disabled = missing.hard.length > 0;
+          const titleParts: string[] = [];
+          if (missing.hard.length > 0)
+            titleParts.push(
+              `Requires ${missing.hard
+                .map((r: any) => formatPrerequisite(r))
+                .join(", ")}`
+            );
+          if (missing.soft.length > 0)
+            titleParts.push(
+              `Story: ${missing.soft
+                .map((r: any) => formatPrerequisite(r))
+                .join(", ")}`
+            );
+          const title = titleParts.length ? titleParts.join(" | ") : undefined;
+          return (
+            <SelectItem
+              key={m.name}
+              value={m.name}
+              disabled={disabled}
+              title={title}
+            >
+              {m.name}
+            </SelectItem>
+          );
+        })}
+      </SelectContent>
+    </Select>
+  );
+
+  const renderLeadershipSelect = (
+    value: string,
+    setValue: (v: string) => void
+  ) => (
+    <Select value={value} onValueChange={setValue}>
+      <SelectTrigger className="mt-2">
+        <SelectValue placeholder="Select maneuver" />
+      </SelectTrigger>
+      <SelectContent>
+        {leadershipManeuvers.map((m: any) => {
           const missing = getMissingPrereqs(
             { prerequisites: m.requirements || [] },
             prereqCharacter
@@ -1156,6 +1278,8 @@ const Step7_SkillsAndFeats = () => {
               setRow1Feat(v);
               setRow1FeatInput("");
               setRow1Maneuver("");
+              setRow1Leadership1("");
+              setRow1Leadership2("");
               setRow1Ability1("");
               setRow1Ability2("");
               setRow1Power1("");
@@ -1178,6 +1302,18 @@ const Step7_SkillsAndFeats = () => {
             )}
             {row1Feat === "Learn Combat Maneuver" &&
               renderManeuverSelect(row1Maneuver, setRow1Maneuver)}
+            {row1Feat === "Natural Born Leader" && (
+              <div className="mt-2 grid grid-cols-1 md:grid-cols-2 gap-2">
+                <div>
+                  <label className="block text-sm mb-1">Maneuver 1</label>
+                  {renderLeadershipSelect(row1Leadership1, setRow1Leadership1)}
+                </div>
+                <div>
+                  <label className="block text-sm mb-1">Maneuver 2</label>
+                  {renderLeadershipSelect(row1Leadership2, setRow1Leadership2)}
+                </div>
+              </div>
+            )}
             {row1Feat === "Ability Score Increase" &&
               renderAbilitySelects(
                 row1Ability1,
@@ -1248,6 +1384,8 @@ const Step7_SkillsAndFeats = () => {
               if (v) {
                 setRow2Feat("");
                 setRow2Maneuver("");
+                setRow2Leadership1("");
+                setRow2Leadership2("");
                 setRow2Ability1("");
                 setRow2Ability2("");
                 setRow2Power1("");
@@ -1273,6 +1411,8 @@ const Step7_SkillsAndFeats = () => {
                 setRow2Feat(v);
                 setRow2FeatInput("");
                 setRow2Maneuver("");
+                setRow2Leadership1("");
+                setRow2Leadership2("");
                 if (v) {
                   setRow2SkillSet("");
                   setRow2CustomSkill("");
@@ -1287,6 +1427,8 @@ const Step7_SkillsAndFeats = () => {
                   setRow2EmulatedPower("");
                   setRow2NewPower("");
                   setRow2CustomEmulatedPower("");
+                  setRow2Leadership1("");
+                  setRow2Leadership2("");
                 }
               },
               !!row2SkillSet,
@@ -1302,6 +1444,18 @@ const Step7_SkillsAndFeats = () => {
             )}
             {row2Feat === "Learn Combat Maneuver" &&
               renderManeuverSelect(row2Maneuver, setRow2Maneuver)}
+            {row2Feat === "Natural Born Leader" && (
+              <div className="mt-2 grid grid-cols-1 md:grid-cols-2 gap-2">
+                <div>
+                  <label className="block text-sm mb-1">Maneuver 1</label>
+                  {renderLeadershipSelect(row2Leadership1, setRow2Leadership1)}
+                </div>
+                <div>
+                  <label className="block text-sm mb-1">Maneuver 2</label>
+                  {renderLeadershipSelect(row2Leadership2, setRow2Leadership2)}
+                </div>
+              </div>
+            )}
             {row2Feat === "Ability Score Increase" &&
               renderAbilitySelects(
                 row2Ability1,
@@ -1373,11 +1527,13 @@ const Step7_SkillsAndFeats = () => {
                 if (v) {
                   setRow3Feat("");
                   setRow3Maneuver("");
+                  setRow3Leadership1("");
+                  setRow3Leadership2("");
                   setRow3Ability1("");
                   setRow3Ability2("");
-                setRow3Power1("");
-                setRow3Power2("");
-                setRow3PowerTrick("");
+                  setRow3Power1("");
+                  setRow3Power2("");
+                  setRow3PowerTrick("");
                 setRow3CustomPowerTrick("");
                 setRow3StuntType("");
                 setRow3EmulatedParent("");
@@ -1398,6 +1554,8 @@ const Step7_SkillsAndFeats = () => {
                 setRow3Feat(v);
                 setRow3FeatInput("");
                 setRow3Maneuver("");
+                setRow3Leadership1("");
+                setRow3Leadership2("");
                 if (v) {
                   setRow3SkillSet("");
                   setRow3CustomSkill("");
@@ -1412,6 +1570,8 @@ const Step7_SkillsAndFeats = () => {
                   setRow3EmulatedPower("");
                   setRow3NewPower("");
                   setRow3CustomEmulatedPower("");
+                  setRow3Leadership1("");
+                  setRow3Leadership2("");
                 }
               },
               !!row3SkillSet,
@@ -1427,11 +1587,23 @@ const Step7_SkillsAndFeats = () => {
             )}
             {row3Feat === "Learn Combat Maneuver" &&
               renderManeuverSelect(row3Maneuver, setRow3Maneuver)}
-              {row3Feat === "Ability Score Increase" &&
-                renderAbilitySelects(
-                  row3Ability1,
-                  setRow3Ability1,
-                  row3Ability2,
+            {row3Feat === "Natural Born Leader" && (
+              <div className="mt-2 grid grid-cols-1 md:grid-cols-2 gap-2">
+                <div>
+                  <label className="block text-sm mb-1">Maneuver 1</label>
+                  {renderLeadershipSelect(row3Leadership1, setRow3Leadership1)}
+                </div>
+                <div>
+                  <label className="block text-sm mb-1">Maneuver 2</label>
+                  {renderLeadershipSelect(row3Leadership2, setRow3Leadership2)}
+                </div>
+              </div>
+            )}
+            {row3Feat === "Ability Score Increase" &&
+              renderAbilitySelects(
+                row3Ability1,
+                setRow3Ability1,
+                row3Ability2,
                   setRow3Ability2
                 )}
               {row3Feat.startsWith("Power Score Increase") &&
