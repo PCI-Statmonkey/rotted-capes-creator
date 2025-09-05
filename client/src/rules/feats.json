@@ -324,18 +324,6 @@
     "input_label": null
   },
   {
-    "name": "Jury Rigging",
-    "description": "**Requirements:** Intelligence 13+  **Benefit:** Increase your Intelligence or Wisdom score by 1.**  ** When you take this feat, choose one category of common equipment or systems you’re known for patching together (e.g., vehicles, weapons, generators, powered doors), subject to Editor-in-Chief approval.  When attempting to meet a challenge involving quick repairs or improvised mechanical fixes to your chosen category, you add your Rank bonus to the roll if you do not possess a Skill Set that includes engineering or technical work. If you do have a relevant Skill Set (e.g., Technician, Tinkerer, Vehicle Mechanic), you instead gain an Edge on these checks.  In addition, you may attempt any relevant Jury Rig challenge with a DC of 20 or lower without requiring proper tools or equipment, provided you have access to basic scrap, parts, or materials.",
-    "prerequisites": [
-      "Intelligence 13+"
-    ],
-    "type": "normal",
-    "repeatable": false,
-    "tags": [],
-    "notes": "",
-    "input_label": null
-  },
-  {
     "name": "Large Frame",
     "description": "*You tower over most survivors, your oversized build making you both imposing and hard to ignore. Whether you're genetically altered, a mutant, or just born that way, your mass lets you throw your weight around, literally.*  You gain a +1 bonus to your Strength score.  **Effects:**  - You are treated as one size category larger than normal for lifting, carrying, and grappling.  <!-- -->  - You may make melee attacks against targets in an adjacent area (1 Area away), if they are not in full cover and you are aware of them.  - When determining your lifting capacity, throw range, and push/drag values, treat your Strength score as if it were +2 higher.  **Special (Restrictions):**  - Your increased size may make it more difficult to move through tight spaces, at the Editor-in-Chief’s discretion (see 'Cramped' and 'Obstacles' rules).  <!-- -->  - Any armor you acquire must be **custom-fitted or reinforced**, doubling its AP cost. A character with the appropriate Skill Set can modify armor during an Enclave Interlude to remove this penalty.",
     "prerequisites": [],
