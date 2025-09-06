@@ -751,51 +751,54 @@ export default function Step10_Summary() {
           </CardContent>
         </Card>
         
-        {/* Health Column */}
-        <Card>
-          <CardHeader className="py-3">
-            <CardTitle className="text-center text-xl font-medium">Health & Initiative</CardTitle>
-          </CardHeader>
-          <CardContent className="p-4 pt-0 h-full">
-            <div className="grid h-full gap-4 grid-rows-[1fr_2fr]">
+        {/* Initiative & Health Column */}
+        <div className="flex flex-col gap-6">
+          <Card>
+            <CardHeader className="py-3">
+              <CardTitle className="text-center text-xl font-medium">Initiative</CardTitle>
+            </CardHeader>
+            <CardContent className="p-4 pt-0">
               <div className="text-center p-3 bg-gray-800 rounded-lg flex flex-col justify-center">
-                <Label className="text-xs text-gray-400 uppercase">Initiative</Label>
                 <div className="text-3xl font-bold flex items-center justify-center gap-2">
                   <Target className="h-5 w-5 text-yellow-400" />
                   {formatModifier(derivedStats.initiative)}
                 </div>
                 <p className="text-xs text-gray-400 mt-1">{formatBreakdown(derivedStats.breakdown.initiative)}</p>
               </div>
+            </CardContent>
+          </Card>
 
-              <div className="p-3 bg-gray-800 rounded-lg flex flex-col">
-                <Label className="text-xs text-gray-400 uppercase text-center">Health</Label>
-                <div className="grid grid-rows-2 gap-4 flex-1 mt-2">
-                  <div className="text-center p-3 bg-gray-900 rounded-lg flex flex-col justify-center">
-                    <Label className="text-xs text-gray-400 uppercase">Stamina</Label>
-                    <div className="text-3xl font-bold flex items-center justify-center gap-2">
-                      <Heart className="h-5 w-5 text-green-400" />
-                      {derivedStats.stamina}
-                    </div>
-                    <p className="text-xs text-gray-400 mt-1">{formatBreakdown(derivedStats.breakdown.stamina)}</p>
+          <Card>
+            <CardHeader className="py-3">
+              <CardTitle className="text-center text-xl font-medium">Health</CardTitle>
+            </CardHeader>
+            <CardContent className="p-4 pt-0">
+              <div className="grid grid-rows-2 gap-4">
+                <div className="text-center p-3 bg-gray-800 rounded-lg flex flex-col justify-center">
+                  <Label className="text-xs text-gray-400 uppercase">Stamina</Label>
+                  <div className="text-3xl font-bold flex items-center justify-center gap-2">
+                    <Heart className="h-5 w-5 text-green-400" />
+                    {derivedStats.stamina}
                   </div>
+                  <p className="text-xs text-gray-400 mt-1">{formatBreakdown(derivedStats.breakdown.stamina)}</p>
+                </div>
 
-                  <div className="text-center p-3 bg-gray-900 rounded-lg flex flex-col justify-center">
-                    <Label className="text-xs text-gray-400 uppercase">Wounds</Label>
-                    <div className="text-3xl font-bold flex items-center justify-center gap-2">
-                      <Heart className="h-5 w-5 text-red-400" />
-                      {derivedStats.wounds}
-                    </div>
-                    <p className="text-xs text-gray-400 mt-1">{formatBreakdown(derivedStats.breakdown.wounds)}</p>
+                <div className="text-center p-3 bg-gray-800 rounded-lg flex flex-col justify-center">
+                  <Label className="text-xs text-gray-400 uppercase">Wounds</Label>
+                  <div className="text-3xl font-bold flex items-center justify-center gap-2">
+                    <Heart className="h-5 w-5 text-red-400" />
+                    {derivedStats.wounds}
                   </div>
+                  <p className="text-xs text-gray-400 mt-1">{formatBreakdown(derivedStats.breakdown.wounds)}</p>
                 </div>
               </div>
-            </div>
-          </CardContent>
-        </Card>
+            </CardContent>
+          </Card>
+        </div>
       </div>
 
       {/* Attacks Section */}
-      <Card>
+      <Card className="mb-6">
         <CardHeader className="py-3">
           <CardTitle className="flex items-center text-xl font-medium">
             <span className="flex-1">Attacks</span>
