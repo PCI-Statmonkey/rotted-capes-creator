@@ -396,14 +396,18 @@ export default function Step6_Weaknesses() {
   };
 
   const handleAllocate5 = () => {
-    if (remainingWeaknessPoints < 5 || !fivePointSkill || !fivePointAbility) return;
-    if (!character.skills.some(s => s.name === fivePointSkill)) {
-      updateCharacterField('skills', [...character.skills, { name: fivePointSkill, ability: '', ranks: 0, trained: true }]);
+    if (remainingWeaknessPoints < 5 || (!fivePointSkill && !fivePointAbility)) return;
+    if (fivePointSkill) {
+      if (!character.skills.some(s => s.name === fivePointSkill)) {
+        updateCharacterField('skills', [...character.skills, { name: fivePointSkill, ability: '', ranks: 0, trained: true }]);
+      }
+      updateAllocations([...allocations, { type: '5', target: fivePointSkill, amount: 5 }]);
+      setFivePointSkill('');
+    } else if (fivePointAbility) {
+      applyAbilityOrPower(fivePointAbility, 1);
+      updateAllocations([...allocations, { type: '5', target: fivePointAbility, amount: 5 }]);
+      setFivePointAbility('');
     }
-    applyAbilityOrPower(fivePointAbility, 1);
-    updateAllocations([...allocations, { type: '5', target: `${fivePointSkill} + ${fivePointAbility}`, amount: 5 }]);
-    setFivePointSkill('');
-    setFivePointAbility('');
   };
 
   const handleAllocate10 = () => {
@@ -1215,13 +1219,13 @@ export default function Step6_Weaknesses() {
             <Accordion type="single" collapsible className="w-full">
               <AccordionItem value="item-1">
                 <AccordionTrigger className="bg-gray-700 text-white px-4 hover:bg-gray-600 data-[state=open]:bg-gray-600">
-                  5 Points: Gain training in a skill set and +1 to any ability/power score
+                  5 Points: Gain training in a skill set or +1 to any ability/power score
                 </AccordionTrigger>
               <AccordionContent>
                   <div className="space-y-3 p-2">
                     <div>
                       <label className="block text-sm mb-1">Skill Set</label>
-                      <Select value={fivePointSkill} onValueChange={setFivePointSkill}>
+                      <Select value={fivePointSkill} onValueChange={(val) => { setFivePointSkill(val); setFivePointAbility(''); }}>
                         <SelectTrigger className="bg-gray-700">
                           <SelectValue placeholder="Select skill set" />
                         </SelectTrigger>
@@ -1234,7 +1238,7 @@ export default function Step6_Weaknesses() {
                     </div>
                     <div>
                       <label className="block text-sm mb-1">Ability or Power</label>
-                      <Select value={fivePointAbility} onValueChange={setFivePointAbility}>
+                      <Select value={fivePointAbility} onValueChange={(val) => { setFivePointAbility(val); setFivePointSkill(''); }}>
                         <SelectTrigger className="bg-gray-700">
                           <SelectValue placeholder="Select target" />
                         </SelectTrigger>
@@ -1248,7 +1252,7 @@ export default function Step6_Weaknesses() {
                         </SelectContent>
                       </Select>
                     </div>
-                    <Button onClick={handleAllocate5} disabled={!fivePointSkill || !fivePointAbility || remainingWeaknessPoints < 5} className="w-full">
+                    <Button onClick={handleAllocate5} disabled={(!fivePointSkill && !fivePointAbility) || remainingWeaknessPoints < 5} className="w-full">
                       Spend 5 Points
                     </Button>
                   </div>
