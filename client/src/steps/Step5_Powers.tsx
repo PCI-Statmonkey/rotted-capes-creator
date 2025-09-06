@@ -45,6 +45,7 @@ interface Power {
   target?: string;
   ability?: string;
   sense?: string;
+  paceType?: string;
   linkedPowers?: string[];
   flaws: PowerModifier[];
   perks: PowerModifier[];
@@ -112,6 +113,12 @@ const SENSES = ["Sight", "Hearing", "Smell", "Taste", "Touch"];
 
 const getSenseOptions = (powerName: string): string[] => {
   return powerName === "Enhanced Sense" ? SENSES : [];
+};
+
+const PACE_TYPES = ["Running", "Flying", "Jumping", "Swimming"];
+
+const getPaceOptions = (powerName: string): string[] => {
+  return powerName === "Surge" ? PACE_TYPES : [];
 };
 
 // Define the available power sets based on the rulebook
@@ -227,6 +234,7 @@ export default function Step5_Powers() {
         canTurnOff: (p as any).canTurnOff,
         ability: p.ability || getAbilityOptions(p.name)[0],
         sense: (p as any).sense || getSenseOptions(p.name)[0],
+        paceType: (p as any).paceType || getPaceOptions(p.name)[0],
         linkedPowers: (p as any).linkedPowers || [],
         flaws: p.flaws.map(f => POWER_FLAWS.find(ff => ff.name === f)).filter(Boolean) as PowerModifier[],
         perks: p.perks.map(perk => POWER_PERKS.find(pp => pp.name === perk)).filter(Boolean) as PowerModifier[],
@@ -404,6 +412,7 @@ export default function Step5_Powers() {
       arrayIndex: undefined,
       ability: getAbilityOptions(ALL_POWERS[0])[0],
       sense: getSenseOptions(ALL_POWERS[0])[0],
+      paceType: getPaceOptions(ALL_POWERS[0])[0],
       attackType: undefined,
       description: info?.description,
       linkedPowers: [],
@@ -467,6 +476,13 @@ export default function Step5_Powers() {
         newPowers[index].sense = senseOpts[0];
       } else {
         newPowers[index].sense = undefined;
+      }
+
+      const paceOpts = getPaceOptions(value);
+      if (paceOpts.length > 0) {
+        newPowers[index].paceType = paceOpts[0];
+      } else {
+        newPowers[index].paceType = undefined;
       }
 
       const info: any = powerDataMap.get(value);
@@ -593,6 +609,7 @@ export default function Step5_Powers() {
         arrayIndex: undefined,
         ability: getAbilityOptions(power.name)[0],
         sense: getSenseOptions(power.name)[0],
+        paceType: getPaceOptions(power.name)[0],
         attackType: power.name === 'Enhanced Melee Attack' ? 'Unarmed' : undefined,
         weapon: undefined,
         canTurnOff: power.name === 'Enhanced Melee Attack' ? false : undefined,
@@ -630,6 +647,7 @@ export default function Step5_Powers() {
       arrayIndex: undefined,
       ability: getAbilityOptions(ALL_POWERS[0])[0],
       sense: getSenseOptions(ALL_POWERS[0])[0],
+      paceType: getPaceOptions(ALL_POWERS[0])[0],
       attackType: undefined,
       weapon: undefined,
       canTurnOff: undefined,
@@ -727,6 +745,7 @@ export default function Step5_Powers() {
       canTurnOff: power.canTurnOff,
       ability: power.ability,
       sense: power.sense,
+      paceType: power.paceType,
       score: power.score,
       finalScore: power.finalScore,
       flaws: power.flaws.map(f => f.name),
@@ -1133,6 +1152,25 @@ export default function Step5_Powers() {
                       </div>
                     )}
 
+                    {getPaceOptions(power.name).length > 0 && (
+                      <div className="mt-2">
+                        <Label className="text-sm">Pace Type</Label>
+                        <Select
+                          value={power.paceType}
+                          onValueChange={(value) => updatePower(index, 'paceType', value)}
+                        >
+                          <SelectTrigger className="bg-gray-800">
+                            <SelectValue placeholder="Select pace type" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {getPaceOptions(power.name).map(opt => (
+                              <SelectItem key={opt} value={opt}>{opt}</SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </div>
+                    )}
+
                     {/* Display applied modifiers */}
                     {(power.flaws.length > 0 || power.perks.length > 0) && (
                       <div className="mt-3 pt-3 border-t border-gray-600">
@@ -1322,6 +1360,25 @@ export default function Step5_Powers() {
                                   <SelectContent>
                                     {getSenseOptions(power.name).map(opt => (
                                       <SelectItem key={`sense-${opt}`} value={opt}>{opt}</SelectItem>
+                                    ))}
+                                  </SelectContent>
+                                </Select>
+                              </div>
+                            )}
+
+                            {getPaceOptions(power.name).length > 0 && (
+                              <div className="flex-1">
+                                <Label className="text-xs mb-1 block">Pace Type</Label>
+                                <Select
+                                  value={power.paceType}
+                                  onValueChange={(value) => updatePower(index, 'paceType', value)}
+                                >
+                                  <SelectTrigger className="bg-gray-800">
+                                    <SelectValue placeholder="Select pace type" />
+                                  </SelectTrigger>
+                                  <SelectContent>
+                                    {getPaceOptions(power.name).map(opt => (
+                                      <SelectItem key={`pace-${opt}`} value={opt}>{opt}</SelectItem>
                                     ))}
                                   </SelectContent>
                                 </Select>
@@ -1664,6 +1721,25 @@ export default function Step5_Powers() {
                                 <SelectContent>
                                   {getSenseOptions(power.name).map(opt => (
                                     <SelectItem key={`pb-sense-${opt}`} value={opt}>{opt}</SelectItem>
+                                  ))}
+                                </SelectContent>
+                              </Select>
+                            </div>
+                          )}
+
+                          {getPaceOptions(power.name).length > 0 && (
+                            <div className="flex-1">
+                              <Label className="text-xs mb-1 block">Pace Type</Label>
+                              <Select
+                                value={power.paceType}
+                                onValueChange={(value) => updatePower(index, 'paceType', value)}
+                              >
+                                <SelectTrigger className="bg-gray-800">
+                                  <SelectValue placeholder="Select pace type" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  {getPaceOptions(power.name).map(opt => (
+                                    <SelectItem key={`pb-pace-${opt}`} value={opt}>{opt}</SelectItem>
                                   ))}
                                 </SelectContent>
                               </Select>
