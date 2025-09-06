@@ -953,18 +953,18 @@ export default function Step5_Powers() {
             <div className="flex justify-between items-center mb-3">
               <h3 className="font-medium text-lg">Point Buy</h3>
               <div className="flex items-center px-4 py-2 bg-gray-700 rounded-lg border border-gray-600 shadow-md">
-                <span className="text-gray-400">Points Available: </span>
+                <span className="text-white">Points Available: </span>
                 <span className={`${availablePoints < 0 ? 'text-red-500' : 'text-accent'}`}>
                   {availablePoints}
                 </span>
-                <span className="text-gray-400"> / 32</span>
+                <span className="text-white"> / 32</span>
               </div>
             </div>
             
             <div className="grid grid-cols-6 gap-2 mb-3">
               {POWER_COST_TABLE.map(entry => (
                 <div key={entry.score} className="bg-gray-700 p-1 rounded text-center text-xs">
-                  <div className="text-gray-300">{entry.score}</div>
+                  <div className="text-white">{entry.score}</div>
                   <div className="text-accent">{entry.cost} pts</div>
                 </div>
               ))}
@@ -1578,22 +1578,23 @@ export default function Step5_Powers() {
                             value={power.name}
                             onValueChange={(value) => updatePower(index, 'name', value)}
                           >
-                            <SelectTrigger className="bg-gray-800">
+                            <SelectTrigger className="bg-gray-800 text-white data-[placeholder]:text-white">
                               <SelectValue placeholder="Select a power" />
                             </SelectTrigger>
                             <SelectContent className="max-h-[300px]">
                               {ALL_POWERS.map(powerName => (
-                                <SelectItem key={powerName} value={powerName}>
-                                  <span className="text-red-500">{powerName}</span>{ALL_SKILL_COMPATIBLE.includes(powerName) && " (all skill capable)"}
+                                <SelectItem key={powerName} value={powerName} className="text-white">
+                                  {powerName}
+                                  {ALL_SKILL_COMPATIBLE.includes(powerName) && " (all skill capable)"}
                                 </SelectItem>
                               ))}
                             </SelectContent>
                           </Select>
-                          <Button 
-                            variant="ghost" 
+                          <Button
+                            variant="ghost"
                             size="icon"
                             onClick={() => removePower(index)}
-                            className="h-6 w-6 p-0 text-gray-400 hover:text-red-400"
+                            className="h-6 w-6 p-0 text-white hover:text-red-400"
                           >
                             <X className="h-4 w-4" />
                           </Button>
@@ -1601,9 +1602,9 @@ export default function Step5_Powers() {
                         
                         <div className="flex flex-col sm:flex-row gap-4 mb-2">
                           <div>
-                            <Label className="text-xs mb-1 block">Power Score</Label>
+                            <Label className="text-xs mb-1 block text-white">Power Score</Label>
                             <div className="flex items-center">
-                              <Button 
+                              <Button
                                 variant="outline"
                                 size="sm"
                                 className="h-8 w-8 p-0"
@@ -1615,7 +1616,7 @@ export default function Step5_Powers() {
                               
                               <div className="mx-2 min-w-[60px] text-center">
                                 <span className="text-lg font-bold">{power.score}</span>
-                                <span className="text-xs text-gray-400 block">
+                                <span className="text-xs text-white block">
                                   ({getCostForScore(power.score)} pts)
                                 </span>
                               </div>
@@ -1634,12 +1635,12 @@ export default function Step5_Powers() {
 
                           {getAbilityOptions(power.name).length > 0 && (
                             <div className="flex-1">
-                              <Label className="text-xs mb-1 block">Ability</Label>
+                              <Label className="text-xs mb-1 block text-white">Ability</Label>
                               <Select
                                 value={power.ability}
                                 onValueChange={(value) => updatePower(index, 'ability', value)}
                               >
-                                <SelectTrigger className="bg-gray-800">
+                                <SelectTrigger className="bg-gray-800 text-white data-[placeholder]:text-white">
                                   <SelectValue placeholder="Select ability" />
                                 </SelectTrigger>
                                 <SelectContent>
@@ -1653,12 +1654,12 @@ export default function Step5_Powers() {
 
                           {getSenseOptions(power.name).length > 0 && (
                             <div className="flex-1">
-                              <Label className="text-xs mb-1 block">Sense</Label>
+                              <Label className="text-xs mb-1 block text-white">Sense</Label>
                               <Select
                                 value={power.sense}
                                 onValueChange={(value) => updatePower(index, 'sense', value)}
                               >
-                                <SelectTrigger className="bg-gray-800">
+                                <SelectTrigger className="bg-gray-800 text-white data-[placeholder]:text-white">
                                   <SelectValue placeholder="Select sense" />
                                 </SelectTrigger>
                                 <SelectContent>
@@ -1672,12 +1673,12 @@ export default function Step5_Powers() {
 
                           {power.name === 'Enhanced Melee Attack' && (
                             <div className="flex-1">
-                              <Label className="text-xs mb-1 block">Attack Type</Label>
+                              <Label className="text-xs mb-1 block text-white">Attack Type</Label>
                               <Select
                                 value={power.attackType}
                                 onValueChange={(value) => updatePower(index, 'attackType', value)}
                               >
-                                <SelectTrigger className="bg-gray-800">
+                                <SelectTrigger className="bg-gray-800 text-white data-[placeholder]:text-white">
                                   <SelectValue placeholder="Select type" />
                                 </SelectTrigger>
                                 <SelectContent>
@@ -1690,12 +1691,12 @@ export default function Step5_Powers() {
 
                           {power.name === 'Enhanced Melee Attack' && power.attackType === 'Weapon' && (
                             <div className="flex-1">
-                              <Label className="text-xs mb-1 block">Melee Weapon</Label>
+                              <Label className="text-xs mb-1 block text-white">Melee Weapon</Label>
                               <Select
                                 value={power.weapon}
                                 onValueChange={(value) => updatePower(index, 'weapon', value)}
                               >
-                                <SelectTrigger className="bg-gray-800">
+                                <SelectTrigger className="bg-gray-800 text-white data-[placeholder]:text-white">
                                   <SelectValue placeholder="Select weapon" />
                                 </SelectTrigger>
                                 <SelectContent>
@@ -1710,12 +1711,12 @@ export default function Step5_Powers() {
                           {power.name === 'Enhanced Melee Attack' && power.attackType === 'Unarmed' && (
                             <>
                               <div className="flex-1">
-                                <Label className="text-xs mb-1 block">Damage Type</Label>
+                                <Label className="text-xs mb-1 block text-white">Damage Type</Label>
                                 <Select
                                   value={power.damageType || "none"}
                                   onValueChange={(value) => updatePower(index, 'damageType', value)}
                                 >
-                                  <SelectTrigger className="bg-gray-800">
+                                  <SelectTrigger className="bg-gray-800 text-white data-[placeholder]:text-white">
                                     <SelectValue placeholder="Select type" />
                                   </SelectTrigger>
                                   <SelectContent>
@@ -1730,19 +1731,19 @@ export default function Step5_Powers() {
                                   checked={power.canTurnOff}
                                   onCheckedChange={(checked) => updatePower(index, 'canTurnOff', checked)}
                                 />
-                                <Label className="text-xs">Can be turned on/off</Label>
+                                <Label className="text-xs text-white">Can be turned on/off</Label>
                               </div>
                             </>
                           )}
 
                           {power.name !== 'Enhanced Melee Attack' && powerUsesDamageType(power.name) && (
                             <div className="flex-1">
-                              <Label className="text-xs mb-1 block">Damage Type</Label>
+                              <Label className="text-xs mb-1 block text-white">Damage Type</Label>
                               <Select
                                 value={power.damageType || "none"}
                                 onValueChange={(value) => updatePower(index, 'damageType', value === "none" ? undefined : value)}
                               >
-                                <SelectTrigger className="bg-gray-800">
+                                <SelectTrigger className="bg-gray-800 text-white data-[placeholder]:text-white">
                                   <SelectValue placeholder="Select type" />
                                 </SelectTrigger>
                                 <SelectContent>
@@ -1759,7 +1760,7 @@ export default function Step5_Powers() {
                         {/* Add power modification dropdowns */}
                         <div className="mt-3 pt-3 border-t border-gray-600 grid grid-cols-2 gap-3">
                           <div>
-                            <Label className="text-xs mb-1 block">Add Flaw</Label>
+                            <Label className="text-xs mb-1 block text-white">Add Flaw</Label>
                             <Select
                               value=""
                               onValueChange={(value) => {
@@ -1771,7 +1772,7 @@ export default function Step5_Powers() {
                                 }
                               }}
                             >
-                              <SelectTrigger className="bg-gray-800">
+                              <SelectTrigger className="bg-gray-800 text-white data-[placeholder]:text-white">
                                 <SelectValue placeholder="Add a flaw" />
                               </SelectTrigger>
                               <SelectContent>
@@ -1789,7 +1790,7 @@ export default function Step5_Powers() {
                           </div>
 
                           <div>
-                            <Label className="text-xs mb-1 block">Add Perk</Label>
+                            <Label className="text-xs mb-1 block text-white">Add Perk</Label>
                             <Select
                               value=""
                               onValueChange={(value) => {
@@ -1801,7 +1802,7 @@ export default function Step5_Powers() {
                                 }
                               }}
                             >
-                              <SelectTrigger className="bg-gray-800">
+                              <SelectTrigger className="bg-gray-800 text-white data-[placeholder]:text-white">
                                 <SelectValue placeholder="Add a perk" />
                               </SelectTrigger>
                               <SelectContent>
@@ -1838,7 +1839,7 @@ export default function Step5_Powers() {
                           <div className="mt-3 pt-3 border-t border-gray-600">
                             {power.flaws.length > 0 && (
                               <div className="mb-2">
-                                <span className="text-xs text-gray-400">Flaws:</span>
+                                <span className="text-xs text-white">Flaws:</span>
                                 <div className="flex flex-wrap gap-1 mt-1">
                                   {power.flaws.map(flaw => (
                                     <div key={flaw.name} className="bg-gray-800 text-red-400 px-2 py-0.5 rounded-full text-xs flex items-center font-comic-light">
@@ -1859,7 +1860,7 @@ export default function Step5_Powers() {
                             
                             {power.perks.length > 0 && (
                               <div>
-                                <span className="text-xs text-gray-400">Perks:</span>
+                                <span className="text-xs text-white">Perks:</span>
                                 <div className="flex flex-wrap gap-1 mt-1">
                                   {power.perks.map(perk => (
                                   <div key={perk.name} className="bg-gray-800 text-green-400 px-2 py-0.5 rounded-full text-xs flex items-center font-comic-light">
@@ -1880,7 +1881,7 @@ export default function Step5_Powers() {
 
                           {power.flaws.some(f => f.name === 'Linked') && selectedPowers.length > 1 && (
                             <div className="mt-2 space-y-1">
-                              <Label className="text-xs">Linked To</Label>
+                              <Label className="text-xs text-white">Linked To</Label>
                               {selectedPowers.map((p, idx) => (
                                 index !== idx && (
                                   <div key={`linked-pb-${index}-${idx}`} className="flex items-center space-x-2">
@@ -1889,7 +1890,7 @@ export default function Step5_Powers() {
                                       checked={power.linkedPowers?.includes(p.name) || false}
                                       onCheckedChange={(checked) => toggleLinkedPower(index, p.name, !!checked)}
                                     />
-                                    <Label htmlFor={`linked-pb-${index}-${idx}`} className="text-xs">{p.name}</Label>
+                                    <Label htmlFor={`linked-pb-${index}-${idx}`} className="text-xs text-white">{p.name}</Label>
                                   </div>
                                 )
                               ))}
