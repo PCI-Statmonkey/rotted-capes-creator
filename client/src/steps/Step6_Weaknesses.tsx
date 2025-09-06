@@ -25,7 +25,6 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import skillSetsData from "@/rules/skills.json";
 import featsData from "@/rules/feats.json";
 import weaknessesData from "@/rules/weaknesses.json";
 import powersData from "@/rules/powers.json";
@@ -102,12 +101,8 @@ export default function Step6_Weaknesses() {
     amount: number;
   }>>(character.weaknessAllocations || []);
 
-  const [fivePointSkill, setFivePointSkill] = useState("");
   const [fivePointAbility, setFivePointAbility] = useState("");
-  const [tenPointMode, setTenPointMode] = useState<"feat" | "ability">("feat");
   const [tenPointFeat, setTenPointFeat] = useState("");
-  const [tenPointAbility1, setTenPointAbility1] = useState("");
-  const [tenPointAbility2, setTenPointAbility2] = useState("");
   const [tenPointPower1, setTenPointPower1] = useState("");
   const [tenPointPower2, setTenPointPower2] = useState("");
   const [tenPointPowerTrick, setTenPointPowerTrick] = useState("");
@@ -118,7 +113,21 @@ export default function Step6_Weaknesses() {
   const [tenPointNewPower, setTenPointNewPower] = useState("");
   const [tenPointLeadership1, setTenPointLeadership1] = useState("");
   const [tenPointLeadership2, setTenPointLeadership2] = useState("");
-  const [fifteenPointAbility, setFifteenPointAbility] = useState("");
+  const [fifteenMode, setFifteenMode] = useState<"feat-ability" | "abilities">("feat-ability");
+  const [fifteenFeat, setFifteenFeat] = useState("");
+  const [fifteenAbility, setFifteenAbility] = useState("");
+  const [fifteenPower1, setFifteenPower1] = useState("");
+  const [fifteenPower2, setFifteenPower2] = useState("");
+  const [fifteenPowerTrick, setFifteenPowerTrick] = useState("");
+  const [fifteenCustomPowerTrick, setFifteenCustomPowerTrick] = useState("");
+  const [fifteenEmulatedParent, setFifteenEmulatedParent] = useState("");
+  const [fifteenEmulatedPower, setFifteenEmulatedPower] = useState("");
+  const [fifteenCustomEmulatedPower, setFifteenCustomEmulatedPower] = useState("");
+  const [fifteenNewPower, setFifteenNewPower] = useState("");
+  const [fifteenLeadership1, setFifteenLeadership1] = useState("");
+  const [fifteenLeadership2, setFifteenLeadership2] = useState("");
+  const [fifteenAbility1, setFifteenAbility1] = useState("");
+  const [fifteenAbility2, setFifteenAbility2] = useState("");
 
   // Calculate total weakness points
   const calculatePoints = () => {
@@ -396,24 +405,14 @@ export default function Step6_Weaknesses() {
   };
 
   const handleAllocate5 = () => {
-    if (remainingWeaknessPoints < 5 || (!fivePointSkill && !fivePointAbility)) return;
-    if (fivePointSkill) {
-      if (!character.skills.some(s => s.name === fivePointSkill)) {
-        updateCharacterField('skills', [...character.skills, { name: fivePointSkill, ability: '', ranks: 0, trained: true }]);
-      }
-      updateAllocations([...allocations, { type: '5', target: fivePointSkill, amount: 5 }]);
-      setFivePointSkill('');
-    } else if (fivePointAbility) {
-      applyAbilityOrPower(fivePointAbility, 1);
-      updateAllocations([...allocations, { type: '5', target: fivePointAbility, amount: 5 }]);
-      setFivePointAbility('');
-    }
+    if (remainingWeaknessPoints < 5 || !fivePointAbility) return;
+    applyAbilityOrPower(fivePointAbility, 1);
+    updateAllocations([...allocations, { type: '5', target: fivePointAbility, amount: 5 }]);
+    setFivePointAbility('');
   };
 
   const handleAllocate10 = () => {
-    if (remainingWeaknessPoints < 10) return;
-    if (tenPointMode === 'feat') {
-      if (!tenPointFeat) return;
+    if (remainingWeaknessPoints < 10 || !tenPointFeat) return;
       if (tenPointFeat.startsWith('Power Score Increase')) {
         if (!tenPointPower1) return;
         applyAbilityOrPower(tenPointPower1, 1);
@@ -537,21 +536,115 @@ export default function Step6_Weaknesses() {
         setTenPointLeadership1('');
         setTenPointLeadership2('');
       }
-    } else {
-      if (!tenPointAbility1 || !tenPointAbility2) return;
-      applyAbilityOrPower(tenPointAbility1, 1);
-      applyAbilityOrPower(tenPointAbility2, 1);
-      updateAllocations([...allocations, { type: '10-ability', target: `${tenPointAbility1} & ${tenPointAbility2}`, amount: 10 }]);
-      setTenPointAbility1('');
-      setTenPointAbility2('');
-    }
   };
 
   const handleAllocate15 = () => {
-    if (remainingWeaknessPoints < 15 || !fifteenPointAbility) return;
-    applyAbilityOrPower(fifteenPointAbility, 2);
-    updateAllocations([...allocations, { type: '15-ability', target: fifteenPointAbility, amount: 15 }]);
-    setFifteenPointAbility('');
+    if (remainingWeaknessPoints < 15) return;
+    if (fifteenMode === 'feat-ability') {
+      if (!fifteenFeat || !fifteenAbility) return;
+      if (fifteenFeat.startsWith('Power Score Increase')) {
+        if (!fifteenPower1) return;
+        applyAbilityOrPower(fifteenPower1, 1);
+        applyAbilityOrPower(fifteenPower2 || fifteenPower1, 1);
+        const featObj = {
+          name: fifteenFeat,
+          powerChoices: [fifteenPower1, fifteenPower2 || fifteenPower1],
+          source: 'Weakness',
+        } as any;
+        if (!character.feats.some(f => f.name === fifteenFeat)) {
+          updateCharacterField('feats', [...character.feats, featObj]);
+        }
+      } else if (fifteenFeat.startsWith('Acquire New Power')) {
+        if (!fifteenNewPower) return;
+        const featObj = {
+          name: fifteenFeat,
+          acquiredPower: fifteenNewPower,
+          source: 'Weakness',
+        } as any;
+        if (!character.feats.some(f => f.name === fifteenFeat)) {
+          updateCharacterField('feats', [...character.feats, featObj]);
+        }
+        const newPower = { name: fifteenNewPower, score: 12, finalScore: 12 } as any;
+        updateCharacterField('powers', [...character.powers, newPower]);
+      } else if (fifteenFeat.startsWith('Master Power Trick')) {
+        const trick =
+          fifteenPowerTrick === 'custom'
+            ? fifteenCustomPowerTrick
+            : fifteenPowerTrick;
+        if (!trick) return;
+        const featObj = {
+          name: fifteenFeat,
+          powerTrick: trick,
+          source: 'Weakness',
+        } as any;
+        if (!character.feats.some(f => f.name === fifteenFeat)) {
+          updateCharacterField('feats', [...character.feats, featObj]);
+        }
+      } else if (fifteenFeat.startsWith('Master Emulated Power')) {
+        if (!fifteenEmulatedParent) return;
+        const emuPower =
+          fifteenEmulatedPower === 'custom'
+            ? fifteenCustomEmulatedPower
+            : fifteenEmulatedPower;
+        if (!emuPower) return;
+        const featObj = {
+          name: fifteenFeat,
+          emulatedFrom: fifteenEmulatedParent,
+          emulatedPower: emuPower,
+          source: 'Weakness',
+        } as any;
+        if (!character.feats.some(f => f.name === fifteenFeat)) {
+          updateCharacterField('feats', [...character.feats, featObj]);
+        }
+        const parent = character.powers.find(p => p.name === fifteenEmulatedParent);
+        const base = parent ? (parent.finalScore ?? parent.score ?? 10) + 2 : 12;
+        const finalScore = Math.min(25, base);
+        const newPower = { name: emuPower, score: finalScore, finalScore } as any;
+        updateCharacterField('powers', [...character.powers, newPower]);
+      } else if (fifteenFeat === 'Natural Born Leader') {
+        if (!fifteenLeadership1 || !fifteenLeadership2) return;
+        const featObj = { name: fifteenFeat, source: 'Weakness' } as any;
+        if (!character.feats.some(f => f.name === fifteenFeat)) {
+          updateCharacterField('feats', [...character.feats, featObj]);
+        }
+        updateCharacterField('maneuvers', [
+          ...(character.maneuvers || []),
+          { name: fifteenLeadership1 },
+          { name: fifteenLeadership2 },
+        ]);
+      } else {
+        if (!character.feats.some(f => f.name === fifteenFeat)) {
+          updateCharacterField('feats', [...character.feats, { name: fifteenFeat, source: 'Weakness' }]);
+        }
+      }
+      applyAbilityOrPower(fifteenAbility, 1);
+      updateAllocations([
+        ...allocations,
+        { type: '15-feat-ability', target: `${fifteenFeat} & ${fifteenAbility}`, amount: 15 },
+      ]);
+      setFifteenFeat('');
+      setFifteenAbility('');
+      setFifteenPower1('');
+      setFifteenPower2('');
+      setFifteenPowerTrick('');
+      setFifteenCustomPowerTrick('');
+      setFifteenEmulatedParent('');
+      setFifteenEmulatedPower('');
+      setFifteenCustomEmulatedPower('');
+      setFifteenNewPower('');
+      setFifteenLeadership1('');
+      setFifteenLeadership2('');
+    } else {
+      if (!fifteenAbility1 || !fifteenAbility2) return;
+      applyAbilityOrPower(fifteenAbility1, 2);
+      applyAbilityOrPower(fifteenAbility2, 2);
+      updateAllocations([
+        ...allocations,
+        { type: '15-abilities', target: `${fifteenAbility1} & ${fifteenAbility2}`, amount: 15 },
+      ]);
+      setFifteenAbility1('');
+      setFifteenAbility2('');
+    }
   };
 
   // Check if we can add the current weakness
@@ -1219,26 +1312,13 @@ export default function Step6_Weaknesses() {
             <Accordion type="single" collapsible className="w-full">
               <AccordionItem value="item-1">
                 <AccordionTrigger className="bg-gray-700 text-white px-4 hover:bg-gray-600 data-[state=open]:bg-gray-600">
-                  5 Points: Gain training in a skill set or +1 to any ability/power score
+                  5 Points: +1 to any ability/power score
                 </AccordionTrigger>
-              <AccordionContent>
+                <AccordionContent>
                   <div className="space-y-3 p-2">
                     <div>
-                      <label className="block text-sm mb-1">Skill Set</label>
-                      <Select value={fivePointSkill} onValueChange={(val) => { setFivePointSkill(val); setFivePointAbility(''); }}>
-                        <SelectTrigger className="bg-gray-700">
-                          <SelectValue placeholder="Select skill set" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {skillSetsData.map((s) => (
-                            <SelectItem key={s.name} value={s.name}>{s.name}</SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </div>
-                    <div>
                       <label className="block text-sm mb-1">Ability or Power</label>
-                      <Select value={fivePointAbility} onValueChange={(val) => { setFivePointAbility(val); setFivePointSkill(''); }}>
+                      <Select value={fivePointAbility} onValueChange={(val) => setFivePointAbility(val)}>
                         <SelectTrigger className="bg-gray-700">
                           <SelectValue placeholder="Select target" />
                         </SelectTrigger>
@@ -1252,7 +1332,7 @@ export default function Step6_Weaknesses() {
                         </SelectContent>
                       </Select>
                     </div>
-                    <Button onClick={handleAllocate5} disabled={(!fivePointSkill && !fivePointAbility) || remainingWeaknessPoints < 5} className="w-full">
+                    <Button onClick={handleAllocate5} disabled={!fivePointAbility || remainingWeaknessPoints < 5} className="w-full">
                       Spend 5 Points
                     </Button>
                   </div>
@@ -1261,130 +1341,278 @@ export default function Step6_Weaknesses() {
 
               <AccordionItem value="item-2">
                 <AccordionTrigger className="bg-gray-700 text-white px-4 hover:bg-gray-600 data-[state=open]:bg-gray-600">
-                  10 Points: Gain a feat or +1 to any two ability/power scores
+                  10 Points: Gain a feat
+                </AccordionTrigger>
+                <AccordionContent>
+                  <div className="space-y-3 p-2">
+                    <div>
+                      <label className="block text-sm mb-1">Feat</label>
+                      <Select
+                        value={tenPointFeat}
+                        onValueChange={(v) => {
+                          setTenPointFeat(v);
+                          setTenPointPower1('');
+                          setTenPointPower2('');
+                          setTenPointPowerTrick('');
+                          setTenPointCustomPowerTrick('');
+                          setTenPointEmulatedParent('');
+                          setTenPointEmulatedPower('');
+                          setTenPointCustomEmulatedPower('');
+                          setTenPointNewPower('');
+                          setTenPointLeadership1('');
+                          setTenPointLeadership2('');
+                        }}
+                      >
+                        <SelectTrigger className="bg-gray-700">
+                          <SelectValue placeholder="Select feat" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {featsData.map((f) => (
+                            <SelectItem key={f.name} value={f.name}>
+                              {displayFeatName(f.name)}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      {tenPointFeat.startsWith('Power Score Increase') && (
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mt-2">
+                          <div>
+                            <label className="block text-sm mb-1">Power 1</label>
+                            <Select
+                              value={tenPointPower1}
+                              onValueChange={(v) =>
+                                setTenPointPower1(v === 'none' ? '' : v)
+                              }
+                            >
+                              <SelectTrigger className="bg-gray-700">
+                                <SelectValue placeholder="Select power" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="none">None</SelectItem>
+                                {character.powers.map((p) => (
+                                  <SelectItem key={p.name} value={p.name}>
+                                    {p.name}
+                                  </SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
+                          </div>
+                          <div>
+                            <label className="block text-sm mb-1">Power 2 (optional)</label>
+                            <Select
+                              value={tenPointPower2}
+                              onValueChange={(v) =>
+                                setTenPointPower2(v === 'none' ? '' : v)
+                              }
+                            >
+                              <SelectTrigger className="bg-gray-700">
+                                <SelectValue placeholder="Select power" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="none">None</SelectItem>
+                                {character.powers.map((p) => (
+                                  <SelectItem key={p.name} value={p.name}>
+                                    {p.name}
+                                  </SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
+                          </div>
+                        </div>
+                      )}
+                      {tenPointFeat.startsWith('Acquire New Power') &&
+                        renderNewPowerSelect(tenPointNewPower, setTenPointNewPower)}
+                      {tenPointFeat.startsWith('Master Power Trick') &&
+                        renderPowerTrickSelect(
+                          tenPointPowerTrick,
+                          setTenPointPowerTrick,
+                          tenPointCustomPowerTrick,
+                          setTenPointCustomPowerTrick
+                        )}
+                      {tenPointFeat.startsWith('Master Emulated Power') &&
+                        renderEmulatedSelect(
+                          tenPointEmulatedParent,
+                          setTenPointEmulatedParent,
+                          tenPointEmulatedPower,
+                          setTenPointEmulatedPower,
+                          tenPointCustomEmulatedPower,
+                          setTenPointCustomEmulatedPower,
+                          true
+                        )}
+                      {tenPointFeat === 'Natural Born Leader' && (
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mt-2">
+                          {renderLeadershipSelect('Maneuver 1', tenPointLeadership1, setTenPointLeadership1)}
+                          {renderLeadershipSelect('Maneuver 2', tenPointLeadership2, setTenPointLeadership2)}
+                        </div>
+                      )}
+                    </div>
+                    <Button
+                      onClick={handleAllocate10}
+                      disabled={
+                        !tenPointFeat ||
+                        (tenPointFeat.startsWith('Power Score Increase') && !tenPointPower1) ||
+                        (tenPointFeat.startsWith('Acquire New Power') && !tenPointNewPower) ||
+                        (tenPointFeat.startsWith('Master Power Trick') &&
+                          (!tenPointPowerTrick ||
+                            (tenPointPowerTrick === 'custom' && !tenPointCustomPowerTrick.trim()))) ||
+                        (tenPointFeat.startsWith('Master Emulated Power') &&
+                          (!tenPointEmulatedParent || !tenPointEmulatedPower ||
+                            (tenPointEmulatedPower === 'custom' && !tenPointCustomEmulatedPower.trim()))) ||
+                        (tenPointFeat === 'Natural Born Leader' &&
+                          (!tenPointLeadership1 || !tenPointLeadership2)) ||
+                        remainingWeaknessPoints < 10
+                      }
+                      className="w-full"
+                    >
+                      Spend 10 Points
+                    </Button>
+                  </div>
+                </AccordionContent>
+              </AccordionItem>
+
+              <AccordionItem value="item-3">
+                <AccordionTrigger className="bg-gray-700 text-white px-4 hover:bg-gray-600 data-[state=open]:bg-gray-600">
+                  15 Points: Gain a feat and +1 to any ability/power score or +2 to any two ability/power scores
                 </AccordionTrigger>
                 <AccordionContent>
                   <div className="space-y-3 p-2">
                     <div>
                       <label className="block text-sm mb-1">Allocation Type</label>
-                      <Select value={tenPointMode} onValueChange={(v) => setTenPointMode(v as "feat" | "ability") }>
+                      <Select value={fifteenMode} onValueChange={(v) => setFifteenMode(v as "feat-ability" | "abilities")}>
                         <SelectTrigger className="bg-gray-700">
                           <SelectValue />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="feat">Feat</SelectItem>
-                          <SelectItem value="ability">Abilities/Powers</SelectItem>
+                          <SelectItem value="feat-ability">Feat + Ability/Power</SelectItem>
+                          <SelectItem value="abilities">+2 to Two Abilities/Powers</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
-                    {tenPointMode === 'feat' ? (
-                      <div>
-                        <label className="block text-sm mb-1">Feat</label>
-                        <Select
-                          value={tenPointFeat}
-                          onValueChange={(v) => {
-                            setTenPointFeat(v);
-                            setTenPointPower1('');
-                            setTenPointPower2('');
-                            setTenPointPowerTrick('');
-                            setTenPointCustomPowerTrick('');
-                            setTenPointEmulatedParent('');
-                            setTenPointEmulatedPower('');
-                            setTenPointCustomEmulatedPower('');
-                            setTenPointNewPower('');
-                            setTenPointLeadership1('');
-                            setTenPointLeadership2('');
-                          }}
-                        >
-                          <SelectTrigger className="bg-gray-700">
-                            <SelectValue placeholder="Select feat" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            {featsData.map((f) => (
-                              <SelectItem key={f.name} value={f.name}>
-                                {displayFeatName(f.name)}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                        {tenPointFeat.startsWith('Power Score Increase') && (
-                          <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mt-2">
-                            <div>
-                              <label className="block text-sm mb-1">Power 1</label>
-                              <Select
-                                value={tenPointPower1}
-                                onValueChange={(v) =>
-                                  setTenPointPower1(v === 'none' ? '' : v)
-                                }
-                              >
-                                <SelectTrigger className="bg-gray-700">
-                                  <SelectValue placeholder="Select power" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                  <SelectItem value="none">None</SelectItem>
-                                  {character.powers.map((p) => (
-                                    <SelectItem key={p.name} value={p.name}>
-                                      {p.name}
-                                    </SelectItem>
-                                  ))}
-                                </SelectContent>
-                              </Select>
+                    {fifteenMode === 'feat-ability' ? (
+                      <div className="space-y-3">
+                        <div>
+                          <label className="block text-sm mb-1">Feat</label>
+                          <Select
+                            value={fifteenFeat}
+                            onValueChange={(v) => {
+                              setFifteenFeat(v);
+                              setFifteenPower1('');
+                              setFifteenPower2('');
+                              setFifteenPowerTrick('');
+                              setFifteenCustomPowerTrick('');
+                              setFifteenEmulatedParent('');
+                              setFifteenEmulatedPower('');
+                              setFifteenCustomEmulatedPower('');
+                              setFifteenNewPower('');
+                              setFifteenLeadership1('');
+                              setFifteenLeadership2('');
+                            }}
+                          >
+                            <SelectTrigger className="bg-gray-700">
+                              <SelectValue placeholder="Select feat" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              {featsData.map((f) => (
+                                <SelectItem key={f.name} value={f.name}>
+                                  {displayFeatName(f.name)}
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                          {fifteenFeat.startsWith('Power Score Increase') && (
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mt-2">
+                              <div>
+                                <label className="block text-sm mb-1">Power 1</label>
+                                <Select
+                                  value={fifteenPower1}
+                                  onValueChange={(v) =>
+                                    setFifteenPower1(v === 'none' ? '' : v)
+                                  }
+                                >
+                                  <SelectTrigger className="bg-gray-700">
+                                    <SelectValue placeholder="Select power" />
+                                  </SelectTrigger>
+                                  <SelectContent>
+                                    <SelectItem value="none">None</SelectItem>
+                                    {character.powers.map((p) => (
+                                      <SelectItem key={p.name} value={p.name}>
+                                        {p.name}
+                                      </SelectItem>
+                                    ))}
+                                  </SelectContent>
+                                </Select>
+                              </div>
+                              <div>
+                                <label className="block text-sm mb-1">Power 2 (optional)</label>
+                                <Select
+                                  value={fifteenPower2}
+                                  onValueChange={(v) =>
+                                    setFifteenPower2(v === 'none' ? '' : v)
+                                  }
+                                >
+                                  <SelectTrigger className="bg-gray-700">
+                                    <SelectValue placeholder="Select power" />
+                                  </SelectTrigger>
+                                  <SelectContent>
+                                    <SelectItem value="none">None</SelectItem>
+                                    {character.powers.map((p) => (
+                                      <SelectItem key={p.name} value={p.name}>
+                                        {p.name}
+                                      </SelectItem>
+                                    ))}
+                                  </SelectContent>
+                                </Select>
+                              </div>
                             </div>
-                            <div>
-                              <label className="block text-sm mb-1">Power 2 (optional)</label>
-                              <Select
-                                value={tenPointPower2}
-                                onValueChange={(v) =>
-                                  setTenPointPower2(v === 'none' ? '' : v)
-                                }
-                              >
-                                <SelectTrigger className="bg-gray-700">
-                                  <SelectValue placeholder="Select power" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                  <SelectItem value="none">None</SelectItem>
-                                  {character.powers.map((p) => (
-                                    <SelectItem key={p.name} value={p.name}>
-                                      {p.name}
-                                    </SelectItem>
-                                  ))}
-                                </SelectContent>
-                              </Select>
+                          )}
+                          {fifteenFeat.startsWith('Acquire New Power') &&
+                            renderNewPowerSelect(fifteenNewPower, setFifteenNewPower)}
+                          {fifteenFeat.startsWith('Master Power Trick') &&
+                            renderPowerTrickSelect(
+                              fifteenPowerTrick,
+                              setFifteenPowerTrick,
+                              fifteenCustomPowerTrick,
+                              setFifteenCustomPowerTrick
+                            )}
+                          {fifteenFeat.startsWith('Master Emulated Power') &&
+                            renderEmulatedSelect(
+                              fifteenEmulatedParent,
+                              setFifteenEmulatedParent,
+                              fifteenEmulatedPower,
+                              setFifteenEmulatedPower,
+                              fifteenCustomEmulatedPower,
+                              setFifteenCustomEmulatedPower,
+                              true
+                            )}
+                          {fifteenFeat === 'Natural Born Leader' && (
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mt-2">
+                              {renderLeadershipSelect('Maneuver 1', fifteenLeadership1, setFifteenLeadership1)}
+                              {renderLeadershipSelect('Maneuver 2', fifteenLeadership2, setFifteenLeadership2)}
                             </div>
-                          </div>
-                        )}
-                        {tenPointFeat.startsWith('Acquire New Power') && (
-                          renderNewPowerSelect(tenPointNewPower, setTenPointNewPower)
-                        )}
-                        {tenPointFeat.startsWith('Master Power Trick') &&
-                          renderPowerTrickSelect(
-                            tenPointPowerTrick,
-                            setTenPointPowerTrick,
-                            tenPointCustomPowerTrick,
-                            setTenPointCustomPowerTrick
                           )}
-                        {tenPointFeat.startsWith('Master Emulated Power') &&
-                          renderEmulatedSelect(
-                            tenPointEmulatedParent,
-                            setTenPointEmulatedParent,
-                            tenPointEmulatedPower,
-                            setTenPointEmulatedPower,
-                            tenPointCustomEmulatedPower,
-                            setTenPointCustomEmulatedPower,
-                            true
-                          )}
-                        {tenPointFeat === 'Natural Born Leader' && (
-                          <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mt-2">
-                            {renderLeadershipSelect('Maneuver 1', tenPointLeadership1, setTenPointLeadership1)}
-                            {renderLeadershipSelect('Maneuver 2', tenPointLeadership2, setTenPointLeadership2)}
-                          </div>
-                        )}
+                        </div>
+                        <div>
+                          <label className="block text-sm mb-1">Ability or Power</label>
+                          <Select value={fifteenAbility} onValueChange={setFifteenAbility}>
+                            <SelectTrigger className="bg-gray-700">
+                              <SelectValue placeholder="Select target" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              {ABILITIES.map((a) => (
+                                <SelectItem key={a} value={a}>{a}</SelectItem>
+                              ))}
+                              {character.powers.map((p) => (
+                                <SelectItem key={p.name} value={p.name}>{p.name}</SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                        </div>
                       </div>
                     ) : (
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                         <div>
                           <label className="block text-sm mb-1">Ability/Power 1</label>
-                          <Select value={tenPointAbility1} onValueChange={setTenPointAbility1}>
+                          <Select value={fifteenAbility1} onValueChange={setFifteenAbility1}>
                             <SelectTrigger className="bg-gray-700">
                               <SelectValue placeholder="Select target" />
                             </SelectTrigger>
@@ -1400,7 +1628,7 @@ export default function Step6_Weaknesses() {
                         </div>
                         <div>
                           <label className="block text-sm mb-1">Ability/Power 2</label>
-                          <Select value={tenPointAbility2} onValueChange={setTenPointAbility2}>
+                          <Select value={fifteenAbility2} onValueChange={setFifteenAbility2}>
                             <SelectTrigger className="bg-gray-700">
                               <SelectValue placeholder="Select target" />
                             </SelectTrigger>
@@ -1417,54 +1645,25 @@ export default function Step6_Weaknesses() {
                       </div>
                     )}
                     <Button
-                      onClick={handleAllocate10}
+                      onClick={handleAllocate15}
                       disabled={
-                        tenPointMode === 'feat'
-                          ? !tenPointFeat ||
-                            (tenPointFeat.startsWith('Power Score Increase') && !tenPointPower1) ||
-                            (tenPointFeat.startsWith('Acquire New Power') && !tenPointNewPower) ||
-                            (tenPointFeat.startsWith('Master Power Trick') &&
-                              (!tenPointPowerTrick ||
-                                (tenPointPowerTrick === 'custom' && !tenPointCustomPowerTrick.trim()))) ||
-                            (tenPointFeat.startsWith('Master Emulated Power') &&
-                              (!tenPointEmulatedParent || !tenPointEmulatedPower ||
-                                (tenPointEmulatedPower === 'custom' && !tenPointCustomEmulatedPower.trim()))) ||
-                            (tenPointFeat === 'Natural Born Leader' &&
-                              (!tenPointLeadership1 || !tenPointLeadership2)) ||
-                            remainingWeaknessPoints < 10
-                          : !tenPointAbility1 || !tenPointAbility2 || remainingWeaknessPoints < 10
+                        fifteenMode === 'feat-ability'
+                          ? !fifteenFeat || !fifteenAbility ||
+                            (fifteenFeat.startsWith('Power Score Increase') && !fifteenPower1) ||
+                            (fifteenFeat.startsWith('Acquire New Power') && !fifteenNewPower) ||
+                            (fifteenFeat.startsWith('Master Power Trick') &&
+                              (!fifteenPowerTrick ||
+                                (fifteenPowerTrick === 'custom' && !fifteenCustomPowerTrick.trim()))) ||
+                            (fifteenFeat.startsWith('Master Emulated Power') &&
+                              (!fifteenEmulatedParent || !fifteenEmulatedPower ||
+                                (fifteenEmulatedPower === 'custom' && !fifteenCustomEmulatedPower.trim()))) ||
+                            (fifteenFeat === 'Natural Born Leader' &&
+                              (!fifteenLeadership1 || !fifteenLeadership2)) ||
+                            remainingWeaknessPoints < 15
+                          : !fifteenAbility1 || !fifteenAbility2 || remainingWeaknessPoints < 15
                       }
                       className="w-full"
                     >
-                      Spend 10 Points
-                    </Button>
-                  </div>
-                </AccordionContent>
-              </AccordionItem>
-
-              <AccordionItem value="item-3">
-                <AccordionTrigger className="bg-gray-700 text-white px-4 hover:bg-gray-600 data-[state=open]:bg-gray-600">
-                  15 Points: Gain +2 to any ability/power score
-                </AccordionTrigger>
-                <AccordionContent>
-                  <div className="space-y-3 p-2">
-                    <div>
-                      <label className="block text-sm mb-1">Ability or Power</label>
-                      <Select value={fifteenPointAbility} onValueChange={setFifteenPointAbility}>
-                        <SelectTrigger className="bg-gray-700">
-                          <SelectValue placeholder="Select target" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {ABILITIES.map((a) => (
-                            <SelectItem key={a} value={a}>{a}</SelectItem>
-                          ))}
-                          {character.powers.map((p) => (
-                            <SelectItem key={p.name} value={p.name}>{p.name}</SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </div>
-                    <Button onClick={handleAllocate15} disabled={!fifteenPointAbility || remainingWeaknessPoints < 15} className="w-full">
                       Spend 15 Points
                     </Button>
                   </div>
