@@ -945,6 +945,9 @@ const Step7_SkillsAndFeats = () => {
             newPower.canTurnOff = (f as any).canTurnOff;
           }
         }
+        if (f.acquiredPower === 'Surge') {
+          newPower.paceType = 'Running';
+        }
         powers.push(newPower);
       }
       if (f.name.startsWith("Master Emulated Power") && f.emulatedPower) {

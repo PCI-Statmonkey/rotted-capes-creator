@@ -40,6 +40,7 @@ export interface Power {
   canTurnOff?: boolean; // Whether unarmed attack can be toggled
   ability?: string;
   sense?: string;
+  paceType?: string;
   linkedPowers?: string[];
   burnout?: number;
   perks: string[];
