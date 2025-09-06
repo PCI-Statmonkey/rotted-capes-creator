@@ -122,11 +122,16 @@ export default function Step6_Weaknesses() {
 
   // Calculate total weakness points
   const calculatePoints = () => {
-    const points = character.complications.reduce((total, weakness) => {
-      return total + (weakness.points || 0);
-    }, 0);
+    const points = character.complications.reduce(
+      (total, weakness) => total + (Number(weakness.points) || 0),
+      0
+    );
+    const spent = allocations.reduce(
+      (total, alloc) => total + Number(alloc.amount || 0),
+      0
+    );
     setTotalWeaknessPoints(points);
-    setRemainingWeaknessPoints(points - allocations.reduce((total, alloc) => total + alloc.amount, 0));
+    setRemainingWeaknessPoints(Math.max(0, points - spent));
   };
 
   useEffect(() => {
