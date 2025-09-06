@@ -2,8 +2,8 @@ import { createContext, useContext, useState, useEffect, ReactNode } from "react
 import { STORAGE_KEY, saveToLocalStorage, loadFromLocalStorage, getScoreData } from "@/lib/utils";
 import type { MasterValue } from "@shared/masterValues";
 import { trackCharacterEvent, trackEvent } from "@/lib/analytics";
-import { RANK_CAPS, getRankCap } from "../utils/rank";
-import { getOriginAbilityBonus, getArchetypeAbilityBonus } from "@/utils/abilityBonuses";
+import { getRankCap } from "../utils/rank";
+import { getEffectiveAbilities } from "@/utils/abilityBonuses";
 const DEFAULT_RANK_BONUS = 2; // Starting rank bonus
 
 export interface Ability extends Omit<MasterValue, "min" | "max"> {
@@ -438,45 +438,7 @@ export const CharacterProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const updateDerivedStats = () => {
-    // Get ability bonuses from origin and archetype
-    const getPowerBonus = (ability: string): number => {
-      return character.powers.reduce((total, p) => {
-        if (p.name.startsWith('Enhanced Ability Score')) {
-          const target = p.ability || p.name.match(/\(([^)]+)\)/)?.[1];
-          if (target && target.toLowerCase().includes(ability.toLowerCase())) {
-            const score = p.finalScore ?? p.score ?? 10;
-            const mod = Math.max(1, getScoreData(score).modifier);
-            return total + mod;
-          }
-        }
-        return total;
-      }, 0);
-    };
-
-    // Calculate total bonuses including origin, archetype and powers
-    const getTotalBonus = (ability: string): number => {
-      return (
-        getOriginAbilityBonus(character, ability) +
-        getArchetypeAbilityBonus(character, ability) +
-        getPowerBonus(ability)
-      );
-    };
-    
-    // Calculate effective ability scores with bonuses capped by rank
-    const cap = getRankCap(character.rank);
-    const getEffective = (ability: keyof Abilities) => {
-      const base = character.abilities[ability].value + getTotalBonus(ability);
-      const capped = Math.min(base, cap);
-      return { ...character.abilities[ability], value: capped, ...getScoreData(capped) };
-    };
-    const effectiveAbilities = {
-      strength: getEffective('strength'),
-      dexterity: getEffective('dexterity'),
-      constitution: getEffective('constitution'),
-      intelligence: getEffective('intelligence'),
-      wisdom: getEffective('wisdom'),
-      charisma: getEffective('charisma'),
-    };
+    const effectiveAbilities = getEffectiveAbilities(character);
 
     // Use effective abilities for derived stats
     setCharacter((prev) => ({
