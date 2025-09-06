@@ -1180,7 +1180,12 @@ export default function Step10_Summary() {
                   }
                   return (
                     <div key={index} className="border border-gray-700 rounded-lg p-2">
-                      <div className="font-semibold">{displayFeatName(feat.name)}</div>
+                      <div className="font-semibold">
+                        {displayFeatName(feat.name)}
+                        {feat.input
+                          ? ` (${Array.isArray(feat.input) ? feat.input.join(', ') : feat.input})`
+                          : ''}
+                      </div>
                       {details.map((d, i) => (
                         <div key={i} className="text-sm text-gray-400">
                           {d}

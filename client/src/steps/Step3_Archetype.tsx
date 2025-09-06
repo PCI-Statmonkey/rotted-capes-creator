@@ -6,11 +6,12 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useCharacter } from "@/context/CharacterContext";
+import type { Feat } from "@/context/CharacterContext";
 import { useCharacterBuilder } from "@/lib/Stores/characterBuilder";
 import { trackEvent } from "@/lib/analytics";
 import { cn } from "@/lib/utils";
 
-// Interface for archetype data 
+// Interface for archetype data
 interface ArchetypeData {
   name: string;
   description: string;
@@ -21,11 +22,27 @@ interface ArchetypeData {
   image: string; // Image path
 }
 
+const WEAPON_TYPES = [
+  "Swords",
+  "Axes",
+  "Clubs/Maces",
+  "Spears",
+  "Knives",
+  "Polearms",
+  "Bows",
+  "Crossbows",
+  "Pistols",
+  "Rifles",
+  "Shotguns",
+  "Thrown Weapons",
+];
+
 export default function Step3_Archetype() {
   const { character, updateCharacterField, setCurrentStep } = useCharacter();
   const { setArchetypeFeat } = useCharacterBuilder();
   const [selectedArchetype, setSelectedArchetype] = useState<string>(character.archetype || "");
   const [selectedFeatChoice, setSelectedFeatChoice] = useState<string>("");
+  const [weaponType, setWeaponType] = useState<string>("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [featError, setFeatError] = useState<string | null>(null);
@@ -52,10 +69,18 @@ export default function Step3_Archetype() {
             setFeatError('Please select a free feat option.');
             return;
           }
-          if (!character.feats.some(f => f.name === selectedFeatChoice)) {
+          if (selectedFeatChoice === 'Weapon Master' && !weaponType) {
+            setFeatError('Please select a weapon type.');
+            return;
+          }
+          const feat: Feat = { name: selectedFeatChoice, source: 'Archetype' };
+          if (selectedFeatChoice === 'Weapon Master' && weaponType) {
+            feat.input = weaponType;
+          }
+          if (!character.feats.some(f => f.name === selectedFeatChoice && (selectedFeatChoice !== 'Weapon Master' || f.input === weaponType))) {
             updateCharacterField('feats', [
               ...character.feats,
-              { name: selectedFeatChoice, source: 'Archetype' },
+              feat,
             ]);
           }
           setArchetypeFeat(selectedFeatChoice);
@@ -172,6 +197,7 @@ export default function Step3_Archetype() {
                 onClick={() => {
                   setSelectedArchetype(archetype.name);
                   setSelectedFeatChoice("");
+                  setWeaponType("");
                   setFeatError(null);
                 }}
               >
@@ -236,18 +262,47 @@ export default function Step3_Archetype() {
                       <div className="space-y-1">
                         <h4 className="text-sm font-medium text-gray-300">Free Feat:</h4>
                         {selectedArchetype === archetype.name ? (
-                          <Select value={selectedFeatChoice} onValueChange={(v) => { setSelectedFeatChoice(v); setFeatError(null); }}>
-                            <SelectTrigger className="w-full">
-                              <SelectValue placeholder="Select feat" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              {archetype.featChoices.map((feat) => (
-                                <SelectItem key={feat} value={feat}>
-                                  {feat}
-                                </SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
+                          <>
+                            <Select
+                              value={selectedFeatChoice}
+                              onValueChange={(v) => {
+                                setSelectedFeatChoice(v);
+                                setWeaponType("");
+                                setFeatError(null);
+                              }}
+                            >
+                              <SelectTrigger className="w-full">
+                                <SelectValue placeholder="Select feat" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                {archetype.featChoices.map((feat) => (
+                                  <SelectItem key={feat} value={feat}>
+                                    {feat}
+                                  </SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
+                            {selectedFeatChoice === 'Weapon Master' && (
+                              <Select
+                                value={weaponType}
+                                onValueChange={(v) => {
+                                  setWeaponType(v);
+                                  setFeatError(null);
+                                }}
+                              >
+                                <SelectTrigger className="w-full mt-2">
+                                  <SelectValue placeholder="Select weapon type" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  {WEAPON_TYPES.map((type) => (
+                                    <SelectItem key={type} value={type}>
+                                      {type}
+                                    </SelectItem>
+                                  ))}
+                                </SelectContent>
+                              </Select>
+                            )}
+                          </>
                         ) : (
                           <div className="flex flex-wrap gap-2">
                             {archetype.featChoices.map((feat, index) => (
