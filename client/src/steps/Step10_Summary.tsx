@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useMemo } from "react";
+import React, { useEffect, useRef, useMemo, useState } from "react";
 import { useCharacter } from "@/context/CharacterContext";
 import { useCharacterBuilder } from "@/lib/Stores/characterBuilder";
 import { Button } from "@/components/ui/button";
@@ -41,6 +41,9 @@ export default function Step10_Summary() {
     }
     return list;
   }, [character.feats, archetypeFeat]);
+
+  const hasMartialArts = feats.some((f: any) => f.name === "Martial Arts");
+  const [unarmedAbility, setUnarmedAbility] = useState<"strength" | "dexterity">("strength");
 
   // Determine weapons from gear list and map to attack data
   const weaponNames = useMemo(() => {
@@ -218,6 +221,21 @@ export default function Step10_Summary() {
     return ability as keyof typeof character.abilities | undefined;
   };
 
+  const normalizeDefense = (def: string) => {
+    const lower = def.toLowerCase();
+    const final = lower === "willpower" ? "discipline" : lower;
+    return final.charAt(0).toUpperCase() + final.slice(1);
+  };
+
+  const getPowerDefense = (power: any): string => {
+    if (typeof (power as any).attack === "string") {
+      return normalizeDefense((power as any).attack);
+    }
+    const desc = powerDataMap.get(power.name)?.description || "";
+    const match = desc.match(/attack:\s*(?:\w+\s+)?(avoidance|fortitude|discipline|willpower)/i);
+    return match ? normalizeDefense(match[1]) : "";
+  };
+
   const weaponAttackStats = useMemo(() => {
     const rangedCategories = [
       "firearms",
@@ -231,7 +249,7 @@ export default function Step10_Summary() {
       return match ? parseInt(match[1], 10) : 0;
     };
 
-    return weaponAttacks.map((w) => {
+    const stats = weaponAttacks.map((w) => {
       const isRanged = rangedCategories.includes(w.category);
       const baseDamageDie = w.attack?.damage ? parseDie(w.attack.damage) : 0;
       const canChooseAbility =
@@ -266,7 +284,7 @@ export default function Step10_Summary() {
         index: w.index,
         name: w.name,
         toHit,
-        defense: w.attack?.defense || "",
+        defense: "Avoidance",
         damage,
         damageType,
         range,
@@ -275,7 +293,39 @@ export default function Step10_Summary() {
         canChooseAbility,
       };
     });
-  }, [weaponAttacks, effectiveAbilities, character.rankBonus, attackBonuses]);
+
+    const abilityKey: "strength" | "dexterity" = hasMartialArts
+      ? unarmedAbility
+      : "strength";
+    const abilityMod = effectiveAbilities[abilityKey].modifier;
+    const bonus = attackBonuses.get("Unarmed") || { attack: 0, damage: 0 };
+    const baseDie = effectiveAbilities[abilityKey].baseDie
+      ? `1${effectiveAbilities[abilityKey].baseDie}`
+      : "";
+    const damageBonus = abilityMod + bonus.damage;
+    const damage = baseDie + (damageBonus ? formatModifier(damageBonus) : "");
+    stats.push({
+      index: -1,
+      name: "Unarmed",
+      toHit: abilityMod + character.rankBonus + bonus.attack,
+      defense: "Avoidance",
+      damage,
+      damageType: "kinetic",
+      range: "Melee",
+      ammo: "",
+      ability: abilityKey,
+      canChooseAbility: hasMartialArts,
+    });
+
+    return stats;
+  }, [
+    weaponAttacks,
+    effectiveAbilities,
+    character.rankBonus,
+    attackBonuses,
+    unarmedAbility,
+    hasMartialArts,
+  ]);
 
   const powerAttackStats = useMemo(() => {
     return attackPowers.map((p: any) => {
@@ -292,10 +342,11 @@ export default function Step10_Summary() {
       const damage = baseDie + (damageBonus ? formatModifier(damageBonus) : "");
       const damageType = p.damageType || "";
       const rangeValue = scoreData.powerRange;
+      const defense = getPowerDefense(p) || "Avoidance";
       return {
         name: p.name,
         toHit,
-        defense: p.attackType === "Weapon" ? "" : p.attackType || "",
+        defense,
         damage,
         damageType,
         range: rangeValue > 0 ? rangeValue.toString() : "Melee",
@@ -829,10 +880,14 @@ export default function Step10_Summary() {
                             className="bg-gray-800 text-xs border border-gray-600 rounded"
                             value={w.ability}
                             onChange={(e) =>
-                              updateWeaponAbility(
-                                w.index,
-                                e.target.value as "strength" | "dexterity"
-                              )
+                              w.index === -1
+                                ? setUnarmedAbility(
+                                    e.target.value as "strength" | "dexterity"
+                                  )
+                                : updateWeaponAbility(
+                                    w.index,
+                                    e.target.value as "strength" | "dexterity"
+                                  )
                             }
                           >
                             <option value="strength">STR</option>
