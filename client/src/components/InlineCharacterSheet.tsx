@@ -2,9 +2,11 @@ import { useCharacter } from "@/context/CharacterContext";
 import { formatModifier } from "@/lib/utils";
 import { useMemo } from "react";
 import useCachedGameContent from "@/hooks/useCachedGameContent";
+import { getEffectiveAbilities } from "@/utils/abilityBonuses";
 
 export default function InlineCharacterSheet() {
   const { character } = useCharacter();
+  const effectiveAbilities = getEffectiveAbilities(character);
   const { data: gearData = [] } = useCachedGameContent<any>("gear");
   const { data: attackData = [] } = useCachedGameContent<any>("attacks");
 
@@ -59,7 +61,7 @@ export default function InlineCharacterSheet() {
     )
   );
   const externalBurnoutThreshold = hasExternalPowerSource
-    ? character.abilities.intelligence.value
+    ? effectiveAbilities.intelligence.value
     : null;
 
   return (
@@ -117,44 +119,44 @@ export default function InlineCharacterSheet() {
             <div className="grid grid-cols-3 gap-4">
               <div className="text-center">
                 <div className="font-bold">STR</div>
-                <div className="text-2xl font-comic">{character.abilities.strength.value || "-"}</div>
+                <div className="text-2xl font-comic">{effectiveAbilities.strength.value || "-"}</div>
                 <div className="text-sm text-gray-600">
-                  {character.abilities.strength.value ? formatModifier(character.abilities.strength.modifier) : "-"}
+                  {effectiveAbilities.strength.value ? formatModifier(effectiveAbilities.strength.modifier) : "-"}
                 </div>
               </div>
               <div className="text-center">
                 <div className="font-bold">DEX</div>
-                <div className="text-2xl font-comic">{character.abilities.dexterity.value || "-"}</div>
+                <div className="text-2xl font-comic">{effectiveAbilities.dexterity.value || "-"}</div>
                 <div className="text-sm text-gray-600">
-                  {character.abilities.dexterity.value ? formatModifier(character.abilities.dexterity.modifier) : "-"}
+                  {effectiveAbilities.dexterity.value ? formatModifier(effectiveAbilities.dexterity.modifier) : "-"}
                 </div>
               </div>
               <div className="text-center">
                 <div className="font-bold">CON</div>
-                <div className="text-2xl font-comic">{character.abilities.constitution.value || "-"}</div>
+                <div className="text-2xl font-comic">{effectiveAbilities.constitution.value || "-"}</div>
                 <div className="text-sm text-gray-600">
-                  {character.abilities.constitution.value ? formatModifier(character.abilities.constitution.modifier) : "-"}
+                  {effectiveAbilities.constitution.value ? formatModifier(effectiveAbilities.constitution.modifier) : "-"}
                 </div>
               </div>
               <div className="text-center">
                 <div className="font-bold">INT</div>
-                <div className="text-2xl font-comic">{character.abilities.intelligence.value || "-"}</div>
+                <div className="text-2xl font-comic">{effectiveAbilities.intelligence.value || "-"}</div>
                 <div className="text-sm text-gray-600">
-                  {character.abilities.intelligence.value ? formatModifier(character.abilities.intelligence.modifier) : "-"}
+                  {effectiveAbilities.intelligence.value ? formatModifier(effectiveAbilities.intelligence.modifier) : "-"}
                 </div>
               </div>
               <div className="text-center">
                 <div className="font-bold">WIS</div>
-                <div className="text-2xl font-comic">{character.abilities.wisdom.value || "-"}</div>
+                <div className="text-2xl font-comic">{effectiveAbilities.wisdom.value || "-"}</div>
                 <div className="text-sm text-gray-600">
-                  {character.abilities.wisdom.value ? formatModifier(character.abilities.wisdom.modifier) : "-"}
+                  {effectiveAbilities.wisdom.value ? formatModifier(effectiveAbilities.wisdom.modifier) : "-"}
                 </div>
               </div>
               <div className="text-center">
                 <div className="font-bold">CHA</div>
-                <div className="text-2xl font-comic">{character.abilities.charisma.value || "-"}</div>
+                <div className="text-2xl font-comic">{effectiveAbilities.charisma.value || "-"}</div>
                 <div className="text-sm text-gray-600">
-                  {character.abilities.charisma.value ? formatModifier(character.abilities.charisma.modifier) : "-"}
+                  {effectiveAbilities.charisma.value ? formatModifier(effectiveAbilities.charisma.modifier) : "-"}
                 </div>
               </div>
             </div>

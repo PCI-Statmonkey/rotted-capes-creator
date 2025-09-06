@@ -1,4 +1,7 @@
-import type { Character } from "@/context/CharacterContext";
+import type { Character, Abilities } from "@/context/CharacterContext";
+import { getScoreData } from "@/lib/utils";
+import { getRankCap } from "@/utils/rank";
+import featRules from "../rules/feats.json" with { type: "json" };
 
 export function getOriginAbilityBonus(character: Pick<Character, "origin">, ability: string): number {
   const abilityLower = ability.toLowerCase();
@@ -111,3 +114,70 @@ export function getArchetypeAbilityBonus(character: Pick<Character, "archetype">
   }
   return 0;
 }
+
+export function getPowerAbilityBonus(
+  character: Pick<Character, "powers">,
+  ability: string
+): number {
+  const abilityLower = ability.toLowerCase();
+  return (character.powers || []).reduce((total, p: any) => {
+    if (p.name?.startsWith("Enhanced Ability Score")) {
+      const target = p.ability || p.name.match(/\(([^)]+)\)/)?.[1];
+      if (target && target.toLowerCase().includes(abilityLower)) {
+        const score = p.finalScore ?? p.score ?? 10;
+        const mod = Math.max(1, getScoreData(score).modifier);
+        return total + mod;
+      }
+    }
+    return total;
+  }, 0);
+}
+
+const featDescriptionMap = new Map(
+  (featRules as any[]).map((f: any) => [f.name, (f.description || "").toLowerCase()])
+);
+
+export function getFeatAbilityBonus(
+  character: Pick<Character, "feats">,
+  ability: string
+): number {
+  const key = ability.toLowerCase();
+  return (character.feats || []).reduce((total, f: any) => {
+    if (f.name === "Ability Score Increase" && Array.isArray(f.abilityChoices)) {
+      return total + f.abilityChoices.filter((ab: string) => ab.toLowerCase() === key).length;
+    }
+    if (Array.isArray(f.abilityChoices)) {
+      return total + f.abilityChoices.filter((ab: string) => ab.toLowerCase() === key).length;
+    }
+    const desc = featDescriptionMap.get(f.name) || "";
+    const regex = new RegExp(`increase[^.]*${key}[^.]*score[^.]*by\\s*\\+?(\\d+)`);
+    const match = desc.match(regex);
+    if (match) {
+      const val = parseInt(match[1], 10);
+      return total + (isNaN(val) ? 1 : val);
+    }
+    return total;
+  }, 0);
+}
+
+export function getTotalAbilityBonus(character: Character, ability: string): number {
+  return (
+    getOriginAbilityBonus(character, ability) +
+    getArchetypeAbilityBonus(character, ability) +
+    getFeatAbilityBonus(character, ability) +
+    getPowerAbilityBonus(character, ability)
+  );
+}
+
+export function getEffectiveAbilities(character: Character): Abilities {
+  const cap = getRankCap(character.rank);
+  const result: any = {};
+  (Object.keys(character.abilities) as (keyof Abilities)[]).forEach((ab) => {
+    const base = character.abilities[ab].value;
+    const bonus = getTotalAbilityBonus(character, ab);
+    const value = Math.min(base + bonus, cap);
+    result[ab] = { value, ...getScoreData(value) };
+  });
+  return result as Abilities;
+}
+
