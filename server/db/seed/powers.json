@@ -649,7 +649,7 @@
   },
   {
     "name": "Speed",
-    "description": "Continuous  **Primary Ability:** Dexterity  *You are simply faster... much faster.*  **Effect:** This power increases your Pace by your power score modifier. This power also grants you the ability to travel and maneuver with your power at high speeds safely; for example, you are not damaged by a sonic boom you created when running, or if you create sheets of ice to skate on, you’re not going to slip.  **Power Stunts:**  *Emulated Powers:* Temporal Fugue",
+    "description": "Continuous  **Primary Ability:** Dexterity  *You are simply faster... much faster.*  **Effect:** This power adds its power bonus to your Pace. This power also grants you the ability to travel and maneuver with your power at high speeds safely; for example, you are not damaged by a sonic boom you created when running, or if you create sheets of ice to skate on, you’re not going to slip.  **Power Stunts:**  *Emulated Powers:* Temporal Fugue",
     "hasDamageType": false,
     "hasTarget": false,
     "skillCompatible": false,
