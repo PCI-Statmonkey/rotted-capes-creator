@@ -6,6 +6,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Checkbox } from "@/components/ui/checkbox";
 import { useThreat } from "@/context/ThreatContext";
 import { THREAT_PARAMETERS } from "@/data/threatParameters";
+import { THREAT_ROLES } from "@/data/threatRoles";
+import { THREAT_SIZES } from "@/data/threatSizes";
 
 interface FormData {
   name: string;
@@ -40,10 +42,17 @@ export default function Step1_Basics() {
   const defenseRank = watch("defenseRank");
   const durabilityRank = watch("durabilityRank");
   const attackRank = watch("attackRank");
+  const role = watch("role");
+  const size = watch("size");
 
   useEffect(() => {
     setValue("rank", threat.rank);
   }, [threat.rank, setValue]);
+
+  useEffect(() => {
+    register("role");
+    register("size");
+  }, [register]);
 
   // Update baseline parameters when rank changes
   useEffect(() => {
@@ -132,11 +141,25 @@ export default function Step1_Basics() {
       </div>
       <div className="grid gap-2">
         <label>Role</label>
-        <Input {...register("role")} />
+        <Select onValueChange={(v) => setValue("role", v)} value={role}>
+          <SelectTrigger className="w-full"><SelectValue /></SelectTrigger>
+          <SelectContent>
+            {THREAT_ROLES.map((r) => (
+              <SelectItem key={r} value={r}>{r}</SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
       </div>
       <div className="grid gap-2">
         <label>Size</label>
-        <Input {...register("size")} />
+        <Select onValueChange={(v) => setValue("size", v)} value={size}>
+          <SelectTrigger className="w-full"><SelectValue /></SelectTrigger>
+          <SelectContent>
+            {THREAT_SIZES.map((s) => (
+              <SelectItem key={s} value={s}>{s}</SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
       </div>
       <div className="grid gap-2">
         <label>Type</label>
