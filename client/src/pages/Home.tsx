@@ -124,9 +124,14 @@ export default function Home() {
                 <p className="mb-6 text-muted-foreground flex-grow">
                   Quick references, rule summaries, and helpful guides for Rotted Capes 2.0 players.
                 </p>
-                <Button className="bg-gray-700 hover:bg-gray-600 w-full font-comic">
-                  Coming Soon
-                </Button>
+                <div className="w-full space-y-2">
+                  <Button className="bg-gray-700 hover:bg-gray-600 w-full font-comic">
+                    Player Resources
+                  </Button>
+                  <Button className="bg-gray-700 hover:bg-gray-600 w-full font-comic">
+                    Editor-in-Chief's Resources
+                  </Button>
+                </div>
               </div>
             </CardContent>
           </Card>
