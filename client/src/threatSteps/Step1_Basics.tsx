@@ -41,6 +41,10 @@ export default function Step1_Basics() {
   const durabilityRank = watch("durabilityRank");
   const attackRank = watch("attackRank");
 
+  useEffect(() => {
+    setValue("rank", threat.rank);
+  }, [threat.rank, setValue]);
+
   // Update baseline parameters when rank changes
   useEffect(() => {
     if (!advanced) {
@@ -76,14 +80,55 @@ export default function Step1_Basics() {
       </div>
       <div className="grid gap-2">
         <label>Rank</label>
-        <Select onValueChange={(v) => setValue("rank", v)} value={rank}>
+        <Select onValueChange={(v) => setValue("rank", v)} value={rank} disabled={advanced}>
           <SelectTrigger className="w-full"><SelectValue /></SelectTrigger>
           <SelectContent>
             {THREAT_PARAMETERS.map((p) => (
-              <SelectItem key={p.label} value={p.label}>{p.label}</SelectItem>
+              <SelectItem key={p.label} value={p.label}>{p.label} / {p.rank}</SelectItem>
             ))}
           </SelectContent>
         </Select>
+        <div className="flex items-center space-x-2 pt-2">
+          <Checkbox id="advanced" checked={advanced} onCheckedChange={(v) => setValue("advanced", v as boolean)} />
+          <label htmlFor="advanced">Use Advanced Threat Parameters</label>
+        </div>
+        {advanced && (
+          <div className="space-y-4 border p-4 rounded-md mt-2">
+            <div className="grid gap-2">
+              <label>Defense Rank</label>
+              <Select onValueChange={(v) => setValue("defenseRank", v)} value={defenseRank}>
+                <SelectTrigger className="w-full"><SelectValue /></SelectTrigger>
+                <SelectContent>
+                  {THREAT_PARAMETERS.map((p) => (
+                    <SelectItem key={p.label} value={p.label}>{p.label} / {p.rank}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="grid gap-2">
+              <label>Durability Rank</label>
+              <Select onValueChange={(v) => setValue("durabilityRank", v)} value={durabilityRank}>
+                <SelectTrigger className="w-full"><SelectValue /></SelectTrigger>
+                <SelectContent>
+                  {THREAT_PARAMETERS.map((p) => (
+                    <SelectItem key={p.label} value={p.label}>{p.label} / {p.rank}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="grid gap-2">
+              <label>Attack Rank</label>
+              <Select onValueChange={(v) => setValue("attackRank", v)} value={attackRank}>
+                <SelectTrigger className="w-full"><SelectValue /></SelectTrigger>
+                <SelectContent>
+                  {THREAT_PARAMETERS.map((p) => (
+                    <SelectItem key={p.label} value={p.label}>{p.label} / {p.rank}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+        )}
       </div>
       <div className="grid gap-2">
         <label>Role</label>
@@ -97,47 +142,6 @@ export default function Step1_Basics() {
         <label>Type</label>
         <Input {...register("type")} />
       </div>
-      <div className="flex items-center space-x-2">
-        <Checkbox id="advanced" checked={advanced} onCheckedChange={(v) => setValue("advanced", v as boolean)} />
-        <label htmlFor="advanced">Use Advanced Threat Parameters</label>
-      </div>
-      {advanced && (
-        <div className="space-y-4 border p-4 rounded-md">
-          <div className="grid gap-2">
-            <label>Defense Rank</label>
-            <Select onValueChange={(v) => setValue("defenseRank", v)} value={defenseRank}>
-              <SelectTrigger className="w-full"><SelectValue /></SelectTrigger>
-              <SelectContent>
-                {THREAT_PARAMETERS.map((p) => (
-                  <SelectItem key={p.label} value={p.label}>{p.label}</SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-          <div className="grid gap-2">
-            <label>Durability Rank</label>
-            <Select onValueChange={(v) => setValue("durabilityRank", v)} value={durabilityRank}>
-              <SelectTrigger className="w-full"><SelectValue /></SelectTrigger>
-              <SelectContent>
-                {THREAT_PARAMETERS.map((p) => (
-                  <SelectItem key={p.label} value={p.label}>{p.label}</SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-          <div className="grid gap-2">
-            <label>Attack Rank</label>
-            <Select onValueChange={(v) => setValue("attackRank", v)} value={attackRank}>
-              <SelectTrigger className="w-full"><SelectValue /></SelectTrigger>
-              <SelectContent>
-                {THREAT_PARAMETERS.map((p) => (
-                  <SelectItem key={p.label} value={p.label}>{p.label}</SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-        </div>
-      )}
       <div className="flex justify-end">
         <Button type="submit">Next</Button>
       </div>

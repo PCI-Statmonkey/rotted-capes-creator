@@ -163,9 +163,13 @@ export function ThreatProvider({ children }: { children: ReactNode }) {
     const def = getThreatParameter(defenseLabel) || THREAT_PARAMETERS[0];
     const dur = getThreatParameter(durabilityLabel) || THREAT_PARAMETERS[0];
     const atk = getThreatParameter(attackLabel) || THREAT_PARAMETERS[0];
-    const avg = ((def.rank + dur.rank + atk.rank) / 3).toFixed(2);
+    const avg = (def.rank + dur.rank + atk.rank) / 3;
+    const closest = THREAT_PARAMETERS.reduce((prev, curr) =>
+      Math.abs(curr.rank - avg) < Math.abs(prev.rank - avg) ? curr : prev
+    );
     setThreat((prev) => ({
       ...prev,
+      rank: closest.label,
       defenses: {
         avoidance: def.defenses[0],
         fortitude: def.defenses[1],
@@ -175,7 +179,7 @@ export function ThreatProvider({ children }: { children: ReactNode }) {
       wounds: dur.wounds,
       attack: { single: atk.toHit[0], area: atk.toHit[1] },
       damage: { ...atk.damage },
-      effectiveRank: parseFloat(avg),
+      effectiveRank: parseFloat(avg.toFixed(2)),
     }));
   };
 
