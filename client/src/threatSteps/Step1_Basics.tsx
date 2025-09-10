@@ -8,6 +8,7 @@ import { useThreat } from "@/context/ThreatContext";
 import { THREAT_PARAMETERS } from "@/data/threatParameters";
 import { THREAT_ROLES } from "@/data/threatRoles";
 import { THREAT_SIZES } from "@/data/threatSizes";
+import { THREAT_TYPES } from "@/data/threatTypes";
 
 interface FormData {
   name: string;
@@ -44,6 +45,7 @@ export default function Step1_Basics() {
   const attackRank = watch("attackRank");
   const role = watch("role");
   const size = watch("size");
+  const type = watch("type");
 
   useEffect(() => {
     setValue("rank", threat.rank);
@@ -52,6 +54,7 @@ export default function Step1_Basics() {
   useEffect(() => {
     register("role");
     register("size");
+    register("type");
   }, [register]);
 
   // Update baseline parameters when rank changes
@@ -163,7 +166,14 @@ export default function Step1_Basics() {
       </div>
       <div className="grid gap-2">
         <label>Type</label>
-        <Input {...register("type")} />
+        <Select onValueChange={(v) => setValue("type", v)} value={type}>
+          <SelectTrigger className="w-full"><SelectValue /></SelectTrigger>
+          <SelectContent>
+            {THREAT_TYPES.map((t) => (
+              <SelectItem key={t} value={t}>{t}</SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
       </div>
       <div className="flex justify-end">
         <Button type="submit">Next</Button>
