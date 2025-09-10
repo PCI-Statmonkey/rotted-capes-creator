@@ -20,6 +20,8 @@ const AdminOrigins = lazy(() => import("@/pages/AdminOrigins"));
 const AdminArchetypes = lazy(() => import("@/pages/AdminArchetypes"));
 const AdminManeuvers = lazy(() => import("@/pages/AdminManeuvers")); // ✅ NEW
 const AdminFeats = lazy(() => import("@/pages/AdminFeats"));
+const EditorResources = lazy(() => import("@/pages/EditorResources"));
+const ThreatCreation = lazy(() => import("@/pages/ThreatCreation"));
 
 // Router component to track page views
 function AppRouter() {
@@ -45,6 +47,8 @@ function AppRouter() {
         </Route>
         <Route path="/profile" component={Profile} />
         <Route path="/analytics" component={Analytics} />
+        <Route path="/editor" component={EditorResources} />
+        <Route path="/editor/threat-creation" component={ThreatCreation} />
 
         {/* Admin Routes */}
         <Route path="/admin" component={Admin} />

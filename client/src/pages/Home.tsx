@@ -128,9 +128,11 @@ export default function Home() {
                   <Button className="bg-gray-700 hover:bg-gray-600 w-full font-comic">
                     Player Resources
                   </Button>
-                  <Button className="bg-gray-700 hover:bg-gray-600 w-full font-comic">
-                    Editor-in-Chief's Resources
-                  </Button>
+                  <Link href="/editor">
+                    <Button className="bg-gray-700 hover:bg-gray-600 w-full font-comic">
+                      Editor-in-Chief's Resources
+                    </Button>
+                  </Link>
                 </div>
               </div>
             </CardContent>
