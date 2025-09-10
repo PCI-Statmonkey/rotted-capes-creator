@@ -1,17 +1,34 @@
-import { Link } from "wouter";
-import { Button } from "@/components/ui/button";
+import { ThreatProvider, useThreat } from "@/context/ThreatContext";
+import Step1_Basics from "@/threatSteps/Step1_Basics";
+import Step2_Stats from "@/threatSteps/Step2_Stats";
+import Step3_Traits from "@/threatSteps/Step3_Traits";
+import Step4_Summary from "@/threatSteps/Step4_Summary";
+
+function Wizard() {
+  const { currentStep } = useThreat();
+
+  switch (currentStep) {
+    case 1:
+      return <Step1_Basics />;
+    case 2:
+      return <Step2_Stats />;
+    case 3:
+      return <Step3_Traits />;
+    case 4:
+      return <Step4_Summary />;
+    default:
+      return <Step1_Basics />;
+  }
+}
 
 export default function ThreatCreation() {
   return (
-    <div className="container mx-auto p-4 md:px-8">
-      <h1 className="font-display text-3xl mb-6">Threat Creation</h1>
-      <p className="text-muted-foreground mb-8">
-        Tools for building adversaries and challenges. (Coming soon)
-      </p>
-      <Link href="/editor">
-        <Button className="bg-accent hover:bg-red-700 font-comic">Back to Toolkit</Button>
-      </Link>
-    </div>
+    <ThreatProvider>
+      <div className="container mx-auto p-4 md:px-8 space-y-6">
+        <h1 className="font-display text-3xl">Threat Creation</h1>
+        <Wizard />
+      </div>
+    </ThreatProvider>
   );
 }
 
