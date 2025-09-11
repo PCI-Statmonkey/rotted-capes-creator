@@ -1,8 +1,7 @@
 import { ThreatProvider, useThreat } from "@/context/ThreatContext";
 import Step1_Basics from "@/threatSteps/Step1_Basics";
-import Step2_Stats from "@/threatSteps/Step2_Stats";
-import Step3_Traits from "@/threatSteps/Step3_Traits";
-import Step4_Summary from "@/threatSteps/Step4_Summary";
+import Step2_Traits from "@/threatSteps/Step2_Traits";
+import Step3_Summary from "@/threatSteps/Step3_Summary";
 
 function Wizard() {
   const { currentStep } = useThreat();
@@ -11,11 +10,9 @@ function Wizard() {
     case 1:
       return <Step1_Basics />;
     case 2:
-      return <Step2_Stats />;
+      return <Step2_Traits />;
     case 3:
-      return <Step3_Traits />;
-    case 4:
-      return <Step4_Summary />;
+      return <Step3_Summary />;
     default:
       return <Step1_Basics />;
   }
