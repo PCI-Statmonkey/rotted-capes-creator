@@ -7,40 +7,39 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Badge } from "@/components/ui/badge";
 import { useThreat } from "@/context/ThreatContext";
 import { THREAT_PARAMETERS, getThreatParameter } from "@/data/threatParameters";
-import { useState } from "react";
+import { getRankLabels } from "@/utils/rank";
+import { useState, useEffect } from "react";
 
 export default function Step1_Rank() {
-  const { threat, updateThreatField, setCurrentStep } = useThreat();
+  const { threat, updateThreatField, setCurrentStep, applyParameters, applyAdvancedParameters } = useThreat();
   const [name, setName] = useState(threat.name);
   const [selectedRank, setSelectedRank] = useState(threat.rank);
-  const [useAdvancedDesign, setUseAdvancedDesign] = useState(false);
+  const [useAdvancedDesign, setUseAdvancedDesign] = useState(threat.advanced || false);
+  
+  // Advanced ranking state
+  const [attackRank, setAttackRank] = useState(threat.advancedRanks?.attack || threat.rank);
+  const [defenseRank, setDefenseRank] = useState(threat.advancedRanks?.defense || threat.rank);
+  const [durabilityRank, setDurabilityRank] = useState(threat.advancedRanks?.durability || threat.rank);
+  
+  const rankLabels = getRankLabels();
 
   const currentParams = getThreatParameter(selectedRank);
 
   const handleNext = () => {
     updateThreatField("name", name);
-    updateThreatField("rank", selectedRank);
     
-    // Apply threat parameters when rank is selected
-    if (currentParams) {
-      updateThreatField("defenses", {
-        avoidance: currentParams.defenses[0],
-        fortitude: currentParams.defenses[1], 
-        willpower: currentParams.defenses[2]
-      });
-      updateThreatField("stamina", currentParams.stamina);
-      updateThreatField("wounds", currentParams.wounds);
-      updateThreatField("attack", {
-        single: currentParams.toHit[0],
-        area: currentParams.toHit[1]
-      });
-      updateThreatField("damage", currentParams.damage);
+    if (useAdvancedDesign) {
+      // Use advanced parameters with three separate rankings
+      applyAdvancedParameters(defenseRank, durabilityRank, attackRank);
+    } else {
+      // Use simple single rank parameters
+      applyParameters(selectedRank);
     }
     
     setCurrentStep(2);
   };
 
-  const canProceed = name.trim() && selectedRank;
+  const canProceed = name.trim() && (useAdvancedDesign ? (attackRank && defenseRank && durabilityRank) : selectedRank);
 
   return (
     <div className="space-y-6" data-testid="step-rank">
@@ -69,28 +68,7 @@ export default function Step1_Rank() {
             />
           </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="rank-select">Threat Rank</Label>
-            <Select value={selectedRank} onValueChange={setSelectedRank}>
-              <SelectTrigger data-testid="select-rank">
-                <SelectValue placeholder="Select threat rank..." />
-              </SelectTrigger>
-              <SelectContent>
-                {THREAT_PARAMETERS.map((param) => (
-                  <SelectItem key={param.label} value={param.label}>
-                    <div className="flex items-center justify-between w-full">
-                      <span>{param.label}</span>
-                      <Badge variant="outline" className="ml-2">
-                        Rank {param.rank}
-                      </Badge>
-                    </div>
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-
-          <div className="flex items-center space-x-2">
+          <div className="flex items-center space-x-2 mb-4">
             <Checkbox 
               id="advanced-design" 
               checked={useAdvancedDesign}
@@ -105,38 +83,100 @@ export default function Step1_Rank() {
             </Label>
           </div>
 
-          {useAdvancedDesign && currentParams && (
-            <div className="mt-4 p-4 bg-muted/50 rounded-lg">
-              <h4 className="font-semibold mb-2">Rank {selectedRank} Parameters</h4>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
-                <div>
-                  <span className="font-medium">Rank Cap:</span>
-                  <p>{currentParams.rankCap}</p>
+          {!useAdvancedDesign ? (
+            <div className="space-y-2">
+              <Label htmlFor="rank-select">Threat Rank</Label>
+              <Select value={selectedRank} onValueChange={setSelectedRank}>
+                <SelectTrigger data-testid="select-rank">
+                  <SelectValue placeholder="Select threat rank..." />
+                </SelectTrigger>
+                <SelectContent>
+                  {THREAT_PARAMETERS.map((param) => (
+                    <SelectItem key={param.label} value={param.label}>
+                      <div className="flex items-center justify-between w-full">
+                        <span>{param.label}</span>
+                        <Badge variant="outline" className="ml-2">
+                          Rank {param.rank}
+                        </Badge>
+                      </div>
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          ) : (
+            <div className="space-y-4">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="attack-rank">Attack Rank</Label>
+                  <Select value={attackRank} onValueChange={setAttackRank}>
+                    <SelectTrigger data-testid="select-attack-rank">
+                      <SelectValue placeholder="Attack rank..." />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {rankLabels.map((label) => (
+                        <SelectItem key={`attack-${label}`} value={label}>
+                          {label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                 </div>
-                <div>
-                  <span className="font-medium">Rank Bonus:</span>
-                  <p>+{currentParams.rankBonus}</p>
+
+                <div className="space-y-2">
+                  <Label htmlFor="defense-rank">Defense Rank</Label>
+                  <Select value={defenseRank} onValueChange={setDefenseRank}>
+                    <SelectTrigger data-testid="select-defense-rank">
+                      <SelectValue placeholder="Defense rank..." />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {rankLabels.map((label) => (
+                        <SelectItem key={`defense-${label}`} value={label}>
+                          {label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                 </div>
-                <div>
-                  <span className="font-medium">Stamina:</span>
-                  <p>{currentParams.stamina}</p>
+
+                <div className="space-y-2">
+                  <Label htmlFor="durability-rank">Durability Rank</Label>
+                  <Select value={durabilityRank} onValueChange={setDurabilityRank}>
+                    <SelectTrigger data-testid="select-durability-rank">
+                      <SelectValue placeholder="Durability rank..." />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {rankLabels.map((label) => (
+                        <SelectItem key={`durability-${label}`} value={label}>
+                          {label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                 </div>
-                <div>
-                  <span className="font-medium">Wounds:</span>
-                  <p>{currentParams.wounds}</p>
-                </div>
-                <div>
-                  <span className="font-medium">Defenses:</span>
-                  <p>{currentParams.defenses.join("/")}</p>
-                </div>
-                <div>
-                  <span className="font-medium">To Hit:</span>
-                  <p>{currentParams.toHit.join("/")}</p>
-                </div>
-                <div>
-                  <span className="font-medium">Damage:</span>
-                  <p>{currentParams.damage.min}-{currentParams.damage.max} (avg {currentParams.damage.avg})</p>
-                </div>
+              </div>
+              
+              <div className="p-4 bg-muted/50 rounded-lg">
+                <h4 className="font-semibold mb-2">Final Calculated Rank</h4>
+                <p className="text-sm text-muted-foreground mb-2">
+                  The threat's final rank will be calculated as the average of Attack ({attackRank}), Defense ({defenseRank}), and Durability ({durabilityRank}).
+                </p>
+                <p className="text-sm">
+                  <span className="font-medium">Resulting Rank:</span> {
+                    attackRank && defenseRank && durabilityRank 
+                      ? (() => {
+                          const attackVal = THREAT_PARAMETERS.find(p => p.label === attackRank)?.rank || 0;
+                          const defenseVal = THREAT_PARAMETERS.find(p => p.label === defenseRank)?.rank || 0;
+                          const durabilityVal = THREAT_PARAMETERS.find(p => p.label === durabilityRank)?.rank || 0;
+                          const avg = (attackVal + defenseVal + durabilityVal) / 3;
+                          const closest = THREAT_PARAMETERS.reduce((prev, curr) =>
+                            Math.abs(curr.rank - avg) < Math.abs(prev.rank - avg) ? curr : prev
+                          );
+                          return `${closest.label} (${avg.toFixed(2)} average)`;
+                        })()
+                      : "Select all ranks to see result"
+                  }
+                </p>
               </div>
             </div>
           )}
