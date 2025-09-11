@@ -1,4 +1,5 @@
 import { ThreatProvider, useThreat } from "@/context/ThreatContext";
+import ThreatParamsBar from "@/components/ThreatParamsBar";
 
 // Import all 8 threat creation steps
 import Step1_Rank from "@/threatSteps/Step1_Rank";
@@ -53,6 +54,7 @@ export default function ThreatCreation() {
               </p>
             </div>
             
+            <ThreatParamsBar />
             <div className="mt-8">
               <Wizard />
             </div>
