@@ -188,12 +188,12 @@ export default function Step1_Basics() {
         Start Over
       </Button>
       <form onSubmit={handleSubmit(onSubmit)} className="mt-12 space-y-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-[280px,1fr] gap-8">
           <div className="space-y-4">
             <h2 className="font-display text-3xl">Step 1: Basics</h2>
             <div className="grid gap-2 text-xl">
               <label className="font-comic">Name</label>
-              <Input className="w-64 h-10" {...register("name")} />
+              <Input className="w-64 h-10 text-xl" {...register("name")} />
             </div>
             <div className="grid gap-2 text-xl">
               <label className="font-comic">Rank</label>
@@ -205,12 +205,12 @@ export default function Step1_Basics() {
                   ))}
                 </SelectContent>
               </Select>
-              <div className="flex items-center space-x-2 pt-2">
+              <div className="flex items-center space-x-2 pt-2 text-xl">
                 <Checkbox id="advanced" checked={advanced} onCheckedChange={(v) => setValue("advanced", v as boolean)} />
                 <label htmlFor="advanced" className="font-comic">Use Advanced Threat Parameters</label>
               </div>
               {advanced && (
-                <div className="space-y-4 border p-4 rounded-md mt-2">
+                <div className="space-y-4 border p-4 rounded-md mt-2 text-xl">
                   <div className="grid gap-2">
                     <label className="font-comic">Defense Rank</label>
                     <Select onValueChange={(v) => setValue("defenseRank", v)} value={defenseRank}>
@@ -398,7 +398,7 @@ export default function Step1_Basics() {
 
             <div>
               <label className="block font-comic mb-2 text-xl">Ability Scores</label>
-              <div className="flex flex-wrap gap-4 text-xl">
+              <div className="flex gap-4 text-xl flex-nowrap">
                 <div className="flex flex-col items-center">
                   <span>STR</span>
                   <Input
