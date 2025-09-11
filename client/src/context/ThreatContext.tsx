@@ -86,6 +86,7 @@ interface ThreatContextType {
   setCurrentStep: (n: number) => void;
   applyParameters: (label: string) => void;
   applyAdvancedParameters: (defenseLabel: string, durabilityLabel: string, attackLabel: string) => void;
+  resetThreat: () => void;
 }
 
 const ThreatContext = createContext<ThreatContextType | undefined>(undefined);
@@ -183,6 +184,27 @@ export function ThreatProvider({ children }: { children: ReactNode }) {
     }));
   };
 
+  const resetThreat = () => {
+    setThreat(() => {
+      const base = { ...defaultThreat };
+      const params = getThreatParameter(base.rank);
+      if (params) {
+        base.defenses = {
+          avoidance: params.defenses[0],
+          fortitude: params.defenses[1],
+          willpower: params.defenses[2],
+        };
+        base.stamina = params.stamina;
+        base.wounds = params.wounds;
+        base.attack = { single: params.toHit[0], area: params.toHit[1] };
+        base.damage = { ...params.damage };
+        base.effectiveRank = params.rank;
+      }
+      return base;
+    });
+    setCurrentStep(1);
+  };
+
   const value: ThreatContextType = {
     threat,
     setThreat,
@@ -195,6 +217,7 @@ export function ThreatProvider({ children }: { children: ReactNode }) {
     setCurrentStep,
     applyParameters,
     applyAdvancedParameters,
+    resetThreat,
   };
 
   return <ThreatContext.Provider value={value}>{children}</ThreatContext.Provider>;
