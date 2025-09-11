@@ -1,17 +1,18 @@
 import { ThreatProvider, useThreat } from "@/context/ThreatContext";
 import ThreatParamsBar from "@/components/ThreatParamsBar";
 
-// Import all 8 threat creation steps
+// Import all 9 threat creation steps
 import Step1_Rank from "@/threatSteps/Step1_Rank";
-import Step2_Role from "@/threatSteps/Step2_Role";
-import Step3_Type from "@/threatSteps/Step3_Type";
-import Step4_Size from "@/threatSteps/Step4_Size";
-import Step5_SkillSets from "@/threatSteps/Step5_SkillSets";
-import Step6_AbilityScores from "@/threatSteps/Step6_AbilityScores";
-import Step7_Actions from "@/threatSteps/Step8_Actions"; // Renumbered from Step 8
-import Step8_Summary from "@/threatSteps/Step9_Summary"; // Renumbered from Step 9
+import Step2_Defenses from "@/threatSteps/Step2_Defenses";
+import Step3_Role from "@/threatSteps/Step2_Role";
+import Step4_Type from "@/threatSteps/Step3_Type";
+import Step5_Size from "@/threatSteps/Step4_Size";
+import Step6_SkillSets from "@/threatSteps/Step5_SkillSets";
+import Step7_AbilityScores from "@/threatSteps/Step6_AbilityScores";
+import Step8_Actions from "@/threatSteps/Step8_Actions";
+import Step9_Summary from "@/threatSteps/Step9_Summary";
 
-const TOTAL_STEPS = 8;
+const TOTAL_STEPS = 9;
 
 function Wizard() {
   const { currentStep } = useThreat();
@@ -20,19 +21,21 @@ function Wizard() {
     case 1:
       return <Step1_Rank />;
     case 2:
-      return <Step2_Role />;
+      return <Step2_Defenses />;
     case 3:
-      return <Step3_Type />;
+      return <Step3_Role />;
     case 4:
-      return <Step4_Size />;
+      return <Step4_Type />;
     case 5:
-      return <Step5_SkillSets />;
+      return <Step5_Size />;
     case 6:
-      return <Step6_AbilityScores />;
+      return <Step6_SkillSets />;
     case 7:
-      return <Step7_Actions />;
+      return <Step7_AbilityScores />;
     case 8:
-      return <Step8_Summary />;
+      return <Step8_Actions />;
+    case 9:
+      return <Step9_Summary />;
     default:
       return <Step1_Rank />;
   }
