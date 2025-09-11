@@ -51,9 +51,9 @@ export default function Step2_Stats() {
     fortitude: number | null;
     willpower: number | null;
   }>({
-    avoidance: 0,
-    fortitude: 1,
-    willpower: 2,
+    avoidance: null,
+    fortitude: null,
+    willpower: null,
   });
   const [selected, setSelected] = useState<number | null>(null);
 
@@ -85,7 +85,7 @@ export default function Step2_Stats() {
       wisdom: threat.abilityScores.wisdom,
       charisma: threat.abilityScores.charisma,
     });
-    setAssigned({ avoidance: 0, fortitude: 1, willpower: 2 });
+    setAssigned({ avoidance: null, fortitude: null, willpower: null });
     setSelected(null);
   }, [
     threat,
@@ -140,11 +140,19 @@ export default function Step2_Stats() {
 
   return (
     <motion.div
-      className="bg-panel rounded-2xl p-6 comic-border overflow-hidden halftone-bg"
+      className="bg-panel rounded-2xl p-6 comic-border overflow-hidden halftone-bg relative"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3 }}
     >
+      <Button
+        type="button"
+        variant="destructive"
+        className="absolute top-4 right-4"
+        onClick={resetThreat}
+      >
+        Start Over
+      </Button>
       <div className="mb-6 border-b-2 border-gray-700 pb-4">
         <h2 className="font-display text-3xl text-red-500 tracking-wide">Step 2: Stats</h2>
         <p className="text-gray-300 mt-2">Set the threat's combat readiness.</p>
@@ -323,14 +331,9 @@ export default function Step2_Stats() {
           </div>
         </div>
 
-        <div className="flex justify-between">
-          <Button type="button" variant="outline" onClick={resetThreat}>
-            Start Over
-          </Button>
-          <div className="flex gap-2">
-            <Button type="button" onClick={() => setCurrentStep(1)}>Back</Button>
-            <Button type="submit">Next</Button>
-          </div>
+        <div className="flex justify-end gap-2">
+          <Button type="button" onClick={() => setCurrentStep(1)}>Back</Button>
+          <Button type="submit">Next</Button>
         </div>
       </form>
     </motion.div>

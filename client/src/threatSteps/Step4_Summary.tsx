@@ -5,7 +5,15 @@ export default function Step4_Summary() {
   const { threat, setCurrentStep, resetThreat } = useThreat();
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 relative pt-12">
+      <Button
+        type="button"
+        variant="destructive"
+        className="absolute top-0 right-0"
+        onClick={resetThreat}
+      >
+        Start Over
+      </Button>
       <h2 className="text-2xl font-bold">{threat.name} {threat.rank}, {threat.size} {threat.type} ({threat.role})</h2>
       {threat.advanced && (
         <p className="text-sm text-muted-foreground">Effective Rank: {threat.effectiveRank}</p>
@@ -90,9 +98,8 @@ export default function Step4_Summary() {
           ))}
         </ul>
       </div>
-      <div className="flex justify-between pt-4">
+      <div className="flex justify-end pt-4">
         <Button type="button" onClick={() => setCurrentStep(3)}>Back</Button>
-        <Button type="button" onClick={resetThreat}>Start Over</Button>
       </div>
     </div>
   );
