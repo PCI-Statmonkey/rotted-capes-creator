@@ -1,0 +1,186 @@
+No problem—here’s a clean, copy-pasteable prompt for Replit AI with **no code fences** and **no inline code formatting**. It keeps the type model but describes it in plain language so Replit can implement it.
+
+---
+
+Rotted Capes 2E App — Threat Builder Overhaul + Character Creation Final Sheet (Full Repo Pass)
+
+Context
+This is the Rotted Capes 2nd Edition app (now in Replit). Rules and examples live in /docs/. Mirror the Character Creation UX for Threat Creation and refresh the Character Creation final screen to look like the Character Sheet I’m attaching to this prompt.
+
+Primary Objectives
+
+1. Repo health check and fixes
+
+* Run end-to-end; fix TS/JS errors, console warnings, 404s.
+* Apply only safe minor/patch dependency bumps if needed to resolve errors.
+* Standardize ESLint/Prettier and format repo.
+* Add a smoke test: Home → Character Creation → Threat Creation (new) → create and save one Threat → render stat block preview without errors.
+
+2. Threat Creation — UI/UX redesign (match Character flow)
+
+* Use the same stepper/wizard, components, and styling as Character Creation.
+* Source of truth in /docs:
+
+  * “5.1\_Running the Game 4.5” → threat creation rules and action economy naming.
+  * “The Archive 0.8” (or latest present) → stat block format and grouped actions (see Silver Kong and The Butcher of Paradigm City).
+
+Layout and State Behavior (important)
+
+* If two steps comfortably fit on one page, combine them vertically with Step A above Step B (not side-by-side). Typical pairs:
+
+  * Basics + Ability Scores
+  * Defenses & Vitality + Pace & Movement
+  * Traits/Features + Type-Specific Features
+  * Actions + Live Preview (Preview anchored at bottom)
+* Real-time reactivity and memory: all fields update live and react to prior inputs (for example, Tier or Role adjusts guidance, caps, derived defaults). Persist using the same global state mechanism used by Character Creation so navigation never loses data.
+* Stepper remains accurate: when two steps share a page, Next advances past both if valid.
+* Keep a live Archive-style Preview on pages where it helps; it should update on every change.
+
+Threat Builder Steps
+
+1. Basics: Name, Type (Zombie, Super-Zombie, Animal, Abomination, Survivor, Robot/Tech, Other), Size, Role, Tier.
+2. Ability Scores: STR/DEX/CON/INT/WIS/CHA with inline guidance and a Rank Cap note (soft warning if exceeded).
+3. Defenses & Vitality: Avoidance (Av), Fortitude (Ft), Willpower (Wp), Stamina, Wounds, Damage Reduction / Immunities / Resistances.
+4. Pace & Movement: Pace (Areas), climb/fly/swim as relevant.
+5. Skill Sets & Rank Bonus: attach sets and rank bonus.
+6. Traits/Features: add traits and special rules.
+7. Actions (with Attack Autofill): see spec below.
+8. Type-Specific Features: if Type is Zombie or Super-Zombie, auto-include all listed features (toggleable).
+9. Preview & Save: exact Archive-style stat block, grouped by action type. Provide Copy (Plain/Markdown). Save to DB with same durability as Characters.
+
+Actions Autofill Spec
+
+* Support both Attack actions and Non-attack actions.
+* For Attack actions, require these fields and format the output exactly like Archive examples:
+
+  * Name
+  * Action Type: one of “Action”, “Bonus Action”, “Reaction”, “Demanding”
+  * Attack Family: one of “Melee”, “Ranged”, “Power” (this controls whether you show “reach: melee” or “Ranged N”)
+  * Bonus to Hit: integer
+  * Defense: one of “Av”, “Ft”, “Wp” (UI can show the full names; output uses the abbreviations)
+  * Reach/Range:
+
+    * Melee → output “reach: melee” (optionally allow “melee (N areas)” for extended reach)
+    * Ranged or Power at range → output “Ranged N” where N is the number of Areas
+  * Targets: common phrase dropdown plus free text (examples: “one creature”, “up to 3 creatures”, “one area”)
+  * Damage: dice string (for example, “1d10+3”) and Damage Type from the rules list (examples include Kinetic, Slashing, Piercing, Ballistic, Fire, Cold, Electricity, Sonic, Psychic, Radioactive, Light, Acid, Cosmic)
+  * Optional On-Hit rider: free text appended after “Upon a successful hit, …”
+* Output format (exact):
+  Name: +X to hit Av/Ft/Wp, reach: melee or melee (N areas) or Ranged N, targets phrase, Hit: dice DamageType. \[Upon a successful hit, free text]
+* Example to match (tone and structure):
+  Bite: +6 to hit Av, reach: melee, one creature, Hit: 1d10+3 Kinetic. Upon a successful hit, the target is grappled (escape DC 13). Until this grapple ends, the target is Restrained (Immobilized), and the alligator can’t bite another target while grappling.
+* Validate required fields before saving. Also allow non-attack action text entries under each action type section.
+
+Stat Block Rendering (must match Archive and group actions)
+
+* Group by these sections, in order: Actions, Bonus Actions, Reactions, Demanding Actions (only show sections that exist).
+* Include: header (Tier, size, type, role), Initiative, Pace (and movement modes), grouped actions, Defenses (Av/Ft/Wp), Stamina/Wounds, DR/Immunities, Ability Scores table, Skill Sets (Edge) with Rank Bonus, Traits, Gear (if any), and Type-specific features (for zombies and super-zombies).
+* Provide Copy to Clipboard in Plain Text and Markdown. Match our existing typography system.
+
+Type-specific Logic
+
+* If Zombie or Super-Zombie is selected:
+
+  * Auto-attach every required feature from /docs/The Archive 0.8 (or latest) and render as enabled toggles. Ensure they appear in the final stat block.
+* For other types: show a short rules note with links to the relevant /docs subsections.
+
+Ability Guidance and Rank Cap
+
+* In the Ability Scores step, display concise, inline guidance from the rules for what each ability influences.
+* Display the current Rank Cap (based on rules). If a score exceeds the cap, show a soft warning (“Above cap: effects may be limited per rules”). Do not hard-block unless rules demand it.
+
+Persistence and API
+
+* Add a Threats model/table mirroring Characters (DB/ORM/routes/controllers).
+* CRUD endpoints under /api/threats with the same auth as Characters.
+* Index/List page with filters (Type, Tier, Role, Name). Row click opens Edit. Include Delete with confirm.
+* Seed 2–3 sample threats (credit “Sample”) drawn from Archive examples.
+
+Non-breaking Changes
+
+* Reuse existing UI components and utilities; do not break Character flow.
+* Keep routing and layout consistent. If renames or migrations are necessary, write idempotent migrations and update all references.
+
+Character Creation — Final Screen Must Match the Attached Character Sheet
+
+* I am attaching the official Character Sheet (image or PDF). Use it as the visual reference for the final screen of Character Creation.
+  Goals:
+* Create a Character Sheet Preview mode that visually matches the attached sheet’s layout (sections, order, headings, spacing).
+* Pull data from the existing Character Creation global state and render it into the sheet layout live.
+* Maintain our design system, but prioritize fidelity to the sheet’s structure (grid, sections, labels). Use similar fonts or nearest available alternatives if exact fonts are not licensed.
+  Requirements:
+* Add a toggle on the final Character Creation step: “Form View” versus “Sheet View (Preview)”.
+* Sheet View must match the attached sheet’s section order and labels (for example: Hero Name, Archetype, Origin, Rank, Ability Scores, Defenses Av/Ft/Wp, Stamina/Wounds, Skill Sets, Powers/Power Sets, Feats, Gear, Conditions, Notes, etc.).
+* Implement responsive CSS (desktop-first) and a print stylesheet for US Letter (A4 fallback). No background bleed, 0.5–0.75 inch margins, avoid orphaned headings.
+* Provide Copy to Clipboard (Markdown) and Print (browser print to PDF). Full PDF export pipeline can be deferred.
+* Update live as data changes; switching back to Form View preserves inputs (same global state).
+* If a field is empty, show a subtle placeholder like “—” rather than collapsing sections.
+* Keep all derived values consistent with rules.
+
+Plain-Language Type Model (implement these in TypeScript; do not just comment them)
+
+* ActionType is a string union with these values: “Action”, “Bonus Action”, “Reaction”, “Demanding”.
+* Defense is a string union with these values: “Av”, “Ft”, “Wp”.
+* AttackFamily is a string union with these values: “Melee”, “Ranged”, “Power”.
+* DamageType is a string union including at least: “Kinetic”, “Slashing”, “Piercing”, “Ballistic”, “Fire”, “Cold”, “Electricity”, “Sonic”, “Psychic”, “Radioactive”, “Light”, “Acid”, “Cosmic”.
+* AttackAction is an object with:
+
+  * kind: the literal string “attack”
+  * name: string
+  * actionType: ActionType
+  * family: AttackFamily
+  * toHit: number
+  * defense: Defense
+  * reachOrRange: one of:
+
+    * the literal string “melee”
+    * an object { meleeAreas: number }
+    * an object { rangedAreas: number }
+  * targets: string (examples: “one creature”, “up to 3 creatures”, “one area”)
+  * damage: an object { dice: string, type: DamageType }
+  * onHit: optional string (starts with “Upon a successful hit, …” in output)
+* NonAttackAction is an object with:
+
+  * kind: the literal string “nonattack”
+  * name: string
+  * actionType: ActionType
+  * text: string (freeform description)
+* ThreatAction is a union of AttackAction and NonAttackAction.
+* Create a pure function named ActionFormatter that takes one AttackAction and returns the exact Archive-style output string described above. Include unit tests for ActionFormatter.
+
+Acceptance Criteria and Tests
+
+* Threat Builder uses combined-step pages where appropriate, with live reactive state and no data loss when navigating.
+* Actions builder enforces required fields for attacks, supports non-attack text, and renders grouped by action type in the final stat block.
+* Zombie and Super-Zombie features are auto-included and shown in the final stat block when those types are selected.
+* Ability guidance and Rank Cap warnings appear inline.
+* Threats can be saved, listed, edited, and deleted like Characters.
+* Character Creation final screen has a Sheet View that clearly resembles the attached sheet and prints cleanly.
+* Add a smoke test and unit tests for ActionFormatter.
+
+Documentation and Commits
+
+* Update README with:
+
+  * How to run in Replit
+  * How to use the Threat Builder
+  * How to use Character Sheet Preview
+  * API endpoints for threats
+* Make atomic commits with clear messages. End with:
+
+  * feat(threats): Threat Builder UI, Archive-style stat blocks, action autofill, zombie features, persistence
+  * feat(characters): Final screen sheet-style preview with print and copy actions
+
+Docs to read first
+
+* /docs/5.1\_Running the Game 4.5
+* /docs/The Archive 0.8 (or latest)
+* Also check ability guidance and caps in the relevant /docs files
+
+Important notes
+
+* Do not invent new rules text; follow the examples and naming exactly.
+* When two steps fit on a page, stack them vertically and keep the stepper accurate.
+* The final Character Creation screen should look like the attached Character Sheet.
+
+---
