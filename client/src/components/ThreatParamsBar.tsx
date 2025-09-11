@@ -46,9 +46,22 @@ export default function ThreatParamsBar() {
           {/* Key Parameters */}
           <div className="flex flex-wrap gap-6 text-sm">
             <div className="text-center" data-testid="display-defenses">
-              <div className="font-medium">Defenses</div>
+              <div className="font-medium flex items-center justify-center gap-1">
+                Defenses
+                {!threat.defenseAssigned && threat.pendingDefenseValues && (
+                  <Badge variant="destructive" className="text-xs">
+                    Unassigned
+                  </Badge>
+                )}
+              </div>
               <div className="text-muted-foreground">
-                {threat.defenses.avoidance}/{threat.defenses.fortitude}/{threat.defenses.willpower}
+                {threat.defenseAssigned ? (
+                  `${threat.defenses.avoidance}/${threat.defenses.fortitude}/${threat.defenses.willpower}`
+                ) : threat.pendingDefenseValues ? (
+                  `Pending: ${threat.pendingDefenseValues.join("/")}`
+                ) : (
+                  "0/0/0"
+                )}
               </div>
             </div>
             
