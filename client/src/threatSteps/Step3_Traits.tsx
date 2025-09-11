@@ -84,7 +84,16 @@ export default function Step3_Traits() {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+    <div className="relative">
+      <Button
+        type="button"
+        variant="destructive"
+        className="absolute top-0 right-0"
+        onClick={resetThreat}
+      >
+        Start Over
+      </Button>
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 mt-12">
       <div className="flex gap-4">
         <div className="flex flex-col">
           <label>To Hit (Single)</label>
@@ -152,13 +161,11 @@ export default function Step3_Traits() {
           ))}
         </ul>
       </div>
-      <div className="flex justify-between">
-        <Button type="button" variant="outline" onClick={resetThreat}>Start Over</Button>
-        <div className="flex gap-2">
+        <div className="flex justify-end gap-2">
           <Button type="button" onClick={() => setCurrentStep(2)}>Back</Button>
           <Button type="submit">Next</Button>
         </div>
-      </div>
-    </form>
+      </form>
+    </div>
   );
 }
