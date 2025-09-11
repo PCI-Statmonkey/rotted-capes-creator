@@ -2,6 +2,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
 import { useThreat } from "@/context/ThreatContext";
@@ -12,6 +13,7 @@ export default function Step1_Rank() {
   const { threat, updateThreatField, setCurrentStep } = useThreat();
   const [name, setName] = useState(threat.name);
   const [selectedRank, setSelectedRank] = useState(threat.rank);
+  const [useAdvancedDesign, setUseAdvancedDesign] = useState(false);
 
   const currentParams = getThreatParameter(selectedRank);
 
@@ -88,7 +90,22 @@ export default function Step1_Rank() {
             </Select>
           </div>
 
-          {currentParams && (
+          <div className="flex items-center space-x-2">
+            <Checkbox 
+              id="advanced-design" 
+              checked={useAdvancedDesign}
+              onCheckedChange={(checked) => setUseAdvancedDesign(!!checked)}
+              data-testid="checkbox-advanced-design"
+            />
+            <Label 
+              htmlFor="advanced-design" 
+              className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+            >
+              Advanced Threat Design: Threat Parameters
+            </Label>
+          </div>
+
+          {useAdvancedDesign && currentParams && (
             <div className="mt-4 p-4 bg-muted/50 rounded-lg">
               <h4 className="font-semibold mb-2">Rank {selectedRank} Parameters</h4>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">

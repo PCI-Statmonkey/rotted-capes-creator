@@ -3,7 +3,7 @@ export const THREAT_TYPES = [
   "Survivor",
   "Abomination",
   "Powered Individual",
-  "Robot/Tech",
+  "Construct (Robot/Tech)",
   "Zombie",
   "Super Z",
 ];

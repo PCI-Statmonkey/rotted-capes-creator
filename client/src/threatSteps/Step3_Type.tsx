@@ -30,23 +30,23 @@ const TYPE_DESCRIPTIONS = {
     examples: "Heroes, villains, powered survivors",
     template: "None"
   },
-  "Robot/Tech": {
+  "Construct (Robot/Tech)": {
     description: "Artificial threats, from malfunctioning robots to killer drones.",
     mechanics: "+10 Stamina, immune to mind-affecting powers",
     examples: "Security bots, repair drones, AI systems",
     template: "Construct"
   },
   "Zombie": {
-    description: "The shambling undead that caused the apocalypse.",
-    mechanics: "Uses Zombie Template",
+    description: "The shambling undead that caused the apocalypse. Automatically applies Survivor base type + Zombie template.",
+    mechanics: "Uses Survivor base mechanics + Zombie Template overlay",
     examples: "Regular zombies, crawlers, runners",
-    template: "Zombie Template"
+    template: "Survivor + Zombie Template"
   },
   "Super Z": {
-    description: "Powered zombies - the most dangerous undead threats.",
-    mechanics: "Uses Super-Zombie Template",
+    description: "Powered zombies - the most dangerous undead threats. Automatically applies Powered Individual base type + Super-Zombie template.",
+    mechanics: "Uses Powered Individual base mechanics + Super-Zombie Template overlay",
     examples: "Former heroes turned zombie, powered undead",
-    template: "Super-Zombie Template"
+    template: "Powered Individual + Super-Zombie Template"
   }
 };
 

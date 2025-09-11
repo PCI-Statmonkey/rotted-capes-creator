@@ -68,11 +68,11 @@ export default function Step8_Actions() {
   const handleNext = () => {
     // Store actions and features in threat context
     // For now, we'll just proceed to summary
-    setCurrentStep(9);
+    setCurrentStep(8);
   };
 
   const handleBack = () => {
-    setCurrentStep(7);
+    setCurrentStep(6);
   };
 
   const addAction = () => {
@@ -164,7 +164,7 @@ export default function Step8_Actions() {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <span className="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-primary-foreground font-semibold">
-              8
+              7
             </span>
             Actions & Features
           </CardTitle>

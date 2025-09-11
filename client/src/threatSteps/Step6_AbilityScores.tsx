@@ -32,16 +32,24 @@ export default function Step6_AbilityScores() {
   const handleNext = () => {
     updateThreatField("abilityScores", abilityScores);
     
-    // Calculate and update defenses based on ability scores
-    const avoidance = Math.floor((abilityScores.dexterity - 10) / 2) + (params?.defenses[0] || 10);
-    const fortitude = Math.floor((abilityScores.constitution - 10) / 2) + (params?.defenses[1] || 10);
-    const willpower = Math.floor((abilityScores.wisdom - 10) / 2) + (params?.defenses[2] || 10);
+    // For threats, ability scores do NOT affect defenses (unlike heroes)
+    // Defenses come from threat parameters only
+    if (params) {
+      updateThreatField("defenses", { 
+        avoidance: params.defenses[0], 
+        fortitude: params.defenses[1], 
+        willpower: params.defenses[2] 
+      });
+    }
     
-    updateThreatField("defenses", { avoidance, fortitude, willpower });
-    
-    // Calculate initiative
+    // Calculate initiative (affected by Dexterity)
     const initiative = Math.floor((abilityScores.dexterity - 10) / 2) + (params?.rankBonus || 1);
     updateThreatField("initiative", initiative);
+    
+    // Calculate pace (affected by Dexterity - threats move faster with higher Dex)
+    const basePace = 2; // Default 2 areas
+    const pace = basePace + Math.max(0, Math.floor((abilityScores.dexterity - 10) / 4)); // +1 pace per 4 points of Dex above 10
+    updateThreatField("pace", `${pace} areas`);
     
     setCurrentStep(7);
   };
@@ -53,8 +61,18 @@ export default function Step6_AbilityScores() {
   const updateAbilityScore = (ability: keyof typeof abilityScores, value: number) => {
     setAbilityScores(prev => ({
       ...prev,
-      [ability]: Math.max(1, Math.min(50, value))
+      [ability]: Math.max(3, Math.min(50, value))
     }));
+  };
+
+  const incrementAbility = (ability: keyof typeof abilityScores) => {
+    const currentValue = abilityScores[ability];
+    updateAbilityScore(ability, currentValue + 1);
+  };
+
+  const decrementAbility = (ability: keyof typeof abilityScores) => {
+    const currentValue = abilityScores[ability];
+    updateAbilityScore(ability, currentValue - 1);
   };
 
   const getModifier = (score: number) => {
@@ -123,16 +141,40 @@ export default function Step6_AbilityScores() {
                           {modifier >= 0 ? `+${modifier}` : modifier}
                         </Badge>
                       </Label>
-                      <Input
-                        id={`ability-${ability}`}
-                        data-testid={`input-${ability}`}
-                        type="number"
-                        min="1"
-                        max="50"
-                        value={score}
-                        onChange={(e) => updateAbilityScore(ability, parseInt(e.target.value) || 1)}
-                        className={getAbilityScoreColor(ability, score)}
-                      />
+                      <div className="flex items-center gap-2">
+                        <Button
+                          type="button"
+                          variant="outline"
+                          size="sm"
+                          className="h-10 w-10 p-0 text-lg font-semibold"
+                          onClick={() => decrementAbility(ability)}
+                          disabled={score <= 3}
+                          data-testid={`button-decrease-${ability}`}
+                        >
+                          -
+                        </Button>
+                        <Input
+                          id={`ability-${ability}`}
+                          data-testid={`input-${ability}`}
+                          type="number"
+                          min="3"
+                          max="50"
+                          value={score}
+                          onChange={(e) => updateAbilityScore(ability, parseInt(e.target.value) || 3)}
+                          className={`text-center text-lg font-semibold ${getAbilityScoreColor(ability, score)}`}
+                        />
+                        <Button
+                          type="button"
+                          variant="outline"
+                          size="sm"
+                          className="h-10 w-10 p-0 text-lg font-semibold"
+                          onClick={() => incrementAbility(ability)}
+                          disabled={score >= 50}
+                          data-testid={`button-increase-${ability}`}
+                        >
+                          +
+                        </Button>
+                      </div>
                       {recommendations && (
                         <div className="text-xs text-muted-foreground">
                           <span className="font-medium">Recommended: </span>
@@ -154,22 +196,34 @@ export default function Step6_AbilityScores() {
           {/* Calculated Values Preview */}
           <div className="p-4 bg-muted/50 rounded-lg">
             <h4 className="font-semibold mb-2">Calculated Values (Preview)</h4>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+            <p className="text-xs text-muted-foreground mb-3">
+              Note: Unlike heroes, threat defenses come from rank parameters only and are not modified by ability scores.
+            </p>
+            <div className="grid grid-cols-2 md:grid-cols-5 gap-4 text-sm">
               <div>
                 <span className="font-medium">Avoidance:</span>
-                <p>{Math.floor((abilityScores.dexterity - 10) / 2) + (params?.defenses[0] || 10)}</p>
+                <p>{params?.defenses[0] || 10}</p>
+                <span className="text-xs text-muted-foreground">(From rank)</span>
               </div>
               <div>
                 <span className="font-medium">Fortitude:</span>
-                <p>{Math.floor((abilityScores.constitution - 10) / 2) + (params?.defenses[1] || 10)}</p>
+                <p>{params?.defenses[1] || 10}</p>
+                <span className="text-xs text-muted-foreground">(From rank)</span>
               </div>
               <div>
                 <span className="font-medium">Willpower:</span>
-                <p>{Math.floor((abilityScores.wisdom - 10) / 2) + (params?.defenses[2] || 10)}</p>
+                <p>{params?.defenses[2] || 10}</p>
+                <span className="text-xs text-muted-foreground">(From rank)</span>
               </div>
               <div>
                 <span className="font-medium">Initiative:</span>
                 <p>+{Math.floor((abilityScores.dexterity - 10) / 2) + (params?.rankBonus || 1)}</p>
+                <span className="text-xs text-muted-foreground">(Dex modifier)</span>
+              </div>
+              <div>
+                <span className="font-medium">Pace:</span>
+                <p>{2 + Math.max(0, Math.floor((abilityScores.dexterity - 10) / 4))} areas</p>
+                <span className="text-xs text-muted-foreground">(Base + Dex)</span>
               </div>
             </div>
           </div>
@@ -181,7 +235,7 @@ export default function Step6_AbilityScores() {
           Back: Skill Sets
         </Button>
         <Button onClick={handleNext} data-testid="button-next">
-          Next: Templates
+          Next: Actions & Features
         </Button>
       </div>
     </div>
