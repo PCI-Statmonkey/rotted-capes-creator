@@ -6,13 +6,19 @@ import { drizzle } from 'drizzle-orm/neon-serverless';
 import ws from "ws";
 import * as schema from "@shared/schema";
 
-// Configure neon to use websockets with proper SSL handling
+// Configure neon to use websockets with proper SSL handling for development
 neonConfig.webSocketConstructor = ws;
-// Fix SSL certificate issues in development
+// Use WebSocket proxy for Neon connections to fix SSL issues in development
 if (process.env.NODE_ENV !== 'production') {
   neonConfig.wsProxy = (host) => `${host}:443/v2`;
-  // For development, we'll disable SSL verification to avoid certificate issues
-  process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
+  console.log('Using Neon WebSocket proxy for development environment');
+  
+  // As a fallback for SSL certificate issues in development only
+  // This is explicitly opt-in and clearly logged as insecure
+  if (process.env.ALLOW_INSECURE_TLS === 'true') {
+    process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
+    console.warn('⚠️  WARNING: TLS certificate verification disabled for development. This is insecure!');
+  }
 }
 
 // Check for database connection string
