@@ -49,6 +49,7 @@ function AppRouter() {
         <Route path="/analytics" component={Analytics} />
         <Route path="/editor" component={EditorResources} />
         <Route path="/editor/threat-creation" component={ThreatCreation} />
+        <Route path="/threat-creation" component={ThreatCreation} />
 
         {/* Admin Routes */}
         <Route path="/admin" component={Admin} />

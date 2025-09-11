@@ -1,5 +1,4 @@
 import { ThreatProvider, useThreat } from "@/context/ThreatContext";
-import ProgressBar from "@/components/ProgressBar";
 
 // Import all 9 new threat creation steps
 import Step1_Rank from "@/threatSteps/Step1_Rank";
@@ -56,8 +55,6 @@ export default function ThreatCreation() {
                 Create cinematic threats for your Rotted Capes sessions
               </p>
             </div>
-            
-            <ProgressBar />
             
             <div className="mt-8">
               <Wizard />
