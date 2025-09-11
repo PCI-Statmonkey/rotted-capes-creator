@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { useThreat } from "@/context/ThreatContext";
 
-export default function Step4_Summary() {
+export default function Step3_Summary() {
   const { threat, setCurrentStep, resetThreat } = useThreat();
 
   return (
@@ -99,7 +99,7 @@ export default function Step4_Summary() {
         </ul>
       </div>
       <div className="flex justify-end pt-4">
-        <Button type="button" onClick={() => setCurrentStep(3)}>Back</Button>
+        <Button type="button" onClick={() => setCurrentStep(2)}>Back</Button>
       </div>
     </div>
   );

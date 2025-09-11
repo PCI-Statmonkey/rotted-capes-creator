@@ -14,7 +14,7 @@ interface AttackFormData {
   damageAvg: number;
 }
 
-export default function Step3_Traits() {
+export default function Step2_Traits() {
   const {
     threat,
     addTrait,
@@ -66,7 +66,7 @@ export default function Step3_Traits() {
       max: data.damageMax,
       avg: data.damageAvg,
     });
-    setCurrentStep(4);
+    setCurrentStep(3);
   };
 
   const addTraitHandler = () => {
@@ -162,7 +162,7 @@ export default function Step3_Traits() {
         </ul>
       </div>
         <div className="flex justify-end gap-2">
-          <Button type="button" onClick={() => setCurrentStep(2)}>Back</Button>
+          <Button type="button" onClick={() => setCurrentStep(1)}>Back</Button>
           <Button type="submit">Next</Button>
         </div>
       </form>
