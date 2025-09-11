@@ -28,28 +28,28 @@ export interface RankInfo {
 
 // Map rank labels to numeric values for averaging
 export function labelToNumeric(label: string): number {
-  const param = THREAT_PARAMETERS.find(p => p.rank === label);
+  const param = THREAT_PARAMETERS.find(p => p.label === label);
   if (!param) throw new Error(`Unknown rank label: ${label}`);
   
-  // Use rank bonus as numeric value (higher rank = higher number)
-  return param.rankBonus;
+  // Use rank field as numeric value (higher rank = higher number)
+  return param.rank;
 }
 
 // Find the nearest rank label to a numeric average
 export function nearestLabel(average: number): string {
   let closest = THREAT_PARAMETERS[0];
-  let minDiff = Math.abs(average - closest.rankBonus);
+  let minDiff = Math.abs(average - closest.rank);
   
   for (const param of THREAT_PARAMETERS) {
-    const diff = Math.abs(average - param.rankBonus);
-    if (diff < minDiff || (diff === minDiff && param.rankBonus > closest.rankBonus)) {
+    const diff = Math.abs(average - param.rank);
+    if (diff < minDiff || (diff === minDiff && param.rank > closest.rank)) {
       // On ties, prefer higher rank (architect's tie-breaker rule)
       closest = param;
       minDiff = diff;
     }
   }
   
-  return closest.rank;
+  return closest.label;
 }
 
 // Calculate average rank from three component ranks
@@ -69,5 +69,5 @@ export function averageRanks(attack: string, defense: string, durability: string
 
 // Get all available rank labels
 export function getRankLabels(): string[] {
-  return THREAT_PARAMETERS.map(p => p.rank);
+  return THREAT_PARAMETERS.map(p => p.label);
 }

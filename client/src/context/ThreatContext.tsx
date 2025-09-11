@@ -44,6 +44,11 @@ export interface Threat {
   traits: string[];
   skillSets: string[];
   advanced: boolean;
+  advancedRanks?: {
+    attack: string;
+    defense: string;
+    durability: string;
+  };
   effectiveRank: number; // for advanced averaging
 }
 
@@ -153,6 +158,8 @@ export function ThreatProvider({ children }: { children: ReactNode }) {
       attack: { single: params.toHit[0], area: params.toHit[1] },
       damage: { ...params.damage },
       effectiveRank: params.rank,
+      advanced: false,
+      advancedRanks: undefined,
     }));
   };
 
@@ -181,6 +188,12 @@ export function ThreatProvider({ children }: { children: ReactNode }) {
       attack: { single: atk.toHit[0], area: atk.toHit[1] },
       damage: { ...atk.damage },
       effectiveRank: parseFloat(avg.toFixed(2)),
+      advanced: true,
+      advancedRanks: {
+        attack: attackLabel,
+        defense: defenseLabel,
+        durability: durabilityLabel,
+      },
     }));
   };
 
