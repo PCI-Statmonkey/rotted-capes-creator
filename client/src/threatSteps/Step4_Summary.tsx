@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { useThreat } from "@/context/ThreatContext";
 
 export default function Step4_Summary() {
-  const { threat, setCurrentStep } = useThreat();
+  const { threat, setCurrentStep, resetThreat } = useThreat();
 
   return (
     <div className="space-y-4">
@@ -92,7 +92,7 @@ export default function Step4_Summary() {
       </div>
       <div className="flex justify-between pt-4">
         <Button type="button" onClick={() => setCurrentStep(3)}>Back</Button>
-        <Button type="button" onClick={() => setCurrentStep(1)}>Start Over</Button>
+        <Button type="button" onClick={resetThreat}>Start Over</Button>
       </div>
     </div>
   );

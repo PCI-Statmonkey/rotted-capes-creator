@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -23,6 +23,7 @@ export default function Step3_Traits() {
     removeSkillSet,
     updateThreatField,
     setCurrentStep,
+    resetThreat,
   } = useThreat();
   const [trait, setTrait] = useState("");
   const [skill, setSkill] = useState("");
@@ -38,7 +39,7 @@ export default function Step3_Traits() {
       ? threat.attack.area + mods.toHit
       : threat.attack.area;
 
-  const { register, handleSubmit } = useForm<AttackFormData>({
+  const { register, handleSubmit, reset } = useForm<AttackFormData>({
     defaultValues: {
       toHitSingle: toHitSingleDefault,
       toHitArea: toHitAreaDefault,
@@ -47,6 +48,16 @@ export default function Step3_Traits() {
       damageAvg: threat.damage.avg,
     },
   });
+
+  useEffect(() => {
+    reset({
+      toHitSingle: toHitSingleDefault,
+      toHitArea: toHitAreaDefault,
+      damageMin: threat.damage.min,
+      damageMax: threat.damage.max,
+      damageAvg: threat.damage.avg,
+    });
+  }, [threat, reset, toHitSingleDefault, toHitAreaDefault]);
 
   const onSubmit = (data: AttackFormData) => {
     updateThreatField("attack", { single: data.toHitSingle, area: data.toHitArea });
@@ -142,8 +153,11 @@ export default function Step3_Traits() {
         </ul>
       </div>
       <div className="flex justify-between">
-        <Button type="button" onClick={() => setCurrentStep(2)}>Back</Button>
-        <Button type="submit">Next</Button>
+        <Button type="button" variant="outline" onClick={resetThreat}>Start Over</Button>
+        <div className="flex gap-2">
+          <Button type="button" onClick={() => setCurrentStep(2)}>Back</Button>
+          <Button type="submit">Next</Button>
+        </div>
       </div>
     </form>
   );
