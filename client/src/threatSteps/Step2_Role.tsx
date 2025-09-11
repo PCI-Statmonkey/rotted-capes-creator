@@ -49,11 +49,11 @@ export default function Step2_Role() {
 
   const handleNext = () => {
     updateThreatField("role", selectedRole);
-    setCurrentStep(3);
+    setCurrentStep(4); // Go to Step 4 (Type)
   };
 
   const handleBack = () => {
-    setCurrentStep(1);
+    setCurrentStep(2); // Go back to Step 2 (Defenses)
   };
 
   const canProceed = selectedRole;
@@ -64,7 +64,7 @@ export default function Step2_Role() {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <span className="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-primary-foreground font-semibold">
-              2
+              3
             </span>
             Choose Role
           </CardTitle>
@@ -117,7 +117,7 @@ export default function Step2_Role() {
 
       <div className="flex justify-between">
         <Button variant="outline" onClick={handleBack} data-testid="button-back">
-          Back: Rank
+          Back: Assign Defenses
         </Button>
         <Button 
           onClick={handleNext} 

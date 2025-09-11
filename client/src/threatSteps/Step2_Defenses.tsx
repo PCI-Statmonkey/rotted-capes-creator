@@ -81,17 +81,34 @@ export default function Step2_Defenses() {
               {availableValues.map((value, index) => (
                 <Badge 
                   key={index} 
-                  variant={usedValues.includes(value) ? "default" : "outline"}
+                  variant={usedIndices.includes(index) ? "default" : "outline"}
                   className="text-lg px-3 py-1"
-                  data-testid={`badge-defense-value-${value}`}
+                  data-testid={`badge-defense-value-${value}-${index}`}
                 >
                   {value}
                 </Badge>
               ))}
             </div>
-            <p className="text-sm text-muted-foreground mt-2">
-              Assign each value to exactly one defense type below.
-            </p>
+            <div className="flex justify-between items-center mt-2">
+              <p className="text-sm text-muted-foreground">
+                Assign each value to exactly one defense type below.
+              </p>
+              {(avoidanceIndex !== null || fortitudeIndex !== null || willpowerIndex !== null) && (
+                <Button 
+                  variant="ghost" 
+                  size="sm" 
+                  onClick={() => {
+                    setAvoidanceIndex(null);
+                    setFortitudeIndex(null);
+                    setWillpowerIndex(null);
+                  }}
+                  data-testid="button-reset-defenses"
+                  className="text-muted-foreground hover:text-foreground"
+                >
+                  Reset All
+                </Button>
+              )}
+            </div>
           </div>
 
           {/* Defense assignment dropdowns */}
