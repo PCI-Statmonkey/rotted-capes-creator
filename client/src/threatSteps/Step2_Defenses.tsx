@@ -9,10 +9,10 @@ import { useState } from "react";
 export default function Step2_Defenses() {
   const { threat, commitDefenseAssignment, setCurrentStep } = useThreat();
   
-  // Local state for the defense assignments
-  const [avoidanceValue, setAvoidanceValue] = useState<number | null>(null);
-  const [fortitudeValue, setFortitudeValue] = useState<number | null>(null);
-  const [willpowerValue, setWillpowerValue] = useState<number | null>(null);
+  // Local state for the defense assignments - now tracking array indices instead of values
+  const [avoidanceIndex, setAvoidanceIndex] = useState<number | null>(null);
+  const [fortitudeIndex, setFortitudeIndex] = useState<number | null>(null);
+  const [willpowerIndex, setWillpowerIndex] = useState<number | null>(null);
 
   if (!threat.pendingDefenseValues) {
     // This shouldn't happen if navigation is correct, but handle gracefully
@@ -28,27 +28,27 @@ export default function Step2_Defenses() {
   }
 
   const availableValues = threat.pendingDefenseValues;
-  const usedValues = [avoidanceValue, fortitudeValue, willpowerValue].filter(v => v !== null);
+  const usedIndices = [avoidanceIndex, fortitudeIndex, willpowerIndex].filter(i => i !== null);
+  const usedValues = usedIndices.map(i => availableValues[i!]).filter(v => v !== undefined);
   
-  const getAvailableOptions = (currentValue: number | null) => {
-    return availableValues.filter(value => 
-      value === currentValue || !usedValues.includes(value)
-    );
+  const getAvailableOptions = (currentIndex: number | null) => {
+    return availableValues.map((value, index) => ({ value, index }))
+      .filter(({ index }) => index === currentIndex || !usedIndices.includes(index));
   };
 
-  const allAssigned = avoidanceValue !== null && fortitudeValue !== null && willpowerValue !== null;
-  const allUnique = new Set(usedValues).size === usedValues.length;
+  const allAssigned = avoidanceIndex !== null && fortitudeIndex !== null && willpowerIndex !== null;
+  const allUnique = new Set(usedIndices).size === usedIndices.length;
   const canProceed = allAssigned && allUnique;
 
   const handleNext = () => {
-    if (!canProceed || avoidanceValue === null || fortitudeValue === null || willpowerValue === null) {
+    if (!canProceed || avoidanceIndex === null || fortitudeIndex === null || willpowerIndex === null) {
       return;
     }
 
     commitDefenseAssignment({
-      avoidance: avoidanceValue,
-      fortitude: fortitudeValue,
-      willpower: willpowerValue,
+      avoidance: availableValues[avoidanceIndex],
+      fortitude: availableValues[fortitudeIndex],
+      willpower: availableValues[willpowerIndex],
     });
     
     setCurrentStep(3); // Move to next step (Role)
@@ -99,15 +99,15 @@ export default function Step2_Defenses() {
             <div className="space-y-2">
               <Label htmlFor="avoidance-select">Avoidance</Label>
               <Select 
-                value={avoidanceValue?.toString() || ""} 
-                onValueChange={(value) => setAvoidanceValue(parseInt(value))}
+                value={avoidanceIndex?.toString() || ""} 
+                onValueChange={(value) => setAvoidanceIndex(parseInt(value))}
               >
                 <SelectTrigger data-testid="select-avoidance">
                   <SelectValue placeholder="Choose value..." />
                 </SelectTrigger>
                 <SelectContent>
-                  {getAvailableOptions(avoidanceValue).map((value) => (
-                    <SelectItem key={`avoidance-${value}`} value={value.toString()}>
+                  {getAvailableOptions(avoidanceIndex).map(({ value, index }) => (
+                    <SelectItem key={`avoidance-${index}`} value={index.toString()}>
                       {value}
                     </SelectItem>
                   ))}
@@ -121,15 +121,15 @@ export default function Step2_Defenses() {
             <div className="space-y-2">
               <Label htmlFor="fortitude-select">Fortitude</Label>
               <Select 
-                value={fortitudeValue?.toString() || ""} 
-                onValueChange={(value) => setFortitudeValue(parseInt(value))}
+                value={fortitudeIndex?.toString() || ""} 
+                onValueChange={(value) => setFortitudeIndex(parseInt(value))}
               >
                 <SelectTrigger data-testid="select-fortitude">
                   <SelectValue placeholder="Choose value..." />
                 </SelectTrigger>
                 <SelectContent>
-                  {getAvailableOptions(fortitudeValue).map((value) => (
-                    <SelectItem key={`fortitude-${value}`} value={value.toString()}>
+                  {getAvailableOptions(fortitudeIndex).map(({ value, index }) => (
+                    <SelectItem key={`fortitude-${index}`} value={index.toString()}>
                       {value}
                     </SelectItem>
                   ))}
@@ -143,15 +143,15 @@ export default function Step2_Defenses() {
             <div className="space-y-2">
               <Label htmlFor="willpower-select">Discipline (Willpower)</Label>
               <Select 
-                value={willpowerValue?.toString() || ""} 
-                onValueChange={(value) => setWillpowerValue(parseInt(value))}
+                value={willpowerIndex?.toString() || ""} 
+                onValueChange={(value) => setWillpowerIndex(parseInt(value))}
               >
                 <SelectTrigger data-testid="select-willpower">
                   <SelectValue placeholder="Choose value..." />
                 </SelectTrigger>
                 <SelectContent>
-                  {getAvailableOptions(willpowerValue).map((value) => (
-                    <SelectItem key={`willpower-${value}`} value={value.toString()}>
+                  {getAvailableOptions(willpowerIndex).map(({ value, index }) => (
+                    <SelectItem key={`willpower-${index}`} value={index.toString()}>
                       {value}
                     </SelectItem>
                   ))}
@@ -164,26 +164,26 @@ export default function Step2_Defenses() {
           </div>
 
           {/* Assignment preview */}
-          {(avoidanceValue || fortitudeValue || willpowerValue) && (
+          {(avoidanceIndex !== null || fortitudeIndex !== null || willpowerIndex !== null) && (
             <div className="p-4 bg-muted/50 rounded-lg">
               <h4 className="font-semibold mb-2">Current Assignment</h4>
               <div className="grid grid-cols-3 gap-4 text-sm">
                 <div>
                   <span className="font-medium">Avoidance:</span>
-                  <p className={avoidanceValue ? "text-primary" : "text-muted-foreground"}>
-                    {avoidanceValue || "Not assigned"}
+                  <p className={avoidanceIndex !== null ? "text-primary" : "text-muted-foreground"}>
+                    {avoidanceIndex !== null ? availableValues[avoidanceIndex] : "Not assigned"}
                   </p>
                 </div>
                 <div>
                   <span className="font-medium">Fortitude:</span>
-                  <p className={fortitudeValue ? "text-primary" : "text-muted-foreground"}>
-                    {fortitudeValue || "Not assigned"}
+                  <p className={fortitudeIndex !== null ? "text-primary" : "text-muted-foreground"}>
+                    {fortitudeIndex !== null ? availableValues[fortitudeIndex] : "Not assigned"}
                   </p>
                 </div>
                 <div>
                   <span className="font-medium">Discipline:</span>
-                  <p className={willpowerValue ? "text-primary" : "text-muted-foreground"}>
-                    {willpowerValue || "Not assigned"}
+                  <p className={willpowerIndex !== null ? "text-primary" : "text-muted-foreground"}>
+                    {willpowerIndex !== null ? availableValues[willpowerIndex] : "Not assigned"}
                   </p>
                 </div>
               </div>
