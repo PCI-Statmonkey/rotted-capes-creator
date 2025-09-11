@@ -1,12 +1,62 @@
 import { useState } from "react";
+import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useThreat } from "@/context/ThreatContext";
+import { getThreatParameter } from "@/data/threatParameters";
+import { calculateThreatMods } from "@/utils/threatModifiers";
+
+interface AttackFormData {
+  toHitSingle: number;
+  toHitArea: number;
+  damageMin: number;
+  damageMax: number;
+  damageAvg: number;
+}
 
 export default function Step3_Traits() {
-  const { threat, addTrait, removeTrait, addSkillSet, removeSkillSet, setCurrentStep } = useThreat();
+  const {
+    threat,
+    addTrait,
+    removeTrait,
+    addSkillSet,
+    removeSkillSet,
+    updateThreatField,
+    setCurrentStep,
+  } = useThreat();
   const [trait, setTrait] = useState("");
   const [skill, setSkill] = useState("");
+
+  const params = getThreatParameter(threat.rank);
+  const mods = calculateThreatMods(threat);
+  const toHitSingleDefault =
+    params && threat.attack.single === params.toHit[0]
+      ? threat.attack.single + mods.toHit
+      : threat.attack.single;
+  const toHitAreaDefault =
+    params && threat.attack.area === params.toHit[1]
+      ? threat.attack.area + mods.toHit
+      : threat.attack.area;
+
+  const { register, handleSubmit } = useForm<AttackFormData>({
+    defaultValues: {
+      toHitSingle: toHitSingleDefault,
+      toHitArea: toHitAreaDefault,
+      damageMin: threat.damage.min,
+      damageMax: threat.damage.max,
+      damageAvg: threat.damage.avg,
+    },
+  });
+
+  const onSubmit = (data: AttackFormData) => {
+    updateThreatField("attack", { single: data.toHitSingle, area: data.toHitArea });
+    updateThreatField("damage", {
+      min: data.damageMin,
+      max: data.damageMax,
+      avg: data.damageAvg,
+    });
+    setCurrentStep(4);
+  };
 
   const addTraitHandler = () => {
     if (trait.trim()) {
@@ -23,7 +73,44 @@ export default function Step3_Traits() {
   };
 
   return (
-    <div className="space-y-6">
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+      <div className="flex gap-4">
+        <div className="flex flex-col">
+          <label>To Hit (Single)</label>
+          <Input
+            className="w-20"
+            type="number"
+            {...register("toHitSingle", { valueAsNumber: true })}
+          />
+        </div>
+        <div className="flex flex-col">
+          <label>To Hit (Area)</label>
+          <Input
+            className="w-20"
+            type="number"
+            {...register("toHitArea", { valueAsNumber: true })}
+          />
+        </div>
+      </div>
+      {mods.notes.toHit.length > 0 && (
+        <p className="text-xs text-muted-foreground">
+          {mods.notes.toHit.join(", ")}
+        </p>
+      )}
+      <div className="grid grid-cols-3 gap-4">
+        <div className="grid gap-2">
+          <label>Damage Min</label>
+          <Input type="number" {...register("damageMin", { valueAsNumber: true })} />
+        </div>
+        <div className="grid gap-2">
+          <label>Damage Max</label>
+          <Input type="number" {...register("damageMax", { valueAsNumber: true })} />
+        </div>
+        <div className="grid gap-2">
+          <label>Damage Avg</label>
+          <Input type="number" {...register("damageAvg", { valueAsNumber: true })} />
+        </div>
+      </div>
       <div>
         <label className="block mb-2">Traits</label>
         <div className="flex space-x-2 mb-2">
@@ -56,8 +143,8 @@ export default function Step3_Traits() {
       </div>
       <div className="flex justify-between">
         <Button type="button" onClick={() => setCurrentStep(2)}>Back</Button>
-        <Button type="button" onClick={() => setCurrentStep(4)}>Next</Button>
+        <Button type="submit">Next</Button>
       </div>
-    </div>
+    </form>
   );
 }
