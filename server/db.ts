@@ -6,8 +6,14 @@ import { drizzle } from 'drizzle-orm/neon-serverless';
 import ws from "ws";
 import * as schema from "@shared/schema";
 
-// Configure neon to use websockets
+// Configure neon to use websockets with proper SSL handling
 neonConfig.webSocketConstructor = ws;
+// Fix SSL certificate issues in development
+if (process.env.NODE_ENV !== 'production') {
+  neonConfig.wsProxy = (host) => `${host}:443/v2`;
+  // For development, we'll disable SSL verification to avoid certificate issues
+  process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
+}
 
 // Check for database connection string
 if (!process.env.DATABASE_URL) {
