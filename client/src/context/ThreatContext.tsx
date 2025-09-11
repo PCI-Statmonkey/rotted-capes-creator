@@ -50,6 +50,13 @@ export interface Threat {
     durability: string;
   };
   effectiveRank: number; // for advanced averaging
+  pendingDefenseValues: number[] | null;
+  defenseAssigned: boolean;
+  defenseAssignment?: {
+    avoidance?: number;
+    fortitude?: number;
+    willpower?: number;
+  };
 }
 
 const defaultThreat: Threat = {
@@ -77,6 +84,8 @@ const defaultThreat: Threat = {
   skillSets: [],
   advanced: false,
   effectiveRank: 1,
+  pendingDefenseValues: null,
+  defenseAssigned: false,
 };
 
 interface ThreatContextType {
@@ -91,6 +100,7 @@ interface ThreatContextType {
   setCurrentStep: (n: number) => void;
   applyParameters: (label: string) => void;
   applyAdvancedParameters: (defenseLabel: string, durabilityLabel: string, attackLabel: string) => void;
+  commitDefenseAssignment: (mapping: { avoidance: number; fortitude: number; willpower: number }) => void;
   resetThreat: () => void;
 }
 
@@ -101,11 +111,9 @@ export function ThreatProvider({ children }: { children: ReactNode }) {
     const base = { ...defaultThreat };
     const params = getThreatParameter(base.rank);
     if (params) {
-      base.defenses = {
-        avoidance: params.defenses[0],
-        fortitude: params.defenses[1],
-        willpower: params.defenses[2],
-      };
+      // Set pending defense values but don't auto-assign them
+      base.pendingDefenseValues = [...params.defenses];
+      base.defenseAssigned = false;
       base.stamina = params.stamina;
       base.wounds = params.wounds;
       base.attack = { single: params.toHit[0], area: params.toHit[1] };
@@ -148,11 +156,9 @@ export function ThreatProvider({ children }: { children: ReactNode }) {
     setThreat((prev) => ({
       ...prev,
       rank: label,
-      defenses: {
-        avoidance: params.defenses[0],
-        fortitude: params.defenses[1],
-        willpower: params.defenses[2],
-      },
+      pendingDefenseValues: [...params.defenses],
+      defenseAssigned: false,
+      defenses: { avoidance: 0, fortitude: 0, willpower: 0 }, // Clear until assigned
       stamina: params.stamina,
       wounds: params.wounds,
       attack: { single: params.toHit[0], area: params.toHit[1] },
@@ -160,6 +166,7 @@ export function ThreatProvider({ children }: { children: ReactNode }) {
       effectiveRank: params.rank,
       advanced: false,
       advancedRanks: undefined,
+      defenseAssignment: undefined,
     }));
   };
 
@@ -178,11 +185,9 @@ export function ThreatProvider({ children }: { children: ReactNode }) {
     setThreat((prev) => ({
       ...prev,
       rank: closest.label,
-      defenses: {
-        avoidance: def.defenses[0],
-        fortitude: def.defenses[1],
-        willpower: def.defenses[2],
-      },
+      pendingDefenseValues: [...def.defenses], // Use defense rank for the pool
+      defenseAssigned: false,
+      defenses: { avoidance: 0, fortitude: 0, willpower: 0 }, // Clear until assigned
       stamina: dur.stamina,
       wounds: dur.wounds,
       attack: { single: atk.toHit[0], area: atk.toHit[1] },
@@ -194,6 +199,17 @@ export function ThreatProvider({ children }: { children: ReactNode }) {
         defense: defenseLabel,
         durability: durabilityLabel,
       },
+      defenseAssignment: undefined,
+    }));
+  };
+
+  const commitDefenseAssignment = (mapping: { avoidance: number; fortitude: number; willpower: number }) => {
+    setThreat((prev) => ({
+      ...prev,
+      defenses: { ...mapping },
+      defenseAssignment: { ...mapping },
+      defenseAssigned: true,
+      pendingDefenseValues: null,
     }));
   };
 
@@ -202,11 +218,8 @@ export function ThreatProvider({ children }: { children: ReactNode }) {
       const base = { ...defaultThreat };
       const params = getThreatParameter(base.rank);
       if (params) {
-        base.defenses = {
-          avoidance: params.defenses[0],
-          fortitude: params.defenses[1],
-          willpower: params.defenses[2],
-        };
+        base.pendingDefenseValues = [...params.defenses];
+        base.defenseAssigned = false;
         base.stamina = params.stamina;
         base.wounds = params.wounds;
         base.attack = { single: params.toHit[0], area: params.toHit[1] };
@@ -230,6 +243,7 @@ export function ThreatProvider({ children }: { children: ReactNode }) {
     setCurrentStep,
     applyParameters,
     applyAdvancedParameters,
+    commitDefenseAssignment,
     resetThreat,
   };
 
