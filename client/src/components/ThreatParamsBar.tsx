@@ -1,9 +1,16 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { RotateCcw } from "lucide-react";
 import { useThreat } from "@/context/ThreatContext";
 
 export default function ThreatParamsBar() {
-  const { threat } = useThreat();
+  const { threat, resetThreat, setCurrentStep } = useThreat();
+
+  const handleStartOver = () => {
+    resetThreat();
+    setCurrentStep(1);
+  };
 
   if (!threat.name) {
     return null; // Don't show until threat has a name
@@ -107,6 +114,20 @@ export default function ThreatParamsBar() {
                 </div>
               </div>
             )}
+          </div>
+
+          {/* Start Over Button */}
+          <div className="flex-shrink-0">
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              onClick={handleStartOver}
+              className="text-muted-foreground hover:text-foreground"
+              data-testid="button-start-over"
+            >
+              <RotateCcw className="h-4 w-4 mr-2" />
+              Start Over
+            </Button>
           </div>
         </div>
       </CardContent>

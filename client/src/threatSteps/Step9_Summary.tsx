@@ -10,7 +10,7 @@ export default function Step9_Summary() {
   const { threat, setCurrentStep, resetThreat } = useThreat();
 
   const handleBack = () => {
-    setCurrentStep(7);
+    setCurrentStep(8); // Go back to Step 8 (Actions)
   };
 
   const handleSave = () => {
@@ -49,7 +49,7 @@ export default function Step9_Summary() {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <span className="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-primary-foreground font-semibold">
-              8
+              9
             </span>
             Threat Summary
           </CardTitle>

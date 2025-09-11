@@ -51,11 +51,11 @@ export default function Step6_AbilityScores() {
     const pace = basePace + Math.max(0, Math.floor((abilityScores.dexterity - 10) / 4)); // +1 pace per 4 points of Dex above 10
     updateThreatField("pace", `${pace} areas`);
     
-    setCurrentStep(7);
+    setCurrentStep(8); // Go to Step 8 (Actions)
   };
 
   const handleBack = () => {
-    setCurrentStep(5);
+    setCurrentStep(6); // Go back to Step 6 (SkillSets)
   };
 
   const updateAbilityScore = (ability: keyof typeof abilityScores, value: number) => {
@@ -95,7 +95,7 @@ export default function Step6_AbilityScores() {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <span className="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-primary-foreground font-semibold">
-              6
+              7
             </span>
             Ability Scores
           </CardTitle>

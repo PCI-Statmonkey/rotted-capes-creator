@@ -56,11 +56,11 @@ export default function Step3_Type() {
 
   const handleNext = () => {
     updateThreatField("type", selectedType);
-    setCurrentStep(4);
+    setCurrentStep(5); // Go to Step 5 (Size)
   };
 
   const handleBack = () => {
-    setCurrentStep(2);
+    setCurrentStep(3); // Go back to Step 3 (Role)
   };
 
   const canProceed = selectedType;
@@ -71,7 +71,7 @@ export default function Step3_Type() {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <span className="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-primary-foreground font-semibold">
-              3
+              4
             </span>
             Choose Type
           </CardTitle>
@@ -127,7 +127,7 @@ export default function Step3_Type() {
 
       <div className="flex justify-between">
         <Button variant="outline" onClick={handleBack} data-testid="button-back">
-          Back: Role
+          Back: Choose Role
         </Button>
         <Button 
           onClick={handleNext} 

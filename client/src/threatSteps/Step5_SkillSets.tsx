@@ -35,11 +35,11 @@ export default function Step5_SkillSets() {
   const [customSkillSet, setCustomSkillSet] = useState("");
 
   const handleNext = () => {
-    setCurrentStep(6);
+    setCurrentStep(7); // Go to Step 7 (AbilityScores)
   };
 
   const handleBack = () => {
-    setCurrentStep(4);
+    setCurrentStep(5); // Go back to Step 5 (Size)
   };
 
   const addCustomSkillSet = () => {
@@ -61,7 +61,7 @@ export default function Step5_SkillSets() {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <span className="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-primary-foreground font-semibold">
-              5
+              6
             </span>
             Skill Sets
           </CardTitle>

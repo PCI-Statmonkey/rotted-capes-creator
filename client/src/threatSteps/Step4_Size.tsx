@@ -56,11 +56,11 @@ export default function Step4_Size() {
 
   const handleNext = () => {
     updateThreatField("size", selectedSize);
-    setCurrentStep(5);
+    setCurrentStep(6); // Go to Step 6 (SkillSets)
   };
 
   const handleBack = () => {
-    setCurrentStep(3);
+    setCurrentStep(4); // Go back to Step 4 (Type)
   };
 
   const canProceed = selectedSize;
@@ -71,7 +71,7 @@ export default function Step4_Size() {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <span className="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-primary-foreground font-semibold">
-              4
+              5
             </span>
             Choose Size
           </CardTitle>
