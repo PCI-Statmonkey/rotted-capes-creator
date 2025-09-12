@@ -10,11 +10,12 @@ import { Separator } from "@/components/ui/separator";
 import { Plus, Trash2, Zap, Shield } from "lucide-react";
 import { useThreat, ThreatAction, ThreatFeature } from "@/context/ThreatContext";
 import { DAMAGE_TYPES } from "@/data/zombieFeatures";
+import { PACE_TYPES } from "@/utils/threatModifiers";
 import { useState } from "react";
 
 const ACTION_TYPES = ["Action", "Bonus", "Demanding", "Reaction"];
 const DEFENSES = ["Avoidance", "Fortitude", "Willpower"];
-const FEATURE_TYPES = ["trait", "immunity", "Damage Resistance", "vulnerability", "special"];
+const FEATURE_TYPES = ["trait", "immunity", "Damage Resistance", "vulnerability", "special", "power"];
 
 export default function Step8_Actions() {
   const { threat, updateThreatField, setCurrentStep } = useThreat();
@@ -463,6 +464,84 @@ export default function Step8_Actions() {
                   <Plus className="h-4 w-4 mr-2" />
                   Add Feature
                 </Button>
+              </div>
+            </Card>
+          </div>
+
+          <Separator />
+
+          {/* Pace Section */}
+          <div className="space-y-4">
+            <div className="flex items-center gap-2">
+              <Zap className="h-5 w-5 text-primary" />
+              <h3 className="text-lg font-semibold">Movement</h3>
+            </div>
+            
+            <Card className="p-4 bg-muted/20">
+              <div className="grid gap-4">
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <Label htmlFor="base-pace">Base Pace (areas)</Label>
+                    <Select 
+                      value={threat.basePace?.toString() || "2"} 
+                      onValueChange={(value) => updateThreatField("basePace", parseInt(value))}
+                    >
+                      <SelectTrigger data-testid="select-base-pace">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 15, 20].map(pace => (
+                          <SelectItem key={pace} value={pace.toString()}>{pace}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
+
+                {/* Additional Pace Types */}
+                <div>
+                  <Label>Additional Movement Types</Label>
+                  <div className="space-y-2 mt-2">
+                    {threat.additionalPaces?.map((paceType, index) => (
+                      <div key={index} className="flex items-center gap-2">
+                        <Badge variant="outline">{paceType.type} {paceType.value}</Badge>
+                        <Button
+                          size="sm"
+                          variant="ghost"
+                          onClick={() => {
+                            const newPaces = threat.additionalPaces?.filter((_, i) => i !== index) || [];
+                            updateThreatField("additionalPaces", newPaces);
+                          }}
+                          data-testid={`remove-pace-${index}`}
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    ))}
+                    
+                    <div className="grid grid-cols-3 gap-2">
+                      <Select 
+                        value=""
+                        onValueChange={(type) => {
+                          if (type) {
+                            const newPace = { type, value: threat.basePace || 2 };
+                            const currentPaces = threat.additionalPaces || [];
+                            updateThreatField("additionalPaces", [...currentPaces, newPace]);
+                          }
+                        }}
+                      >
+                        <SelectTrigger data-testid="select-add-pace-type">
+                          <SelectValue placeholder="Add movement type" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {PACE_TYPES.map(type => (
+                            <SelectItem key={type} value={type}>{type}</SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </div>
+                </div>
               </div>
             </Card>
           </div>
