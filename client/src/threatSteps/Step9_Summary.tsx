@@ -86,10 +86,43 @@ export default function Step9_Summary() {
             <div className="mb-4">
               <h3 className="font-semibold text-primary mb-2">Actions</h3>
               <div className="text-sm bg-background/50 p-3 rounded border">
-                {/* TODO: Display formatted actions here */}
-                <p className="text-muted-foreground italic">
-                  Actions will be displayed here in Archive format when implemented.
-                </p>
+                {threat.actions && threat.actions.length > 0 ? (
+                  <div className="space-y-2">
+                    {threat.actions.map((action) => (
+                      <div key={action.id}>
+                        <p className="font-medium">
+                          <span className="font-semibold">{action.name}:</span>{" "}
+                          {action.type === "Attack" ? (
+                            <>
+                              {action.toHit && `+${action.toHit} to hit`}
+                              {action.defense && `, ${action.defense}`}
+                              {action.range && `, ${action.range.toLowerCase().includes("melee") 
+                                ? `reach: ${action.range}` 
+                                : `Ranged ${action.range}`}`}
+                              {action.area && `, ${action.area}`}
+                              {action.damage && action.damageType && `. Hit: ${action.damage} ${action.damageType}`}
+                              {action.successText && `. Upon a successful hit, ${action.successText}`}
+                            </>
+                          ) : (
+                            action.description
+                          )}
+                          {action.actionType && (
+                            <span className="ml-2 text-xs bg-muted px-1 py-0.5 rounded">
+                              {action.actionType}
+                            </span>
+                          )}
+                        </p>
+                        {action.type === "Attack" && action.description && (
+                          <p className="text-muted-foreground text-xs pl-4">{action.description}</p>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="text-muted-foreground italic">
+                    No actions defined.
+                  </p>
+                )}
               </div>
             </div>
 
