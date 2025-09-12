@@ -77,7 +77,9 @@ export default function Step8_Actions() {
   };
 
   const addAction = () => {
-    if (!actionForm.name || !actionForm.description) return;
+    // Attack actions only need a name, non-attack actions need both name and description
+    if (!actionForm.name) return;
+    if (actionForm.type === "Non-Attack" && !actionForm.description) return;
     
     const newAction: ThreatAction = {
       id: `action-${Date.now()}`,
@@ -357,7 +359,9 @@ export default function Step8_Actions() {
                 )}
 
                 <div>
-                  <Label htmlFor="action-description">Description</Label>
+                  <Label htmlFor="action-description">
+                    Description {actionForm.type === "Non-Attack" ? "" : "(Optional for attacks)"}
+                  </Label>
                   <Textarea
                     id="action-description"
                     data-testid="textarea-action-description"
@@ -392,7 +396,7 @@ export default function Step8_Actions() {
 
                 <Button 
                   onClick={addAction}
-                  disabled={!actionForm.name || !actionForm.description}
+                  disabled={!actionForm.name || (actionForm.type === "Non-Attack" && !actionForm.description)}
                   data-testid="button-add-action"
                 >
                   <Plus className="h-4 w-4 mr-2" />
