@@ -7,27 +7,114 @@ import { Plus, Trash2 } from "lucide-react";
 import { useThreat } from "@/context/ThreatContext";
 import { useState } from "react";
 
-const COMMON_SKILL_SETS = [
+// Type-specific skill sets based on threat type
+const SKILL_SETS_BY_TYPE = {
+  "Animal": [
+    "Apex Predator",
+    "Feline Reflexes", 
+    "Pack Hunter",
+    "Animal Instincts",
+    "Silent Hunter",
+    "Canopy Ghost",
+    "Primate Survivor",
+    "Scavenger",
+    "Hunter",
+    "Outdoor Survivalist"
+  ],
+  "Survivor": [
+    "Caretaker",
+    "Teacher", 
+    "Handyman",
+    "Cook",
+    "Custodian",
+    "Farmhand",
+    "Librarian",
+    "Bus Driver",
+    "Janitor",
+    "Parent",
+    "Veteran",
+    "Beat Cop",
+    "Disaster Responder",
+    "Field Engineer",
+    "Medical Training",
+    "First Aid"
+  ],
+  "Abomination": [
+    "Apex Predator",
+    "Urban Stalker",
+    "Bestial Instincts", 
+    "Enhanced Athletes",
+    "Silent Hunter",
+    "Professional Thief",
+    "Tactical Infiltration",
+    "Hunter of the In-Between",
+    "Freelance Cryptid Hunter"
+  ],
+  "Powered Individual": [
+    "Visionary",
+    "Urban Recon Training",
+    "Ex-Military Operative",
+    "Undercover Operative", 
+    "Street Mechanic",
+    "Cybercriminal",
+    "Alien Scout",
+    "Billionaire Playboy Philanthropist",
+    "Strategic Command Training",
+    "Gadgeteer Tinkerer",
+    "Masked Detective",
+    "Born to Wear the Mask",
+    "Former Sidekick",
+    "Superhero Support Specialist",
+    "Trained Since Childhood"
+  ],
+  "Construct (Robot/Tech)": [
+    "Targeting Algorithms",
+    "Sensor Suite",
+    "Mobility Protocols",
+    "Security Doctrine", 
+    "Maintenance Subroutines",
+    "Industrial Tooling",
+    "Legacy Technician",
+    "Field Engineer",
+    "Tech Specialist",
+    "Scientific Fieldwork"
+  ],
+  "Zombie": [
+    "Swarm Hunter",
+    "Climbing Corps",
+    "Zombie Senses",
+    "Pack Hunter",
+    "Silent Hunter",
+    "Urban Stalker"
+  ],
+  "Super Z": [
+    // Combines Zombie and Powered Individual skill sets
+    "Swarm Hunter",
+    "Climbing Corps", 
+    "Zombie Senses",
+    "Visionary",
+    "Urban Recon Training",
+    "Ex-Military Operative",
+    "Undercover Operative",
+    "Strategic Command Training",
+    "Masked Detective",
+    "Apex Predator",
+    "Enhanced Athletes"
+  ]
+};
+
+// Fallback skill sets if type not found or not selected
+const DEFAULT_SKILL_SETS = [
   "Survivalist",
   "Combat Veteran", 
   "Animal Instincts",
-  "Zombie Senses",
   "Street Smart",
   "Academic",
   "Medical Training",
   "Mechanical Aptitude",
   "Leadership",
   "Stealth Operations",
-  "Marksman",
-  "First Aid",
-  "Intimidation",
-  "Investigation",
-  "Athletics",
-  "Primate Survivor",
-  "Pack Hunter",
-  "Apex Predator",
-  "Scavenger",
-  "Tech Specialist"
+  "Marksman"
 ];
 
 export default function Step5_SkillSets() {
@@ -54,6 +141,16 @@ export default function Step5_SkillSets() {
       addSkillSet(skillSet);
     }
   };
+
+  // Get appropriate skill sets based on threat type
+  const getSkillSetsForType = () => {
+    if (!threat.type || !SKILL_SETS_BY_TYPE[threat.type as keyof typeof SKILL_SETS_BY_TYPE]) {
+      return DEFAULT_SKILL_SETS;
+    }
+    return SKILL_SETS_BY_TYPE[threat.type as keyof typeof SKILL_SETS_BY_TYPE];
+  };
+
+  const availableSkillSets = getSkillSetsForType();
 
   return (
     <div className="space-y-6" data-testid="step-skillsets">
@@ -124,11 +221,18 @@ export default function Step5_SkillSets() {
             </div>
           </div>
 
-          {/* Common Skill Sets */}
+          {/* Type-Appropriate Skill Sets */}
           <div className="space-y-2">
-            <Label>Common Skill Sets</Label>
+            <Label>
+              {threat.type ? `${threat.type} Skill Sets` : "Common Skill Sets"}
+            </Label>
+            {threat.type && (
+              <p className="text-sm text-muted-foreground">
+                Skill sets appropriate for {threat.type} threats
+              </p>
+            )}
             <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
-              {COMMON_SKILL_SETS.map((skillSet) => (
+              {availableSkillSets.map((skillSet) => (
                 <Button
                   key={skillSet}
                   variant={threat.skillSets.includes(skillSet) ? "default" : "outline"}
@@ -151,8 +255,11 @@ export default function Step5_SkillSets() {
               <li>• Most threats have 1-2 skill sets</li>
               <li>• Highly trained or intelligent (Intelligence 20+) threats may have more</li>
               <li>• Choose sets that reflect the threat's background and nature</li>
-              <li>• Animal threats typically have instinct-based sets</li>
+              <li>• Animal threats typically have instinct-based sets like Apex Predator</li>
+              <li>• Survivor threats have mundane profession-based skill sets</li>
               <li>• Zombie threats lose previous skill sets and gain Zombie Senses</li>
+              <li>• Powered Individual threats have heroic training and advanced skill sets</li>
+              <li>• Construct threats have algorithmic and technical skill sets</li>
             </ul>
           </div>
         </CardContent>
