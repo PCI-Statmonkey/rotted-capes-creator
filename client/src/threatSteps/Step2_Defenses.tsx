@@ -13,6 +13,9 @@ export default function Step2_Defenses() {
   const [avoidanceIndex, setAvoidanceIndex] = useState<number | null>(null);
   const [fortitudeIndex, setFortitudeIndex] = useState<number | null>(null);
   const [willpowerIndex, setWillpowerIndex] = useState<number | null>(null);
+  
+  // State for click-to-assign interface
+  const [selectedValueIndex, setSelectedValueIndex] = useState<number | null>(null);
 
   if (!threat.pendingDefenseValues) {
     // This shouldn't happen if navigation is correct, but handle gracefully
@@ -58,6 +61,45 @@ export default function Step2_Defenses() {
     setCurrentStep(1);
   };
 
+  // Click-to-assign handlers
+  const handleValueClick = (index: number) => {
+    if (usedIndices.includes(index)) {
+      // If value is already used, deselect it and clear from defenses
+      if (avoidanceIndex === index) setAvoidanceIndex(null);
+      if (fortitudeIndex === index) setFortitudeIndex(null);
+      if (willpowerIndex === index) setWillpowerIndex(null);
+      setSelectedValueIndex(null);
+    } else {
+      // Select this value for assignment
+      setSelectedValueIndex(index);
+    }
+  };
+
+  const handleDefenseClick = (defenseType: 'avoidance' | 'fortitude' | 'willpower') => {
+    if (selectedValueIndex === null) return;
+    
+    // Clear any previous assignment of this value
+    if (avoidanceIndex === selectedValueIndex) setAvoidanceIndex(null);
+    if (fortitudeIndex === selectedValueIndex) setFortitudeIndex(null);
+    if (willpowerIndex === selectedValueIndex) setWillpowerIndex(null);
+    
+    // Assign to the clicked defense
+    switch (defenseType) {
+      case 'avoidance':
+        setAvoidanceIndex(selectedValueIndex);
+        break;
+      case 'fortitude':
+        setFortitudeIndex(selectedValueIndex);
+        break;
+      case 'willpower':
+        setWillpowerIndex(selectedValueIndex);
+        break;
+    }
+    
+    // Clear selection after assignment
+    setSelectedValueIndex(null);
+  };
+
   return (
     <div className="space-y-6" data-testid="step-defenses">
       <Card>
@@ -81,8 +123,11 @@ export default function Step2_Defenses() {
               {availableValues.map((value, index) => (
                 <Badge 
                   key={index} 
-                  variant={usedIndices.includes(index) ? "default" : "outline"}
-                  className="text-lg px-3 py-1"
+                  variant={usedIndices.includes(index) ? "default" : selectedValueIndex === index ? "secondary" : "outline"}
+                  className={`text-lg px-3 py-1 cursor-pointer transition-colors hover:bg-primary/20 ${
+                    selectedValueIndex === index ? "ring-2 ring-primary" : ""
+                  }`}
+                  onClick={() => handleValueClick(index)}
                   data-testid={`badge-defense-value-${value}-${index}`}
                 >
                   {value}
@@ -91,7 +136,11 @@ export default function Step2_Defenses() {
             </div>
             <div className="flex justify-between items-center mt-2">
               <p className="text-sm text-muted-foreground">
-                Assign each value to exactly one defense type below.
+                {selectedValueIndex !== null ? (
+                  <>Click a defense below to assign <strong>{availableValues[selectedValueIndex]}</strong>, or use the dropdowns.</>
+                ) : (
+                  "Click a value above then click a defense below to assign, or use the dropdowns."
+                )}
               </p>
               {(avoidanceIndex !== null || fortitudeIndex !== null || willpowerIndex !== null) && (
                 <Button 
@@ -101,6 +150,7 @@ export default function Step2_Defenses() {
                     setAvoidanceIndex(null);
                     setFortitudeIndex(null);
                     setWillpowerIndex(null);
+                    setSelectedValueIndex(null);
                   }}
                   data-testid="button-reset-defenses"
                   className="text-muted-foreground hover:text-foreground"
@@ -111,10 +161,21 @@ export default function Step2_Defenses() {
             </div>
           </div>
 
-          {/* Defense assignment dropdowns */}
+          {/* Defense assignment - clickable + dropdowns */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="space-y-2">
-              <Label htmlFor="avoidance-select">Avoidance</Label>
+            <div className={`space-y-2 p-3 rounded-lg border-2 transition-colors ${
+              selectedValueIndex !== null ? "cursor-pointer hover:border-primary/50 hover:bg-primary/5" : ""
+            } ${avoidanceIndex !== null ? "border-primary/30 bg-primary/5" : "border-border"}`}
+            onClick={() => selectedValueIndex !== null && handleDefenseClick('avoidance')}
+            >
+              <Label htmlFor="avoidance-select" className="flex items-center justify-between">
+                Avoidance
+                {avoidanceIndex !== null && (
+                  <Badge variant="secondary" className="text-lg">
+                    {availableValues[avoidanceIndex]}
+                  </Badge>
+                )}
+              </Label>
               <Select 
                 value={avoidanceIndex?.toString() || ""} 
                 onValueChange={(value) => setAvoidanceIndex(parseInt(value))}
@@ -135,8 +196,19 @@ export default function Step2_Defenses() {
               </p>
             </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="fortitude-select">Fortitude</Label>
+            <div className={`space-y-2 p-3 rounded-lg border-2 transition-colors ${
+              selectedValueIndex !== null ? "cursor-pointer hover:border-primary/50 hover:bg-primary/5" : ""
+            } ${fortitudeIndex !== null ? "border-primary/30 bg-primary/5" : "border-border"}`}
+            onClick={() => selectedValueIndex !== null && handleDefenseClick('fortitude')}
+            >
+              <Label htmlFor="fortitude-select" className="flex items-center justify-between">
+                Fortitude
+                {fortitudeIndex !== null && (
+                  <Badge variant="secondary" className="text-lg">
+                    {availableValues[fortitudeIndex]}
+                  </Badge>
+                )}
+              </Label>
               <Select 
                 value={fortitudeIndex?.toString() || ""} 
                 onValueChange={(value) => setFortitudeIndex(parseInt(value))}
@@ -157,8 +229,19 @@ export default function Step2_Defenses() {
               </p>
             </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="willpower-select">Discipline (Willpower)</Label>
+            <div className={`space-y-2 p-3 rounded-lg border-2 transition-colors ${
+              selectedValueIndex !== null ? "cursor-pointer hover:border-primary/50 hover:bg-primary/5" : ""
+            } ${willpowerIndex !== null ? "border-primary/30 bg-primary/5" : "border-border"}`}
+            onClick={() => selectedValueIndex !== null && handleDefenseClick('willpower')}
+            >
+              <Label htmlFor="willpower-select" className="flex items-center justify-between">
+                Discipline (Willpower)
+                {willpowerIndex !== null && (
+                  <Badge variant="secondary" className="text-lg">
+                    {availableValues[willpowerIndex]}
+                  </Badge>
+                )}
+              </Label>
               <Select 
                 value={willpowerIndex?.toString() || ""} 
                 onValueChange={(value) => setWillpowerIndex(parseInt(value))}
