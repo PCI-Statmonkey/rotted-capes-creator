@@ -237,40 +237,6 @@ export default function Step6_AbilityScores() {
             })}
           </div>
 
-          {/* Calculated Values Preview */}
-          <div className="p-4 bg-muted/50 rounded-lg">
-            <h4 className="font-semibold mb-2">Calculated Values (Preview)</h4>
-            <p className="text-xs text-muted-foreground mb-3">
-              Note: Unlike heroes, threat defenses come from rank parameters only and are not modified by ability scores.
-            </p>
-            <div className="grid grid-cols-2 md:grid-cols-5 gap-4 text-sm">
-              <div>
-                <span className="font-medium">Avoidance:</span>
-                <p>{params?.defenses[0] || 10}</p>
-                <span className="text-xs text-muted-foreground">(From rank)</span>
-              </div>
-              <div>
-                <span className="font-medium">Fortitude:</span>
-                <p>{params?.defenses[1] || 10}</p>
-                <span className="text-xs text-muted-foreground">(From rank)</span>
-              </div>
-              <div>
-                <span className="font-medium">Willpower:</span>
-                <p>{params?.defenses[2] || 10}</p>
-                <span className="text-xs text-muted-foreground">(From rank)</span>
-              </div>
-              <div>
-                <span className="font-medium">Initiative:</span>
-                <p>+{Math.floor((abilityScores.dexterity - 10) / 2) + (params?.rankBonus || 1)}</p>
-                <span className="text-xs text-muted-foreground">(Dex modifier)</span>
-              </div>
-              <div>
-                <span className="font-medium">Pace:</span>
-                <p>{2 + Math.max(0, Math.floor((abilityScores.dexterity - 10) / 4))} areas</p>
-                <span className="text-xs text-muted-foreground">(Base + Dex)</span>
-              </div>
-            </div>
-          </div>
         </CardContent>
       </Card>
 

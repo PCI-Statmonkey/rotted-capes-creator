@@ -171,7 +171,7 @@ export function ThreatProvider({ children }: { children: ReactNode }) {
 
   // Apply threat modifiers automatically when relevant parameters change
   useEffect(() => {
-    if (threat.role && threat.size && threat.type) {
+    if (threat.role || threat.size || threat.type) {
       setThreat(prev => applyThreatMods(prev));
     }
   }, [threat.role, threat.size, threat.type, threat.abilityScores.dexterity, threat.basePace]);
