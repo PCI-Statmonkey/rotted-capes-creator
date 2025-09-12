@@ -21,12 +21,19 @@ const ABILITY_NAMES = {
 export default function Step6_AbilityScores() {
   const { threat, updateThreatField, setCurrentStep } = useThreat();
   const [abilityScores, setAbilityScores] = useState(threat.abilityScores);
+  const [inputValues, setInputValues] = useState<Record<string, string>>({});
   
   const guidance = getAbilityScoreGuidance(threat.rank);
   const params = getThreatParameter(threat.rank);
 
   useEffect(() => {
     setAbilityScores(threat.abilityScores);
+    // Initialize input values from ability scores
+    const initialInputs: Record<string, string> = {};
+    Object.entries(threat.abilityScores).forEach(([key, value]) => {
+      initialInputs[key] = value.toString();
+    });
+    setInputValues(initialInputs);
   }, [threat.abilityScores]);
 
   const handleNext = () => {
@@ -59,10 +66,46 @@ export default function Step6_AbilityScores() {
   };
 
   const updateAbilityScore = (ability: keyof typeof abilityScores, value: number) => {
+    const clampedValue = Math.max(3, Math.min(50, value));
     setAbilityScores(prev => ({
       ...prev,
-      [ability]: Math.max(3, Math.min(50, value))
+      [ability]: clampedValue
     }));
+    setInputValues(prev => ({
+      ...prev,
+      [ability]: clampedValue.toString()
+    }));
+  };
+
+  const handleInputChange = (ability: keyof typeof abilityScores, value: string) => {
+    // Update input state immediately to allow typing
+    setInputValues(prev => ({
+      ...prev,
+      [ability]: value
+    }));
+    
+    // Only update ability score if the value is a valid number
+    const numValue = parseInt(value);
+    if (!isNaN(numValue) && numValue >= 3 && numValue <= 50) {
+      setAbilityScores(prev => ({
+        ...prev,
+        [ability]: numValue
+      }));
+    }
+  };
+
+  const handleInputBlur = (ability: keyof typeof abilityScores) => {
+    const inputValue = inputValues[ability];
+    const numValue = parseInt(inputValue);
+    
+    // On blur, ensure we have a valid value
+    if (isNaN(numValue) || numValue < 3) {
+      updateAbilityScore(ability, 3);
+    } else if (numValue > 50) {
+      updateAbilityScore(ability, 50);
+    } else {
+      updateAbilityScore(ability, numValue);
+    }
   };
 
   const incrementAbility = (ability: keyof typeof abilityScores) => {
@@ -159,8 +202,9 @@ export default function Step6_AbilityScores() {
                           type="number"
                           min="3"
                           max="50"
-                          value={score}
-                          onChange={(e) => updateAbilityScore(ability, parseInt(e.target.value) || 3)}
+                          value={inputValues[ability] || score.toString()}
+                          onChange={(e) => handleInputChange(ability, e.target.value)}
+                          onBlur={() => handleInputBlur(ability)}
                           className={`text-center text-lg font-semibold ${getAbilityScoreColor(ability, score)}`}
                         />
                         <Button
