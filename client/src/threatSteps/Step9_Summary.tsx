@@ -254,6 +254,97 @@ export default function Step9_Summary() {
               </div>
             )}
 
+            {/* Custom Features */}
+            {threat.features && threat.features.length > 0 && (
+              <div className="mb-4">
+                <table className="w-full border border-border">
+                  <thead>
+                    <tr className="bg-muted/50">
+                      <th className="border border-border p-2 font-semibold text-left">Features & Powers</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td className="border border-border p-2">
+                        <div className="space-y-2">
+                          {threat.features.map((feature) => (
+                            <div key={feature.id} className="text-sm">
+                              <span className="font-semibold">{feature.name}</span>
+                              {feature.type !== "trait" && (
+                                <span className="ml-2 text-xs bg-muted px-1 py-0.5 rounded">
+                                  {feature.type}
+                                </span>
+                              )}
+                              <span className="block text-muted-foreground mt-1">
+                                {feature.description}
+                              </span>
+                            </div>
+                          ))}
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            )}
+
+            {/* Resistances & Immunities Summary */}
+            {(() => {
+              const immunities: string[] = [];
+              const resistances: string[] = [];
+              
+              // Get auto-generated immunities/resistances
+              autoFeatures.forEach(feature => {
+                if (feature.name.toLowerCase().includes("immunity")) {
+                  immunities.push(feature.name.replace(/\s*immunity$/i, ""));
+                }
+                if (feature.name.toLowerCase().includes("resistance")) {
+                  resistances.push(feature.name.replace(/\s*resistance$/i, ""));
+                }
+              });
+              
+              // Get custom immunities/resistances
+              threat.features?.forEach(feature => {
+                if (feature.type === "immunity") {
+                  immunities.push(feature.name);
+                } else if (feature.type === "Damage Resistance") {
+                  resistances.push(feature.name);
+                }
+              });
+              
+              return (immunities.length > 0 || resistances.length > 0) && (
+                <div className="mb-4">
+                  <table className="w-full border border-border">
+                    <thead>
+                      <tr className="bg-muted/50">
+                        <th className="border border-border p-2 font-semibold text-left">Resistances & Immunities</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td className="border border-border p-2">
+                          <div className="space-y-1 text-sm">
+                            {immunities.length > 0 && (
+                              <div>
+                                <span className="font-semibold">Immune to:</span>{" "}
+                                {immunities.join(", ")}
+                              </div>
+                            )}
+                            {resistances.length > 0 && (
+                              <div>
+                                <span className="font-semibold">Resistant to:</span>{" "}
+                                {resistances.join(", ")}
+                              </div>
+                            )}
+                          </div>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              );
+            })()}
+
             {/* Rank Bonus */}
             <div className="mb-4">
               <table className="w-full border border-border">
