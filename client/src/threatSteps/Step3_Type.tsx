@@ -91,7 +91,10 @@ export default function Step3_Type() {
                       ? "ring-2 ring-primary bg-primary/5" 
                       : "hover:bg-muted/50"
                   }`}
-                  onClick={() => setSelectedType(type)}
+                  onClick={() => {
+                    setSelectedType(type);
+                    updateThreatField("type", type); // Update context immediately for real-time summary updates
+                  }}
                   data-testid={`type-${type.toLowerCase().replace(/\\s+/g, '-')}`}
                 >
                   <CardContent className="p-4">

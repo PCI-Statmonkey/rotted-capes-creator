@@ -84,7 +84,10 @@ export default function Step2_Role() {
                       ? "ring-2 ring-primary bg-primary/5" 
                       : "hover:bg-muted/50"
                   }`}
-                  onClick={() => setSelectedRole(role)}
+                  onClick={() => {
+                    setSelectedRole(role);
+                    updateThreatField("role", role); // Update context immediately for real-time summary updates
+                  }}
                   data-testid={`role-${role.toLowerCase().replace(/\\s+/g, '-')}`}
                 >
                   <CardContent className="p-4">

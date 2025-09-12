@@ -91,7 +91,10 @@ export default function Step4_Size() {
                       ? "ring-2 ring-primary bg-primary/5" 
                       : "hover:bg-muted/50"
                   }`}
-                  onClick={() => setSelectedSize(size)}
+                  onClick={() => {
+                    setSelectedSize(size);
+                    updateThreatField("size", size); // Update context immediately for real-time summary updates
+                  }}
                   data-testid={`size-${size.toLowerCase().replace(/[\\s\\/]/g, '-')}`}
                 >
                   <CardContent className="p-4">
