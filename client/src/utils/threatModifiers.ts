@@ -267,12 +267,14 @@ export function applyThreatMods(threat: Threat): Threat {
   const mods = calculateThreatMods(threat);
   const modified = { ...threat };
   
-  // Apply stamina modifications
+  // Apply stamina modifications from base values to prevent doubling
   if (mods.stamina === -999) {
     // Special case for undead - set stamina to 0
     modified.stamina = 0;
   } else {
-    modified.stamina = Math.max(0, Math.floor((threat.stamina + mods.stamina) * mods.staminaMult));
+    // Use baseStamina if available, otherwise fall back to stamina
+    const baseStamina = threat.baseStamina !== undefined ? threat.baseStamina : threat.stamina;
+    modified.stamina = Math.max(0, Math.floor((baseStamina + mods.stamina) * mods.staminaMult));
   }
   
   // Apply defense modifications (only if defenses are assigned)
@@ -284,8 +286,9 @@ export function applyThreatMods(threat: Threat): Threat {
     };
   }
   
-  // Apply wounds modifications
-  modified.wounds = Math.max(1, threat.wounds + mods.wounds);
+  // Apply wounds modifications from base values to prevent doubling
+  const baseWounds = threat.baseWounds !== undefined ? threat.baseWounds : threat.wounds;
+  modified.wounds = Math.max(1, baseWounds + mods.wounds);
   
   // Calculate initiative: dex modifier + pace (minimum 1)
   const dexMod = getAbilityModifier(threat.abilityScores.dexterity);

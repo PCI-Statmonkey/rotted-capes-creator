@@ -68,6 +68,8 @@ export interface Threat {
   defenses: Defenses;
   stamina: number;
   wounds: number;
+  baseStamina: number; // Store original stamina value before modifiers
+  baseWounds: number; // Store original wounds value before modifiers
   attack: AttackInfo;
   damage: DamageInfo;
   initiative: number;
@@ -111,6 +113,8 @@ const defaultThreat: Threat = {
   defenses: { avoidance: 0, fortitude: 0, willpower: 0 },
   stamina: 0,
   wounds: 0,
+  baseStamina: 0,
+  baseWounds: 0,
   attack: { single: 0, area: 0 },
   damage: { min: 0, max: 0, avg: 0 },
   initiative: 0,
@@ -155,6 +159,8 @@ export function ThreatProvider({ children }: { children: ReactNode }) {
       base.defenseAssigned = false;
       base.stamina = params.stamina;
       base.wounds = params.wounds;
+      base.baseStamina = params.stamina; // Store original values
+      base.baseWounds = params.wounds; // Store original values
       base.attack = { single: params.toHit[0], area: params.toHit[1] };
       base.damage = { ...params.damage };
       base.effectiveRank = params.rank;
@@ -165,10 +171,10 @@ export function ThreatProvider({ children }: { children: ReactNode }) {
 
   // Apply threat modifiers automatically when relevant parameters change
   useEffect(() => {
-    if (threat.defenseAssigned && threat.role && threat.size && threat.type) {
+    if (threat.role && threat.size && threat.type) {
       setThreat(prev => applyThreatMods(prev));
     }
-  }, [threat.role, threat.size, threat.type, threat.defenseAssigned, threat.abilityScores.dexterity, threat.basePace]);
+  }, [threat.role, threat.size, threat.type, threat.abilityScores.dexterity, threat.basePace]);
 
   const updateThreatField = (field: keyof Threat, value: any) => {
     setThreat((prev) => ({ ...prev, [field]: value }));
@@ -207,6 +213,8 @@ export function ThreatProvider({ children }: { children: ReactNode }) {
       defenses: { avoidance: 0, fortitude: 0, willpower: 0 }, // Clear until assigned
       stamina: params.stamina,
       wounds: params.wounds,
+      baseStamina: params.stamina, // Store original values
+      baseWounds: params.wounds, // Store original values
       attack: { single: params.toHit[0], area: params.toHit[1] },
       damage: { ...params.damage },
       effectiveRank: params.rank,
