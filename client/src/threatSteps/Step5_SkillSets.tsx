@@ -18,8 +18,7 @@ const SKILL_SETS_BY_TYPE = {
     "Canopy Ghost",
     "Primate Survivor",
     "Scavenger",
-    "Hunter",
-    "Outdoor Survivalist"
+    "Hunter"
   ],
   "Survivor": [
     "Caretaker",
@@ -36,8 +35,7 @@ const SKILL_SETS_BY_TYPE = {
     "Beat Cop",
     "Disaster Responder",
     "Field Engineer",
-    "Medical Training",
-    "First Aid"
+    "Medical Training"
   ],
   "Abomination": [
     "Apex Predator",
@@ -45,10 +43,10 @@ const SKILL_SETS_BY_TYPE = {
     "Bestial Instincts", 
     "Enhanced Athletes",
     "Silent Hunter",
-    "Professional Thief",
-    "Tactical Infiltration",
+    "Nocturnal Hunter",
+    "Abominable Guardian",
     "Hunter of the In-Between",
-    "Freelance Cryptid Hunter"
+    "Way Too Clever"
   ],
   "Powered Individual": [
     "Visionary",
