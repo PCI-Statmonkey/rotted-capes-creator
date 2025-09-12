@@ -14,7 +14,7 @@ import { useState } from "react";
 
 const ACTION_TYPES = ["Action", "Bonus", "Demanding", "Reaction"];
 const DEFENSES = ["Avoidance", "Fortitude", "Willpower"];
-const FEATURE_TYPES = ["trait", "immunity", "resistance", "vulnerability", "special"];
+const FEATURE_TYPES = ["trait", "immunity", "Damage Resistance", "vulnerability", "special"];
 
 export default function Step8_Actions() {
   const { threat, updateThreatField, setCurrentStep } = useThreat();
