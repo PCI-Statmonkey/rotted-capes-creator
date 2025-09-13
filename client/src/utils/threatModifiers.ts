@@ -27,12 +27,27 @@ export const PACE_TYPES = [
   "Swim",
   "Fly",
   "Burrow",
-  "Teleport"
+  "Teleport",
+  "Leap",
+  "Swing"
 ];
 
 // Calculate ability modifier from ability score
 export function getAbilityModifier(score: number): number {
   return Math.floor((score - 10) / 2);
+}
+
+// Get suggested save DC based on threat rank
+export function getSuggestedSaveDC(rank: string): number {
+  const rankDCs: { [key: string]: number } = {
+    "Zeta": 12,
+    "Epsilon": 14,
+    "Delta": 15,
+    "Gamma": 16,
+    "Beta": 17,
+    "Alpha": 18
+  };
+  return rankDCs[rank] || 12;
 }
 
 // Get auto-generated features for a threat type

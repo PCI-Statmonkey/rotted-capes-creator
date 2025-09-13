@@ -153,6 +153,8 @@ export default function Step9_Summary() {
                   <tr className="bg-muted/50">
                     <th className="border border-border p-2 font-semibold">Stamina</th>
                     <th className="border border-border p-2 font-semibold">Wounds</th>
+                    <th className="border border-border p-2 font-semibold">Damage Resistance</th>
+                    <th className="border border-border p-2 font-semibold">Immunities</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -162,6 +164,25 @@ export default function Step9_Summary() {
                       {threat.type === "Zombie" || threat.type === "Super Z" ? " (None - Undead)" : ""}
                     </td>
                     <td className="border border-border p-2 text-center">{threat.wounds}</td>
+                    <td className="border border-border p-2 text-center">
+                      {(() => {
+                        const resistances = threat.features?.filter(f => 
+                          f.type === "Damage Resistance" || 
+                          f.name.toLowerCase().includes("resistance")
+                        ).map(f => f.name).join(", ");
+                        return resistances || "Nil";
+                      })()}
+                    </td>
+                    <td className="border border-border p-2 text-center">
+                      {(() => {
+                        const immunities = threat.features?.filter(f => 
+                          f.type === "immunity" || 
+                          f.name.toLowerCase().includes("immunity") ||
+                          f.name.toLowerCase().includes("immune")
+                        ).map(f => f.name).join(", ");
+                        return immunities || "Nil";
+                      })()}
+                    </td>
                   </tr>
                 </tbody>
               </table>
