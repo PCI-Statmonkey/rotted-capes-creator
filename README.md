@@ -4,22 +4,20 @@ This project is a Vite/React web application with an Express API for creating ch
 
 ## Environment Variables
 
-Create a `.env` file in the project root with the following keys:
+Environment configuration is split between development, production, and a
+template for new contributors:
 
-```bash
-# Firebase configuration used on the client
-VITE_FIREBASE_API_KEY=your-key
-VITE_FIREBASE_PROJECT_ID=your-project
-VITE_FIREBASE_APP_ID=your-app-id
-VITE_FIREBASE_MESSAGING_SENDER_ID=your-sender-id
-VITE_FIREBASE_MEASUREMENT_ID=your-measurement-id
+- Copy `.env.example` to `.env` for local development and fill in any sensitive
+  values (Firebase client keys, analytics IDs, etc.).
+- Use `.env.production` for production deployments.
 
-# Optional Google Analytics key
-VITE_GA_MEASUREMENT_ID=your-ga-id
+Both files should provide a `DATABASE_URL` and `PORT`. The example file uses a
+local Postgres connection string and the default Express port of `5000` so you
+can get started quickly.
 
-# PostgreSQL connection string used by the server and Drizzle
-DATABASE_URL=postgresql://user:password@host/db?sslmode=require
-```
+> **⚠️ TLS note:** TLS certificate verification is **enabled by default**. Only
+> set `ALLOW_INSECURE_TLS=true` in your local `.env` if you must bypass TLS for
+> troubleshooting. Never add this flag to `.env.production`.
 
 These variables are loaded by both the server and the Vite client build.
 
@@ -81,6 +79,12 @@ npm run dev
 ```
 
 The server runs on `http://localhost:5000` with hot reloading provided by Vite.
+
+## Common Scripts
+
+- **Dev:** `npm run dev`
+- **Build:** `npm run build`
+- **Prod (example):** `npm run start`
 
 ## Type Checking
 

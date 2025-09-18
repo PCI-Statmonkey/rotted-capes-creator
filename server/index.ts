@@ -1,5 +1,11 @@
-import dotenv from "dotenv";
-dotenv.config();
+import "dotenv/config";
+
+// TLS safety guard: never disable verification in production
+if (process.env.NODE_ENV !== "production" && process.env.ALLOW_INSECURE_TLS === "true") {
+  // eslint-disable-next-line no-process-env
+  (process as any).env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
+  console.warn("⚠️  TLS verification is disabled for local development. Do NOT use this in production.");
+}
 
 import express, { type Request, Response, NextFunction } from "express";
 import cors from "cors";
@@ -80,8 +86,8 @@ app.use((req, res, next) => {
     serveStatic(app);
   }
 
-  const port = 5000;
-  server.listen(port, "localhost", () => {
+  const port = Number(process.env.PORT ?? 5000);
+  server.listen(port, () => {
     log(`serving on http://localhost:${port}`);
   });
 })();

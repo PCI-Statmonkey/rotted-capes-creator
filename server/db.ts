@@ -1,5 +1,4 @@
-import dotenv from "dotenv";
-dotenv.config();
+import "dotenv/config";
 
 import { Pool, neonConfig } from '@neondatabase/serverless';
 import { drizzle } from 'drizzle-orm/neon-serverless';
@@ -12,13 +11,6 @@ neonConfig.webSocketConstructor = ws;
 if (process.env.NODE_ENV !== 'production') {
   neonConfig.wsProxy = (host) => `${host}:443/v2`;
   console.log('Using Neon WebSocket proxy for development environment');
-  
-  // As a fallback for SSL certificate issues in development only
-  // This is explicitly opt-in and clearly logged as insecure
-  if (process.env.ALLOW_INSECURE_TLS === 'true') {
-    process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
-    console.warn('⚠️  WARNING: TLS certificate verification disabled for development. This is insecure!');
-  }
 }
 
 // Check for database connection string
@@ -34,12 +26,15 @@ let connectionError: Error | null = null;
 let retryCount = 0;
 const MAX_RETRIES = 3;
 
+const isProd = process.env.NODE_ENV === 'production';
+
 // Create a connection pool with additional options for better reliability
-export const pool = new Pool({ 
+export const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
   max: 10, // Maximum number of clients
   idleTimeoutMillis: 30000, // Close idle clients after 30 seconds
   connectionTimeoutMillis: 5000, // Return an error after 5 seconds if connection not established
+  ssl: isProd ? { rejectUnauthorized: true } : undefined,
 });
 
 // Add error handling for the pool
