@@ -1,9 +1,11 @@
-node_modules
-dist
+node_modules/
+.env
+.env.production
+.vercel/
+.next/
+dist/
+build/
 .DS_Store
-server/public
+server/public/
 vite.config.ts.*
 *.tar.gz
-+*.tar.gz
-+.env
-+
